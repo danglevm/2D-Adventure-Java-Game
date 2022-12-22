@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import entity.Player;
+
 //Game Panel inherits all components from JPanel
 public class GamePanel extends JPanel implements Runnable{
 	//*****************************************************************************************************************		
@@ -16,7 +18,7 @@ public class GamePanel extends JPanel implements Runnable{
 	final int originalTileSize = 16; //16x16 size
 	//Scale the 16x16 characters to fit computers' resolutions
 	final int scale = 3;
-	final int tileSize = originalTileSize*scale;//48x48 tile
+	public final int tileSize = originalTileSize*scale;//48x48 tile
 	
 	//Setting max screen settings 16 tiles x 12 tiles - 4:3 ratio
 	final int maxScreenColumns = 18;
@@ -35,9 +37,10 @@ public class GamePanel extends JPanel implements Runnable{
 	//FPS
 	int FPS = 60;
 	
-	//Game Thread
+	//Game Objects
 	KeyHandler keyH = new KeyHandler();
 	Thread gameThread;
+	Player player = new Player(this, keyH);
 	
 	
 	//-------------------------------CONSTRUCTORS------------------
@@ -109,23 +112,8 @@ public class GamePanel extends JPanel implements Runnable{
 
 //Takes in KeyH inputs and then updates character model
 public void update() {
-	//X and Y values increase as the player moves right and down
-	if (keyH.upPressed == true) {
-		playerY-=playerSpeed;
-		
-	}
 	
-	if (keyH.downPressed== true) {
-		playerY+=playerSpeed;
-	}
-	
-	if (keyH.leftPressed == true) {
-		playerX-=playerSpeed;
-	}
-	if (keyH.rightPressed==true) {
-		playerX+=playerSpeed;
-	}
-	
+	player.update();
 	
 }
 
@@ -137,9 +125,7 @@ public void paintComponent (Graphics g) {
 	//Set 1D graphics to 2d Graphics
 	Graphics2D g2 = (Graphics2D)g;
 	
-	g2.setColor(Color.yellow);
-	
-	g2.fillRect(playerX, playerY, tileSize, tileSize);
+	player.draw(g2);
 	
 	
 	g2.dispose();
