@@ -2,6 +2,7 @@ package entity;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -30,6 +31,10 @@ public class Player extends Entity {
 		//Subtract half of the tile length to be at the center of the player character
 		screenX = gp.screenWidth/2 - (gp.tileSize/2);
 		screenY = gp.screenHeight/2 - (gp.tileSize/2);
+		
+		//x, y, width, length
+		solidArea = new Rectangle(8,12,32,32);
+		
 		
 		setDefaultValues();
 		getPlayerImage();
@@ -66,25 +71,50 @@ public class Player extends Entity {
 		if (keyH.upPressed == true||keyH.downPressed==true||
 				keyH.leftPressed==true||keyH.rightPressed==true)
 		{//X and Y values increase as the player moves right and down
+			
+			//Check tile collision
+			collisionOn = false;
+			//Collision checker receive subclass
+			gp.cChecker.CheckTile(this);
+			
 			if (keyH.upPressed == true) {
 				direction ="up";
-				WorldY-=speed;
-				
+				if (collisionOn) {WorldY+=speed/5;} else {WorldY-=speed;}
 			}
-			
 			if (keyH.downPressed== true) {
 				direction = "down";
-				WorldY+=speed;
+				if (collisionOn) {WorldY-=speed/5;} else {WorldY+=speed;}
 			}
-			
 			if (keyH.leftPressed == true) {
-				direction = "left";
-				WorldX-=speed;
+				direction = "left";	
+				if (collisionOn) {WorldX+=speed/5;} else {WorldX-=speed;}
 			}
 			if (keyH.rightPressed==true) {
 				direction = "right";
-				WorldX+=speed;
+				if (collisionOn) {WorldX-=speed/5;} else {WorldX+=speed;}
 			}
+			
+			
+			
+			
+			/*//player can move when collision on is false
+			if (collisionOn ==false) {
+			if (direction == "up") {
+					WorldY-=speed;
+			}
+			if (direction == "down") {
+					WorldY+=speed;
+			}
+			if (direction =="left") {
+					WorldX-=speed;
+			}
+			if (direction == "right") {
+					WorldX+=speed;
+				}
+			}*/
+			
+			
+			
 			
 			spriteCounter++;
 			//Player image changes every 12 frames
@@ -97,9 +127,13 @@ public class Player extends Entity {
 					spriteNum=1;
 				}
 				spriteCounter=0;
-			}}
+			}
+			
+		}//keypress loop
+			
 		
-	}
+	}//update
+		
 	
 	public void draw(Graphics2D g2) {
 		/*
