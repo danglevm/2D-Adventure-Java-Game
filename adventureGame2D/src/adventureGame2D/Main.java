@@ -24,6 +24,7 @@ public class Main {
 	window.setLocationRelativeTo(null);//Center the GUI on the screen
 	window.setVisible(true);
 	
+	gamePanel.GameSetup();
 	gamePanel.startGameThread();
 
 	

@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 //Game Panel inherits all components from JPanel
@@ -44,6 +45,10 @@ public class GamePanel extends JPanel implements Runnable{
 	public CollisionCheck cChecker = new CollisionCheck(this);
 	Thread gameThread;
 	public Player player = new Player(this, keyH);
+	public AssetPlacement assetPlace = new AssetPlacement(this);
+	//Display up to only 10 objects on screen - decide later
+	public SuperObject obj [] = new SuperObject[10];
+	
 	
 	
 	//-------------------------------CONSTRUCTORS------------------
@@ -64,7 +69,13 @@ public class GamePanel extends JPanel implements Runnable{
 		gameThread = new Thread(this); //Pass in the class it's calling and the thread will run through the game's processes
 		gameThread.start();
 	}
-
+	//Setting up the game
+	//*******************************THREADING**********************
+	public void GameSetup() {
+		
+		assetPlace.setObject();
+	}
+	
 	@Override
 	//Overriding the run method from the Thread class
 	//Game loop
@@ -130,10 +141,21 @@ public void paintComponent (Graphics g) {
 	
 	
 	//Draw the tiles first before the player characters
+	//TILE
 	tileM.draw(g2);
 	
+	//OBJECT
+	for (int i = 0; i < obj.length;i++) {
+		//Check if the object is null or not
+		if (obj [i] != null) {
+			obj[i].draw(g2, this);
+		}
+	}
+	
+	//PLAYER
 	player.draw(g2);
 
+	
 	
 	
 	g2.dispose();
