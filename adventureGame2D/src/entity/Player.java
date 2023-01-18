@@ -34,6 +34,9 @@ public class Player extends Entity {
 		
 		//x, y, width, length
 		solidArea = new Rectangle(8,12,32,32);
+		//Default values so x and y values of the rectangle can be changed later
+		solidAreaDefaultX= solidArea.x;
+		solidAreaDefaultY= solidArea.y;
 		
 		
 		setDefaultValues();

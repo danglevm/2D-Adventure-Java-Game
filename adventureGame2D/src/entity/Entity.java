@@ -14,6 +14,7 @@ public class Entity {
 	//specifies the solid area of the character entity for collision
 	//Store data about this rectangle as x, y, width and height
 	public Rectangle solidArea;
+	public int solidAreaDefaultX, solidAreaDefaultY;
 	
 	public boolean collisionOn = false;
 	
