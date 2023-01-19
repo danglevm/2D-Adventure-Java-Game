@@ -8,6 +8,7 @@ public class Obj_door extends SuperObject{
 	
 	public Obj_door() {
 	name  = "Door";
+	collision=true;
 	
 	try {
 		image = ImageIO.read(getClass().getResourceAsStream("/objects/door.png"));
@@ -15,7 +16,7 @@ public class Obj_door extends SuperObject{
 	} catch (IOException e) {
 		e.printStackTrace(); //Trace back this error
 	}
-	collision = true;
+	
 	}
 	
 	

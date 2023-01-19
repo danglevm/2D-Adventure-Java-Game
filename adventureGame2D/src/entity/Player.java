@@ -16,6 +16,7 @@ public class Player extends Entity {
 	//Variables
 	GamePanel gp;
 	KeyHandler keyH;
+	int hasKey = 0;
 	
 	//Where the player is drawn on the screen - camera 
 	public final int screenX;
@@ -33,10 +34,14 @@ public class Player extends Entity {
 		screenY = gp.screenHeight/2 - (gp.tileSize/2);
 		
 		//x, y, width, length
-		solidArea = new Rectangle(8,12,32,32);
+		solidArea = new Rectangle();
+		solidArea.x =8;
+		solidArea.y=12;
 		//Default values so x and y values of the rectangle can be changed later
 		solidAreaDefaultX= solidArea.x;
 		solidAreaDefaultY= solidArea.y;
+		solidArea.width=32;
+		solidArea.height=32;
 		
 		
 		setDefaultValues();
@@ -75,28 +80,37 @@ public class Player extends Entity {
 				keyH.leftPressed==true||keyH.rightPressed==true)
 		{//X and Y values increase as the player moves right and down
 			
+			
+		
 			//Check tile collision
 			collisionOn = false;
 			//Collision checker receive subclass
 			gp.cChecker.CheckTile(this);
 			
+			
+			//Check object collision
+			int objIndex = gp.cChecker.checkObject(this, true);
+			ObjectPickUp(objIndex);
+			
+			
 			if (keyH.upPressed == true) {
 				direction ="up";
-				if (collisionOn) {WorldY+=speed/5;} else {WorldY-=speed;}
+				if (collisionOn==true) {WorldY+=speed/5;} else {WorldY-=speed;}
 			}
 			if (keyH.downPressed== true) {
 				direction = "down";
-				if (collisionOn) {WorldY-=speed/5;} else {WorldY+=speed;}
+				if (collisionOn==true) {WorldY-=speed/5;} else {WorldY+=speed;}
 			}
 			if (keyH.leftPressed == true) {
 				direction = "left";	
-				if (collisionOn) {WorldX+=speed/5;} else {WorldX-=speed;}
+				if (collisionOn==true) {WorldX+=speed/5;} else {WorldX-=speed;}
 			}
 			if (keyH.rightPressed==true) {
 				direction = "right";
-				if (collisionOn) {WorldX-=speed/5;} else {WorldX+=speed;}
+				if (collisionOn==true) {WorldX-=speed/5;} else {WorldX+=speed;}
 			}
 			
+		
 			
 			
 			
@@ -136,6 +150,32 @@ public class Player extends Entity {
 			
 		
 	}//update
+	
+	public void ObjectPickUp(int index) {
+		
+		if (index!=9999) {
+			
+			String objectName = gp.obj[index].name;
+			
+			switch (objectName) {
+			case "Key":
+				++hasKey;
+				gp.obj[index]=null;
+				System.out.println ("Key:"+hasKey);
+				break;
+			case "Door":
+				if (hasKey>0) {
+					gp.obj[index]=null;
+					--hasKey;
+				}
+				System.out.println("Key:"+hasKey);
+				break;
+				
+			
+			}
+			
+		}
+	}
 		
 	
 	public void draw(Graphics2D g2) {
