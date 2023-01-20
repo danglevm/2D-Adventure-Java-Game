@@ -99,7 +99,7 @@ public class Player extends Entity {
 			}
 			if (keyH.downPressed== true) {
 				direction = "down";
-				if (collisionOn==true) {WorldY-=speed/5;} else {WorldY+=speed;}
+				if (collisionOn==true) {WorldY-=speed/5;} else {WorldY+=speed;} 
 			}
 			if (keyH.leftPressed == true) {
 				direction = "left";	
@@ -159,18 +159,25 @@ public class Player extends Entity {
 			
 			switch (objectName) {
 			case "Key":
+				gp.playSE(1);
 				++hasKey;
 				gp.obj[index]=null;
 				System.out.println ("Key:"+hasKey);
 				break;
 			case "Door":
+				
 				if (hasKey>0) {
 					gp.obj[index]=null;
 					--hasKey;
+					gp.playSE(4);
 				}
 				System.out.println("Key:"+hasKey);
 				break;
-				
+			case "Boots":
+				speed +=1;
+				gp.obj[index] = null;
+				gp.playSE(2);
+				break;
 			
 			}
 			

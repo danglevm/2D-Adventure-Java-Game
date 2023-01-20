@@ -1,5 +1,6 @@
 package adventureGame2D;
 
+import object.Obj_boots;
 import object.Obj_chest;
 import object.Obj_door;
 import object.Obj_key;
@@ -29,5 +30,9 @@ public class AssetPlacement {
 		gp.obj[3] = new Obj_chest();
 		gp.obj[3].worldX = 13*gp.tileSize;
 		gp.obj[3].worldY = 37 *gp.tileSize;
+		
+		gp.obj[4] = new Obj_boots();
+		gp.obj[4].worldX = 15*gp.tileSize;
+		gp.obj[4].worldY = 12*gp.tileSize;
 	}
 }

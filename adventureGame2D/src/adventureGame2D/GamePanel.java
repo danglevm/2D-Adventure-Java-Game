@@ -45,6 +45,11 @@ public class GamePanel extends JPanel implements Runnable{
 	public CollisionCheck cChecker = new CollisionCheck(this);
 	Thread gameThread;
 	public Player player = new Player(this, keyH);
+	//sound
+	Sound sound = new Sound();
+	
+	
+	//In-game objects
 	public AssetPlacement assetPlace = new AssetPlacement(this);
 	//Display up to only 10 objects on screen - decide later
 	public SuperObject obj [] = new SuperObject[10];
@@ -74,6 +79,9 @@ public class GamePanel extends JPanel implements Runnable{
 	public void GameSetup() {
 		
 		assetPlace.setObject();
+		playMusic(0);
+		
+		
 	}
 	
 	@Override
@@ -163,4 +171,19 @@ public void paintComponent (Graphics g) {
 	
 }
 
-}//End of class
+//Music playing methods
+	public void playMusic (int i) {
+		sound.setFile(i);
+		sound.play();
+		sound.loop();
+	}
+	
+	public void stopMusic () {
+		sound.stop();
+	}
+	
+	public void playSE(int i) {
+		sound.setFile(i);
+		sound.play();
+	}
+}
