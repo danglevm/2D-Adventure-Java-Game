@@ -108,8 +108,7 @@ public class CollisionCheck {
 					entity.solidArea.y -= entity.speed;
 					//entity rectangle intersects with object rectangle
 					if (entity.solidArea.intersects(gp.obj[i].solidArea)) {
-						System.out.println("Up collision");
-						System.out.println(gp.obj[i].collision);
+						
 						if (gp.obj[i].collision==true) {
 							entity.collisionOn=true;
 						}
@@ -123,7 +122,7 @@ public class CollisionCheck {
 					entity.solidArea.y += entity.speed;
 					if (entity.solidArea.intersects(gp.obj[i].solidArea)) {
 						if (entity.solidArea.intersects(gp.obj[i].solidArea)) {
-							System.out.println("Down collision");
+							
 							if (gp.obj[i].collision==true) {
 								entity.collisionOn=true;
 							}

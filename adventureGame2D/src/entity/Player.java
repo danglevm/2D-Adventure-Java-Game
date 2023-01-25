@@ -10,17 +10,22 @@ import javax.imageio.ImageIO;
 
 import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
+import adventureGame2D.UI;
 
 public class Player extends Entity {
 	
 	//Variables
 	GamePanel gp;
 	KeyHandler keyH;
-	int hasKey = 0;
+	public int hasKey = 0;
+
+	
+	
 	
 	//Where the player is drawn on the screen - camera 
 	public final int screenX;
 	public final int screenY;
+	
 	
 	
 	//-------------------------------CONSTRUCTORS------------------
@@ -36,7 +41,7 @@ public class Player extends Entity {
 		//x, y, width, length
 		solidArea = new Rectangle();
 		solidArea.x =8;
-		solidArea.y=12;
+		solidArea.y= 8;
 		//Default values so x and y values of the rectangle can be changed later
 		solidAreaDefaultX= solidArea.x;
 		solidAreaDefaultY= solidArea.y;
@@ -71,7 +76,9 @@ public class Player extends Entity {
 	public void setDefaultValues() {
 		WorldX = gp.tileSize*23;
 		WorldY= gp.tileSize*15;
-		speed = 4;
+		
+		speed = 3;
+		
 		direction = "down";
 	}
 	
@@ -80,8 +87,6 @@ public class Player extends Entity {
 				keyH.leftPressed==true||keyH.rightPressed==true)
 		{//X and Y values increase as the player moves right and down
 			
-			
-		
 			//Check tile collision
 			collisionOn = false;
 			//Collision checker receive subclass
@@ -95,40 +100,22 @@ public class Player extends Entity {
 			
 			if (keyH.upPressed == true) {
 				direction ="up";
-				if (collisionOn==true) {WorldY+=speed/5;} else {WorldY-=speed;}
+				
+				if (collisionOn==false) {WorldY-=speed;}
 			}
 			if (keyH.downPressed== true) {
 				direction = "down";
-				if (collisionOn==true) {WorldY-=speed/5;} else {WorldY+=speed;} 
+				if (collisionOn==false) {WorldY+=speed;} 
 			}
 			if (keyH.leftPressed == true) {
 				direction = "left";	
-				if (collisionOn==true) {WorldX+=speed/5;} else {WorldX-=speed;}
+				if (collisionOn==false){WorldX-=speed;}
 			}
 			if (keyH.rightPressed==true) {
 				direction = "right";
-				if (collisionOn==true) {WorldX-=speed/5;} else {WorldX+=speed;}
+				if (collisionOn==false){WorldX+=speed;}
 			}
-			
-		
-			
-			
-			
-			/*//player can move when collision on is false
-			if (collisionOn ==false) {
-			if (direction == "up") {
-					WorldY-=speed;
-			}
-			if (direction == "down") {
-					WorldY+=speed;
-			}
-			if (direction =="left") {
-					WorldX-=speed;
-			}
-			if (direction == "right") {
-					WorldX+=speed;
-				}
-			}*/
+	
 			
 			
 			
@@ -162,7 +149,7 @@ public class Player extends Entity {
 				gp.playSE(1);
 				++hasKey;
 				gp.obj[index]=null;
-				System.out.println ("Key:"+hasKey);
+				gp.ui.displayMessage("Picked up a key");
 				break;
 			case "Door":
 				
@@ -170,18 +157,27 @@ public class Player extends Entity {
 					gp.obj[index]=null;
 					--hasKey;
 					gp.playSE(4);
+					gp.ui.displayMessage("Opened a door");
+				} else {
+					gp.ui.displayMessage("No key in inventory");
 				}
 				System.out.println("Key:"+hasKey);
 				break;
 			case "Boots":
-				speed +=1;
+				speed+=1;
 				gp.obj[index] = null;
 				gp.playSE(2);
+				gp.ui.displayMessage("Picked up Boots of Speed");
+				break;
+			
+			case "Chest":
+				gp.ui.gameCompleted = true;
+				gp.stopMusic();
+				gp.playSE(4);
 				break;
 			
 			}
-			
-		}
+			}	
 	}
 		
 	
