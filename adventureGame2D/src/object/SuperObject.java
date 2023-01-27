@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import adventureGame2D.GamePanel;
+import adventureGame2D.UtilityTool;
 
 public class SuperObject {
 
@@ -20,6 +21,7 @@ public class SuperObject {
 	public int solidAreaDefaultX = 0;
 	public int solidAreaDefaultY = 0;
 	
+	UtilityTool uTool = new UtilityTool();
 	public void draw(Graphics2D g2, GamePanel gp) {
 		
 		int screenX = worldX-gp.player.WorldX + gp.player.screenX;

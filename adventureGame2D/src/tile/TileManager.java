@@ -35,10 +35,10 @@ public class TileManager {
 		
 			//Streams (sequences of bytes) are searched and found, then decoded into buffered image and stored into an object
 			tileSetup(0, "grass", false);
-			tileSetup(1, "wall", false);
-			tileSetup(2, "water", false);
+			tileSetup(1, "wall", true);
+			tileSetup(2, "water", true);
 			tileSetup(3, "earth", false);
-			tileSetup(4, "tree", false);
+			tileSetup(4, "tree", true);
 			tileSetup(5, "sand", false);
 	}
 	
