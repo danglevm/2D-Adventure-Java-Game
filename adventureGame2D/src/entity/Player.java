@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
 import adventureGame2D.UI;
+import adventureGame2D.UtilityTool;
 
 public class Player extends Entity {
 	
@@ -71,17 +72,38 @@ public class Player extends Entity {
 			//prints and trace the error to its cause
 			e.printStackTrace();
 		}
+		up1 = setupPlayer("boy_up_1");
+		up2 = setupPlayer("boy_up_2");
+		down1 = setupPlayer ("boy_down_1");
+		down2 = setupPlayer ("boy_down_2");
+		left1 = setupPlayer("boy_left_1");
+		left2 = setupPlayer("boy_left_2");
+		right1 = setupPlayer("boy_right_1");
+		right2 = setupPlayer ("boy_right_2");
+		
 	}
 	
 	public void setDefaultValues() {
 		WorldX = gp.tileSize*23;
 		WorldY= gp.tileSize*15;
 		
-		speed = 3;
+		speed = 2;
 		
 		direction = "down";
 	}
-	
+	public BufferedImage setupPlayer(String imageName) {
+		
+		UtilityTool uTool = new UtilityTool();
+		BufferedImage scaledImage = null;
+		
+		try {
+			scaledImage = ImageIO.read(getClass().getResourceAsStream("/player/"+imageName+".png"));
+			scaledImage = uTool.scaleImage(scaledImage, gp.tileSize, gp.tileSize);
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		return scaledImage;
+	}
 	public void update() {
 		if (keyH.upPressed == true||keyH.downPressed==true||
 				keyH.leftPressed==true||keyH.rightPressed==true)
@@ -100,7 +122,6 @@ public class Player extends Entity {
 			
 			if (keyH.upPressed == true) {
 				direction ="up";
-				
 				if (collisionOn==false) {WorldY-=speed;}
 			}
 			if (keyH.downPressed== true) {
@@ -226,7 +247,7 @@ public class Player extends Entity {
 		}
 		
 		//16 pixels
-		g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+		g2.drawImage(image, screenX, screenY, null);
 		
 			
 	}
