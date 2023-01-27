@@ -1,6 +1,7 @@
 package tile;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +10,7 @@ import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 
 import adventureGame2D.GamePanel;
+import adventureGame2D.UtilityTool;
 
 public class TileManager {
 
@@ -31,32 +33,32 @@ public class TileManager {
 	//Store tile images as entries inside the Tile array
 	public void getTileImage() {
 		
-		try {
 			//Streams (sequences of bytes) are searched and found, then decoded into buffered image and stored into an object
-			tile[0] = new Tile();
-			tile[0].image = ImageIO.read(getClass().getResourceAsStream("/tiles/grass.png"));
+			tileSetup(0, "grass", false);
+			tileSetup(1, "wall", false);
+			tileSetup(2, "water", false);
+			tileSetup(3, "earth", false);
+			tileSetup(4, "tree", false);
+			tileSetup(5, "sand", false);
+	}
+	
+	public void tileSetup(int index, String imageName, boolean collision) {
+		 
+		UtilityTool uTool = new UtilityTool();
+		
+		//handle image instantiation, import, scale and collision
+		try {
+			tile[index] = new Tile();
+			tile[index].image = ImageIO.read(getClass().getResourceAsStream("/tiles/"+imageName+".png"));
+			tile[index].image = uTool.scaleImage(tile[index].image, gp.tileSize, gp.tileSize);
+			tile[index].collision = collision;
 			
-			tile[1] = new Tile();
-			tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall.png"));
-			tile[1].collision = true;
-			
-			tile[2] = new Tile();
-			tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png"));
-			tile[2].collision = true;
-			
-			tile[3] = new Tile();
-			tile[3].image = ImageIO.read(getClass().getResourceAsStream("/tiles/earth.png"));
-			
-			tile[4] = new Tile();
-			tile[4].image = ImageIO.read(getClass().getResourceAsStream("/tiles/tree.png"));
-			tile[4].collision = true;
-			
-			tile[5] = new Tile();
-			tile[5].image = ImageIO.read(getClass().getResourceAsStream("/tiles/sand.png"));
-			
-		}catch(IOException e){
+		}catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
+		
 	}
 	
 	public void loadMap(String filePath) {
@@ -113,7 +115,7 @@ public class TileManager {
 				worldY+gp.tileSize>gp.player.WorldY-gp.player.screenY&&
 				worldY-gp.tileSize <gp.player.WorldY+gp.player.screenY) {
 				
-				g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+				g2.drawImage(tile[tileNum].image, screenX, screenY, null);
 			}
 			
 			
