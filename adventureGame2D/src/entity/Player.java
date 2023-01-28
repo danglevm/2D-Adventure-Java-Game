@@ -18,7 +18,7 @@ public class Player extends Entity {
 	//Variables
 	GamePanel gp;
 	KeyHandler keyH;
-	public int hasKey = 0;
+	
 
 	
 	
@@ -163,42 +163,8 @@ public class Player extends Entity {
 		
 		if (index!=9999) {
 			
-			String objectName = gp.obj[index].name;
-			
-			switch (objectName) {
-			case "Key":
-				gp.playSE(1);
-				++hasKey;
-				gp.obj[index]=null;
-				gp.ui.displayMessage("Picked up a key");
-				break;
-			case "Door":
-				
-				if (hasKey>0) {
-					gp.obj[index]=null;
-					--hasKey;
-					gp.playSE(4);
-					gp.ui.displayMessage("Opened a door");
-				} else {
-					gp.ui.displayMessage("No key in inventory");
-				}
-				System.out.println("Key:"+hasKey);
-				break;
-			case "Boots":
-				speed+=1;
-				gp.obj[index] = null;
-				gp.playSE(2);
-				gp.ui.displayMessage("Picked up Boots of Speed");
-				break;
-			
-			case "Chest":
-				gp.ui.gameCompleted = true;
-				gp.stopMusic();
-				gp.playSE(4);
-				break;
-			
-			}
-			}	
+
+	}
 	}
 		
 	
