@@ -37,16 +37,24 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int worldWidth = tileSize*maxWorldCol;
 	public final int worldHeight = tileSize*maxWorldRow;
 	
+	
+	//Game state
+	public int gameState;
+	public final int playState = 1;
+	public final int pauseState = 2;
+	
 	//FPS
 	int FPS = 60;
 	
 	//Game Objects
 	TileManager tileM = new TileManager(this);
-	KeyHandler keyH = new KeyHandler();
+	KeyHandler keyH = new KeyHandler(this);
 	public CollisionCheck cChecker = new CollisionCheck(this);
 	public UI ui = new UI(this);
 	Thread gameThread;
 	public Player player = new Player(this, keyH);
+	
+
 	
 	//sound
 	Sound music = new Sound();
@@ -56,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable{
 	//In-game objects
 	public AssetPlacement assetPlace = new AssetPlacement(this);
 	//Display up to only 10 objects on screen - decide later
-	public SuperObject obj [] = new SuperObject[10];
+	public SuperObject obj [] = new SuperObject[50];
 	
 	
 	
@@ -84,6 +92,8 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		assetPlace.setObject();
 		playMusic(0);
+		stopMusic();
+		gameState = playState;
 		
 		
 	}
@@ -139,7 +149,13 @@ public class GamePanel extends JPanel implements Runnable{
 //Takes in KeyH inputs and then updates character model
 public void update() {
 	
-	player.update();
+	if (gameState == playState) {
+		player.update();
+	} else {
+		//nothing happens
+	}
+	
+	
 	
 }
 
