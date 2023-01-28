@@ -18,12 +18,13 @@ public class TileManager {
 	public Tile[]tile;
 	public int mapTileNum[][];
 	//Change file path for maps
-	String filePath1 = "/maps/world01.txt";
+	String filePath1 = "/maps/spawnmap";
+	
 	//-------------------------------CONSTRUCTORS------------------
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
 		
-		tile =  new Tile[10];
+		tile =  new Tile[50];
 		mapTileNum = new int [gp.maxWorldCol][gp.maxWorldRow];
 		
 		getTileImage();
@@ -34,12 +35,51 @@ public class TileManager {
 	public void getTileImage() {
 		
 			//Streams (sequences of bytes) are searched and found, then decoded into buffered image and stored into an object
-			tileSetup(0, "grass", false);
-			tileSetup(1, "wall", true);
-			tileSetup(2, "water", true);
-			tileSetup(3, "earth", false);
-			tileSetup(4, "tree", true);
-			tileSetup(5, "sand", false);
+			tileSetup(0, "000", false);
+			tileSetup(1, "001", false);
+			tileSetup(2, "002", false);
+			tileSetup(3, "003", false);
+			tileSetup(4, "004", false);
+			tileSetup(5, "005", false);
+			
+			tileSetup(6, "006", false);
+			tileSetup(7, "007", false);
+			tileSetup(8, "008", false);
+			tileSetup(9, "009", false);
+			tileSetup(10, "010", false);
+			tileSetup(11, "011", false);
+			
+			tileSetup(12, "012", false);
+			tileSetup(13, "013", false);
+			tileSetup(14, "014", false);
+			tileSetup(15, "015", false);
+			tileSetup(16, "016", true);
+			tileSetup(17, "017", false);
+
+			tileSetup(18, "018", true);
+			tileSetup(19, "019", true);
+			tileSetup(20, "020", true);
+			tileSetup(21, "021", true);
+			tileSetup(22, "022", true);
+			tileSetup(23, "023", true);
+			
+			tileSetup(24, "024", true);
+			tileSetup(25, "025", true);
+			tileSetup(26, "026", true);
+			tileSetup(27, "027", true);
+			tileSetup(28, "028", true);
+			tileSetup(29, "029", true);
+			
+			tileSetup(30, "030", true);
+			tileSetup(31, "031", true);
+			tileSetup(32, "032", true);
+			tileSetup(33, "033", true);
+			tileSetup(34, "034", false);
+			tileSetup(35, "035", true);
+			
+			tileSetup(36, "036", false);
+			
+			tileSetup(37, "037", false);
 	}
 	
 	public void tileSetup(int index, String imageName, boolean collision) {

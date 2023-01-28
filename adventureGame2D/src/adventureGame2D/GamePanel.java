@@ -31,8 +31,9 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int screenHeight = tileSize * maxScreenRows; //672 pixels
 	
 	//World Map settings
-	public final int maxWorldCol = 50;
-	public final int maxWorldRow = 50;
+	public int maxWorldCol = 250;
+	public int maxWorldRow = 250;
+	public final int maxMap = 10;
 	public final int worldWidth = tileSize*maxWorldCol;
 	public final int worldHeight = tileSize*maxWorldRow;
 	
@@ -144,15 +145,17 @@ public void update() {
 
 public void paintComponent (Graphics g) {
 	
-	
-	
-		
 	//Calling parent class JPanel
 	super.paintComponent(g);
 	
 	//Set 1D graphics to 2d Graphics
 	Graphics2D g2 = (Graphics2D)g;
 	
+	//DEBUG
+	long drawStart = 0;
+	if (keyH.checkDrawTime == true) {
+		drawStart = System.nanoTime();	
+	}
 	
 	//Draw the tiles first before the player characters
 	//TILE
@@ -173,7 +176,14 @@ public void paintComponent (Graphics g) {
 	ui.draw(g2);
 	
 	
-	
+	//debug
+	if (keyH.checkDrawTime==true) {
+		long drawEnd = System.nanoTime();
+		long passed = drawEnd - drawStart;
+		g2.setColor(Color.white);
+		g2.drawString("Draw Time: " + passed, 10, 400);
+		System.out.println("Draw time: " + passed);
+	}
 	g2.dispose();
 	
 	
