@@ -11,7 +11,7 @@ public class KeyHandler implements KeyListener{
 	}
 	public boolean upPressed, downPressed, leftPressed, rightPressed;
 	//Debug
-	boolean checkDrawTime = false;
+	boolean FPS_display = false;
 	@Override
 	public void keyTyped(KeyEvent e) {
 	
@@ -46,12 +46,13 @@ public class KeyHandler implements KeyListener{
 
 	
 
-	//Debug 
+	//display FPS
 	if (code == KeyEvent.VK_T) {
-		if (checkDrawTime == false) {
-			checkDrawTime = true;
+		System.out.println(FPS_display);
+		if (FPS_display == false) {
+			FPS_display = true;
 		} else { 
-			checkDrawTime = false;
+			FPS_display = false;
 		}
 	}
 	}

@@ -45,13 +45,19 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int pauseState = 2;
 	
 	//FPS
-	int FPS = 60;
+	private int FPS = 60, drawCount = 0;
+	private long timer =0;
+	private int FPS_x = screenWidth - tileSize*3, FPS_y = tileSize;
+	private String FPS_text = "";
+	
+	
 	
 	//Game Objects
 	TileManager tileM = new TileManager(this);
 	KeyHandler keyH = new KeyHandler(this);
 	public CollisionCheck cChecker = new CollisionCheck(this);
 	public UI ui = new UI(this);
+	
 	
 	//Entities
 	Thread gameThread;
@@ -110,8 +116,8 @@ public class GamePanel extends JPanel implements Runnable{
 		double delta = 0;
 		long lastTime = System.nanoTime();
 		long currentTime;
-		long timer =0;
-		int drawCount =0;
+		
+		
 		
 		while (gameThread!= null) {
 			
@@ -125,25 +131,27 @@ public class GamePanel extends JPanel implements Runnable{
 			
 			//When delta reach drawInterval that is equals to 1
 			if (delta>=1) {
+				
 				//1. Update information - character position
 				update();
 				//2. Draw the screen with the updated information
 				//Repaint internally calls paint to repaint the component
 				repaint();
 				delta--;
-				drawCount++;
+				++drawCount;
 				
 			}
-			//Display FPS
+			//FPS counter
 			if (timer>=1000000000) {
-				System.out.println("FPS: " +drawCount);
-				drawCount = 0;
+				FPS_text = "FPS: "+ drawCount;	
 				timer = 0;
-			}
+				drawCount = 0;
+					
 		
 		}
 		
 		
+	}
 	}
 	 
 	
@@ -183,11 +191,6 @@ public void paintComponent (Graphics g) {
 	//Set 1D graphics to 2d Graphics
 	Graphics2D g2 = (Graphics2D)g;
 	
-	//DEBUG
-	long drawStart = 0;
-	if (keyH.checkDrawTime == true) {
-		drawStart = System.nanoTime();	
-	}
 	
 	//Draw the tiles first before the player characters
 	//TILE
@@ -214,19 +217,19 @@ public void paintComponent (Graphics g) {
 	//Drawing the UI
 	ui.draw(g2);
 	
-	
-	//debug
-	if (keyH.checkDrawTime==true) {
-		long drawEnd = System.nanoTime();
-		long passed = drawEnd - drawStart;
-		g2.setColor(Color.white);
-		g2.drawString("Draw Time: " + passed, 10, 400);
-		System.out.println("Draw time: " + passed);
+	//draws FPS
+	if (keyH.FPS_display) {
+		g2.drawString(FPS_text, FPS_x, FPS_y);
 	}
+	
+	
+	
+	
 	g2.dispose();
 	
 	
 }
+
 
 //Music playing methods
 	public void playMusic (int i) {

@@ -18,16 +18,13 @@ public class UI {
 	private int messageCount=0;
 	public boolean gameCompleted = false;
 	
-	double playTime;
-	DecimalFormat dFormat = new DecimalFormat("#0.00");
-	
+
 	public UI(GamePanel gp) {
 		this.gp = gp;
 		
 		arial_30 = new Font ("Arial", Font.PLAIN, 30);
 		arial_50 = new Font ("Arial", Font.PLAIN, 50);
 		arial_70 = new Font ("Arial", Font.BOLD, 70);
-		Obj_key Key = new Obj_key(gp);
 		
 	}
 	
@@ -36,6 +33,13 @@ public class UI {
 		messageOn = true;
 		
 	}
+	
+	public int getXCenter (String text) {
+		int str_length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+		int x = gp.screenWidth/2 - str_length/2;
+		return x;
+	}
+	
 	
 	
 	//Draws the UI
@@ -46,14 +50,34 @@ public class UI {
 		g2.setFont(arial_30);
 		g2.setColor(Color.white);
 		
+		
+		//Drawing gamestate
 		if (gp.gameState == gp.playState) {
 			//game state
 			
-		} else {
+		} else if (gp.gameState ==gp.pauseState) {
 			//pause state
 			drawPauseScreen();
+		} else {
+			//dialog state
+			drawDialogueScreen();
 		}
 		
+		
+		//displays FPS
+		
+		
+	}
+	
+	//displays FPS on screen
+	public void drawFPS (int fps) {
+		int x, y;
+		g2.setFont(arial_30);
+		g2.setColor(Color.white);
+		String text = "FPS: " + fps;
+		x = getXCenter(text);
+		y = gp.screenHeight/2;
+		g2.drawString(text, x, y);
 	}
 	
 	public void drawPauseScreen () {
@@ -64,10 +88,18 @@ public class UI {
 		g2.drawString(text, x ,y );
 	}
 	
-	public int getXCenter (String text) {
-		int str_length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-		int x = gp.screenWidth/2 - str_length/2;
-		return x;
+	public void drawDialogueScreen() {
+		
+		// Dialogue window
+		int x = gp.tileSize*2, 
+			y = gp.tileSize/2, 
+			width = gp.screenWidth - (gp.tileSize*4), 
+			height = gp.tileSize*5;
 	}
+	
+	public void drawDialogueWindow (int x, int y, int width, int height) {
+		
+	}
+	
 	
 }
