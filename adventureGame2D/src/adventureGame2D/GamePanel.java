@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import entity.Entity;
 import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
@@ -51,9 +52,11 @@ public class GamePanel extends JPanel implements Runnable{
 	KeyHandler keyH = new KeyHandler(this);
 	public CollisionCheck cChecker = new CollisionCheck(this);
 	public UI ui = new UI(this);
+	
+	//Entities
 	Thread gameThread;
 	public Player player = new Player(this, keyH);
-	
+	public Entity npcs[] = new Entity[20]; 
 
 	
 	//sound
@@ -91,6 +94,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public void GameSetup() {
 		
 		assetPlace.setObject();
+		assetPlace.setNPCs();
 		playMusic(0);
 		stopMusic();
 		gameState = playState;
@@ -149,11 +153,23 @@ public class GamePanel extends JPanel implements Runnable{
 //Takes in KeyH inputs and then updates character model
 public void update() {
 	
+	
 	if (gameState == playState) {
+		//Player
 		player.update();
+		//NPCs
+		for (int i = 0; i <npcs.length;++i) {
+			if (npcs[i]!=null) {
+				npcs[i].update();
+			}
+		}
+		
+		
 	} else {
 		//nothing happens
 	}
+	
+	
 	
 	
 	
@@ -182,6 +198,13 @@ public void paintComponent (Graphics g) {
 		//Check if the object is null or not
 		if (obj [i] != null) {
 			obj[i].draw(g2, this);
+		}
+	}
+	
+	//NPCS
+	for (int i =0 ; i<npcs.length;++i) {
+		if (npcs[i]!=null) { 
+			npcs[i].draw(g2, this); 
 		}
 	}
 	
