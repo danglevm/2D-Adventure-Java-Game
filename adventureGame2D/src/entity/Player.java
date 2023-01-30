@@ -16,13 +16,9 @@ import adventureGame2D.UtilityTool;
 public class Player extends Entity {
 	
 	//Variables
-	GamePanel gp;
 	KeyHandler keyH;
 	
 
-	
-	
-	
 	//Where the player is drawn on the screen - camera 
 	public final int screenX;
 	public final int screenY;
@@ -31,7 +27,8 @@ public class Player extends Entity {
 	
 	//-------------------------------CONSTRUCTORS------------------
 	public Player (GamePanel gp, KeyHandler keyH) {
-		this.gp = gp;
+		super(gp);
+		
 		this.keyH = keyH;
 		
 		//Places the character at the center of the screen
@@ -46,64 +43,34 @@ public class Player extends Entity {
 		//Default values so x and y values of the rectangle can be changed later
 		solidAreaDefaultX= solidArea.x;
 		solidAreaDefaultY= solidArea.y;
-		solidArea.width=32;
-		solidArea.height=32;
+		solidArea.width=24;
+		solidArea.height=38;
 		
+		//Default NPC values
+		WorldX = gp.tileSize*122;
+		WorldY= gp.tileSize*132;
+		speed = 3;
+		direction = "down";
 		
-		setDefaultValues();
 		getPlayerImage();
 	}
 	
 	//-------------------------------CLASS METHODS------------------
 	public void getPlayerImage() {
-		try {
-			//Returns the buffered image from the link specified 
-			//GetClass () - returns the runtime class of the object
-			up1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_1.png"));
-			up2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_2.png"));
-			down1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_down_1.png"));
-			down2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_down_2.png"));
-			left1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_1.png"));
-			left2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_2.png"));
-			right1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_1.png"));
-			right2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_2.png"));
-			
-		}catch(IOException e){
-			//prints and trace the error to its cause
-			e.printStackTrace();
-		}
-		up1 = setupPlayer("boy_up_1");
-		up2 = setupPlayer("boy_up_2");
-		down1 = setupPlayer ("boy_down_1");
-		down2 = setupPlayer ("boy_down_2");
-		left1 = setupPlayer("boy_left_1");
-		left2 = setupPlayer("boy_left_2");
-		right1 = setupPlayer("boy_right_1");
-		right2 = setupPlayer ("boy_right_2");
+		
+		up1 = setupCharacter("boy_up_1", "/player/");
+		up2 = setupCharacter("boy_up_2", "/player/");
+		down1 = setupCharacter("boy_down_1", "/player/");
+		down2 = setupCharacter("boy_down_2", "/player/");
+		left1 = setupCharacter("boy_left_1", "/player/");
+		left2 = setupCharacter("boy_left_2", "/player/");
+		right1 = setupCharacter("boy_right_1", "/player/");
+		right2 = setupCharacter ("boy_right_2", "/player/");
 		
 	}
 	
-	public void setDefaultValues() {
-		WorldX = gp.tileSize*122;
-		WorldY= gp.tileSize*132;
-		
-		speed = 3;
-		
-		direction = "down";
-	}
-	public BufferedImage setupPlayer(String imageName) {
-		
-		UtilityTool uTool = new UtilityTool();
-		BufferedImage scaledImage = null;
-		
-		try {
-			scaledImage = ImageIO.read(getClass().getResourceAsStream("/player/"+imageName+".png"));
-			scaledImage = uTool.scaleImage(scaledImage, gp.tileSize, gp.tileSize);
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-		return scaledImage;
-	}
+	
+	
 	public void update() {
 		if (keyH.upPressed == true||keyH.downPressed==true||
 				keyH.leftPressed==true||keyH.rightPressed==true)
@@ -115,10 +82,15 @@ public class Player extends Entity {
 			gp.cChecker.CheckTile(this);
 			
 			
+			
 			//Check object collision
 			int objIndex = gp.cChecker.checkObject(this, true);
 			ObjectPickUp(objIndex);
 			
+			
+			//check NPC collision
+			int npcIndex = gp.cChecker.checkEntity(this, gp.npcs);
+			collisionNPC(npcIndex);
 			
 			if (keyH.upPressed == true) {
 				direction ="up";
@@ -136,6 +108,7 @@ public class Player extends Entity {
 				direction = "right";
 				if (collisionOn==false){WorldX+=speed;}
 			}
+			
 	
 			
 			
@@ -166,7 +139,12 @@ public class Player extends Entity {
 
 	}
 	}
-		
+	
+	public void collisionNPC (int i) {
+		if (i != 9999) {
+			System.out.println("go do it");
+		}
+	}
 	
 	public void draw(Graphics2D g2) {
 		/*
