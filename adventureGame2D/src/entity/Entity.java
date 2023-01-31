@@ -24,14 +24,20 @@ public class Entity {
 	//Store data about this rectangle as x, y, width and height
 	public Rectangle solidArea;
 	public int solidAreaDefaultX, solidAreaDefaultY;
-	
 	public boolean collisionOn = false;
 	
+	
+	
+//	Constructor
 	public Entity (GamePanel gp) {
 		this.gp = gp;
 	}
 	
+	
+// 	Class methods
 	public void setAction() {}
+	
+	public void speak() {}
 	
 	public void update() {
 		setAction();
@@ -131,6 +137,27 @@ public class Entity {
 			e.printStackTrace();
 		}
 		return scaledImage;
+	}
+	
+	//Set direction when talking to player
+	public void talkingDirection (Entity player, Entity NPC) {
+		String direction = "";
+		switch(player.direction) {
+		case "up":
+			direction="down";
+			break;
+		case "down":
+			direction = "up";
+			break;
+		case "right":
+			direction = "left";
+			break;
+		case "left":
+			direction = "right";
+			break;
+		}
+		NPC.direction = direction;
+		
 	}
 	
 	
