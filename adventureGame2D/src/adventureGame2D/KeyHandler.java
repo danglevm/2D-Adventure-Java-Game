@@ -22,6 +22,8 @@ public class KeyHandler implements KeyListener{
 		int code = e.getKeyCode();
 		
 		//Check if WASD is in use
+		//PLAY state
+	if (gp.gameState == gp.playState) {
 		if (code == KeyEvent.VK_W) {
 			upPressed=true;
 		} 
@@ -37,24 +39,47 @@ public class KeyHandler implements KeyListener{
 		
 		//Pause the game
 		if (code == KeyEvent.VK_ESCAPE) {
-			if (gp.gameState == gp.playState) {
-				gp.gameState = gp.pauseState;
-			} else {
-				gp.gameState = gp.playState;
-			}
+			gp.gameState = gp.pauseState;
 		} 
 
 	
 
 	//display FPS
 	if (code == KeyEvent.VK_T) {
-		System.out.println(FPS_display);
 		if (FPS_display == false) {
 			FPS_display = true;
 		} else { 
 			FPS_display = false;
 		}
-	}
+			}
+	
+	
+		}
+		
+		else if (gp.gameState ==gp.pauseState) {
+			//Pause state
+			//Resumes the game
+			if (code == KeyEvent.VK_ESCAPE) {
+				gp.gameState = gp.playState;
+			} 
+			
+		}
+		
+		else{
+			//Dialogue state
+			if (code == KeyEvent.VK_ENTER) {
+				gp.gameState = gp.playState;
+			}
+			
+			
+			
+			
+		}
+		
+		
+		
+		
+		
 	}
 	
 	
