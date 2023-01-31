@@ -11,6 +11,9 @@ import adventureGame2D.GamePanel;
 import adventureGame2D.UtilityTool;
 
 public class NPC_OldDude extends Entity {
+	//Dialogues
+	String oldDudeDialogues[] = new String [20];
+	int oldDudeDialogueIndex = 0;
 
 	public NPC_OldDude (GamePanel gp) {
 		super(gp);
@@ -18,7 +21,9 @@ public class NPC_OldDude extends Entity {
 		speed = 2;
 		solidArea = new Rectangle(8,8, 24, 24);
 		
+		
 		getOldDudeImage();
+		setDialogue();
 	}
 	
 
@@ -36,6 +41,19 @@ public class NPC_OldDude extends Entity {
 		
 
 		
+	}
+	
+	public void setDialogue() {
+		
+		//Meeting the player for the first time
+		oldDudeDialogues[0] = " '...' ";
+		oldDudeDialogues[1] = " 'OH what the-' ";
+		oldDudeDialogues[2] = " 'Who the f*** are you, whippersnapper? Creeping on me like that?' ";
+		
+		//depends on what the player chooses
+		oldDudeDialogues[3] = "You deaf, son?";
+		oldDudeDialogues[4] = "I sure as hell haven't seen you around. What's your name?";
+		oldDudeDialogues[5] = "You what? You woke up in my HOUSE?";
 	}
 	
 	@Override
@@ -64,5 +82,13 @@ public class NPC_OldDude extends Entity {
 	
 	
 
-	
+	public void speak() {
+		//Opening speak
+		if (oldDudeDialogues[oldDudeDialogueIndex]!=null) {
+			gp.ui.setCurrentDialogue(oldDudeDialogues[oldDudeDialogueIndex]);
+			++oldDudeDialogueIndex;
+		}
+		talkingDirection(gp.player, gp.npcs[0]);
+		
+	}
 }
