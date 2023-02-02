@@ -1,2 +1,9 @@
 Some bugs:
 1. When two directions are pressed at once into the wall, the keys invert
+
+Features:
+1. Make going next in a dialogue more natural easier to maneuver
+2. Show what keys to make the dialogue go next
+3. add dialogue choices
+4. titleScreen cursor animation - box goes around the options
+5. Pause screen logged out

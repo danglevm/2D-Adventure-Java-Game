@@ -2,6 +2,7 @@ package adventureGame2D;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -39,11 +40,14 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int worldHeight = tileSize*maxWorldRow;
 	
 	
-	//Game state
+	//Main game state
 	public int gameState;
+	public final int titleState = 0;
 	public final int playState = 1;
 	public final int pauseState = 2;
 	public final int dialogueState = 3;
+	
+	
 	
 	//FPS
 	private int FPS = 60;
@@ -103,7 +107,7 @@ public class GamePanel extends JPanel implements Runnable{
 		assetPlace.setNPCs();
 		playMusic(0);
 		stopMusic();
-		gameState = playState;
+		gameState = titleState;
 		
 		
 	}
@@ -192,6 +196,10 @@ public void paintComponent (Graphics g) {
 	//Set 1D graphics to 2d Graphics
 	Graphics2D g2 = (Graphics2D)g;
 	
+	if (gameState == titleState) {
+		ui.draw(g2);
+		
+	} else {
 	
 	//Draw the tiles first before the player characters
 	//TILE
@@ -220,15 +228,18 @@ public void paintComponent (Graphics g) {
 	
 	//draws FPS
 	if (keyH.FPS_display) {
+		g2.setColor(Color.white);
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN,20));
 		g2.drawString(FPS_text, FPS_x, FPS_y);
 	}
-	
 	
 	
 	
 	g2.dispose();
 	
 	
+	}
+
 }
 
 
