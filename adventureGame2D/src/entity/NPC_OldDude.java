@@ -83,7 +83,7 @@ public class NPC_OldDude extends Entity {
 	public void speak() {
 		//Opening speak
 		if (oldDudeDialogues[oldDudeDialogueIndex]!=null) {
-			gp.ui.currentDialogue = oldDudeDialogues[oldDudeDialogueIndex];
+			gp.ui.setCurrentDialogue( oldDudeDialogues[oldDudeDialogueIndex]);
 			++oldDudeDialogueIndex;
 		}
 		talkingDirection(gp.player, gp.npcs[0]);

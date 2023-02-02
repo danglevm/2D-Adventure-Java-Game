@@ -24,7 +24,8 @@ public class UI {
 	//Stylizing
 	Font arial_30, arial_50, arial_70, maruMonica, purisa;
 	//Dialogue
-	public String currentDialogue = "";	
+	private String currentDialogue = "";	
+	public void setCurrentDialogue (String dialogue) { currentDialogue = dialogue;}
 	public int cursorNum = 0;
 	//commandnum set and get
 	
