@@ -9,7 +9,7 @@ public class KeyHandler implements KeyListener{
 	public KeyHandler (GamePanel gp) {
 		this.gp = gp;
 	}
-	public boolean upPressed, downPressed, leftPressed, rightPressed, dialoguePressed = false, FPS_display = false;
+	public boolean upPressed, downPressed, leftPressed, rightPressed, dialoguePressed = true, FPS_display = false;
 	@Override
 	public void keyTyped(KeyEvent e) {
 	
@@ -19,9 +19,68 @@ public class KeyHandler implements KeyListener{
 	public void keyPressed(KeyEvent e) {
 		int code = e.getKeyCode();
 		
-		//Check if WASD is in use
-		//PLAY state
-	if (gp.gameState == gp.playState) {
+		//title state
+		if (gp.gameState == gp.titleState) {
+			if (gp.ui.titleScreenState == 0) {
+				//Title screen
+				if (code == KeyEvent.VK_W) {
+					--gp.ui.cursorNum;
+				} 
+				if (code == KeyEvent.VK_S) {
+					++gp.ui.cursorNum;
+				} 
+				
+				if (code == KeyEvent.VK_ENTER) {
+					//new game
+					if (gp.ui.cursorNum == 0) {
+						gp.ui.titleScreenState = 1;
+					} 
+					else if (gp.ui.cursorNum == 1) {
+						//load save
+					} else if (gp.ui.cursorNum == 2) {
+						//settings
+					} else {
+						System.exit(0);
+					}
+				}
+				
+				if (gp.ui.cursorNum > 3) {
+					gp.ui.cursorNum = 3;
+				} 
+				if (gp.ui.cursorNum < 0) {
+					gp.ui.cursorNum = 0;
+				}
+			} else if (gp.ui.titleScreenState == 1) {
+				//Path selection screen
+				if (code == KeyEvent.VK_A) {
+					--gp.ui.cursorNum;
+				} 
+				if (code == KeyEvent.VK_D) {
+					++gp.ui.cursorNum;
+				} 
+				
+				if (code == KeyEvent.VK_ENTER) {
+					//Blue boy
+					if (gp.ui.cursorNum == 0) {
+						gp.gameState = gp.playState;
+						gp.playMusic(0);
+					} else {
+						//Yellow Girl
+					}
+				}
+				
+				if (gp.ui.cursorNum > 1) {
+					gp.ui.cursorNum = 1;
+				} 
+				if (gp.ui.cursorNum < 0) {
+					gp.ui.cursorNum = 0;
+				}
+			}
+			
+			
+	
+		
+	} else if (gp.gameState == gp.playState) {
 		if (code == KeyEvent.VK_W) {
 			upPressed=true;
 		} 
@@ -59,7 +118,7 @@ public class KeyHandler implements KeyListener{
 	
 		}
 		
-		else if (gp.gameState ==gp.pauseState) {
+		else if (gp.gameState == gp.pauseState) {
 			//Pause state
 			//Resumes the game
 			if (code == KeyEvent.VK_ESCAPE) {
@@ -68,7 +127,7 @@ public class KeyHandler implements KeyListener{
 			
 		}
 		
-		else{
+		else if (gp.gameState == gp.dialogueState){
 			//Dialogue state
 			if (code == KeyEvent.VK_ENTER) {
 				gp.gameState = gp.playState;

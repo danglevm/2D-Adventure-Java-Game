@@ -17,14 +17,17 @@ public class UI {
 	
 	GamePanel gp;
 	Graphics2D g2;
+	//Sub-states
+	//0 - welcome screen; 1 - story paths
+	public int titleScreenState = 0;
 	
 	//Stylizing
 	Font arial_30, arial_50, arial_70, maruMonica, purisa;
 	//Dialogue
-	private String currentDialogue = "";	
-	public void setCurrentDialogue(String dialogue) {
-		currentDialogue = dialogue;
-	}
+	public String currentDialogue = "";	
+	public int cursorNum = 0;
+	//commandnum set and get
+	
 	
 	//Drawing and setting UI
 	public UI(GamePanel gp) {
@@ -37,8 +40,8 @@ public class UI {
 		InputStream is = getClass().getResourceAsStream("/fonts/Purisa Bold.ttf");
 		try {
 			purisa = Font.createFont(Font.TRUETYPE_FONT, is);
-			is = getClass().getResourceAsStream("/fonts/x12y16pxMaruMonica.ttf");
-			maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
+			InputStream is2 = getClass().getResourceAsStream("/fonts/x12y16pxMaruMonica.ttf");
+			maruMonica = Font.createFont(Font.TRUETYPE_FONT, is2);
 		} catch (FontFormatException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,19 +65,25 @@ public class UI {
 		this.g2 = g2;
 		
 		g2.setFont(purisa);
-		g2.setRenderingHint (RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setColor(Color.white);
 		
 		
 		//Drawing gamestate
-		if (gp.gameState == gp.playState) {
-			//game state
+		if (gp.gameState == gp.titleState) {
+			//titleScreen
+			drawTitleScreen();
 			
-		} else if (gp.gameState ==gp.pauseState) {
+		} 
+		if (gp.gameState == gp.pauseState) {
 			//pause state
 			drawPauseScreen();
-		} else {
-			//dialog state
+		}
+		if (gp.gameState == gp.gameState){
+			//playing state
+		} 
+		if (gp.gameState == gp.dialogueState){
+			//dialogue state
+			
 			drawDialogueScreen();
 		}
 		
@@ -94,8 +103,91 @@ public class UI {
 		g2.drawString(text, x ,y );
 	}
 	
-	public void drawDialogueScreen() {
+	public void drawTitleScreen() {
+		g2.setColor(new Color (70,120,80));
+		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+		if (titleScreenState == 0) {
+			//Draw background
+			
+			
+			//Title name
+			g2.setFont(maruMonica);
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80));
+			String text = "A Fever Dream";
+			int x = getXCenter(text),
+				y = gp.tileSize*3;
+			
+			//Draw the shadow
+			g2.setColor(Color.black);
+			g2.drawString(text, x+5, y+5);
+			
+			//Draw the actual text
+			g2.setColor(Color.white);
+			g2.drawString(text, x, y);
+			
+			//Character image
+			x = gp.screenWidth/2-gp.tileSize*2;
+			y += gp.tileSize*1.5;
+			g2.drawImage(gp.player.down1, x, y, gp.tileSize*4, gp.tileSize*4, null);
+			
+			//Menu options
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+			text = "NEW GAME";
+			x = getXCenter(text);
+			y += gp.tileSize*5.5;
+			g2.drawString(text, x, y);
+			if (cursorNum == 0) {g2.drawString(">", x-gp.tileSize, y);}
+			
+			text = "LOAD SAVE";
+			x = getXCenter(text);
+			y += gp.tileSize;
+			g2.drawString(text, x, y);
+			if (cursorNum == 1) {g2.drawString(">", x-gp.tileSize, y);}
+			
+			text = "SETTINGS";
+			x = getXCenter(text);
+			y += gp.tileSize;
+			g2.drawString(text, x, y);
+			if (cursorNum == 2) {g2.drawString(">", x-gp.tileSize, y);}
 		
+			text = "QUIT";
+			x = getXCenter(text);
+			y += gp.tileSize;
+			g2.drawString(text,x, y);
+			if (cursorNum == 3) {g2.drawString(">", x-gp.tileSize, y);}
+		} else if (titleScreenState == 1) {
+			
+			//STORY PATH SELECTION
+			g2.setColor(Color.white);
+			g2.setFont(g2.getFont().deriveFont(42F));
+			
+			String text = "Select a story";
+			int x = getXCenter(text),
+				y = gp.tileSize*2;
+			g2.drawString(text,x,y);
+			
+			text = "Blue Boy";
+			x = getXCenter(text) - gp.tileSize*4;
+			y = gp.screenHeight/2;
+			g2.drawString(text, x, y);
+			if (cursorNum == 0) {g2.drawString(">", x-gp.tileSize, y);}
+			
+			text = "Yellow Girl";
+			x = getXCenter(text) + gp.tileSize*4;
+			y = gp.screenHeight/2;
+			g2.drawString(text, x, y);
+			if (cursorNum == 1) {g2.drawString(">", x-gp.tileSize, y);}
+			
+			
+		}
+
+		
+		
+		
+	
+	}
+	
+	public void drawDialogueScreen() {
 		// Dialogue window
 		int x = gp.tileSize*2, 
 			y = gp.tileSize/2, 
@@ -108,7 +200,6 @@ public class UI {
 		int dialogueX = gp.tileSize*3-20,
 			dialogueY = gp.tileSize/2 +gp.tileSize;
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
-		
 		//Split the string into many parts
 		for (String line : currentDialogue.split("\n")) {
 			g2.drawString(line, dialogueX, dialogueY);
