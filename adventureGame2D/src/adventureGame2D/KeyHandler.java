@@ -9,9 +9,7 @@ public class KeyHandler implements KeyListener{
 	public KeyHandler (GamePanel gp) {
 		this.gp = gp;
 	}
-	public boolean upPressed, downPressed, leftPressed, rightPressed;
-	//Debug
-	boolean FPS_display = false;
+	public boolean upPressed, downPressed, leftPressed, rightPressed, dialoguePressed = false, FPS_display = false;
 	@Override
 	public void keyTyped(KeyEvent e) {
 	
@@ -41,6 +39,11 @@ public class KeyHandler implements KeyListener{
 		if (code == KeyEvent.VK_ESCAPE) {
 			gp.gameState = gp.pauseState;
 		} 
+		
+		if (code == KeyEvent.VK_ENTER) {
+			dialoguePressed = true;
+		} 
+
 
 	
 

@@ -43,10 +43,10 @@ public class GamePanel extends JPanel implements Runnable{
 	public int gameState;
 	public final int playState = 1;
 	public final int pauseState = 2;
+	public final int dialogueState = 3;
 	
 	//FPS
-	private int FPS = 60, drawCount = 0;
-	private long timer =0;
+	private int FPS = 60;
 	private int FPS_x = screenWidth - tileSize*3, FPS_y = tileSize;
 	private String FPS_text = "";
 	
@@ -116,6 +116,7 @@ public class GamePanel extends JPanel implements Runnable{
 		double delta = 0;
 		long lastTime = System.nanoTime();
 		long currentTime;
+		int timer=0, drawCount=0;
 		
 		
 		
@@ -231,6 +232,7 @@ public void paintComponent (Graphics g) {
 }
 
 
+
 //Music playing methods
 	public void playMusic (int i) {
 		music.setFile(i);
@@ -247,3 +249,5 @@ public void paintComponent (Graphics g) {
 		se.play();
 	}
 }
+
+

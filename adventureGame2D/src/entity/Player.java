@@ -142,8 +142,14 @@ public class Player extends Entity {
 	
 	public void collisionNPC (int i) {
 		if (i != 9999) {
-			System.out.println("go do it");
+			//player touching npc
+			if (keyH.dialoguePressed) {
+				gp.gameState = gp.dialogueState;
+				gp.npcs[i].speak();
+				keyH.dialoguePressed = false; 
+			}
 		}
+	
 	}
 	
 	public void draw(Graphics2D g2) {

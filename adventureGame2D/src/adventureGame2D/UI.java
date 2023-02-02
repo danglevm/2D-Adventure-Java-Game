@@ -1,9 +1,14 @@
 package adventureGame2D;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 
 import object.Obj_key;
@@ -11,14 +16,17 @@ import object.Obj_key;
 public class UI {
 	
 	GamePanel gp;
-	Font arial_30, arial_50, arial_70;
 	Graphics2D g2;
-	public boolean messageOn = false;
-	public String message ="";
-	private int messageCount=0;
-	public boolean gameCompleted = false;
 	
-
+	//Stylizing
+	Font arial_30, arial_50, arial_70, maruMonica, purisa;
+	//Dialogue
+	private String currentDialogue = "";	
+	public void setCurrentDialogue(String dialogue) {
+		currentDialogue = dialogue;
+	}
+	
+	//Drawing and setting UI
 	public UI(GamePanel gp) {
 		this.gp = gp;
 		
@@ -26,13 +34,19 @@ public class UI {
 		arial_50 = new Font ("Arial", Font.PLAIN, 50);
 		arial_70 = new Font ("Arial", Font.BOLD, 70);
 		
-	}
-	
-	public void displayMessage (String text) {
-		message = text;
-		messageOn = true;
+		InputStream is = getClass().getResourceAsStream("/fonts/Purisa Bold.ttf");
+		try {
+			purisa = Font.createFont(Font.TRUETYPE_FONT, is);
+			is = getClass().getResourceAsStream("/fonts/x12y16pxMaruMonica.ttf");
+			maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
+		} catch (FontFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
+	
+
 	
 	public int getXCenter (String text) {
 		int str_length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
@@ -47,7 +61,8 @@ public class UI {
 		
 		this.g2 = g2;
 		
-		g2.setFont(arial_30);
+		g2.setFont(purisa);
+		g2.setRenderingHint (RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setColor(Color.white);
 		
 		
@@ -69,20 +84,11 @@ public class UI {
 		
 	}
 	
-	//displays FPS on screen
-	public void drawFPS (int fps) {
-		int x, y;
-		g2.setFont(arial_30);
-		g2.setColor(Color.white);
-		String text = "FPS: " + fps;
-		x = getXCenter(text);
-		y = gp.screenHeight/2;
-		g2.drawString(text, x, y);
-	}
-	
+
+	//draw screen when paused
 	public void drawPauseScreen () {
 		
-		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));
+		g2.setFont(g2.getFont().deriveFont(Font.ITALIC, 80));
 		String text = "Game Paused";
 		int x = getXCenter(text), y = gp.screenHeight/2;
 		g2.drawString(text, x ,y );
@@ -94,10 +100,38 @@ public class UI {
 		int x = gp.tileSize*2, 
 			y = gp.tileSize/2, 
 			width = gp.screenWidth - (gp.tileSize*4), 
-			height = gp.tileSize*5;
+			height = gp.tileSize*4;
+		
+			drawDialogueWindow (x, y, width, height);
+			
+		//Dialogue display inside window
+		int dialogueX = gp.tileSize*3-20,
+			dialogueY = gp.tileSize/2 +gp.tileSize;
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
+		
+		//Split the string into many parts
+		for (String line : currentDialogue.split("\n")) {
+			g2.drawString(line, dialogueX, dialogueY);
+			//increase the display
+			dialogueY+= 40;
+		}
+		
 	}
 	
+	//Receives input and actually draw the window inside the dialogue box
 	public void drawDialogueWindow (int x, int y, int width, int height) {
+		
+		//black color
+		//alpha value - 220 - some opacity
+		Color background = new Color (0,0,0, 220);
+		g2.setColor(background);
+		g2.fillRoundRect(x, y, width, height, 35, 35);
+		
+		Color frameColor = new Color (255,255,255);
+		//width of the stroke
+		g2.setColor(frameColor);
+		g2.setStroke(new BasicStroke(5));
+		g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
 		
 	}
 	
