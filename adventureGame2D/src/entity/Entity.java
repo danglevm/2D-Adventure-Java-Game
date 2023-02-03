@@ -18,7 +18,7 @@ public class Entity {
 	public int spriteCounter=0, spriteNum=1;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 	public String direction;
-	protected int actionLock =0;
+	protected int actionLock = 0;
 	
 	//specifies the solid area of the character entity for collision
 	//Store data about this rectangle as x, y, width and height
@@ -26,6 +26,13 @@ public class Entity {
 	public int solidAreaDefaultX, solidAreaDefaultY;
 	public boolean collisionOn = false;
 	
+	//Character HP - both players and monster
+	protected int maxLife, life;
+	//maxLife and Life get and set
+	public int getMaxLife() {return maxLife;}
+	public int getLife() {return life;}
+	public void setMaxLife(int life) {maxLife = life;}
+	public void setLife (int life) {this.life = life;}
 	
 	
 //	Constructor
