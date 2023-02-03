@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 
 import object.Obj_key;
+import object.Object_heart;
+import object.SuperObject;
 
 public class UI {
 	
@@ -27,7 +29,9 @@ public class UI {
 	private String currentDialogue = "";	
 	public void setCurrentDialogue (String dialogue) { currentDialogue = dialogue;}
 	public int cursorNum = 0;
-	//commandnum set and get
+	
+	//Drawing hearts
+	private BufferedImage heart_full, heart_half, heart_blank;
 	
 	
 	//Drawing and setting UI
@@ -48,11 +52,18 @@ public class UI {
 			e.printStackTrace();
 		}
 		
+		
+		//Create HUD 
+		SuperObject heart = new Object_heart(gp);
+		heart_full=heart.image;
+		heart_half=heart.getImage2();
+		heart_blank=heart.getImage3();
+		
 	}
 	
 
 	
-	public int getXCenter (String text) {
+	protected int getXCenter (String text) {
 		int str_length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 		int x = gp.screenWidth/2 - str_length/2;
 		return x;
@@ -72,39 +83,39 @@ public class UI {
 		//Drawing gamestate
 		if (gp.gameState == gp.titleState) {
 			//titleScreen
-			drawTitleScreen();
+			this.drawTitleScreen();
 			
 		} 
 		if (gp.gameState == gp.pauseState) {
 			//pause state
 			drawPauseScreen();
+			this.drawPlayerHearts();
 		}
-		if (gp.gameState == gp.gameState){
+		if (gp.gameState == gp.playState){
 			//playing state
+			this.drawPlayerHearts();
 		} 
 		if (gp.gameState == gp.dialogueState){
 			//dialogue state
 			
-			drawDialogueScreen();
+			this.drawDialogueScreen();
+			this.drawPlayerHearts();
 		}
-		
-		
-		//displays FPS
 		
 		
 	}
 	
 
 	//draw screen when paused
-	public void drawPauseScreen () {
-		
+	protected void drawPauseScreen () {
+		//Draw background
 		g2.setFont(g2.getFont().deriveFont(Font.ITALIC, 80));
 		String text = "Game Paused";
 		int x = getXCenter(text), y = gp.screenHeight/2;
 		g2.drawString(text, x ,y );
 	}
 	
-	public void drawTitleScreen() {
+	protected void drawTitleScreen() {
 		g2.setColor(new Color (70,120,80));
 		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 		if (titleScreenState == 0) {
@@ -182,13 +193,45 @@ public class UI {
 			
 		}
 
-		
-		
-		
-	
 	}
 	
-	public void drawDialogueScreen() {
+	protected void drawPlayerHearts() {
+		int xLocation = gp.tileSize/2, 
+			yLocation = gp.tileSize/2, 
+			i = 0;
+		int playerMaxLife = gp.player.getMaxLife();
+		int currentPlayerLife = gp.player.getLife();
+		
+		//Draw blank hearts - max hp
+		
+		while (i < playerMaxLife/2) {
+			g2.drawImage(heart_blank, xLocation, yLocation, null);
+			++i;
+			xLocation += gp.tileSize;
+		}
+		
+		
+		//Reset drawing location
+		xLocation = gp.tileSize/2;
+		yLocation = gp.tileSize/2;
+		i = 0;
+		
+		//Draw current hp
+		
+		while (i < currentPlayerLife) {
+			g2.drawImage(heart_half, xLocation, yLocation, null);
+			++i;
+			//if it's an odd value, then continue to draw again
+			if (i < currentPlayerLife) {
+				g2.drawImage(heart_full, xLocation, yLocation,null);
+			}
+			++i;
+			xLocation += gp.tileSize;
+		}
+		
+	}
+	
+	protected void drawDialogueScreen() {
 		// Dialogue window
 		int x = gp.tileSize*2, 
 			y = gp.tileSize/2, 
@@ -211,7 +254,7 @@ public class UI {
 	}
 	
 	//Receives input and actually draw the window inside the dialogue box
-	public void drawDialogueWindow (int x, int y, int width, int height) {
+	protected void drawDialogueWindow (int x, int y, int width, int height) {
 		
 		//black color
 		//alpha value - 220 - some opacity
