@@ -46,13 +46,8 @@ public class Player extends Entity {
 		solidArea.width=24;
 		solidArea.height=38;
 		
-		//Default NPC values
-		WorldX = gp.tileSize*122;
-		WorldY= gp.tileSize*132;
-		speed = 3;
-		direction = "down";
-		
-		getPlayerImage();
+		this.setDefaultPlayerValues();
+		this.getPlayerImage();
 	}
 	
 	//-------------------------------CLASS METHODS------------------
@@ -66,6 +61,17 @@ public class Player extends Entity {
 		left2 = setupCharacter("boy_left_2", "/player/");
 		right1 = setupCharacter("boy_right_1", "/player/");
 		right2 = setupCharacter ("boy_right_2", "/player/");
+		
+	}
+	
+	public void setDefaultPlayerValues() {
+		//Default player values
+		WorldX = gp.tileSize*122;
+		WorldY= gp.tileSize*132;
+		speed = 3;
+		direction = "down";
+		maxLife = 8;
+		life = maxLife;
 		
 	}
 	
