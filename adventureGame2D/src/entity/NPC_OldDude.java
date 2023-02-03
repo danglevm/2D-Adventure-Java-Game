@@ -48,7 +48,7 @@ public class NPC_OldDude extends Entity {
 		//Meeting the player for the first time
 		oldDudeDialogues[0] = " '...' ";
 		oldDudeDialogues[1] = " 'OH what the-' ";
-		oldDudeDialogues[2] = " 'Who the f*** are you, whippersnapper?\n Creeping on me like that?' ";
+		oldDudeDialogues[2] = " 'Who the heck are you, whippersnapper?\n Creeping on me like that?' ";
 		
 		//depends on what the player chooses
 		oldDudeDialogues[3] = " 'You deaf, son?' ";
