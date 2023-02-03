@@ -10,10 +10,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.util.Random;
 
 import object.Obj_key;
 import object.Object_heart;
 import object.SuperObject;
+import quotes.PauseQuotes;
 
 public class UI {
 	
@@ -22,6 +24,10 @@ public class UI {
 	//Sub-states
 	//0 - welcome screen; 1 - story paths
 	public int titleScreenState = 0;
+	
+	//Quotes
+	PauseQuotes pauseQuotes = new PauseQuotes();
+	String pauseText = "";
 	
 	//Stylizing
 	Font arial_30, arial_50, arial_70, maruMonica, purisa;
@@ -89,7 +95,8 @@ public class UI {
 		if (gp.gameState == gp.pauseState) {
 			//pause state
 			drawPauseScreen();
-			this.drawPlayerHearts();
+			drawRandomPauseQuotes();
+			
 		}
 		if (gp.gameState == gp.playState){
 			//playing state
@@ -108,11 +115,39 @@ public class UI {
 
 	//draw screen when paused
 	protected void drawPauseScreen () {
+		
+	
 		//Draw background
+		Color background = new Color (0,0,0, 220);
+		g2.setColor(background);
+		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+			
+		
 		g2.setFont(g2.getFont().deriveFont(Font.ITALIC, 80));
+		g2.setColor(Color.white);
 		String text = "Game Paused";
 		int x = getXCenter(text), y = gp.screenHeight/2;
-		g2.drawString(text, x ,y );
+		g2.drawString(text,x, y);
+		
+		
+	
+		
+	}
+	
+	protected void drawRandomPauseQuotes() {
+		//Draws a random quote from Pause Quote array
+		g2.setFont(g2.getFont().deriveFont(Font.ITALIC, 30));
+		int max = 2, 
+				min = 0,
+				range = max - min + 1,
+				rand = (int)(Math.random()*range)+min;
+		if (gp.keyH.pauseQuote) {
+			pauseText = pauseQuotes.getPauseQuote(rand);
+			gp.keyH.pauseQuote=false;
+		}
+		int y = gp.screenHeight/2 + gp.tileSize*2, x = getXCenter (pauseText);
+		g2.drawString(pauseText,x, y);
+		
 	}
 	
 	protected void drawTitleScreen() {
