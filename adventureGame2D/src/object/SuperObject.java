@@ -14,6 +14,8 @@ public class SuperObject {
 	public boolean collision = false;
 	public int worldX, worldY;
 	
+
+	
 	//Rectangle values
 	//x,y,width,length
 	//Rectangle value can be changed for different objects to reflect size
@@ -22,6 +24,15 @@ public class SuperObject {
 	public int solidAreaDefaultY = 0;
 	
 	UtilityTool uTool = new UtilityTool();
+	
+	
+	//Heart variables, set and get methods
+	protected BufferedImage image2, image3;
+	public BufferedImage getImage2() {return image2;}
+	public BufferedImage getImage3() {return image3;}
+	
+	
+	
 	public void draw(Graphics2D g2, GamePanel gp) {
 		
 		int screenX = worldX-gp.player.WorldX + gp.player.screenX;
