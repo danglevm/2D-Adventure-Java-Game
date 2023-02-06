@@ -1,4 +1,6 @@
-package adventureGame2D;
+package events;
+
+import adventureGame2D.GamePanel;
 
 public class Event {
 	
