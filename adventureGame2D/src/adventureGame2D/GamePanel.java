@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import entity.Entity;
 import entity.Player;
+import events.EventHandler;
 import object.SuperObject;
 import tile.TileManager;
 
