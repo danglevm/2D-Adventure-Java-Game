@@ -61,6 +61,7 @@ public class GamePanel extends JPanel implements Runnable{
 	KeyHandler keyH = new KeyHandler(this);
 	public CollisionCheck cChecker = new CollisionCheck(this);
 	public UI ui = new UI(this);
+	public EventHandler eHandler = new EventHandler (this);
 	
 	
 	//Entities
@@ -78,6 +79,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public AssetPlacement assetPlace = new AssetPlacement(this);
 	//Display up to only 10 objects on screen - decide later
 	public SuperObject obj [] = new SuperObject[50];
+
 	
 	
 	
@@ -226,11 +228,12 @@ public void paintComponent (Graphics g) {
 	//Drawing the UI
 	ui.draw(g2);
 	
-	//draws FPS
+	//draws FPS and player location
 	if (keyH.FPS_display) {
 		g2.setColor(Color.white);
-		g2.setFont(g2.getFont().deriveFont(Font.PLAIN,20));
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN,25));
 		g2.drawString(FPS_text, FPS_x, FPS_y);
+		g2.drawString("X: " + (player.WorldX)/tileSize + " Y: " + (player.WorldY)/tileSize, FPS_x - tileSize*2, FPS_y + tileSize);
 	}
 	
 	
