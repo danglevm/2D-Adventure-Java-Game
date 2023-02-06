@@ -87,7 +87,8 @@ public class Player extends Entity {
 			//Collision checker receive subclass
 			gp.cChecker.CheckTile(this);
 			
-			
+			//Check event collision
+			gp.eHandler.checkEvent();
 			
 			//Check object collision
 			int objIndex = gp.cChecker.checkObject(this, true);
@@ -207,4 +208,6 @@ public class Player extends Entity {
 		
 			
 	}
+	
+	
 }
