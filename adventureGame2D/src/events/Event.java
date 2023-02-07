@@ -25,4 +25,11 @@ public class Event {
 		if (currentPlayerLife<maxLife) {currentPlayerLife+=2;}
 		gp.player.setLife(currentPlayerLife);
 	}
+	
+	public void teleport (int gameState, int xTiles, int yTiles) {
+		gp.gameState = gameState;
+		gp.ui.setCurrentDialogue("You sailed to the nearest island");
+		gp.player.WorldX = xTiles *gp.tileSize;
+		gp.player.WorldY = yTiles * gp.tileSize;
+	}
 }
