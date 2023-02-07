@@ -306,4 +306,13 @@ public class UI {
 	}
 	
 	
+	//Method for drawing a simple string above the player head for event interaction
+	public void drawInteractionKey(String actionWord) {
+			int x = gp.screenWidth/2, y = gp.screenHeight/2 - gp.tileSize;
+			g2.setColor(Color.white);
+			g2.setFont(g2.getFont().deriveFont(20));
+			String text = "Press X to interact " + actionWord;
+			g2.drawString(text, x, y);
+	}
+	
 }
