@@ -10,6 +10,8 @@ public class EventHandler {
 	GamePanel gp;
 	Event eventObject;
 	EventRectangle eventRect[][];
+	int previousEventX, previousEventY;
+	boolean touchEvent = true;
 	
 	public EventHandler (GamePanel gp) {
 		this.gp = gp;
@@ -47,24 +49,39 @@ public class EventHandler {
 		int tpXto = 132, tpYto = 152;
 		int tpXback = 153, tpYback = 150;
 		
+		//Check to see if player is 1 tile away from previous event  - works for lava or some damage things
+		int xDistance = Math.abs(gp.player.WorldX - previousEventX),
+			yDistance = Math.abs(gp.player.WorldY - previousEventY),
+			distance = Math.max(xDistance, yDistance);
+		if (distance > gp.tileSize) {touchEvent = true;}
+		
+		
 		//damage player
-		if (eventCollision(pitX, pitY, "any")) {
-			eventObject.DamagePit(gp.dialogueState);
-			eventRect[pitX][pitY].eventTriggered = true;
-		}
+			if (eventCollision(pitX, pitY, "any")) {
+				eventObject.DamagePit(gp.dialogueState);
+				eventRect[pitX][pitY].eventTriggered = true;
+			}
 		
-		//heal player
-		if (eventCollision(healX, healY, "any")) {
-			eventObject.healingPool(gp.dialogueState);
-			eventRect[healX][healY].eventTriggered = true;
-		}
+			//heal player
+			if (eventCollision(healX, healY, "any")) {
+				eventObject.healingPool(gp.dialogueState);
+				eventRect[healX][healY].eventTriggered = true;
+			}
 		
-		//Boat teleport
-		if (eventCollision(tpXto, tpYto, "any")) {
-			eventObject.teleport(gp.dialogueState, tpXback, tpYback);
+			//Handles all cases when player chooses to interact with an event
+			//should work in most cases.... hopefully.... because it determines where the player is before triggering the correct event
+		if (gp.keyH.eventInteract) {
+			//Boat teleport 
+			if (eventCollision(tpXto, tpYto, "any")) {
+				eventObject.teleport(gp.dialogueState, tpXback, tpYback);
+				gp.keyH.eventInteract = false;
 			
-		} else if (eventCollision (tpXback, tpYback, "any")) {
-			eventObject.teleport(gp.dialogueState, tpXto, tpYto);
+			} else if (eventCollision (tpXback, tpYback, "any")) {
+				eventObject.teleport(gp.dialogueState, tpXto, tpYto);
+				gp.keyH.eventInteract = false;
+				
+			}
+			
 		}
 	}
 	
@@ -83,6 +100,9 @@ public class EventHandler {
 			if (gp.player.solidArea.intersects(eventRect[col][row]) && !eventRect[col][row].eventTriggered) {
 				if (gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")) {
 					playerCollision = true;
+					
+					previousEventX = gp.player.WorldX;
+					previousEventY = gp.player.WorldY;
 				}
 			}
 			
