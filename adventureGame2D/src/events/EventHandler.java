@@ -44,6 +44,8 @@ public class EventHandler {
 	public void checkEvent() {
 		int pitX = 121, pitY = 122; 
 		int healX = 115, healY = 121;
+		int tpXto = 132, tpYto = 152;
+		int tpXback = 153, tpYback = 150;
 		
 		//damage player
 		if (eventCollision(pitX, pitY, "any")) {
@@ -55,6 +57,14 @@ public class EventHandler {
 		if (eventCollision(healX, healY, "any")) {
 			eventObject.healingPool(gp.dialogueState);
 			eventRect[healX][healY].eventTriggered = true;
+		}
+		
+		//Boat teleport
+		if (eventCollision(tpXto, tpYto, "any")) {
+			eventObject.teleport(gp.dialogueState, tpXback, tpYback);
+			
+		} else if (eventCollision (tpXback, tpYback, "any")) {
+			eventObject.teleport(gp.dialogueState, tpXto, tpYto);
 		}
 	}
 	
