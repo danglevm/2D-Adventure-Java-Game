@@ -11,7 +11,12 @@ public class EventHandler {
 	Event eventObject;
 	EventRectangle eventRect[][];
 	int previousEventX, previousEventY;
-	boolean touchEvent = true;
+	boolean touchEvent = true, interact = false;
+	
+	//return interaction state
+	public boolean getInteraction() {
+		return interact;
+	}
 	
 	public EventHandler (GamePanel gp) {
 		this.gp = gp;
@@ -27,8 +32,8 @@ public class EventHandler {
 			eventRect[col][row] = new EventRectangle();
 			eventRect[col][row].x = 23;
 			eventRect[col][row].y = 23;
-			eventRect[col][row].width = 23;
-			eventRect[col][row].height = 23;
+			eventRect[col][row].width = 2;
+			eventRect[col][row].height = 2;
 			eventRect[col][row].eventDefaultX = eventRect[col][row].x;
 			eventRect[col][row].eventDefaultY = eventRect[col][row].y;
 			
@@ -53,7 +58,6 @@ public class EventHandler {
 		int xDistance = Math.abs(gp.player.WorldX - previousEventX),
 			yDistance = Math.abs(gp.player.WorldY - previousEventY),
 			distance = Math.max(xDistance, yDistance);
-		if (distance > gp.tileSize) {touchEvent = true;}
 		
 		
 		//damage player
@@ -70,19 +74,31 @@ public class EventHandler {
 		
 			//Handles all cases when player chooses to interact with an event
 			//should work in most cases.... hopefully.... because it determines where the player is before triggering the correct event
-		if (gp.keyH.eventInteract) {
+		
+			
 			//Boat teleport 
 			if (eventCollision(tpXto, tpYto, "any")) {
-				eventObject.teleport(gp.dialogueState, tpXback, tpYback);
-				gp.keyH.eventInteract = false;
-			
-			} else if (eventCollision (tpXback, tpYback, "any")) {
-				eventObject.teleport(gp.dialogueState, tpXto, tpYto);
-				gp.keyH.eventInteract = false;
+				//interact is true --> UI draws the string
+				interact = true;
+				if (distance > gp.tileSize) {interact = false;}
+				if (gp.keyH.allowInteraction) {
+					eventObject.teleport(gp.dialogueState, tpXback, tpYback);
+					gp.keyH.allowInteraction = false;
 				
+				}
+			} 
+			if (eventCollision (tpXback, tpYback, "any")) {
+				interact = true;
+				if (distance > gp.tileSize) {interact = false;}
+				if (gp.keyH.allowInteraction) {
+					eventObject.teleport(gp.dialogueState, tpXto, tpYto);
+					gp.keyH.allowInteraction = false;
+					
+				}
 			}
 			
-		}
+			
+		
 	}
 	
 	public boolean eventCollision (int col, int row, String reqDirection)
