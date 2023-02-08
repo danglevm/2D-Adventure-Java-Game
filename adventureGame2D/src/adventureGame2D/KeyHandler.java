@@ -9,7 +9,12 @@ public class KeyHandler implements KeyListener{
 	public KeyHandler (GamePanel gp) {
 		this.gp = gp;
 	}
-	public boolean upPressed, downPressed, leftPressed, rightPressed, dialoguePressed = true, FPS_display = false, pauseQuote = false;
+	public boolean upPressed, downPressed, leftPressed, rightPressed, 
+				   dialoguePressed = true, 
+				   FPS_display = false, 
+				   pauseQuote = false,
+				   allowInteraction = false;
+				 
 	@Override
 	public void keyTyped(KeyEvent e) {
 	
@@ -104,17 +109,22 @@ public class KeyHandler implements KeyListener{
 			dialoguePressed = true;
 		} 
 
-
-	
-
-	//display FPS
-	if (code == KeyEvent.VK_T) {
-		if (FPS_display == false) {
-			FPS_display = true;
-		} else { 
-			FPS_display = false;
-		}
+		//display FPS and player X and Y
+		if (code == KeyEvent.VK_T) {
+			if (!FPS_display) {
+				FPS_display = true;
+			} else { 
+				FPS_display = false;
 			}
+		}
+		
+		//eventHandling
+		//If player is standing near an interactive event, then they can press X to trigger the interaction
+		if (gp.eHandler.getInteraction()) {
+			if (code == KeyEvent.VK_X) {
+				allowInteraction = true;
+			}
+		}
 	
 	
 		}
@@ -135,10 +145,9 @@ public class KeyHandler implements KeyListener{
 				gp.gameState = gp.playState;
 			}
 			
-			
-			
-			
 		}
+		
+		
 		
 		
 		
