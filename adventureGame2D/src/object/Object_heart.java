@@ -14,7 +14,7 @@ public class Object_heart extends Entity{
 		name = "Heart";
 		image = setupCharacter("heart_full", "/heart/");
 		image2 = setupCharacter("heart_half", "/heart/");
-		image = setupCharacter("heart_blank", "/heart/");
+		image3 = setupCharacter("heart_blank", "/heart/");
 
 	}
 }
