@@ -12,9 +12,9 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Random;
 
+import entity.Entity;
 import object.Obj_key;
 import object.Object_heart;
-import object.SuperObject;
 import quotes.PauseQuotes;
 
 public class UI {
@@ -60,10 +60,10 @@ public class UI {
 		
 		
 		//Create HUD 
-		SuperObject heart = new Object_heart(gp);
+		Entity heart = new Object_heart(gp);
 		heart_full=heart.image;
-		heart_half=heart.getImage2();
-		heart_blank=heart.getImage3();
+		heart_half=heart.image2;
+		heart_blank=heart.image3;
 		
 	}
 	
