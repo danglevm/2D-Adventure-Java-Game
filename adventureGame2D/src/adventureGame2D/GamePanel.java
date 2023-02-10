@@ -5,13 +5,15 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.JPanel;
 
 import entity.Entity;
 import entity.Player;
 import events.EventHandler;
-import object.SuperObject;
 import tile.TileManager;
 
 //Game Panel inherits all components from JPanel
@@ -69,18 +71,19 @@ public class GamePanel extends JPanel implements Runnable{
 	Thread gameThread;
 	public Player player = new Player(this, keyH);
 	public Entity npcs[] = new Entity[20]; 
-
+	//In-game objects
+	public AssetPlacement assetPlace = new AssetPlacement(this);
+	//Display up to only 10 objects on screen - decide later
+	public Entity obj [] = new Entity[50];
+	//entity with lowest world Y index 0, highest world y final index
+	ArrayList<Entity> entityList = new ArrayList<>();
 	
 	//sound
 	Sound music = new Sound();
 	Sound se = new Sound();
 	
 	
-	//In-game objects
-	public AssetPlacement assetPlace = new AssetPlacement(this);
-	//Display up to only 10 objects on screen - decide later
-	public SuperObject obj [] = new SuperObject[50];
-
+	
 	
 	
 	
@@ -204,40 +207,55 @@ public void paintComponent (Graphics g) {
 		
 	} else {
 	
-	//Draw the tiles first before the player characters
-	//TILE
-	tileM.draw(g2);
+		//Draw the tiles first before the player characters
+		//TILE
+		tileM.draw(g2);
 	
-	//OBJECT
-	for (int i = 0; i < obj.length;i++) {
-		//Check if the object is null or not
-		if (obj [i] != null) {
-			obj[i].draw(g2, this);
+		entityList.add(player);
+	
+		//Add both npcs and objects to the array list 
+		for (int i = 0; i < npcs.length; ++i) {
+			if (npcs[i] != null) {
+				entityList.add(npcs[i]);
+			}
 		}
-	}
 	
-	//NPCS
-	for (int i =0 ; i<npcs.length;++i) {
-		if (npcs[i]!=null) { 
-			npcs[i].draw(g2, this); 
+		
+		for (int i = 0; i < obj.length; ++i) {
+			if (obj[i] != null) {
+				entityList.add(obj[i]);
+			}
 		}
-	}
-	
-	//PLAYER
-	player.draw(g2);
-	
-	//Drawing the UI
+		//Sort the entityList
+		Collections.sort(entityList, new Comparator<Entity>() {
+
+			@Override
+			public int compare(Entity e1, Entity e2) {
+				int result = Integer.compare(e1.WorldY, e2.WorldY);
+				
+				return result;
+				
+			}
+			
+		});
+		
+		//Draw entities
+		for (int i = 0; i < entityList.size(); ++i) {
+			entityList.get(i).draw(g2, this);
+		}
+		//Empty entity list after drawing
+		for (int i = 0; i < entityList.size(); ++i) {
+			entityList.remove(i);
+		}
 	ui.draw(g2);
 	
 	//draws FPS and player location
-	if (keyH.FPS_display) {
-		g2.setColor(Color.white);
-		g2.setFont(g2.getFont().deriveFont(Font.PLAIN,25));
-		g2.drawString(FPS_text, FPS_x, FPS_y);
-		g2.drawString("X: " + (player.WorldX)/tileSize + " Y: " + (player.WorldY)/tileSize, FPS_x - tileSize*2, FPS_y + tileSize);
-	}
-	
-	
+		if (keyH.FPS_display) {
+			g2.setColor(Color.white);
+			g2.setFont(g2.getFont().deriveFont(Font.PLAIN,25));
+			g2.drawString(FPS_text, FPS_x, FPS_y);
+			g2.drawString("X: " + (player.WorldX)/tileSize + " Y: " + (player.WorldY)/tileSize, FPS_x - tileSize*2, FPS_y + tileSize);
+		}
 	
 	g2.dispose();
 	
