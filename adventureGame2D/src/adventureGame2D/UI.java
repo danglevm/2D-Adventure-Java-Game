@@ -61,9 +61,9 @@ public class UI {
 		
 		//Create HUD 
 		Entity heart = new Object_heart(gp);
-		heart_full=heart.image;
-		heart_half=heart.image2;
-		heart_blank=heart.image3;
+		heart_full = heart.image;
+		heart_half = heart.image2;
+		heart_blank = heart.image3;
 		
 	}
 	
@@ -242,7 +242,6 @@ public class UI {
 		int currentPlayerLife = gp.player.getLife();
 		
 		//Draw blank hearts - max hp
-		
 		while (i < playerMaxLife/2) {
 			g2.drawImage(heart_blank, xLocation, yLocation, null);
 			++i;
