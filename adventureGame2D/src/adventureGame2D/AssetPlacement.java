@@ -16,6 +16,12 @@ public class AssetPlacement {
 	
 	public void setObject() {
 		
+		gp.obj[0] = new Obj_door(gp);
+		gp.obj[0].WorldX = gp.tileSize*121;
+		gp.obj[0].WorldY = gp.tileSize*123;
+	
+		
+	
 	
 	
 	}
