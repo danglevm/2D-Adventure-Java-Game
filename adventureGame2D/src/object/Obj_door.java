@@ -5,21 +5,21 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import adventureGame2D.GamePanel;
+import entity.Entity;
 
-public class Obj_door extends SuperObject{
-	GamePanel gp;
+public class Obj_door extends Entity{
 	public Obj_door(GamePanel gp) {
+		super(gp);
 		name  = "Door";
-		collision=true;
-		this.gp = gp;
-	try {
-		image = ImageIO.read(getClass().getResourceAsStream("/objects/door.png"));
-		uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-
+		down1 = setupCharacter("door", "/objects/");
+		collisionOn = true;
 		
-	} catch (IOException e) {
-		e.printStackTrace(); //Trace back this error
-	}
+		solidArea.x = 0;
+		solidArea.y = 16;
+		solidArea.width = 48;
+		solidArea.height = 32;
+		solidAreaDefaultX = solidArea.x;
+		solidAreaDefaultY = solidArea.y;
 	
 	}
 	

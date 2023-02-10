@@ -5,21 +5,16 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import adventureGame2D.GamePanel;
+import entity.Entity;
 
-public class Obj_boots extends SuperObject{
-	
-	GamePanel gp;
+public class Obj_boots extends Entity{
 	
 	public Obj_boots(GamePanel gp) {
-		name  = "Boots";
-		collision=true;
-		this.gp = gp;
-		try {
-			image = ImageIO.read(getClass().getResourceAsStream("/objects/boots.png"));
-			uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-		} catch (IOException e) {
-			e.printStackTrace(); //Trace back this error
-		}
+		super(gp);
+	
+		name = "Boots";
+		
+		down1 = setupCharacter("boots", "/objects/");
 		}
 }
 

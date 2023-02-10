@@ -5,19 +5,17 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import adventureGame2D.GamePanel;
+import entity.Entity;
 
-public class Obj_key extends SuperObject {
-	GamePanel gp;
-	public Obj_key(GamePanel gp) {
-		name = "Key";
-		this.gp = gp;
+public class Obj_key extends Entity{
 	
-	try {
-		image = ImageIO.read(getClass().getResourceAsStream("/objects/key.png"));
-		uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-
-	} catch (IOException e) {
-		e.printStackTrace(); //Trace back this error
+	public Obj_key(GamePanel gp) {
+		super (gp);
+		
+		name = "Key";
+		
+		
 	}
-	} 
+	
 }
+
