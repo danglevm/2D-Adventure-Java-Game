@@ -11,18 +11,22 @@ import adventureGame2D.GamePanel;
 import adventureGame2D.UtilityTool;
 
 public class Entity {
+	
+	public BufferedImage image, image2, image3;
+	public String name;
 	//Position of the player on the world map
 	GamePanel gp;
 	public int WorldX, WorldY;
 	public int speed;
 	public int spriteCounter=0, spriteNum=1;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-	public String direction;
+	public String direction = "down";
 	protected int actionLock = 0;
 	
+		
 	//specifies the solid area of the character entity for collision
 	//Store data about this rectangle as x, y, width and height
-	public Rectangle solidArea;
+	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
 	public int solidAreaDefaultX, solidAreaDefaultY;
 	public boolean collisionOn = false;
 	
@@ -34,6 +38,7 @@ public class Entity {
 	public void setMaxLife(int life) {maxLife = life;}
 	public void setLife (int life) {this.life = life;}
 	
+	//Deal with objects
 	
 //	Constructor
 	public Entity (GamePanel gp) {
