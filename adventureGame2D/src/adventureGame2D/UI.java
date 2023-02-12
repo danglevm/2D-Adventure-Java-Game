@@ -27,7 +27,7 @@ public class UI {
 	
 	//Quotes
 	PauseQuotes pauseQuotes = new PauseQuotes();
-	String pauseText = "";
+	String pauseText = "", moveDialogue = "Press ENTER to continue...";
 	
 	//Stylizing
 	Font arial_30, arial_50, arial_70, maruMonica, purisa;
@@ -286,9 +286,14 @@ public class UI {
 		for (String line : currentDialogue.split("\n")) {
 			g2.drawString(line, dialogueX, dialogueY);
 			//increase the display
-			dialogueY+= 40;
+			dialogueY += 40;
 		}
 		
+		//Draw the press next to move on key notification
+		dialogueX += 390;
+		dialogueY = (gp.tileSize/2) + gp.tileSize + 120;
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 14));
+		g2.drawString(moveDialogue, dialogueX, dialogueY);
 	}
 	
 	//Receives input and actually draw the window inside the dialogue box
@@ -304,7 +309,7 @@ public class UI {
 		//width of the stroke
 		g2.setColor(frameColor);
 		g2.setStroke(new BasicStroke(5));
-		g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
+		g2.drawRoundRect(x + 5, y + 5, width - 10, height - 10, 25, 25);
 		
 	}
 	
