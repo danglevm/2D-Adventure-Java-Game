@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -15,7 +16,7 @@ import adventureGame2D.UtilityTool;
 public class TileManager {
 
 	GamePanel gp;
-	public Tile[]tile;
+	public ArrayList<Tile> tilesList;
 	public int mapTileNum[][];
 	//Change file path for maps
 	String filePath1 = "/maps/spawnmap";
@@ -23,8 +24,8 @@ public class TileManager {
 	//-------------------------------CONSTRUCTORS------------------
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
-		
-		tile =  new Tile[50];
+		tilesList = new ArrayList<Tile>();
+		tilesList.ensureCapacity(100);
 		mapTileNum = new int [gp.maxWorldCol][gp.maxWorldRow];
 		
 		getTileImage();
@@ -88,10 +89,10 @@ public class TileManager {
 		
 		//handle image instantiation, import, scale and collision
 		try {
-			tile[index] = new Tile();
-			tile[index].image = ImageIO.read(getClass().getResourceAsStream("/tiles/"+imageName+".png"));
-			tile[index].image = uTool.scaleImage(tile[index].image, gp.tileSize, gp.tileSize);
-			tile[index].collision = collision;
+			tilesList.add(new Tile());
+			tilesList.get(index).image = ImageIO.read(getClass().getResourceAsStream("/tiles/"+imageName+".png"));
+			tilesList.get(index).image = uTool.scaleImage(tilesList.get(index).image, gp.tileSize, gp.tileSize);
+			tilesList.get(index).collision = collision;
 			
 		}catch (IOException e) {
 			e.printStackTrace();
@@ -101,6 +102,7 @@ public class TileManager {
 		
 	}
 	
+
 	public void loadMap(String filePath) {
 		try{
 			//Store link to text file as variable and read the text file
@@ -155,7 +157,7 @@ public class TileManager {
 				worldY+gp.tileSize>gp.player.WorldY-gp.player.screenY&&
 				worldY-gp.tileSize <gp.player.WorldY+gp.player.screenY) {
 				
-				g2.drawImage(tile[tileNum].image, screenX, screenY, null);
+				g2.drawImage(tilesList.get(tileNum).image, screenX, screenY, null);
 			}
 			
 			
