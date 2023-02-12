@@ -12,16 +12,14 @@ import adventureGame2D.UtilityTool;
 
 public class Entity {
 	
-	public BufferedImage image, image2, image3;
-	public String name;
-	//Position of the player on the world map
 	GamePanel gp;
-	public int WorldX, WorldY;
-	public int speed;
-	public int spriteCounter=0, spriteNum=1;
+	public BufferedImage image, image2, image3;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-	public String direction = "down";
-	protected int actionLock = 0;
+	public String name, direction = "down";
+	//Entity position
+	public int WorldX, WorldY, speed;
+	protected int spriteCounter = 0, actionLock = 0;
+	protected boolean spriteNum = true;
 	
 		
 	//specifies the solid area of the character entity for collision
@@ -58,7 +56,7 @@ public class Entity {
 		gp.cChecker.checkObject(this, false);
 		gp.cChecker.checkPlayer(this);
 		
-		if (collisionOn==false) {
+		if (!collisionOn) {
 			switch (direction) {
 			case "up": WorldY -= speed; break;
 			case "down": WorldY += speed; break;
@@ -74,60 +72,60 @@ public class Entity {
 		
 		spriteCounter++;
 		//Player image changes every 12 frames
-		if (collisionOn == false) {
+		if (!collisionOn) {
 		if (spriteCounter > 12) {
-			if (spriteNum==1) {
-				spriteNum =2;
+			if (spriteNum) {
+				spriteNum = false;
 			}
 			
-			else if (spriteNum ==2) {
-				spriteNum=1;
+			else {
+				spriteNum = true;
 			}
-			spriteCounter=0;
+			spriteCounter = 0;
 		}
 		}
 	}
 	public void draw (Graphics2D g2, GamePanel gp) {
 		this.gp = gp;
 		BufferedImage image = null;
-		int screenX = WorldX-gp.player.WorldX + gp.player.screenX;
+		int screenX = WorldX - gp.player.WorldX + gp.player.screenX;
 		int screenY = WorldY - gp.player.WorldY + gp.player.screenY;
-		if (WorldX+gp.tileSize>gp.player.WorldX-gp.player.screenX && 
-			WorldX-gp.tileSize<gp.player.WorldX+gp.player.screenX &&
-			WorldY+gp.tileSize>gp.player.WorldY-gp.player.screenY&&
-			WorldY-gp.tileSize <gp.player.WorldY+gp.player.screenY) {
+		if (WorldX + gp.tileSize > gp.player.WorldX - gp.player.screenX && 
+			WorldX - gp.tileSize < gp.player.WorldX + gp.player.screenX &&
+			WorldY + gp.tileSize > gp.player.WorldY - gp.player.screenY &&
+			WorldY - gp.tileSize < gp.player.WorldY + gp.player.screenY) {
 			
 			switch (direction) {
 			case "up":
-				if (spriteNum==1) {
+				if (spriteNum) {
 					image = up1;
 				}
-				if (spriteNum==2) {
+				if (!spriteNum) {
 					image = up2;
 				}
 				
 				break;
 			case "down":
-				if (spriteNum==1) {
+				if (spriteNum) {
 					image = down1;
 				}
-				if (spriteNum==2) {
+				if (!spriteNum) {
 					image = down2;
 				}
 				break;
 			case "left":
-				if (spriteNum==1) {
+				if (spriteNum) {
 					image = left1;
 				}
-				if (spriteNum==2) {
+				if (!spriteNum) {
 					image = left2;
 				}
 				break;
 			case "right":
-				if (spriteNum==1) {
+				if (spriteNum) {
 					image = right1;
 				}
-				if (spriteNum==2) {
+				if (!spriteNum) {
 					image = right2;
 				}
 				break;
@@ -156,7 +154,7 @@ public class Entity {
 		String direction = "";
 		switch(player.direction) {
 		case "up":
-			direction="down";
+			direction ="down";
 			break;
 		case "down":
 			direction = "up";
