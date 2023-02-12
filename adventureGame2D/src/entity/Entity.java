@@ -141,7 +141,7 @@ public class Entity {
 		BufferedImage scaledImage = null;
 		
 		try {
-			scaledImage = ImageIO.read(getClass().getResourceAsStream(pathName +imageName+".png"));
+			scaledImage = ImageIO.read(getClass().getResourceAsStream(pathName + imageName+".png"));
 			scaledImage = uTool.scaleImage(scaledImage, gp.tileSize, gp.tileSize);
 		}catch(IOException e) {
 			e.printStackTrace();
