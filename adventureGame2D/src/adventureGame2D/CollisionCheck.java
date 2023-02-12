@@ -44,7 +44,7 @@ public class CollisionCheck {
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
 			
 			//Check the type of tile and see whether it has collision on
-			if (gp.tileM.tile[tileNum1].collision==true||gp.tileM.tile[tileNum2].collision==true) {
+			if (gp.tileM.tilesList.get(tileNum1).collision==true||gp.tileM.tilesList.get(tileNum2).collision==true) {
 				entity.collisionOn=true;
 			}
 			break;
@@ -54,7 +54,7 @@ public class CollisionCheck {
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBotRow];
 			
 			//Check the type of tile and see whether it has collision on
-			if (gp.tileM.tile[tileNum1].collision==true||gp.tileM.tile[tileNum2].collision==true) {
+			if (gp.tileM.tilesList.get(tileNum1).collision==true||gp.tileM.tilesList.get(tileNum2).collision==true) {
 				entity.collisionOn=true;
 			}
 			break;
@@ -64,7 +64,7 @@ public class CollisionCheck {
 			tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBotRow];
 			
 			//Check the type of tile and see whether it has collision on
-			if (gp.tileM.tile[tileNum1].collision==true||gp.tileM.tile[tileNum2].collision==true) {
+			if (gp.tileM.tilesList.get(tileNum1).collision==true||gp.tileM.tilesList.get(tileNum2).collision==true) {
 				entity.collisionOn=true;
 			}
 			break;
@@ -74,7 +74,7 @@ public class CollisionCheck {
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBotRow];
 			
 			//Check the type of tile and see whether it has collision on
-			if (gp.tileM.tile[tileNum1].collision==true||gp.tileM.tile[tileNum2].collision==true) {
+			if (gp.tileM.tilesList.get(tileNum1).collision==true||gp.tileM.tilesList.get(tileNum2).collision==true) {
 				entity.collisionOn=true;
 			}
 			break;
