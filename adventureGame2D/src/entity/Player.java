@@ -28,7 +28,6 @@ public class Player extends Entity {
 	//-------------------------------CONSTRUCTORS------------------
 	public Player (GamePanel gp, KeyHandler keyH) {
 		super(gp);
-		
 		this.keyH = keyH;
 		
 		//Places the character at the center of the screen
@@ -38,13 +37,14 @@ public class Player extends Entity {
 		
 		//x, y, width, length
 		solidArea = new Rectangle();
-		solidArea.x =8;
-		solidArea.y= 8;
+		solidArea.x = 8;
+		solidArea.y = 8;
 		//Default values so x and y values of the rectangle can be changed later
-		solidAreaDefaultX= solidArea.x;
-		solidAreaDefaultY= solidArea.y;
-		solidArea.width=24;
-		solidArea.height=38;
+		solidAreaDefaultX = solidArea.x;
+		solidAreaDefaultY = solidArea.y;
+		solidArea.width = 24;
+		solidArea.height = 36
+				;
 		
 		this.setDefaultPlayerValues();
 		this.getPlayerImage();
@@ -66,8 +66,8 @@ public class Player extends Entity {
 	
 	public void setDefaultPlayerValues() {
 		//Default player values
-		WorldX = gp.tileSize*122;
-		WorldY= gp.tileSize*132;
+		WorldX = gp.tileSize * 122;
+		WorldY= gp.tileSize * 132;
 		speed = 3;
 		direction = "down";
 		maxLife = 8;
@@ -78,8 +78,8 @@ public class Player extends Entity {
 	
 	
 	public void update() {
-		if (keyH.upPressed == true||keyH.downPressed==true||
-				keyH.leftPressed==true||keyH.rightPressed==true)
+		if (keyH.upPressed||keyH.downPressed||
+				keyH.leftPressed||keyH.rightPressed)
 		{//X and Y values increase as the player moves right and down
 			
 			//Check tile collision
@@ -99,21 +99,21 @@ public class Player extends Entity {
 			int npcIndex = gp.cChecker.checkEntity(this, gp.npcs);
 			collisionNPC(npcIndex);
 			
-			if (keyH.upPressed == true) {
+			if (keyH.upPressed) {
 				direction ="up";
-				if (collisionOn==false) {WorldY-=speed;}
+				if (!collisionOn) {WorldY -= speed;}
 			}
-			if (keyH.downPressed== true) {
+			if (keyH.downPressed) {
 				direction = "down";
-				if (collisionOn==false) {WorldY+=speed;} 
+				if (!collisionOn) {WorldY += speed;} 
 			}
-			if (keyH.leftPressed == true) {
+			if (keyH.leftPressed) {
 				direction = "left";	
-				if (collisionOn==false){WorldX-=speed;}
+				if (!collisionOn){WorldX -= speed;}
 			}
-			if (keyH.rightPressed==true) {
+			if (keyH.rightPressed) {
 				direction = "right";
-				if (collisionOn==false){WorldX+=speed;}
+				if (!collisionOn){WorldX += speed;}
 			}
 			
 	
@@ -124,14 +124,14 @@ public class Player extends Entity {
 			spriteCounter++;
 			//Player image changes every 12 frames
 			if (spriteCounter > 12) {
-				if (spriteNum==1) {
-					spriteNum =2;
+				if (spriteNum) {
+					spriteNum = false;
 				}
 				
-				else if (spriteNum ==2) {
-					spriteNum=1;
+				else if (!spriteNum) {
+					spriteNum = true;
 				}
-				spriteCounter=0;
+				spriteCounter = 0;
 			}
 			
 		}//keypress loop
@@ -141,7 +141,7 @@ public class Player extends Entity {
 	
 	public void ObjectPickUp(int index) {
 		
-		if (index!=9999) {
+		if (index != 9999) {
 			
 
 	}
@@ -169,35 +169,35 @@ public class Player extends Entity {
 		
 		switch (direction) {
 		case "up":
-			if (spriteNum==1) {
+			if (spriteNum) {
 				image = up1;
 			}
-			if (spriteNum==2) {
+			if (!spriteNum) {
 				image = up2;
 			}
 			
 			break;
 		case "down":
-			if (spriteNum==1) {
+			if (spriteNum) {
 				image = down1;
 			}
-			if (spriteNum==2) {
+			if (!spriteNum) {
 				image = down2;
 			}
 			break;
 		case "left":
-			if (spriteNum==1) {
+			if (spriteNum) {
 				image = left1;
 			}
-			if (spriteNum==2) {
+			if (!spriteNum) {
 				image = left2;
 			}
 			break;
 		case "right":
-			if (spriteNum==1) {
+			if (spriteNum) {
 				image = right1;
 			}
-			if (spriteNum==2) {
+			if (!spriteNum) {
 				image = right2;
 			}
 			break;

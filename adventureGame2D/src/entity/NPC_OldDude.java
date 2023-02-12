@@ -19,7 +19,8 @@ public class NPC_OldDude extends Entity {
 		super(gp);
 		direction = "down";
 		speed = 2;
-		solidArea = new Rectangle(8,8, 24, 24);
+		//x, y, width, height
+		solidArea = new Rectangle(8, 8, 24, 36);
 		
 		
 		getOldDudeImage();
@@ -61,23 +62,24 @@ public class NPC_OldDude extends Entity {
 		
 		++actionLock;
 		
-	if (actionLock ==240) {
+		//After every a certain pseudo random amount of time
+	if (actionLock == 240) {
 		Random random = new Random();
 		int i = random.nextInt(100) + 1;//1 to 100
 		
 		
-		if (i <= 25) {
+		if (i < 25) {
 			direction = "up";
-		} else if (i<=50) {
+		} else if (i < 50) {
 			direction = "down";
-		} else if (i <= 75) {
+		} else if (i < 75) {
 			direction = "left";
 		} else {
 			direction = "right";
 		}
 		
 		actionLock = 0;
-	}
+		}
 	}
 	
 	public void speak() {
