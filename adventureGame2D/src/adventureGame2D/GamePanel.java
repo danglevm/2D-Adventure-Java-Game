@@ -114,7 +114,7 @@ public class GamePanel extends JPanel implements Runnable{
 		gameThread.start();
 	}
 	//Setting up the game
-	//*******************************THREADING**********************
+	//*******************************GAME SETUP**********************
 	public void GameSetup() {
 		
 		assetPlace.setObject();
@@ -190,15 +190,10 @@ public void update() {
 				npcs[i].update();
 			}
 		}
-		
-		
+			
 	} else {
 		//nothing happens
 	}
-	
-	
-	
-	
 	
 }
 
@@ -222,18 +217,10 @@ public void paintComponent (Graphics g) {
 		entityList.add(player);
 	
 		//Add both npcs and objects to the array list 
-		for (int i = 0; i < npcs.length; ++i) {
-			if (npcs[i] != null) {
-				entityList.add(npcs[i]);
-			}
-		}
-	
+		this.addtoEntityList(npcs);
+		this.addtoEntityList(obj);
 		
-		for (int i = 0; i < obj.length; ++i) {
-			if (obj[i] != null) {
-				entityList.add(obj[i]);
-			}
-		}
+		
 		//Sort the entityList
 		Collections.sort(entityList, new Comparator<Entity>() {
 
@@ -270,9 +257,7 @@ public void paintComponent (Graphics g) {
 
 }
 
-
-
-//Music playing methods
+	//Music playing methods
 	public void playMusic (int i) {
 		music.setFile(i);
 		music.play();
@@ -287,6 +272,18 @@ public void paintComponent (Graphics g) {
 		se.setFile(i);
 		se.play();
 	}
+	
+	
+	//Add from array to array List
+	private void addtoEntityList (Entity array[]) {
+		for (int i = 0; i < array.length; ++i) {
+			if (array[i] != null) {
+			entityList.add(array[i]);
+			}
+		}
+	}
+
 }
+
 
 
