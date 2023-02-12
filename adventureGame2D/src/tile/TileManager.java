@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 import adventureGame2D.GamePanel;
 import adventureGame2D.UtilityTool;
 
-public class TileManager {
+public class TileManager extends Tile{
 
 	GamePanel gp;
 	public ArrayList<Tile> tilesList;
@@ -109,13 +109,13 @@ public class TileManager {
 			InputStream is = getClass().getResourceAsStream(filePath);
 			//Convert bytes from the stream into chars (in this case, numbers 0 - 2)
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-			int col = 0;
-			int row = 0;
+			int col = 0,
+				row = 0;
 			
-			while (col<gp.maxWorldCol &&row<gp.maxWorldRow) {
+			while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
 				String line = br.readLine();
 				
-				while (col<gp.maxWorldCol) {
+				while (col < gp.maxWorldCol) {
 					//Get the numbers one by one and store them into mapTileNum
 					String numbers[] = line.split(" ");
 					
@@ -139,23 +139,24 @@ public class TileManager {
 	//Draw tiles in the background
 	public void draw(Graphics2D g2) {
 		
-		int worldCol =0;
-		int worldRow =0;
+		int worldCol = 0;
+		int worldRow = 0;
 
 		
 		//While the tiles are still within max row and column size, draw the tile
-		while (worldCol<gp.maxWorldCol && worldRow<gp.maxWorldRow) {
+		while (worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
 			//Retrieve the tile from mapTileNum
 			int tileNum = mapTileNum[worldCol][worldRow];
 			//Find the drawing location
-			int worldX = worldCol*gp.tileSize;
-			int worldY = worldRow*gp.tileSize;
-			int screenX = worldX-gp.player.WorldX + gp.player.screenX;
+			//Render the area viewable only in the player field of view
+			int worldX = worldCol * gp.tileSize;
+			int worldY = worldRow * gp.tileSize;
+			int screenX = worldX - gp.player.WorldX + gp.player.screenX;
 			int screenY = worldY - gp.player.WorldY + gp.player.screenY;
-			if (worldX+gp.tileSize>gp.player.WorldX-gp.player.screenX && 
-				worldX-gp.tileSize<gp.player.WorldX+gp.player.screenX &&
-				worldY+gp.tileSize>gp.player.WorldY-gp.player.screenY&&
-				worldY-gp.tileSize <gp.player.WorldY+gp.player.screenY) {
+			if (worldX + gp.tileSize > gp.player.WorldX - gp.player.screenX && 
+				worldX - gp.tileSize < gp.player.WorldX + gp.player.screenX &&
+				worldY + gp.tileSize > gp.player.WorldY - gp.player.screenY&&
+				worldY - gp.tileSize < gp.player.WorldY + gp.player.screenY) {
 				
 				g2.drawImage(tilesList.get(tileNum).image, screenX, screenY, null);
 			}
@@ -164,8 +165,8 @@ public class TileManager {
 			++worldCol;
 			
 			
-			if (worldCol==gp.maxWorldCol) {
-				worldCol=0;
+			if (worldCol == gp.maxWorldCol) {
+				worldCol = 0;
 				worldRow++;
 			}
 		}

@@ -35,6 +35,11 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int screenWidth = tileSize * maxScreenColumns; //864 pixels
 	public final int screenHeight = tileSize * maxScreenRows; //672 pixels
 	
+	
+	//******************************************************************************************************************		
+	//------------------------------IN GAME SETTINGS----------------------------------------------------------------------//
+	//*****************************************************************************************************************
+	
 	//World Map settings
 	public int maxWorldCol = 250;
 	public int maxWorldRow = 250;
@@ -53,11 +58,12 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	
 	//FPS
-	private int FPS = 60;
-	private int FPS_x = screenWidth - tileSize*3, FPS_y = tileSize;
+	private int FPS = 60, FPS_x = screenWidth - tileSize*3, FPS_y = tileSize;
 	private String FPS_text = "";
 	
-	
+	//******************************************************************************************************************		
+		//------------------------------IN GAME OBJECTS----------------------------------------------------------------------//
+		//*****************************************************************************************************************
 	
 	//Game Objects
 	TileManager tileM = new TileManager(this);
@@ -78,6 +84,7 @@ public class GamePanel extends JPanel implements Runnable{
 	//entity with lowest world Y index 0, highest world y final index
 	ArrayList<Entity> entityList = new ArrayList<>();
 	
+	
 	//sound
 	Sound music = new Sound();
 	Sound se = new Sound();
@@ -96,6 +103,7 @@ public class GamePanel extends JPanel implements Runnable{
 		this.addKeyListener(keyH);
 		//Set the Game Panel to focus on taking inputs from key presses
 		this.setFocusable(true);
+		entityList.ensureCapacity(100);
 		
 	}
 	
@@ -126,11 +134,11 @@ public class GamePanel extends JPanel implements Runnable{
 		double delta = 0;
 		long lastTime = System.nanoTime();
 		long currentTime;
-		int timer=0, drawCount=0;
+		int timer = 0, drawCount = 0;
 		
 		
 		
-		while (gameThread!= null) {
+		while (gameThread != null) {
 			
 			currentTime = System.nanoTime();
 			
@@ -141,7 +149,7 @@ public class GamePanel extends JPanel implements Runnable{
 			
 			
 			//When delta reach drawInterval that is equals to 1
-			if (delta>=1) {
+			if (delta >= 1) {
 				
 				//1. Update information - character position
 				update();
@@ -153,7 +161,7 @@ public class GamePanel extends JPanel implements Runnable{
 				
 			}
 			//FPS counter
-			if (timer>=1000000000) {
+			if (timer >= 1000000000) {
 				FPS_text = "FPS: "+ drawCount;	
 				timer = 0;
 				drawCount = 0;
@@ -244,9 +252,7 @@ public void paintComponent (Graphics g) {
 			entityList.get(i).draw(g2, this);
 		}
 		//Empty entity list after drawing
-		for (int i = 0; i < entityList.size(); ++i) {
-			entityList.remove(i);
-		}
+		entityList.clear();
 	ui.draw(g2);
 	
 	//draws FPS and player location
