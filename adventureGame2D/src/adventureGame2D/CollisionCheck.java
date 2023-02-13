@@ -118,49 +118,26 @@ public class CollisionCheck{
 				switch (entity.direction) {
 				case "up":
 					entity.solidArea.y -= entity.speed;
-					//entity rectangle intersects with object rectangle
-					if (this.checkObjectCollision(entity, gp.objects.get(i))) {
-						entity.collisionOn = true;
-					};
-					if (player) {
-						index = i;
-					}
-					
 					break;
 					
 				case "down":
 					entity.solidArea.y += entity.speed;
-					if (this.checkObjectCollision(entity, gp.objects.get(i))) {
-						entity.collisionOn = true;
-					};
-					if (player) {
-						index = i;
-					}
-					
 					break;
 				case "left":
 					entity.solidArea.x -= entity.speed;
-					if (this.checkObjectCollision(entity, gp.objects.get(i))) {
-						entity.collisionOn = true;
-					};
-					if (player) {
-						index = i;
-					}
-					
 					break;
 					
 				case "right":
 					entity.solidArea.x += entity.speed;
-					if (this.checkObjectCollision(entity, gp.objects.get(i))) {
-						entity.collisionOn = true;
-					};
-					if (player) {
-						index = i;
-					}
-					
 					break;
-					
-					
+				}
+				
+				//entity rectangle intersects with object rectangle
+				if (this.checkObjectCollision(entity, gp.objects.get(i))) {
+					entity.collisionOn = true;
+				};
+				if (player) {
+					index = i;
 				}
 				//reset entity's solid Area or else the values increase indefinitely
 				entity.solidArea.x = entity.solidAreaDefaultX;
@@ -197,37 +174,22 @@ public class CollisionCheck{
 						switch (entity.direction) {
 						case "up":
 							entity.solidArea.y -= entity.speed;
-							//entity rectangle intersects with target's rectangle
-							if (this.checkObjectCollision(entity, entities.get(i))) {
-								entity.collisionOn = true;
-								index = i;
-							};
 							break;
-							
 						case "down":
 							entity.solidArea.y += entity.speed;
-							if (this.checkObjectCollision(entity, entities.get(i))) {
-								entity.collisionOn = true;
-								index = i;
-							};
 							break;
 						case "left":
 							entity.solidArea.x -= entity.speed;
-							if (this.checkObjectCollision(entity, entities.get(i))) {
-								entity.collisionOn = true;
-								index = i;
-							};
 							break;
 						case "right":
 							entity.solidArea.x += entity.speed;
-							if (this.checkObjectCollision(entity, entities.get(i))) {
-								entity.collisionOn = true;
-								index = i;
-							};
 							break;
-							
 						}
 						//reset entity's solid Area or else the values increase indefinitely
+						if (this.checkObjectCollision(entity, entities.get(i))) {
+							entity.collisionOn = true;
+							index = i;
+						};
 						entity.solidArea.x = entity.solidAreaDefaultX;
 						entity.solidArea.y = entity.solidAreaDefaultY;
 						entities.get(i).solidArea.x = entities.get(i).solidAreaDefaultX;
@@ -255,31 +217,20 @@ public class CollisionCheck{
 		switch (entity.direction) {
 		case "up":
 			entity.solidArea.y -= entity.speed;
-			//entity rectangle intersects with target's rectangle
-			if (entity.solidArea.intersects(gp.player.solidArea)) {
-				entity.collisionOn = true;
-			}
 			break;
-			
 		case "down":
 			entity.solidArea.y += entity.speed;
-			if (entity.solidArea.intersects(gp.player.solidArea)) {
-				entity.collisionOn = true;
-			}
 			break;
 		case "left":
 			entity.solidArea.x -= entity.speed;
-			if (entity.solidArea.intersects(gp.player.solidArea)) {
-				entity.collisionOn = true;
-			}
 			break;
 		case "right":
 			entity.solidArea.x += entity.speed;
-			if (entity.solidArea.intersects(gp.player.solidArea)) {
-				entity.collisionOn = true;
-			}
 			break;
-			
+		}
+		//entity rectangle intersects with target's rectangle
+		if (entity.solidArea.intersects(gp.player.solidArea)) {
+			entity.collisionOn = true;
 		}
 		//reset entity's solid Area or else the values increase indefinitely
 		entity.solidArea.x = entity.solidAreaDefaultX;
