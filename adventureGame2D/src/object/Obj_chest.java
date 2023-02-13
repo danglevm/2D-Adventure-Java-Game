@@ -9,10 +9,11 @@ import entity.Entity;
 
 public class Obj_chest extends Entity {
 	
-	public Obj_chest(GamePanel gp) {
+	public Obj_chest(GamePanel gp, int worldX, int worldY) {
 	 super(gp);  
-	 
 	 name = "chest";
+	 this.WorldX = worldX;
+	 this.WorldY = worldY;
 	 down1 = setupCharacter("chest","/objects/");
 	}		
 }
