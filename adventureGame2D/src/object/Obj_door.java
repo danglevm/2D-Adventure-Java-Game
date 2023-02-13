@@ -13,8 +13,8 @@ public class Obj_door extends Entity{
 		name  = "Door";
 		down1 = setupCharacter("door", "/objects/");
 		collisionOn = true;
-		this.WorldX = worldX;
-		this.WorldY = worldY;
+		this.WorldX = worldX * gp.tileSize;
+		this.WorldY = worldY * gp.tileSize;
 		
 		solidArea.x = 0;
 		solidArea.y = 16;

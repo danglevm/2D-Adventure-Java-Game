@@ -11,8 +11,8 @@ public class Obj_key extends Entity{
 	
 	public Obj_key(GamePanel gp, int worldX, int worldY) {
 		super (gp);
-		this.WorldX = worldX;
-		this.WorldY = worldY;
+		this.WorldX = worldX * gp.tileSize;
+		this.WorldY = worldY * gp.tileSize;
 		name = "Key";
 		
 		

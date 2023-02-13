@@ -12,8 +12,8 @@ public class Obj_chest extends Entity {
 	public Obj_chest(GamePanel gp, int worldX, int worldY) {
 	 super(gp);  
 	 name = "chest";
-	 this.WorldX = worldX;
-	 this.WorldY = worldY;
+	 this.WorldX = worldX * gp.tileSize;
+	 this.WorldY = worldY * gp.tileSize;
 	 down1 = setupCharacter("chest","/objects/");
 	}		
 }
