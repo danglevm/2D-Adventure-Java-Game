@@ -55,6 +55,8 @@ public class Entity {
 		gp.cChecker.CheckTile(this);
 		gp.cChecker.checkObject(this, false);
 		gp.cChecker.checkPlayer(this);
+		gp.cChecker.checkEntity(this, gp.NPCs);
+		gp.cChecker.checkEntity(this, gp.monsters);
 		
 		if (!collisionOn) {
 			switch (direction) {
@@ -66,10 +68,6 @@ public class Entity {
 			}
 		}
 
-		
-		
-		
-		
 		spriteCounter++;
 		//Player image changes every 12 frames
 		if (!collisionOn) {
@@ -85,6 +83,7 @@ public class Entity {
 		}
 		}
 	}
+	
 	public void draw (Graphics2D g2, GamePanel gp) {
 		this.gp = gp;
 		BufferedImage image = null;
