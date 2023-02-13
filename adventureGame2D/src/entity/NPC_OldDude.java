@@ -15,13 +15,14 @@ public class NPC_OldDude extends Entity {
 	String oldDudeDialogues[] = new String [20];
 	int oldDudeDialogueIndex = 0;
 
-	public NPC_OldDude (GamePanel gp) {
+	public NPC_OldDude (GamePanel gp, int worldX, int worldY) {
 		super(gp);
 		direction = "down";
 		speed = 2;
 		//x, y, width, height
 		solidArea = new Rectangle(8, 8, 24, 36);
-		
+		this.WorldX = gp.tileSize * worldX;
+		this.WorldY = gp.tileSize * worldY;
 		
 		getOldDudeImage();
 		setDialogue();
@@ -88,7 +89,7 @@ public class NPC_OldDude extends Entity {
 			gp.ui.setCurrentDialogue( oldDudeDialogues[oldDudeDialogueIndex]);
 			++oldDudeDialogueIndex;
 		}
-		talkingDirection(gp.player, gp.npcs[0]);
+		talkingDirection(gp.player, this);
 		
 	}
 }

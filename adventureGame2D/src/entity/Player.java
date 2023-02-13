@@ -96,7 +96,7 @@ public class Player extends Entity {
 			
 			
 			//check NPC collision
-			int npcIndex = gp.cChecker.checkEntity(this, gp.npcs);
+			int npcIndex = gp.cChecker.checkEntity(this, gp.NPCs);
 			collisionNPC(npcIndex);
 			
 			if (keyH.upPressed) {
@@ -152,7 +152,7 @@ public class Player extends Entity {
 			//player touching npc
 			if (keyH.dialoguePressed) {
 				gp.gameState = gp.dialogueState;
-				gp.npcs[i].speak();
+				gp.NPCs.get(i).speak();
 				keyH.dialoguePressed = false; 
 			}
 		}
