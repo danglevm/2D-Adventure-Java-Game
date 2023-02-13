@@ -231,12 +231,13 @@ public void paintComponent (Graphics g) {
 		});
 		
 		//Draw entities
-		for (int i = 0; i < entityList.size(); ++i) {
-			entityList.get(i).draw(g2, this);
+		for (Entity currentEntity : entityList) {
+			currentEntity.draw(g2, this);
 		}
 		//Empty entity list after drawing
 		entityList.clear();
-	ui.draw(g2);
+		
+		ui.draw(g2);
 	
 	//draws FPS and player location
 		if (keyH.FPS_display) {
@@ -279,8 +280,7 @@ public void paintComponent (Graphics g) {
 		}
 	}
 	
-	//generic method to learn
-	private final <T> void updateEntities (ArrayList <Entity> entities) {
+	private final void updateEntities (ArrayList <Entity> entities) {
 		for (Entity currentEntity : entities) {
 			if (currentEntity != null) {
 				currentEntity.update();
