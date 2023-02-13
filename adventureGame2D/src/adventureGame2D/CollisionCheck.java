@@ -108,8 +108,6 @@ public class CollisionCheck{
 				entity.solidArea.x = entity.WorldX + entity.solidArea.x;
 				entity.solidArea.y = entity.WorldY + entity.solidArea.y;
 				
-				
-				
 				//Get object's solid area position
 				gp.objects.get(i).solidArea.x = gp.objects.get(i).WorldX + gp.objects.get(i).solidArea.x;
 				gp.objects.get(i).solidArea.y = gp.objects.get(i).WorldY + gp.objects.get(i).solidArea.y;
@@ -187,8 +185,10 @@ public class CollisionCheck{
 						}
 						//reset entity's solid Area or else the values increase indefinitely
 						if (this.checkObjectCollision(entity, entities.get(i))) {
+							if (entities.get(i) != entity) {
 							entity.collisionOn = true;
 							index = i;
+							}
 						};
 						entity.solidArea.x = entity.solidAreaDefaultX;
 						entity.solidArea.y = entity.solidAreaDefaultY;
