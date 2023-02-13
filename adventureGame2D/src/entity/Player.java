@@ -84,6 +84,10 @@ public class Player extends Entity {
 			
 			//Check tile collision
 			collisionOn = false;
+			
+			//monster collision
+			int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
+			
 			//Collision checker receive subclass
 			gp.cChecker.CheckTile(this);
 			
