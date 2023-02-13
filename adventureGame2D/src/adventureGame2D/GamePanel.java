@@ -71,16 +71,14 @@ public class GamePanel extends JPanel implements Runnable{
 	public CollisionCheck cChecker = new CollisionCheck(this);
 	public UI ui = new UI(this);
 	public EventHandler eHandler = new EventHandler (this);
-	
+	public AssetPlacement assetPlace = new AssetPlacement(this);
 	
 	//Entities
 	Thread gameThread;
 	public Player player = new Player(this, keyH);
-	public Entity npcs[] = new Entity[20]; 
-	//In-game objects
-	public AssetPlacement assetPlace = new AssetPlacement(this);
-	//Display up to only 10 objects on screen - decide later
-	public Entity obj [] = new Entity[50];
+	public ArrayList <Entity> NPCs = new ArrayList <> (); 
+	public ArrayList <Entity> objects = new ArrayList <> ();
+	public ArrayList <Entity> monsters = new ArrayList <> ();
 	//entity with lowest world Y index 0, highest world y final index
 	ArrayList<Entity> entityList = new ArrayList<>();
 	
@@ -119,6 +117,7 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		assetPlace.setObject();
 		assetPlace.setNPCs();
+		assetPlace.setMonsters();
 		playMusic(0);
 		stopMusic();
 		gameState = titleState;
@@ -176,7 +175,6 @@ public class GamePanel extends JPanel implements Runnable{
 	
 
 //************************************ GAME LOOP METHODS**************
-
 //Takes in KeyH inputs and then updates character model
 public void update() {
 	
@@ -185,12 +183,10 @@ public void update() {
 		//Player
 		player.update();
 		//NPCs
-		for (int i = 0; i <npcs.length;++i) {
-			if (npcs[i]!=null) {
-				npcs[i].update();
-			}
-		}
-			
+		this.updateEntities(objects);
+		this.updateEntities(NPCs);
+		this.updateEntities(monsters);
+		
 	} else {
 		//nothing happens
 	}
@@ -217,9 +213,9 @@ public void paintComponent (Graphics g) {
 		entityList.add(player);
 	
 		//Add both npcs and objects to the array list 
-		this.addtoEntityList(npcs);
-		this.addtoEntityList(obj);
-		
+		this.addtoEntityList(NPCs);
+		this.addtoEntityList(objects);
+		this.addtoEntityList(monsters);
 		
 		//Sort the entityList
 		Collections.sort(entityList, new Comparator<Entity>() {
@@ -275,10 +271,19 @@ public void paintComponent (Graphics g) {
 	
 	
 	//Add from array to array List
-	private void addtoEntityList (Entity array[]) {
-		for (int i = 0; i < array.length; ++i) {
-			if (array[i] != null) {
-			entityList.add(array[i]);
+	private final void addtoEntityList (ArrayList <Entity> entities) {
+		for (Entity currentEntity : entities) {
+			if (currentEntity != null) {
+				entityList.add(currentEntity);
+			}
+		}
+	}
+	
+	//generic method to learn
+	private final <T> void updateEntities (ArrayList <Entity> entities) {
+		for (Entity currentEntity : entities) {
+			if (currentEntity != null) {
+				currentEntity.update();
 			}
 		}
 	}
