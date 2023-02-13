@@ -1,5 +1,7 @@
 package adventureGame2D;
 
+import java.util.ArrayList;
+
 import entity.Entity;
 import tile.Tile;
 
@@ -83,14 +85,23 @@ public class CollisionCheck{
 	
 	}
 	
-	public int checkObject(Entity entity, boolean player) {
+	private final boolean checkObjectCollision (Entity entity, Entity other) {
+		if (entity.solidArea.intersects(other.solidArea)) {
+			if (other.collisionOn) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public final int checkObject(Entity entity, boolean player) {
 		
 		//If player is colliding with any object. If player is, returns index of the object
 		int index = 9999;
 		
-		for (int i = 0; i<gp.obj.length; i++) {
+		for (int i = 0; i < gp.objects.size(); i++) {
 			
-			if (gp.obj[i]!=null) {
+			if (gp.objects.get(i) != null) {
 				
 				//Get entity's solid area position
 				//Location of entity + entity solid area size - 0 is default, can be changed later
@@ -100,65 +111,62 @@ public class CollisionCheck{
 				
 				
 				//Get object's solid area position
-				gp.obj[i].solidArea.x = gp.obj[i].WorldX+gp.obj[i].solidArea.x;
-				gp.obj[i].solidArea.y = gp.obj[i].WorldY+gp.obj[i].solidArea.y;
+				gp.objects.get(i).solidArea.x = gp.objects.get(i).WorldX + gp.objects.get(i).solidArea.x;
+				gp.objects.get(i).solidArea.y = gp.objects.get(i).WorldY + gp.objects.get(i).solidArea.y;
 				
 				//NPC cannot pick up objects
 				switch (entity.direction) {
 				case "up":
 					entity.solidArea.y -= entity.speed;
 					//entity rectangle intersects with object rectangle
-					if (entity.solidArea.intersects(gp.obj[i].solidArea)) {
-						if (gp.obj[i].collisionOn) {
-							entity.collisionOn = true;
-						}
-						if (player) {
-							index = i;
-						}
+					if (this.checkObjectCollision(entity, gp.objects.get(i))) {
+						entity.collisionOn = true;
+					};
+					if (player) {
+						index = i;
 					}
+					
 					break;
 					
 				case "down":
 					entity.solidArea.y += entity.speed;
-					if (entity.solidArea.intersects(gp.obj[i].solidArea)) {
-							if (gp.obj[i].collisionOn) {
-								entity.collisionOn = true;
-							}
-							if (player) {
-								index = i;
-							}
+					if (this.checkObjectCollision(entity, gp.objects.get(i))) {
+						entity.collisionOn = true;
+					};
+					if (player) {
+						index = i;
 					}
+					
 					break;
 				case "left":
 					entity.solidArea.x -= entity.speed;
-					if (entity.solidArea.intersects(gp.obj[i].solidArea)) {
-							if (gp.obj[i].collisionOn) {
-								entity.collisionOn = true;
-							}
-							if (player) {
-								index = i;
-							}
+					if (this.checkObjectCollision(entity, gp.objects.get(i))) {
+						entity.collisionOn = true;
+					};
+					if (player) {
+						index = i;
 					}
+					
 					break;
+					
 				case "right":
 					entity.solidArea.x += entity.speed;
-					if (entity.solidArea.intersects(gp.obj[i].solidArea)) {
-						
-							if (gp.obj[i].collisionOn) {
-								entity.collisionOn = true;
-							}
-							if (player) {
-								index = i;
-							}
+					if (this.checkObjectCollision(entity, gp.objects.get(i))) {
+						entity.collisionOn = true;
+					};
+					if (player) {
+						index = i;
 					}
+					
 					break;
+					
 					
 				}
 				//reset entity's solid Area or else the values increase indefinitely
 				entity.solidArea.x = entity.solidAreaDefaultX;
 				entity.solidArea.y = entity.solidAreaDefaultY;
-				gp.obj[i].solidArea.x = gp.obj[i].solidAreaDefaultX;
-				gp.obj[i].solidArea.y = gp.obj[i].solidAreaDefaultY;
+				gp.objects.get(i).solidArea.x = gp.objects.get(i).solidAreaDefaultX;
+				gp.objects.get(i).solidArea.y = gp.objects.get(i).solidAreaDefaultY;
 			}
 		}
 		
@@ -166,13 +174,13 @@ public class CollisionCheck{
 	}
 	
 	//NPCs and monster collision
-	public int checkEntity (Entity entity, Entity[] target) {
+	public final int checkEntity (Entity entity, ArrayList <Entity> entities) {
 		//If player is colliding with a NPC. If player is, returns index of the object
 				int index = 9999;
 				
-				for (int i = 0; i<target.length; i++) {
+				for (int i = 0; i < entities.size(); i++) {
 					
-					if (target[i] != null) {
+					if (entities.get(i) != null) {
 						
 						//Get entity's solid area position
 						//Location of entity + entity solid area size - 0 is default, can be changed later
@@ -182,48 +190,48 @@ public class CollisionCheck{
 						
 						
 						//Get target's solid area position
-						target[i].solidArea.x= target[i].WorldX+target[i].solidArea.x;
-						target[i].solidArea.y= target[i].WorldY+target[i].solidArea.y;
+						entities.get(i).solidArea.x = entities.get(i).WorldX + entities.get(i).solidArea.x;
+						entities.get(i).solidArea.y = entities.get(i).WorldY + entities.get(i).solidArea.y;
 						
 						
 						switch (entity.direction) {
 						case "up":
 							entity.solidArea.y -= entity.speed;
 							//entity rectangle intersects with target's rectangle
-							if (entity.solidArea.intersects(target[i].solidArea)) {
+							if (this.checkObjectCollision(entity, entities.get(i))) {
 								entity.collisionOn = true;
-								index=i;
-							}
+								index = i;
+							};
 							break;
 							
 						case "down":
 							entity.solidArea.y += entity.speed;
-							if (entity.solidArea.intersects(target[i].solidArea)) {
+							if (this.checkObjectCollision(entity, entities.get(i))) {
 								entity.collisionOn = true;
 								index = i;
-							}
+							};
 							break;
 						case "left":
 							entity.solidArea.x -= entity.speed;
-							if (entity.solidArea.intersects(target[i].solidArea)) {
+							if (this.checkObjectCollision(entity, entities.get(i))) {
 								entity.collisionOn = true;
 								index = i;
-							}
+							};
 							break;
 						case "right":
 							entity.solidArea.x += entity.speed;
-							if (entity.solidArea.intersects(target[i].solidArea)) {
+							if (this.checkObjectCollision(entity, entities.get(i))) {
 								entity.collisionOn = true;
 								index = i;
-							}
+							};
 							break;
 							
 						}
 						//reset entity's solid Area or else the values increase indefinitely
 						entity.solidArea.x = entity.solidAreaDefaultX;
 						entity.solidArea.y = entity.solidAreaDefaultY;
-						target[i].solidArea.x=target[i].solidAreaDefaultX;
-						target[i].solidArea.y=target[i].solidAreaDefaultY;
+						entities.get(i).solidArea.x = entities.get(i).solidAreaDefaultX;
+						entities.get(i).solidArea.y = entities.get(i).solidAreaDefaultY;
 					}
 				}
 				
@@ -231,7 +239,7 @@ public class CollisionCheck{
 		
 	}
 	
-	public void checkPlayer (Entity entity) {
+	public final void checkPlayer (Entity entity) {
 		//Get entity's solid area position
 		//Location of entity + entity solid area size - 0 is default, can be changed later
 		entity.solidArea.x = entity.WorldX + entity.solidArea.x;
