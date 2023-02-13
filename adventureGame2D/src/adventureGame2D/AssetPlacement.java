@@ -17,8 +17,8 @@ public class AssetPlacement {
 	
 	public void setObject() {
 		//121, 123
-		gp.objects.add(new Obj_key(gp, 110, 123));
-		gp.objects.add(new Obj_door(gp, 121, 122));
+		gp.objects.add(new Obj_key(gp, 126, 123));
+		gp.objects.add(new Obj_door(gp, 121, 123));
 	}
 	
 	public void setNPCs() {
