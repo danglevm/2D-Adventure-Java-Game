@@ -9,14 +9,18 @@ import monster.Monster_Interface.Monster;
 public class Monster_Green_Slime extends Entity implements Monster{
 	public Monster_Green_Slime (GamePanel gp, int worldX, int worldY) {
 		super(gp);
-		this.WorldX = worldX;
-		this.WorldY = worldY;
+		this.WorldX = worldX * gp.tileSize;
+		this.WorldY = worldY * gp.tileSize;
 		this.setDefaultValues();
 		this.getImage();
 	}
 	
-	public void setDefaultValues() {
+	public final void setDefaultValues() {
 		name = "";
+		speed = 1;
+		maxLife = 6;
+		life = maxLife;
+		
 		solidArea.x = 3;
 		solidArea.y = 18;
 		solidArea.width = 42;
@@ -25,7 +29,7 @@ public class Monster_Green_Slime extends Entity implements Monster{
 		solidAreaDefaultY = solidArea.y;
 	}
 	
-	public void getImage() {
+	public final void getImage() {
 		up1 = setupCharacter("greenslime_down_1","/monster/");
 		up2 = setupCharacter("greenslime_down_2","/monster/");
 
@@ -40,7 +44,7 @@ public class Monster_Green_Slime extends Entity implements Monster{
 	}
 	
 	@Override
-	public void setAction() {
+	public final void setAction() {
 	++actionLock;
 		
 		//After every a certain pseudo random amount of time
