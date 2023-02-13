@@ -7,8 +7,10 @@ import entity.Entity;
 import monster.Monster_Interface.Monster;
 
 public class Monster_Green_Slime extends Entity implements Monster{
-	public Monster_Green_Slime (GamePanel gp) {
+	public Monster_Green_Slime (GamePanel gp, int worldX, int worldY) {
 		super(gp);
+		this.WorldX = worldX;
+		this.WorldY = worldY;
 		this.setDefaultValues();
 		this.getImage();
 	}
