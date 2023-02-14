@@ -10,27 +10,26 @@ import javax.imageio.ImageIO;
 import adventureGame2D.GamePanel;
 import adventureGame2D.UtilityTool;
 
-public class NPC_OldDude extends Entity {
+public class NPC_OldDude extends Entity implements NPC_Interface{
 	//Dialogues
 	String oldDudeDialogues[] = new String [20];
 	int oldDudeDialogueIndex = 0;
 
 	public NPC_OldDude (GamePanel gp, int worldX, int worldY) {
 		super(gp);
-		direction = "down";
-		speed = 2;
 		//x, y, width, height
 		solidArea = new Rectangle(8, 8, 24, 36);
 		this.WorldX = gp.tileSize * worldX;
 		this.WorldY = gp.tileSize * worldY;
 		
-		getOldDudeImage();
-		setDialogue();
+		this.setDefaultValues();
+		this.getImage();
+		this.setDialogue();
 	}
 	
 
 	//-------------------------------NPC RENDER METHODS------------------
-	public void getOldDudeImage() {
+	public void getImage() {
 		
 		up1 = setupCharacter("oldman_up_1", "/npc/");
 		up2 = setupCharacter("oldman_up_2", "/npc/");
@@ -44,7 +43,7 @@ public class NPC_OldDude extends Entity {
 
 		
 	}
-	
+	@Override
 	public void setDialogue() {
 		
 		//Meeting the player for the first time
@@ -92,4 +91,19 @@ public class NPC_OldDude extends Entity {
 		talkingDirection(gp.player, this);
 		
 	}
+
+
+	@Override
+	public final void setDefaultValues() {
+		name = "Old_Dude";
+		direction = "down";
+		speed = 2;
+		maxLife = 6;
+		life = maxLife;
+		entityType = 1;
+		
+	}
+
+
+	
 }
