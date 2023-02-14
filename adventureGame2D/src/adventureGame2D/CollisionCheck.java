@@ -186,8 +186,8 @@ public class CollisionCheck{
 						//reset entity's solid Area or else the values increase indefinitely
 						if (this.checkObjectCollision(entity, entities.get(i))) {
 							if (entities.get(i) != entity) {
-							entity.collisionOn = true;
-							index = i;
+								entity.collisionOn = true;
+								index = i;
 							}
 						};
 						entity.solidArea.x = entity.solidAreaDefaultX;
@@ -201,7 +201,7 @@ public class CollisionCheck{
 		
 	}
 	
-	public final void checkPlayer (Entity entity) {
+	public final boolean checkPlayer (Entity entity) {
 		//Get entity's solid area position
 		//Location of entity + entity solid area size - 0 is default, can be changed later
 		entity.solidArea.x = entity.WorldX + entity.solidArea.x;
@@ -231,13 +231,14 @@ public class CollisionCheck{
 		//entity rectangle intersects with target's rectangle
 		if (entity.solidArea.intersects(gp.player.solidArea)) {
 			entity.collisionOn = true;
+			return true;
 		}
 		//reset entity's solid Area or else the values increase indefinitely
 		entity.solidArea.x = entity.solidAreaDefaultX;
 		entity.solidArea.y = entity.solidAreaDefaultY;
 		gp.player.solidArea.x = gp.player.solidAreaDefaultX;
 		gp.player.solidArea.y = gp.player.solidAreaDefaultY;
-
+		return false;
 	}
 }
 
