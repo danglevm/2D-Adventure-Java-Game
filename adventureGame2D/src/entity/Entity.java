@@ -18,15 +18,20 @@ public class Entity {
 	public String name, direction = "down";
 	//Entity position
 	public int WorldX, WorldY, speed;
-	protected int spriteCounter = 0, actionLock = 0;
-	protected boolean spriteNum = true;
+	protected int spriteCounter = 0, actionLock = 0, invincibilityCounter = 0;
+	protected boolean spriteNum = true; 
+	
+	//0 - player, 1 - npc, 2 - monster
+	protected int entityType;
+	
+	
 	
 		
 	//specifies the solid area of the character entity for collision
 	//Store data about this rectangle as x, y, width and height
 	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
 	public int solidAreaDefaultX, solidAreaDefaultY;
-	public boolean collisionOn = false;
+	public boolean collisionOn = false, invincibility = false;;
 	
 	//Character HP - both players and monster
 	protected int maxLife, life;
@@ -54,16 +59,23 @@ public class Entity {
 		collisionOn = false;
 		gp.cChecker.CheckTile(this);
 		gp.cChecker.checkObject(this, false);
-		gp.cChecker.checkPlayer(this);
 		gp.cChecker.checkEntity(this, gp.NPCs);
 		gp.cChecker.checkEntity(this, gp.monsters);
 		
+		
+		if (gp.cChecker.checkPlayer(this) && this.entityType == 2) {
+			if (!gp.player.invincibility) {
+				gp.player.setLife(gp.player.getLife() - 1);
+				gp.player.invincibility = true;
+			}
+		}
+		
 		if (!collisionOn) {
 			switch (direction) {
-			case "up": WorldY -= speed; break;
-			case "down": WorldY += speed; break;
-			case "left": WorldX -= speed; break;
-			case "right": WorldX += speed; break;
+			case "up": this.WorldY -= speed; break;
+			case "down": this.WorldY += speed; break;
+			case "left": this.WorldX -= speed; break;
+			case "right": this.WorldX += speed; break;
 			
 			}
 		}
@@ -81,6 +93,19 @@ public class Entity {
 			}
 			spriteCounter = 0;
 		}
+		}
+	}
+	
+	protected void damageContact(Entity entity) {};
+	
+	protected void checkInvincibilityTime() 
+	{
+		if (this.invincibility) {
+		++this.invincibilityCounter;
+		if (this.invincibilityCounter > 120) {
+			this.invincibility = false;
+			this.invincibilityCounter = 0;
+			}
 		}
 	}
 	
@@ -168,6 +193,7 @@ public class Entity {
 		NPC.direction = direction;
 		
 	}
+	
 	
 	
 }
