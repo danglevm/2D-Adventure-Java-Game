@@ -4,15 +4,15 @@ import java.util.Random;
 
 import adventureGame2D.GamePanel;
 import entity.Entity;
-import monster.Monster_Interface.Monster;
 
-public class Monster_Green_Slime extends Entity implements Monster{
+public class Monster_Green_Slime extends Entity implements Monster_Interface{
 	public Monster_Green_Slime (GamePanel gp, int worldX, int worldY) {
 		super(gp);
 		this.WorldX = worldX * gp.tileSize;
 		this.WorldY = worldY * gp.tileSize;
 		this.setDefaultValues();
 		this.getImage();
+		
 	}
 	
 	public final void setDefaultValues() {
@@ -20,6 +20,7 @@ public class Monster_Green_Slime extends Entity implements Monster{
 		speed = 1;
 		maxLife = 6;
 		life = maxLife;
+		entityType = 2;
 		
 		solidArea.x = 3;
 		solidArea.y = 18;
@@ -65,4 +66,13 @@ public class Monster_Green_Slime extends Entity implements Monster{
 		actionLock = 0;
 		}
 	}
+	
+	@Override
+	public final void damageContact(Entity entity) {
+		if (!entity.invincibility) {
+			entity.setLife(entity.getLife() - 1);
+			entity.invincibility = true;
+		}
+	}
+	
 }
