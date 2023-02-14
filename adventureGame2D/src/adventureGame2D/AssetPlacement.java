@@ -22,7 +22,7 @@ public class AssetPlacement {
 	}
 	
 	public void setNPCs() {
-		gp.NPCs.add(new NPC_OldDude(gp, 121, 136));
+		gp.NPCs.add(new NPC_OldDude(gp, 121, 139));
 	}
 	
 	public void setMonsters() {
