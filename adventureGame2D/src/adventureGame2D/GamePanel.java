@@ -193,6 +193,7 @@ public void update() {
 	
 }
 
+
 public void paintComponent (Graphics g) {
 	
 	//Calling parent class JPanel
@@ -232,7 +233,12 @@ public void paintComponent (Graphics g) {
 		
 		//Draw entities
 		for (Entity currentEntity : entityList) {
-			currentEntity.draw(g2, this);
+			if (currentEntity != player) {
+				currentEntity.draw(g2, this);
+			} else {
+				player.draw(g2);
+				
+			}
 		}
 		//Empty entity list after drawing
 		entityList.clear();
@@ -287,6 +293,7 @@ public void paintComponent (Graphics g) {
 			}
 		}
 	}
+	
 
 }
 
