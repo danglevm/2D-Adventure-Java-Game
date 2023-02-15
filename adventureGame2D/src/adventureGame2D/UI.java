@@ -127,7 +127,8 @@ public class UI {
 		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 			
 		
-		g2.setFont(g2.getFont().deriveFont(Font.ITALIC, 80));
+		g2.setFont(maruMonica);
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80));
 		g2.setColor(Color.white);
 		String text = "Game Paused";
 		int x = getXCenter(text), y = gp.screenHeight/2;
@@ -140,6 +141,7 @@ public class UI {
 	
 	protected void drawRandomPauseQuotes() {
 		//Draws a random quote from Pause Quote array
+		g2.setFont(purisa);
 		g2.setFont(g2.getFont().deriveFont(Font.ITALIC, 30));
 		int max = 2, 
 				min = 0,
