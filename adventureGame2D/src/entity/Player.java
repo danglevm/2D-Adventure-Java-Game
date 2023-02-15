@@ -221,11 +221,12 @@ public class Player extends Entity {
 		//Draw effect when player gets damaged
 		if (this.invincibility) {
 			++this.switchOpacityCounter;
-			if (!switchOpacity && switchOpacityCounter > 30) {
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));	
+			if (!switchOpacity && switchOpacityCounter > 3) {
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));	
 				switchOpacity = true;
+				switchOpacityCounter = 0;
 			} else {
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));	
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));	
 				switchOpacity = false;
 			}
 		}
