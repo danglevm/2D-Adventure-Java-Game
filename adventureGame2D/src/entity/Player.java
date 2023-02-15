@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -23,6 +24,9 @@ public class Player extends Entity {
 	public final int screenX;
 	public final int screenY;
 	
+	private boolean switchOpacity = false;
+	private int switchOpacityCounter = 0;
+	
 	
 	
 	//-------------------------------CONSTRUCTORS------------------
@@ -43,8 +47,7 @@ public class Player extends Entity {
 		solidAreaDefaultX = solidArea.x;
 		solidAreaDefaultY = solidArea.y;
 		solidArea.width = 24;
-		solidArea.height = 36
-				;
+		solidArea.height = 36;
 		
 		this.setDefaultPlayerValues();
 		this.getPlayerImage();
@@ -69,6 +72,7 @@ public class Player extends Entity {
 		WorldX = gp.tileSize * 122;
 		WorldY= gp.tileSize * 132;
 		speed = 3;
+		entityType = 0;
 		direction = "down";
 		maxLife = 8;
 		life = maxLife;
@@ -87,6 +91,10 @@ public class Player extends Entity {
 			
 			//monster collision
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
+			//this might return 9999
+			if (monsterIndex != 9999) {
+				gp.monsters.get(monsterIndex).damageContact(this);
+			}
 			
 			//Collision checker receive subclass
 			gp.cChecker.CheckTile(this);
@@ -139,7 +147,9 @@ public class Player extends Entity {
 			}
 			
 		}//keypress loop
-			
+		
+		//Call superclass invincibility time
+		this.checkInvincibilityTime();
 		
 	}//update
 	
@@ -170,6 +180,7 @@ public class Player extends Entity {
 		*/
 		
 		BufferedImage image = null;
+		
 		
 		switch (direction) {
 		case "up":
@@ -207,11 +218,36 @@ public class Player extends Entity {
 			break;
 		}
 		
+		//Draw effect when player gets damaged
+		if (this.invincibility) {
+			++this.switchOpacityCounter;
+			if (!switchOpacity && switchOpacityCounter > 30) {
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));	
+				switchOpacity = true;
+			} else {
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));	
+				switchOpacity = false;
+			}
+		}
 		//16 pixels
 		g2.drawImage(image, screenX, screenY, null);
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+		
 		
 			
 	}
 	
+	@Override
+	protected final void checkInvincibilityTime() {
+
+		if (this.invincibility) {
+		++this.invincibilityCounter;
+		if (this.invincibilityCounter > 90) {
+			this.invincibility = false;
+			this.invincibilityCounter = 0;
+			
+			}
+		}
+	}
 	
 }
