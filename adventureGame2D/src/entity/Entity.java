@@ -154,6 +154,9 @@ public class Entity {
 				}
 				break;
 			}
+			if (gp.player.invincibility) {
+				
+			}
 			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 		}
 	}
