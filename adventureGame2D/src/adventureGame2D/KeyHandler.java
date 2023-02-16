@@ -10,7 +10,7 @@ public class KeyHandler implements KeyListener{
 		this.gp = gp;
 	}
 	public boolean upPressed, downPressed, leftPressed, rightPressed, 
-				   dialoguePressed = true, 
+				   dialoguePressed = false, 
 				   FPS_display = false, 
 				   pauseQuote = false,
 				   allowInteraction = false;
