@@ -18,6 +18,7 @@ public class Player extends Entity {
 	
 	//Variables
 	KeyHandler keyH;
+	BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 	
 
 	//Where the player is drawn on the screen - camera 
@@ -111,24 +112,25 @@ public class Player extends Entity {
 			int npcIndex = gp.cChecker.checkEntity(this, gp.NPCs);
 			collisionNPC(npcIndex);
 			
-			if (keyH.upPressed) {
-				direction ="up";
-				if (!collisionOn) {WorldY -= speed;}
-			}
-			if (keyH.downPressed) {
-				direction = "down";
-				if (!collisionOn) {WorldY += speed;} 
-			}
-			if (keyH.leftPressed) {
-				direction = "left";	
-				if (!collisionOn){WorldX -= speed;}
-			}
-			if (keyH.rightPressed) {
-				direction = "right";
-				if (!collisionOn){WorldX += speed;}
-			}
-			
 	
+			if (keyH.upPressed) {
+				this.direction = "up";
+				if (!collisionOn && !keyH.dialoguePressed) {this.WorldY -= speed;} 
+			} 
+			if (keyH.downPressed) {
+				this.direction = "down";
+				if (!collisionOn && !keyH.dialoguePressed) {this.WorldY += speed;}
+			} 
+			if (keyH.leftPressed) {
+				this.direction = "left";
+				if (!collisionOn && !keyH.dialoguePressed) {this.WorldX -= speed;}
+			} 
+			if (keyH.rightPressed) {
+				this.direction = "right";
+				if (!collisionOn && !keyH.dialoguePressed) {this.WorldX += speed;}
+			}
+		
+			
 			
 			
 			
@@ -161,7 +163,7 @@ public class Player extends Entity {
 	}
 	}
 	
-	public void collisionNPC (int i) {
+	private final void collisionNPC (int i) {
 		if (i != 9999) {
 			//player touching npc
 			if (keyH.dialoguePressed) {
