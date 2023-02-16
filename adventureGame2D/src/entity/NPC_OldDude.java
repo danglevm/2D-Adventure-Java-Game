@@ -18,7 +18,7 @@ public class NPC_OldDude extends Entity implements NPC_Interface{
 	public NPC_OldDude (GamePanel gp, int worldX, int worldY) {
 		super(gp);
 		//x, y, width, height
-		solidArea = new Rectangle(8, 8, 24, 36);
+		solidArea = new Rectangle(8, 8, 36, 36);
 		this.WorldX = gp.tileSize * worldX;
 		this.WorldY = gp.tileSize * worldY;
 		
