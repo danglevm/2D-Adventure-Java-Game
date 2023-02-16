@@ -80,7 +80,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public ArrayList <Entity> objects = new ArrayList <> ();
 	public ArrayList <Entity> monsters = new ArrayList <> ();
 	//entity with lowest world Y index 0, highest world y final index
-	ArrayList<Entity> entityList = new ArrayList<>();
+	private ArrayList<Entity> entityList = new ArrayList<>();
 	
 	
 	//sound

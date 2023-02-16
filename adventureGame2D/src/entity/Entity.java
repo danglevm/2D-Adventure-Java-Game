@@ -16,14 +16,16 @@ public class Entity {
 	public BufferedImage image, image2, image3;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 	public String name, direction = "down";
+	
+	
+	
+	
 	//Entity position
 	public int WorldX, WorldY, speed;
 	protected int spriteCounter = 0, actionLock = 0, invincibilityCounter = 0;
 	protected boolean spriteNum = true; 
 	
-	//0 - player, 1 - npc, 2 - monster
-	protected int entityType;
-	
+
 	
 	
 		
@@ -31,7 +33,10 @@ public class Entity {
 	//Store data about this rectangle as x, y, width and height
 	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
 	public int solidAreaDefaultX, solidAreaDefaultY;
-	public boolean collisionOn = false, invincibility = false;;
+	public boolean collisionOn = false, invincibility = false;
+	//0 - player, 1 - npc, 2 - monster
+	protected int entityType;
+	
 	
 	//Character HP - both players and monster
 	protected int maxLife, life;
