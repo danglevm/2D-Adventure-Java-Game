@@ -126,55 +126,31 @@ public class Entity {
 			
 			switch (direction) {
 			case "up":
-				if (spriteNum) {
-					image = up1;
-				}
-				if (!spriteNum) {
-					image = up2;
-				}
-				
+				if (spriteNum) {image = up1;} else {image = up2;}
 				break;
 			case "down":
-				if (spriteNum) {
-					image = down1;
-				}
-				if (!spriteNum) {
-					image = down2;
-				}
+				if (spriteNum) {image = down1;} else {image = down2;}
 				break;
 			case "left":
-				if (spriteNum) {
-					image = left1;
-				}
-				if (!spriteNum) {
-					image = left2;
-				}
+				if (spriteNum) {image = left1;} else {image = left2;}
 				break;
 			case "right":
-				if (spriteNum) {
-					image = right1;
-				}
-				if (!spriteNum) {
-					image = right2;
-				}
+				if (spriteNum) {image = right1;} else {image = right2;}
 				break;
-			}
-			if (gp.player.invincibility) {
-				
 			}
 			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 		}
 	}
 	
 	//Render and scale the entity
-	public BufferedImage setupCharacter(String imageName, String pathName) {
+	public BufferedImage setupCharacter(String imageName, String pathName, int width, int height) {
 		
 		UtilityTool uTool = new UtilityTool();
 		BufferedImage scaledImage = null;
 		
 		try {
 			scaledImage = ImageIO.read(getClass().getResourceAsStream(pathName + imageName+".png"));
-			scaledImage = uTool.scaleImage(scaledImage, gp.tileSize, gp.tileSize);
+			scaledImage = uTool.scaleImage(scaledImage, width, height);
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
