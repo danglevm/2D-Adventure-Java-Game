@@ -3,6 +3,7 @@ package entity;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -12,8 +13,8 @@ import adventureGame2D.UtilityTool;
 
 public class NPC_OldDude extends Entity implements NPC_Interface{
 	//Dialogues
-	String oldDudeDialogues[] = new String [20];
-	int oldDudeDialogueIndex = 0;
+	private ArrayList<String> oldDudeDialogues = new ArrayList <String>();
+	private int dialogueIndex = 0;
 
 	public NPC_OldDude (GamePanel gp, int worldX, int worldY) {
 		super(gp);
@@ -31,14 +32,14 @@ public class NPC_OldDude extends Entity implements NPC_Interface{
 	//-------------------------------NPC RENDER METHODS------------------
 	public void getImage() {
 		
-		up1 = setupCharacter("oldman_up_1", "/npc/");
-		up2 = setupCharacter("oldman_up_2", "/npc/");
-		down1 = setupCharacter("oldman_down_1", "/npc/");
-		down2 = setupCharacter("oldman_down_2", "/npc/");
-		left1 = setupCharacter("oldman_left_1", "/npc/");
-		left2 = setupCharacter("oldman_left_2", "/npc/");
-		right1 = setupCharacter("oldman_right_1", "/npc/");
-		right2 = setupCharacter("oldman_right_2", "/npc/");
+		up1 = setupCharacter("oldman_up_1", "/npc/", gp.tileSize, gp.tileSize);
+		up2 = setupCharacter("oldman_up_2", "/npc/", gp.tileSize, gp.tileSize);
+		down1 = setupCharacter("oldman_down_1", "/npc/", gp.tileSize, gp.tileSize);
+		down2 = setupCharacter("oldman_down_2", "/npc/", gp.tileSize, gp.tileSize);
+		left1 = setupCharacter("oldman_left_1", "/npc/", gp.tileSize, gp.tileSize);
+		left2 = setupCharacter("oldman_left_2", "/npc/", gp.tileSize, gp.tileSize);
+		right1 = setupCharacter("oldman_right_1", "/npc/", gp.tileSize, gp.tileSize);
+		right2 = setupCharacter("oldman_right_2", "/npc/", gp.tileSize, gp.tileSize);
 		
 
 		
@@ -47,14 +48,14 @@ public class NPC_OldDude extends Entity implements NPC_Interface{
 	public void setDialogue() {
 		
 		//Meeting the player for the first time
-		oldDudeDialogues[0] = " '...' ";
-		oldDudeDialogues[1] = " 'OH what the-' ";
-		oldDudeDialogues[2] = " 'Who the heck are you, whippersnapper?\n Creeping on me like that?' ";
+		oldDudeDialogues.add(" '...' ");
+		oldDudeDialogues.add(" 'OH what the-' ");
+		oldDudeDialogues.add(" 'Who the heck are you, whippersnapper?\n Creeping on me like that?' ");
 		
 		//depends on what the player chooses
-		oldDudeDialogues[3] = " 'You deaf, son?' ";
-		oldDudeDialogues[4] = " 'I sure as hell haven't seen you around.\n What's your name?' ";
-		oldDudeDialogues[5] = " 'You what? You woke up in my HOUSE?' ";
+		oldDudeDialogues.add(" 'You deaf, son?' "); 
+		oldDudeDialogues.add(" 'I sure as hell haven't seen you around.\n What's your name?' "); 
+		oldDudeDialogues.add(" 'You what? You woke up in my HOUSE?' ");
 	}
 	
 	@Override
@@ -84,10 +85,12 @@ public class NPC_OldDude extends Entity implements NPC_Interface{
 	
 	public void speak() {
 		//Opening speak
-		if (oldDudeDialogues[oldDudeDialogueIndex]!=null) {
-			gp.ui.setCurrentDialogue( oldDudeDialogues[oldDudeDialogueIndex]);
-			++oldDudeDialogueIndex;
-		}
+		try {
+		if (oldDudeDialogues.get(dialogueIndex)!=null && dialogueIndex < oldDudeDialogues.size()) {
+			gp.ui.setCurrentDialogue(oldDudeDialogues.get(dialogueIndex));
+			++dialogueIndex;
+			}
+		} catch (IndexOutOfBoundsException e){}
 		talkingDirection(gp.player, this);
 		
 	}
