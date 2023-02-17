@@ -106,7 +106,11 @@ public class KeyHandler implements KeyListener{
 		} 
 		
 		if (code == KeyEvent.VK_ENTER) {
-			dialoguePressed = true;
+			if (!dialoguePressed) {
+				dialoguePressed = true;
+			} else {
+				dialoguePressed = false;
+			}
 		} 
 
 		//display FPS and player X and Y
@@ -117,6 +121,12 @@ public class KeyHandler implements KeyListener{
 				FPS_display = false;
 			}
 		}
+		
+		//Player attack
+		if (code == KeyEvent.VK_J){
+			gp.player.playerAttack = true;
+		}
+		
 		
 		//eventHandling
 		//If player is standing near an interactive event, then they can press X to trigger the interaction
