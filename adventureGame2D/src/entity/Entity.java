@@ -37,6 +37,9 @@ public class Entity {
 	//0 - player, 1 - npc, 2 - monster
 	protected int entityType;
 	
+	//attack area
+	Rectangle attackArea = new Rectangle (0, 0, 0, 0);
+	
 	
 	//Character HP - both players and monster
 	protected int maxLife, life;
@@ -103,16 +106,7 @@ public class Entity {
 	
 	protected void damageContact(Entity entity) {};
 	
-	protected void checkInvincibilityTime() 
-	{
-		if (this.invincibility) {
-		++this.invincibilityCounter;
-		if (this.invincibilityCounter > 120) {
-			this.invincibility = false;
-			this.invincibilityCounter = 0;
-			}
-		}
-	}
+	protected void checkInvincibilityTime() {}
 	
 	public void draw (Graphics2D g2, GamePanel gp) {
 		this.gp = gp;
@@ -161,18 +155,10 @@ public class Entity {
 	public void talkingDirection (Entity player, Entity NPC) {
 		String direction = "";
 		switch(player.direction) {
-		case "up":
-			direction ="down";
-			break;
-		case "down":
-			direction = "up";
-			break;
-		case "right":
-			direction = "left";
-			break;
-		case "left":
-			direction = "right";
-			break;
+		case "up": direction ="down"; break;
+		case "down": direction = "up"; break;
+		case "right": direction = "left"; break;
+		case "left": direction = "right"; break; 
 		}
 		NPC.direction = direction;
 		
