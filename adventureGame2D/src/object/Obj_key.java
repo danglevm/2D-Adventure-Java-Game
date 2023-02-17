@@ -14,7 +14,8 @@ public class Obj_key extends Entity{
 		this.WorldX = worldX * gp.tileSize;
 		this.WorldY = worldY * gp.tileSize;
 		name = "Key";
-		
+		collisionOn = false;
+		down1 = setupCharacter("key", "/objects/", gp.tileSize, gp.tileSize);
 		
 	}
 	

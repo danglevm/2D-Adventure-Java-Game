@@ -14,6 +14,6 @@ public class Obj_chest extends Entity {
 	 name = "chest";
 	 this.WorldX = worldX * gp.tileSize;
 	 this.WorldY = worldY * gp.tileSize;
-	 down1 = setupCharacter("chest","/objects/");
+	 down1 = setupCharacter("chest","/objects/", gp.tileSize, gp.tileSize);
 	}		
 }

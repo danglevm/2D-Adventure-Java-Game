@@ -14,7 +14,7 @@ public class Obj_boots extends Entity{
 		name = "Boots";
 		this.WorldX = worldX * gp.tileSize;
 		this.WorldY = worldY * gp.tileSize;
-		down1 = setupCharacter("boots", "/objects/");
+		down1 = setupCharacter("boots", "/objects/", gp.tileSize, gp.tileSize);
 		}
 }
 
