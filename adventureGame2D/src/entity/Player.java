@@ -96,6 +96,12 @@ public class Player extends Entity {
 		//attack cooldown period has not 
 		solidArea.height = 36;
 		
+		
+		//Attack area
+		attackArea.width = 36;
+		attackArea.height = 36;
+		
+		
 	}
 	
 	
@@ -105,24 +111,7 @@ public class Player extends Entity {
 							
 		if (playerAttack && (attackStamina == attackCooldownPeriod)) 
 		{
-		
-			++spriteCounter;
-			
-			//4 frames of short attack animation
-			if (spriteCounter < 6) {
-				spriteNum = true;
-			//next 20 frames of long attack animation
-			} else if (spriteCounter < 25) {
-				spriteNum = false;
-			//4 frames of receding attack animation
-			} else {
-				spriteNum = true;
-				spriteCounter = 0;
-				playerAttack = false;
-				attackStamina -= attackCooldownPeriod;
-				System.out.println(attackStamina);
-				
-			}
+			attack();
 			
 		} else if (keyH.upPressed||keyH.downPressed||
 				keyH.leftPressed||keyH.rightPressed || keyH.dialoguePressed)
@@ -189,14 +178,14 @@ public class Player extends Entity {
 				spriteCounter = 0;
 			}
 			
-		}//keypress loop
+		}
 		
 		//Call superclass invincibility time
 		this.checkInvincibilityTime();
 		
 	}//update
 	
-	public void ObjectPickUp(int index) {
+	private final void ObjectPickUp(int index) {
 		
 		if (index != 9999) {
 			
@@ -263,7 +252,7 @@ public class Player extends Entity {
 		
 		//Draw effect when player gets damaged
 		if (this.invincibility) {
-			++this.switchOpacityCounter;
+			++switchOpacityCounter;
 			if (!switchOpacity && switchOpacityCounter > 3) {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));	
 				switchOpacity = true;
@@ -284,14 +273,61 @@ public class Player extends Entity {
 	@Override
 	protected final void checkInvincibilityTime() {
 
-		if (this.invincibility) {
-		++this.invincibilityCounter;
-		if (this.invincibilityCounter > 90) {
-			this.invincibility = false;
-			this.invincibilityCounter = 0;
+		if (invincibility) {
+		++invincibilityCounter;
+		if (invincibilityCounter > 90) {
+			invincibility = false;
+			invincibilityCounter = 0;
 			
 			}
 		}
 	}
+	
+	private final void attack() {
+		//Attacking
+		++spriteCounter;
+		
+		//4 frames of short attack animation
+		if (spriteCounter < 6) {
+			spriteNum = true;
+		//next 20 frames of long attack animation
+		} else if (spriteCounter < 25) {
+			spriteNum = false;
+
+			//Save player's current location on map
+			int currWorldX = WorldX, 
+				currWorldY = WorldY,
+				currWidth = solidArea.width,
+				currHeight = solidArea.height;
+			
+		switch (direction) {
+		//shift collision area back by the attack area length
+			case "up": WorldY -= attackArea.height; break;
+			case "down": WorldY += attackArea.height; break;
+			case "left": WorldX -= attackArea.width; break;
+			case "right": WorldX += attackArea.width; break;
+		}
+		
+		solidArea.width = attackArea.width;
+		solidArea.height = attackArea.height;
+		
+		gp.cChecker.checkEntity(this, gp.monsters);
+		
+		//After checking collision, restore original data
+		WorldX = currWorldX;
+		WorldY = currWorldY;
+		solidArea.width = currWidth;
+		solidArea.height = currHeight;
+			 
+		//4 frames of receding attack animation
+		} else {
+			spriteNum = true;
+			spriteCounter = 0;
+			playerAttack = false;
+			attackStamina -= attackCooldownPeriod;
+			
+		}
+	}
+	
 	
 }
