@@ -26,7 +26,8 @@ public class Player extends Entity {
 	public final int screenY;
 	
 	private boolean switchOpacity = false;
-	private int switchOpacityCounter = 0;
+	private int switchOpacityCounter = 0, attackCooldownPeriod = 60, attackStamina = 0;
+	public boolean playerAttack = false;
 	
 	
 	
@@ -40,35 +41,41 @@ public class Player extends Entity {
 		screenX = gp.screenWidth/2 - (gp.tileSize/2);
 		screenY = gp.screenHeight/2 - (gp.tileSize/2);
 		
-		//x, y, width, length
-		solidArea = new Rectangle();
-		solidArea.x = 8;
-		solidArea.y = 8;
-		//Default values so x and y values of the rectangle can be changed later
-		solidAreaDefaultX = solidArea.x;
-		solidAreaDefaultY = solidArea.y;
-		solidArea.width = 24;
-		solidArea.height = 36;
-		
 		this.setDefaultPlayerValues();
 		this.getPlayerImage();
+		this.getPlayerAttackImage();
 	}
 	
 	//-------------------------------CLASS METHODS------------------
-	public void getPlayerImage() {
+	private final void getPlayerImage() {
 		
-		up1 = setupCharacter("boy_up_1", "/player/");
-		up2 = setupCharacter("boy_up_2", "/player/");
-		down1 = setupCharacter("boy_down_1", "/player/");
-		down2 = setupCharacter("boy_down_2", "/player/");
-		left1 = setupCharacter("boy_left_1", "/player/");
-		left2 = setupCharacter("boy_left_2", "/player/");
-		right1 = setupCharacter("boy_right_1", "/player/");
-		right2 = setupCharacter ("boy_right_2", "/player/");
+		attackUp1 = setupCharacter("boy_attack_up_1", "/player_attack/", gp.tileSize, gp.tileSize*2);
+		attackUp2 = setupCharacter("boy_attack_up_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
+		attackDown1 = setupCharacter("boy_attack_down_1", "/player_attack/", gp.tileSize, gp.tileSize * 2);
+		attackDown2 = setupCharacter("boy_attack_down_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
+		attackLeft1 = setupCharacter("boy_attack_left_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackLeft2 = setupCharacter("boy_attack_left_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackRight1 = setupCharacter("boy_attack_right_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackRight2 = setupCharacter("boy_attack_right_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		
 		
 	}
 	
-	public void setDefaultPlayerValues() {
+	private final void getPlayerAttackImage() {
+		
+		up1 = setupCharacter("boy_up_1", "/player/", gp.tileSize, gp.tileSize);
+		up2 = setupCharacter("boy_up_2", "/player/", gp.tileSize, gp.tileSize);
+		down1 = setupCharacter("boy_down_1", "/player/", gp.tileSize, gp.tileSize);
+		down2 = setupCharacter("boy_down_2", "/player/", gp.tileSize, gp.tileSize);
+		left1 = setupCharacter("boy_left_1", "/player/", gp.tileSize, gp.tileSize);
+		left2 = setupCharacter("boy_left_2", "/player/", gp.tileSize, gp.tileSize);
+		right1 = setupCharacter("boy_right_1", "/player/", gp.tileSize, gp.tileSize);
+		right2 = setupCharacter ("boy_right_2", "/player/", gp.tileSize, gp.tileSize);
+		
+	}
+	
+	
+	private final void setDefaultPlayerValues() {
 		//Default player values
 		WorldX = gp.tileSize * 122;
 		WorldY= gp.tileSize * 132;
@@ -78,15 +85,49 @@ public class Player extends Entity {
 		maxLife = 8;
 		life = maxLife;
 		
+		//x, y, width, length
+		solidArea = new Rectangle();
+		solidArea.x = 8;
+		solidArea.y = 8;
+		//Default values so x and y values of the rectangle can be changed later
+		solidAreaDefaultX = solidArea.x;
+		solidAreaDefaultY = solidArea.y;
+		solidArea.width = 24;
+		//attack cooldown period has not 
+		solidArea.height = 36;
+		
 	}
 	
 	
 	
-	public void update() {
-		if (keyH.upPressed||keyH.downPressed||
-				keyH.leftPressed||keyH.rightPressed)
-		{//X and Y values increase as the player moves right and down
+	public void update() 
+	{
+							
+		if (playerAttack && (attackStamina == attackCooldownPeriod)) 
+		{
+		
+			++spriteCounter;
 			
+			//4 frames of short attack animation
+			if (spriteCounter < 6) {
+				spriteNum = true;
+			//next 20 frames of long attack animation
+			} else if (spriteCounter < 25) {
+				spriteNum = false;
+			//4 frames of receding attack animation
+			} else {
+				spriteNum = true;
+				spriteCounter = 0;
+				playerAttack = false;
+				attackStamina -= attackCooldownPeriod;
+				System.out.println(attackStamina);
+				
+			}
+			
+		} else if (keyH.upPressed||keyH.downPressed||
+				keyH.leftPressed||keyH.rightPressed || keyH.dialoguePressed)
+		{
+			//X and Y values increase as the player moves right and down
 			//Check tile collision
 			collisionOn = false;
 			
@@ -135,7 +176,7 @@ public class Player extends Entity {
 			
 			
 			
-			spriteCounter++;
+			++spriteCounter;
 			//Player image changes every 12 frames
 			if (spriteCounter > 12) {
 				if (spriteNum) {
@@ -181,44 +222,44 @@ public class Player extends Entity {
 		g2.fillRect(x, y, gp.tileSize,gp.tileSize );
 		*/
 		
+		//attack cooldown period has not 
 		BufferedImage image = null;
+		int tempScreenX = screenX, tempScreenY = screenY;
+		if (attackStamina < attackCooldownPeriod) {
+			++attackStamina;
+		}
+	
+		//attack cool down period is on
+		if (!playerAttack || attackStamina < attackCooldownPeriod) {
+		switch (direction) {
+		case "up":
+			if (spriteNum) {image = up1;} else {image = up2;} break;
+		case "down":
+			if (spriteNum) {image = down1;} else {image = down2;} break;
+		case "left":
+			if (spriteNum) {image = left1;} else {image = left2;} break;
+		case "right":
+			if (spriteNum) {image = right1;} else {image = right2;} break;
+			}
 		
+		
+		} //attack cool down period is over - stamina
+			else if (playerAttack && (attackStamina == attackCooldownPeriod) )
+		{
 		
 		switch (direction) {
 		case "up":
-			if (spriteNum) {
-				image = up1;
-			}
-			if (!spriteNum) {
-				image = up2;
-			}
-			
-			break;
+			tempScreenY = screenY - gp.tileSize;
+			if (spriteNum) {image = attackUp1;} else {image = attackUp2;} break;
 		case "down":
-			if (spriteNum) {
-				image = down1;
-			}
-			if (!spriteNum) {
-				image = down2;
-			}
-			break;
+			if (spriteNum) {image = attackDown1;} else {image = attackDown2;} break;
 		case "left":
-			if (spriteNum) {
-				image = left1;
-			}
-			if (!spriteNum) {
-				image = left2;
-			}
-			break;
+			tempScreenX = screenX - gp.tileSize;
+			if (spriteNum) {image = attackLeft1;} else {image = attackLeft2;} break;
 		case "right":
-			if (spriteNum) {
-				image = right1;
-			}
-			if (!spriteNum) {
-				image = right2;
-			}
-			break;
-		}
+			if (spriteNum) {image = attackRight1;} else {image = attackRight2;} break;
+			}	
+		} 
 		
 		//Draw effect when player gets damaged
 		if (this.invincibility) {
@@ -233,7 +274,7 @@ public class Player extends Entity {
 			}
 		}
 		//16 pixels
-		g2.drawImage(image, screenX, screenY, null);
+		g2.drawImage(image, tempScreenX, tempScreenY, null);
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		
 		
