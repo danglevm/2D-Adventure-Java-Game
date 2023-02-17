@@ -10,3 +10,4 @@ Features:
 7. Narrator talking over the player
 8. next video when objects are loaded, add a boat that the player can interact with and tp
 - with events, make lava or ticking damage events
+9. option to interact with event still does not work
