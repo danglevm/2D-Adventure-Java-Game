@@ -11,7 +11,7 @@ public class Monster_Green_Slime extends Entity implements Monster_Interface{
 		this.WorldX = worldX * gp.tileSize;
 		this.WorldY = worldY * gp.tileSize;
 		this.setDefaultValues();
-		this.getImage();
+		this.getImage(gp.tileSize);
 		
 	}
 	
@@ -29,19 +29,19 @@ public class Monster_Green_Slime extends Entity implements Monster_Interface{
 		solidAreaDefaultX = solidArea.x;
 		solidAreaDefaultY = solidArea.y;
 	}
-	
-	public final void getImage() {
-		up1 = setupCharacter("greenslime_down_1","/monster/");
-		up2 = setupCharacter("greenslime_down_2","/monster/");
+	@Override
+	public final void getImage(int size) {
+		up1 = setupCharacter("greenslime_down_1","/monster/", size, size);
+		up2 = setupCharacter("greenslime_down_2","/monster/", size, size);
 
-		down1 = setupCharacter("greenslime_down_1","/monster/");
-		down2 = setupCharacter("greenslime_down_2","/monster/");
+		down1 = setupCharacter("greenslime_down_1","/monster/", size, size);
+		down2 = setupCharacter("greenslime_down_2","/monster/", size, size);
 		
-		right1 = setupCharacter("greenslime_down_1","/monster/");
-		right2 = setupCharacter("greenslime_down_2","/monster/");
+		right1 = setupCharacter("greenslime_down_1","/monster/", size, size);
+		right2 = setupCharacter("greenslime_down_2","/monster/", size, size);
 		
-		left1 = setupCharacter("greenslime_down_1","/monster/");
-		left2 = setupCharacter("greenslime_down_2","/monster/");
+		left1 = setupCharacter("greenslime_down_1","/monster/", size, size);
+		left2 = setupCharacter("greenslime_down_2","/monster/", size, size);
 	}
 	
 	@Override
@@ -74,5 +74,7 @@ public class Monster_Green_Slime extends Entity implements Monster_Interface{
 			entity.invincibility = true;
 		}
 	}
+
+	
 	
 }
