@@ -85,15 +85,6 @@ public class CollisionCheck{
 	
 	}
 	
-	private final boolean checkObjectCollision (Entity entity, Entity other) {
-		if (entity.solidArea.intersects(other.solidArea)) {
-			if (other.collisionOn) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public final int checkObject(Entity entity, boolean player) {
 		
 		//If player is colliding with any object. If player is, returns index of the object
@@ -131,7 +122,7 @@ public class CollisionCheck{
 				}
 				
 				//entity rectangle intersects with object rectangle
-				if (this.checkObjectCollision(entity, gp.objects.get(i))) {
+				if (entity.solidArea.intersects(gp.objects.get(i).solidArea)) {
 					entity.collisionOn = true;
 				};
 				if (player) {
@@ -152,7 +143,7 @@ public class CollisionCheck{
 	public final int checkEntity (Entity entity, ArrayList <Entity> entities) {
 		//If player is colliding with a NPC. If player is, returns index of the object
 				int index = 9999;
-				
+			
 				for (int i = 0; i < entities.size(); i++) {
 					
 					if (entities.get(i) != null) {
@@ -184,7 +175,7 @@ public class CollisionCheck{
 							break;
 						}
 						//reset entity's solid Area or else the values increase indefinitely
-						if (this.checkObjectCollision(entity, entities.get(i))) {
+						if (entity.solidArea.intersects(entities.get(i).solidArea)) {
 							if (entities.get(i) != entity) {
 								entity.collisionOn = true;
 								index = i;
