@@ -86,7 +86,7 @@ public class NPC_OldDude extends Entity implements NPC_Interface{
 	public void speak() {
 		//Opening speak
 		try {
-		if (oldDudeDialogues.get(dialogueIndex)!=null && dialogueIndex < oldDudeDialogues.size()) {
+		if (oldDudeDialogues.get(dialogueIndex) != null) {
 			gp.ui.setCurrentDialogue(oldDudeDialogues.get(dialogueIndex));
 			++dialogueIndex;
 			}
