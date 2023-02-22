@@ -287,14 +287,16 @@ public void paintComponent (Graphics g) {
 	}
 	
 	private final void updateEntities (ArrayList <Entity> entities) {
-		for (Entity currentEntity : entities) {
-			if (currentEntity != null) {
-				currentEntity.update();
-			}
-		}
-	}
-	
 
+		for (Entity currentEntity : entities) {
+			if (currentEntity.getAlive()) {
+				currentEntity.update();
+			} else if (!currentEntity.getAlive() &&  !currentEntity.getDying()) {
+				entities.remove(currentEntity);
+		} 
+	}
+
+}
 }
 
 
