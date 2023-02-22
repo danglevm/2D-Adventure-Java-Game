@@ -22,10 +22,11 @@ public class Monster_Green_Slime extends Entity implements Monster_Interface{
 		life = maxLife;
 		entityType = 2;
 		
-		solidArea.x = 3;
-		solidArea.y = 18;
-		solidArea.width = 42;
-		solidArea.height = 30;
+		
+		solidArea.x = 8;
+		solidArea.y = 8;
+		solidArea.width = 40;
+		solidArea.height = 40;
 		solidAreaDefaultX = solidArea.x;
 		solidAreaDefaultY = solidArea.y;
 	}
@@ -74,7 +75,8 @@ public class Monster_Green_Slime extends Entity implements Monster_Interface{
 			entity.invincibility = true;
 		}
 	}
-
+	
+	
 	
 	
 }
