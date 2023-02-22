@@ -38,11 +38,13 @@ public class Entity {
 	public boolean collisionOn = false, invincibility = false;
 	//0 - player, 1 - npc, 2 - monster
 	protected int entityType;
+
 	
 	//attack area
 	protected Rectangle attackArea = new Rectangle (0, 0, 0, 0);
 	
 	
+	//ENTITY STATUS
 	//Character HP - both players and monster
 	protected int maxLife, life;
 	//maxLife and Life get and set
@@ -50,9 +52,13 @@ public class Entity {
 	public int getLife() {return life;}
 	public void setMaxLife(int life) {maxLife = life;}
 	public void setLife (int life) {this.life = life;}
+	protected int deathCount = 0;
 	
-	//Deal with objects
 	
+	//alive and in dying animation or not
+	protected boolean alive = true, dying = false;
+	public boolean getAlive() {return alive;}
+	public boolean getDying() { return dying;}
 //	Constructor
 	public Entity (GamePanel gp) {
 		this.gp = gp;
@@ -60,9 +66,9 @@ public class Entity {
 	
 	
 // 	Class methods
-	public void setAction() {}
+	protected void setAction() {}
 	
-	public void speak() {}
+	protected void speak() {}
 	
 	public void update() {
 		setAction();
@@ -139,15 +145,20 @@ public class Entity {
 			if (invincibility) {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));	
 			}
-			//16 pixels
 			
+			if (dying && !alive) {
+				this.deathAnimation(g2);
+			}
+			
+			
+			//16 pixels
 			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		}
 	}
 	
 	//Render and scale the entity
-	public BufferedImage setupCharacter(String imageName, String pathName, int width, int height) {
+	protected BufferedImage setupCharacter(String imageName, String pathName, int width, int height) {
 		
 		UtilityTool uTool = new UtilityTool();
 		BufferedImage scaledImage = null;
@@ -162,7 +173,7 @@ public class Entity {
 	}
 	
 	//Set direction when talking to player
-	public void talkingDirection (Entity player, Entity NPC) {
+	protected void talkingDirection (Entity player, Entity NPC) {
 		String direction = "";
 		switch(player.direction) {
 		case "up": direction ="down"; break;
@@ -171,6 +182,22 @@ public class Entity {
 		case "left": direction = "right"; break; 
 		}
 		NPC.direction = direction;
+		
+	}
+	
+	//Draws dying animation for monsters
+	protected void deathAnimation (Graphics2D g2) {
+		++deathCount;
+		
+		if (deathCount < 41) {
+			if (deathCount%5 == 0 && deathCount%10 != 0) {
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));	
+			} else if (deathCount % 10 == 0){
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));	
+			}
+		} else {
+			dying = false;
+		}
 		
 	}
 	
