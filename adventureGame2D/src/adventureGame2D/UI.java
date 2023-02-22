@@ -91,6 +91,7 @@ public class UI {
 			//titleScreen
 			this.drawTitleScreen();
 			
+			
 		} 
 		if (gp.gameState == gp.pauseState) {
 			//pause state
@@ -243,6 +244,7 @@ public class UI {
 		int playerMaxLife = gp.player.getMaxLife();
 		int currentPlayerLife = gp.player.getLife();
 		
+		
 		//Draw blank hearts - max hp
 		while (i < playerMaxLife/2) {
 			g2.drawImage(heart_blank, xLocation, yLocation, null);
@@ -267,7 +269,8 @@ public class UI {
 			}
 			++i;
 			xLocation += gp.tileSize;
-		}
+	}
+	
 		
 	}
 	
