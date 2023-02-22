@@ -24,9 +24,10 @@ public class Player extends Entity {
 	//Where the player is drawn on the screen - camera 
 	public final int screenX;
 	public final int screenY;
-	
 	private boolean switchOpacity = false;
-	private int switchOpacityCounter = 0, attackCooldownPeriod = 60, attackStamina = 0;
+	private int switchOpacityCounter = 0;
+
+	private int attackCost = 60, attackStamina = 0;
 	public boolean playerAttack = false;
 	
 	
@@ -94,12 +95,12 @@ public class Player extends Entity {
 		solidAreaDefaultY = solidArea.y;
 		solidArea.width = 24;
 		//attack cooldown period has not 
-		solidArea.height = 36;
+		solidArea.height = 32;
 		
 		
-		//Attack area
-		attackArea.width = 36;
-		attackArea.height = 36;
+		//Attack area - could really increase this for potions
+		attackArea.width = 32;
+		attackArea.height = 32;
 		
 		
 	}
@@ -108,8 +109,8 @@ public class Player extends Entity {
 	
 	public void update() 
 	{
-							
-		if (playerAttack && (attackStamina == attackCooldownPeriod)) 
+		collisionOn = false;				
+		if (playerAttack && (attackStamina >= attackCost)) 
 		{
 			attack();
 			
@@ -118,11 +119,11 @@ public class Player extends Entity {
 		{
 			//X and Y values increase as the player moves right and down
 			//Check tile collision
-			collisionOn = false;
 			
-			//monster collision
-			int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
+			
+			//monster collision;
 			//this might return 9999
+			int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
 			if (monsterIndex != 9999) {
 				gp.monsters.get(monsterIndex).damageContact(this);
 			}
@@ -134,30 +135,28 @@ public class Player extends Entity {
 			gp.eHandler.checkEvent();
 			
 			//Check object collision
-			int objIndex = gp.cChecker.checkObject(this, true);
-			ObjectPickUp(objIndex);
+			ObjectPickUp(gp.cChecker.checkObject(this, true));
 			
 			
 			//check NPC collision
-			int npcIndex = gp.cChecker.checkEntity(this, gp.NPCs);
-			collisionNPC(npcIndex);
+			collisionNPC(gp.cChecker.checkEntity(this, gp.NPCs));
 			
 	
 			if (keyH.upPressed) {
 				this.direction = "up";
-				if (!collisionOn && !keyH.dialoguePressed) {this.WorldY -= speed;} 
+				if (!collisionOn && !keyH.dialoguePressed) {WorldY -= speed;} 
 			} 
 			if (keyH.downPressed) {
 				this.direction = "down";
-				if (!collisionOn && !keyH.dialoguePressed) {this.WorldY += speed;}
+				if (!collisionOn && !keyH.dialoguePressed) {WorldY += speed;}
 			} 
 			if (keyH.leftPressed) {
 				this.direction = "left";
-				if (!collisionOn && !keyH.dialoguePressed) {this.WorldX -= speed;}
+				if (!collisionOn && !keyH.dialoguePressed) {WorldX -= speed;}
 			} 
 			if (keyH.rightPressed) {
 				this.direction = "right";
-				if (!collisionOn && !keyH.dialoguePressed) {this.WorldX += speed;}
+				if (!collisionOn && !keyH.dialoguePressed) {WorldX += speed;}
 			}
 		
 			
@@ -188,9 +187,7 @@ public class Player extends Entity {
 	private final void ObjectPickUp(int index) {
 		
 		if (index != 9999) {
-			
-
-	}
+		}
 	}
 	
 	private final void collisionNPC (int i) {
@@ -214,12 +211,12 @@ public class Player extends Entity {
 		//attack cooldown period has not 
 		BufferedImage image = null;
 		int tempScreenX = screenX, tempScreenY = screenY;
-		if (attackStamina < attackCooldownPeriod) {
+		if (attackStamina < attackCost) {
 			++attackStamina;
 		}
 	
 		//attack cool down period is on
-		if (!playerAttack || attackStamina < attackCooldownPeriod) {
+		if (!playerAttack || attackStamina < attackCost) {
 		switch (direction) {
 		case "up":
 			if (spriteNum) {image = up1;} else {image = up2;} break;
@@ -233,7 +230,7 @@ public class Player extends Entity {
 		
 		
 		} //attack cool down period is over - stamina
-			else if (playerAttack && (attackStamina == attackCooldownPeriod) )
+			else if (playerAttack && (attackStamina == attackCost) )
 		{
 		
 		switch (direction) {
@@ -251,7 +248,7 @@ public class Player extends Entity {
 		} 
 		
 		//Draw effect when player gets damaged
-		if (this.invincibility) {
+		if (invincibility) {
 			++switchOpacityCounter;
 			if (!switchOpacity && switchOpacityCounter > 3) {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));	
@@ -288,10 +285,10 @@ public class Player extends Entity {
 		++spriteCounter;
 		
 		//4 frames of short attack animation
-		if (spriteCounter < 6) {
+		if (spriteCounter < 10) {
 			spriteNum = true;
 		//next 20 frames of long attack animation
-		} else if (spriteCounter < 25) {
+		} else if (spriteCounter < 30) {
 			spriteNum = false;
 
 			//Save player's current location on map
@@ -300,18 +297,20 @@ public class Player extends Entity {
 				currWidth = solidArea.width,
 				currHeight = solidArea.height;
 			
-		switch (direction) {
+		switch (this.direction) {
 		//shift collision area back by the attack area length
 			case "up": WorldY -= attackArea.height; break;
 			case "down": WorldY += attackArea.height; break;
-			case "left": WorldX -= attackArea.width; break;
+			case "left": WorldX -= attackArea.width;  break;
 			case "right": WorldX += attackArea.width; break;
 		}
+	
 		
 		solidArea.width = attackArea.width;
 		solidArea.height = attackArea.height;
 		
-		gp.cChecker.checkEntity(this, gp.monsters);
+		int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
+		damageMonster(monsterIndex);
 		
 		//After checking collision, restore original data
 		WorldX = currWorldX;
@@ -321,11 +320,29 @@ public class Player extends Entity {
 			 
 		//4 frames of receding attack animation
 		} else {
+			System.out.println("Attack");
 			spriteNum = true;
 			spriteCounter = 0;
 			playerAttack = false;
-			attackStamina -= attackCooldownPeriod;
+			attackStamina -= attackCost;
 			
+		}
+		
+	}
+	
+	private final void damageMonster(int i) {
+		if (i != 9999) {
+			if (!gp.monsters.get(i).invincibility) {
+				System.out.println("Hit");
+				//attack lands
+				gp.monsters.get(i).setLife(gp.monsters.get(i).getLife() - 1);
+				gp.monsters.get(i).invincibility = true;
+				if (gp.monsters.get(i).getLife() < 1) {
+					gp.monsters.remove(i);
+				}
+			}
+		} else {
+			//Miss the attack
 		}
 	}
 	
