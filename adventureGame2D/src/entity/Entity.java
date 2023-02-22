@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -16,6 +17,7 @@ public class Entity {
 	public BufferedImage image, image2, image3;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 	public String name, direction = "down";
+
 	
 	
 	
@@ -38,7 +40,7 @@ public class Entity {
 	protected int entityType;
 	
 	//attack area
-	Rectangle attackArea = new Rectangle (0, 0, 0, 0);
+	protected Rectangle attackArea = new Rectangle (0, 0, 0, 0);
 	
 	
 	//Character HP - both players and monster
@@ -80,10 +82,10 @@ public class Entity {
 		
 		if (!collisionOn) {
 			switch (direction) {
-			case "up": this.WorldY -= speed; break;
-			case "down": this.WorldY += speed; break;
-			case "left": this.WorldX -= speed; break;
-			case "right": this.WorldX += speed; break;
+			case "up": WorldY -= speed; break;
+			case "down": WorldY += speed; break;
+			case "left": WorldX -= speed; break;
+			case "right": WorldX += speed; break;
 			
 			}
 		}
@@ -102,11 +104,21 @@ public class Entity {
 			spriteCounter = 0;
 		}
 		}
+		this.checkInvincibilityTime();
 	}
 	
 	protected void damageContact(Entity entity) {};
 	
-	protected void checkInvincibilityTime() {}
+	protected void checkInvincibilityTime() {
+		if (invincibility) {
+			++invincibilityCounter;
+			if (invincibilityCounter > 120) {
+				invincibility = false;
+				invincibilityCounter = 0;
+				
+				}
+			}
+	}
 	
 	public void draw (Graphics2D g2, GamePanel gp) {
 		this.gp = gp;
@@ -119,20 +131,18 @@ public class Entity {
 			WorldY - gp.tileSize < gp.player.WorldY + gp.player.screenY) {
 			
 			switch (direction) {
-			case "up":
-				if (spriteNum) {image = up1;} else {image = up2;}
-				break;
-			case "down":
-				if (spriteNum) {image = down1;} else {image = down2;}
-				break;
-			case "left":
-				if (spriteNum) {image = left1;} else {image = left2;}
-				break;
-			case "right":
-				if (spriteNum) {image = right1;} else {image = right2;}
-				break;
+			case "up": if (spriteNum) {image = up1;} else {image = up2;} break;
+			case "down": if (spriteNum) {image = down1;} else {image = down2;} break;
+			case "left": if (spriteNum) {image = left1;} else {image = left2;} break;
+			case "right": if (spriteNum) {image = right1;} else {image = right2;} break;
 			}
+			if (invincibility) {
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));	
+			}
+			//16 pixels
+			
 			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		}
 	}
 	
