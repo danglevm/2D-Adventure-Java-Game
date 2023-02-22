@@ -110,13 +110,18 @@ public class Player extends Entity {
 	public void update() 
 	{
 		collisionOn = false;				
-		if (playerAttack && (attackStamina >= attackCost)) 
+		if (playerAttack) 
 		{
-			attack();
+			if (attackStamina >= attackCost) {
+				attack();
+			} else {
+				playerAttack = false;
+			}
 			
 		} else if (keyH.upPressed||keyH.downPressed||
 				keyH.leftPressed||keyH.rightPressed || keyH.dialoguePressed)
 		{
+			
 			//X and Y values increase as the player moves right and down
 			//Check tile collision
 			
@@ -320,7 +325,6 @@ public class Player extends Entity {
 			 
 		//4 frames of receding attack animation
 		} else {
-			System.out.println("Attack");
 			spriteNum = true;
 			spriteCounter = 0;
 			playerAttack = false;
@@ -333,12 +337,12 @@ public class Player extends Entity {
 	private final void damageMonster(int i) {
 		if (i != 9999) {
 			if (!gp.monsters.get(i).invincibility) {
-				System.out.println("Hit");
 				//attack lands
 				gp.monsters.get(i).setLife(gp.monsters.get(i).getLife() - 1);
 				gp.monsters.get(i).invincibility = true;
 				if (gp.monsters.get(i).getLife() < 1) {
-					gp.monsters.remove(i);
+					gp.monsters.get(i).alive = false;
+					gp.monsters.get(i).dying = true;
 				}
 			}
 		} else {
