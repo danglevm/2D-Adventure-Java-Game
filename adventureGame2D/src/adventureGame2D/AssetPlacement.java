@@ -1,7 +1,7 @@
 package adventureGame2D;
 
 import entity.NPC_OldDude;
-import monster.Monster_Green_Slime;
+import monster.MonsterGreenSlime;
 import object.Obj_boots;
 import object.Obj_chest;
 import object.Obj_door;
@@ -27,8 +27,8 @@ public class AssetPlacement {
 	}
 	
 	public void setMonsters() {
-		gp.monsters.add(new Monster_Green_Slime (gp, 126, 136));
-		gp.monsters.add(new Monster_Green_Slime (gp, 110, 120));
+		gp.monsters.add(new MonsterGreenSlime (gp, 126, 136));
+		gp.monsters.add(new MonsterGreenSlime (gp, 110, 120));
 	}
 	
 }
