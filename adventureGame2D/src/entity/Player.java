@@ -24,11 +24,15 @@ public class Player extends Entity {
 	//Where the player is drawn on the screen - camera 
 	public final int screenX;
 	public final int screenY;
-	private boolean switchOpacity = false;
+	private boolean switchOpacity;
 	private int switchOpacityCounter = 0;
 
-	private int attackCost = 60, attackStamina = 0;
-	public boolean playerAttack = false;
+	private int attackCost, attackStamina, maxStamina, staminaRechargeCounter;
+
+	public boolean playerAttack;
+	
+	private boolean staminaEnabled;
+
 	
 	
 	
@@ -101,6 +105,20 @@ public class Player extends Entity {
 		//Attack area - could really increase this for potions
 		attackArea.width = 32;
 		attackArea.height = 32;
+		playerAttack = false;
+		
+		
+		//stamina
+		attackCost = 60;
+		maxStamina = 120;
+		attackStamina = maxStamina;
+		staminaRechargeCounter = 0;
+		staminaEnabled = false;
+		
+		
+		//player opacity
+		switchOpacity = false;
+		switchOpacityCounter = 0;
 		
 		
 	}
@@ -113,7 +131,11 @@ public class Player extends Entity {
 		if (playerAttack) 
 		{
 			if (attackStamina >= attackCost) {
+				staminaEnabled = true;
+				staminaRechargeCounter = 0;
 				attack();
+				
+				
 				
 			} else {
 				playerAttack = false;
@@ -132,6 +154,7 @@ public class Player extends Entity {
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
 			if (monsterIndex != 9999) {
 				gp.monsters.get(monsterIndex).damageContact(this);
+				this.collisionOn = false;
 				gp.playSE(6);
 			}
 			
@@ -215,10 +238,12 @@ public class Player extends Entity {
 		g2.fillRect(x, y, gp.tileSize,gp.tileSize );
 		*/
 		
-		//attack cooldown period has not 
+		
 		BufferedImage image = null;
 		int tempScreenX = screenX, tempScreenY = screenY;
-		if (attackStamina < attackCost) {
+		
+		//stamina starts recharging after 1 second of not attacking and attackStamina recharges
+		if (attackStamina < maxStamina && staminaRechargeCounter > 60) {
 			++attackStamina;
 		}
 	
@@ -237,7 +262,7 @@ public class Player extends Entity {
 		
 		
 		} //attack cool down period is over - stamina
-			else if (playerAttack && (attackStamina == attackCost) )
+			else if (playerAttack && (attackStamina >= attackCost) )
 		{
 		
 		switch (direction) {
@@ -266,6 +291,37 @@ public class Player extends Entity {
 				switchOpacity = false;
 			}
 		}
+		
+		
+		//stamina bar not hidden
+		if (staminaEnabled) {
+			double singleStaminaBar = (double) gp.tileSize/this.maxStamina,
+					currentStaminaBar = singleStaminaBar * this.attackStamina;
+			//Draw stamina bar
+			//Gray outline
+			//x, y, width, height
+			
+			g2.setColor(new Color(35, 35, 35));
+			g2.fillRect(screenX - 1 , screenY - 21, gp.tileSize + 2, 12);
+			
+			//Blue stamina bar
+			g2.setColor(new Color(0,0, 255));
+			g2.fillRect(screenX, screenY - 20, (int) currentStaminaBar, 10);
+			
+		
+			
+			if (attackStamina == maxStamina ) {
+				staminaEnabled = false;
+			}
+			
+			
+		}
+		
+		++staminaRechargeCounter;
+		
+		
+		
+		
 		//16 pixels
 		g2.drawImage(image, tempScreenX, tempScreenY, null);
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
@@ -296,7 +352,6 @@ public class Player extends Entity {
 			spriteNum = true;
 		//next 20 frames of long attack animation
 		} else if (spriteCounter < 30) {
-			
 			spriteNum = false;
 
 			//Save player's current location on map
@@ -355,6 +410,6 @@ public class Player extends Entity {
 			//Miss the attack
 		}
 	}
-	
+
 	
 }
