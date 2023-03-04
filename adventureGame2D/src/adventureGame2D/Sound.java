@@ -1,6 +1,7 @@
 package adventureGame2D;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -12,22 +13,27 @@ public class Sound {
 	Clip clip;
 	
 	//Store file path of sound files
-	URL soundURL[] = new URL[30];
+	ArrayList <URL> soundURL = new ArrayList<>();
 	
 	public Sound() {
 		//link to all sounds file
-		soundURL[0] = getClass().getResource("/sounds/BlueBoyAdventure.wav");
-		soundURL[1] = getClass().getResource("/sounds/coin.wav");
-		soundURL[2] = getClass().getResource("/sounds/powerup.wav");
-		soundURL[3] = getClass().getResource("/sounds/unlock.wav");
-		soundURL[4] = getClass().getResource("/sounds/fanfare.wav");
+		soundURL.add (getClass().getResource("/sounds/game/BlueBoyAdventure.wav")); //0
+		soundURL.add (getClass().getResource("/sounds/objects/coin.wav")); //1
+		soundURL.add (getClass().getResource("/sounds/objects/powerup.wav")); //2
+		soundURL.add (getClass().getResource("/sounds/objects/unlock.wav")); //3
+		soundURL.add (getClass().getResource("/sounds/game/fanfare.wav")); //4
+		soundURL.add (getClass().getResource("/sounds/monsters/hitmonster.wav")); //5
+		soundURL.add (getClass().getResource("/sounds/player/playerdamaged.wav")); //6
+		soundURL.add (getClass().getResource("/sounds/monsters/slime-death-sound.wav")); //7
+		
+		
 	}
 	
 	public void setFile(int i) {
 		try {
 			
 			//Obtain the clip that can be used for playback
-			AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL.get(i));
 			clip = AudioSystem.getClip();
 			clip.open(ais);
 			
