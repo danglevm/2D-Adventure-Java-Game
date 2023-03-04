@@ -87,16 +87,16 @@ public class KeyHandler implements KeyListener{
 		
 	} else if (gp.gameState == gp.playState) {
 		if (code == KeyEvent.VK_W) {
-			upPressed=true;
+			upPressed = true;
 		} 
 		if (code == KeyEvent.VK_A) {
-			leftPressed=true;
+			leftPressed = true;
 		} 
 		if (code == KeyEvent.VK_S) {
-			downPressed=true;
+			downPressed = true;
 		} 
 		if (code == KeyEvent.VK_D) {
-			rightPressed=true;
+			rightPressed = true;
 		} 
 		
 		//Pause the game
@@ -172,16 +172,16 @@ public class KeyHandler implements KeyListener{
 		int code = e.getKeyCode();
 		//Check if WASD is in use
 		if (code == KeyEvent.VK_W) {
-			upPressed=false;
+			upPressed = false;
 		} 
 		if (code == KeyEvent.VK_A) {
-			leftPressed=false;
+			leftPressed = false;
 		} 
 		if (code == KeyEvent.VK_S) {
-			downPressed=false;
+			downPressed = false;
 		} 
 		if (code == KeyEvent.VK_D) {
-			rightPressed=false;
+			rightPressed = false;
 		
 		}
 		
