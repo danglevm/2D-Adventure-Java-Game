@@ -25,7 +25,7 @@ public class Event {
 		gp.ui.setCurrentDialogue("You recovered some of your strength");
 		int currentPlayerLife = gp.player.getLife();
 		int maxLife = gp.player.getMaxLife();
-		if (currentPlayerLife<maxLife) {currentPlayerLife+=2;}
+		if (currentPlayerLife < maxLife) {currentPlayerLife += 2;}
 		gp.player.setLife(currentPlayerLife);
 	}
 	
