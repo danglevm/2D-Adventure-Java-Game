@@ -80,21 +80,23 @@ public class EventHandler {
 			if (eventCollision(tpXto, tpYto, "any")) {
 				//interact is true --> UI draws the string
 				interact = true;
-				if (distance > gp.tileSize) {interact = false;}
 				if (gp.keyH.allowInteraction) {
 					eventObject.teleport(gp.dialogueState, tpXback, tpYback);
 					gp.keyH.allowInteraction = false;
-				
 				}
-			} 
+			} else if (distance > gp.tileSize) {
+				interact = false;
+			}
+			
+			
 			if (eventCollision (tpXback, tpYback, "any")) {
 				interact = true;
-				if (distance > gp.tileSize) {interact = false;}
 				if (gp.keyH.allowInteraction) {
 					eventObject.teleport(gp.dialogueState, tpXto, tpYto);
 					gp.keyH.allowInteraction = false;
-					
 				}
+			} else if (distance > gp.tileSize) {
+				interact = false;
 			}
 			
 			
