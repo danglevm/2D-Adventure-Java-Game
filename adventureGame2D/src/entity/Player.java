@@ -169,24 +169,27 @@ public class Player extends Entity {
 			
 			
 			//check NPC collision
-			collisionNPC(gp.cChecker.checkEntity(this, gp.NPCs));
+			if (!collisionNPC(gp.cChecker.checkEntity(this, gp.NPCs)) && keyH.dialoguePressed) {
+				keyH.dialoguePressed = false;
+			}
+			
 			
 	
 			if (keyH.upPressed) {
 				this.direction = "up";
-				if (!collisionOn && !keyH.dialoguePressed) {WorldY -= speed;} 
+				if (!collisionOn && gp.gameState == gp.playState) {WorldY -= speed;} 
 			} 
 			if (keyH.downPressed) {
 				this.direction = "down";
-				if (!collisionOn && !keyH.dialoguePressed) {WorldY += speed;}
+				if (!collisionOn && gp.gameState == gp.playState) {WorldY += speed;}
 			} 
 			if (keyH.leftPressed) {
 				this.direction = "left";
-				if (!collisionOn && !keyH.dialoguePressed) {WorldX -= speed;}
+				if (!collisionOn && gp.gameState == gp.playState) {WorldX -= speed;}
 			} 
 			if (keyH.rightPressed) {
 				this.direction = "right";
-				if (!collisionOn && !keyH.dialoguePressed) {WorldX += speed;}
+				if (!collisionOn && gp.gameState == gp.playState) {WorldX += speed;}
 			}
 		
 			
@@ -220,16 +223,17 @@ public class Player extends Entity {
 		}
 	}
 	
-	private final void collisionNPC (int i) {
+	private final boolean collisionNPC (int i) {
 		if (i != 9999) {
 			//player touching npc
 			if (keyH.dialoguePressed) {
 				gp.gameState = gp.dialogueState;
 				gp.NPCs.get(i).speak();
-				keyH.dialoguePressed = false; 
+				keyH.dialoguePressed = false;
+				return true;
 			}
-		}
-	
+		} 
+		return false;
 	}
 	
 	public void draw(Graphics2D g2) {
@@ -305,7 +309,7 @@ public class Player extends Entity {
 			g2.fillRect(screenX - 1 , screenY - 21, gp.tileSize + 2, 12);
 			
 			//Blue stamina bar
-			g2.setColor(new Color(0,0, 255));
+			g2.setColor(new Color(0,100, 255));
 			g2.fillRect(screenX, screenY - 20, (int) currentStaminaBar, 10);
 			
 		
