@@ -114,6 +114,7 @@ public class Player extends Entity {
 		{
 			if (attackStamina >= attackCost) {
 				attack();
+				
 			} else {
 				playerAttack = false;
 			}
@@ -131,6 +132,7 @@ public class Player extends Entity {
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
 			if (monsterIndex != 9999) {
 				gp.monsters.get(monsterIndex).damageContact(this);
+				gp.playSE(6);
 			}
 			
 			//Collision checker receive subclass
@@ -289,11 +291,12 @@ public class Player extends Entity {
 		//Attacking
 		++spriteCounter;
 		
-		//4 frames of short attack animation
+		//10 frames of short attack animation
 		if (spriteCounter < 10) {
 			spriteNum = true;
 		//next 20 frames of long attack animation
 		} else if (spriteCounter < 30) {
+			
 			spriteNum = false;
 
 			//Save player's current location on map
@@ -323,7 +326,7 @@ public class Player extends Entity {
 		solidArea.width = currWidth;
 		solidArea.height = currHeight;
 			 
-		//4 frames of receding attack animation
+		//Final frames of receding attack animation
 		} else {
 			spriteNum = true;
 			spriteCounter = 0;
@@ -337,12 +340,15 @@ public class Player extends Entity {
 	private final void damageMonster(int i) {
 		if (i != 9999) {
 			if (!gp.monsters.get(i).invincibility) {
+				gp.playSE(5);
 				//attack lands
 				gp.monsters.get(i).setLife(gp.monsters.get(i).getLife() - 1);
 				gp.monsters.get(i).invincibility = true;
+				gp.monsters.get(i).monsterDamageReaction(this);
 				if (gp.monsters.get(i).getLife() < 1) {
 					gp.monsters.get(i).alive = false;
 					gp.monsters.get(i).dying = true;
+					gp.playSE(gp.monsters.get(i).returnDeathSound());
 				}
 			}
 		} else {
