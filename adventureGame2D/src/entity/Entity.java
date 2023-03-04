@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -38,6 +39,10 @@ public class Entity {
 	public boolean collisionOn = false, invincibility = false;
 	//0 - player, 1 - npc, 2 - monster
 	protected int entityType;
+	
+	//Monster HP Bar
+	private boolean hpBarEnabled = false;
+	private int hpBarCounter = 0;
 
 	
 	//attack area
@@ -113,28 +118,19 @@ public class Entity {
 		this.checkInvincibilityTime();
 	}
 	
-	protected void damageContact(Entity entity) {};
 	
-	protected void checkInvincibilityTime() {
-		if (invincibility) {
-			++invincibilityCounter;
-			if (invincibilityCounter > 120) {
-				invincibility = false;
-				invincibilityCounter = 0;
-				
-				}
-			}
-	}
 	
 	public void draw (Graphics2D g2, GamePanel gp) {
 		this.gp = gp;
 		BufferedImage image = null;
-		int screenX = WorldX - gp.player.WorldX + gp.player.screenX;
-		int screenY = WorldY - gp.player.WorldY + gp.player.screenY;
-		if (WorldX + gp.tileSize > gp.player.WorldX - gp.player.screenX && 
-			WorldX - gp.tileSize < gp.player.WorldX + gp.player.screenX &&
-			WorldY + gp.tileSize > gp.player.WorldY - gp.player.screenY &&
-			WorldY - gp.tileSize < gp.player.WorldY + gp.player.screenY) {
+		int entityScreenX = this.WorldX - gp.player.WorldX + gp.player.screenX;
+		int entityScreenY = this.WorldY - gp.player.WorldY + gp.player.screenY;
+		
+		//Render the monsters on screen - pretty fuzzy about this since just copy
+		if (this.WorldX + gp.tileSize > gp.player.WorldX - gp.player.screenX && 
+			this.WorldX - gp.tileSize < gp.player.WorldX + gp.player.screenX &&
+			this.WorldY + gp.tileSize > gp.player.WorldY - gp.player.screenY &&
+			this.WorldY - gp.tileSize < gp.player.WorldY + gp.player.screenY) {
 			
 			switch (direction) {
 			case "up": if (spriteNum) {image = up1;} else {image = up2;} break;
@@ -142,7 +138,36 @@ public class Entity {
 			case "left": if (spriteNum) {image = left1;} else {image = left2;} break;
 			case "right": if (spriteNum) {image = right1;} else {image = right2;} break;
 			}
+			
+			//Monster HP bar
+			if (entityType == 2 && hpBarEnabled) {
+				double oneBarValue = (double) gp.tileSize/this.maxLife,
+						hpBarValue = oneBarValue * this.life;
+				
+				
+				//Gray outline
+				//x, y, width, height
+				g2.setColor(new Color(35, 35, 35));
+				g2.fillRect(entityScreenX - 1, entityScreenY - 1, gp.tileSize + 2, 12);
+				
+			
+				
+				//Red hp bar
+				g2.setColor(new Color(255,0,30));
+				g2.fillRect(entityScreenX, entityScreenY, (int) hpBarValue, 10);
+				
+				
+				++hpBarCounter;
+				
+				if (hpBarCounter > 360) {
+					hpBarCounter = 0;
+					hpBarEnabled = false;
+				}
+			}
+			
 			if (invincibility) {
+				hpBarEnabled = true;
+				hpBarCounter = 0;
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));	
 			}
 			
@@ -152,7 +177,7 @@ public class Entity {
 			
 			
 			//16 pixels
-			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(image, entityScreenX, entityScreenY, gp.tileSize, gp.tileSize, null);
 			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		}
 	}
@@ -184,22 +209,46 @@ public class Entity {
 		NPC.direction = direction;
 		
 	}
+	//******************************************************************************************************************		
+	//------------------------------MONSTER OVERRIDE METHODS----------------------------------------------------------------------//
+	//*****************************************************************************************************************
+	
+	protected void checkInvincibilityTime() {
+		if (invincibility) {
+			++invincibilityCounter;
+			if (invincibilityCounter > 120) {
+				invincibility = false;
+				invincibilityCounter = 0;
+				
+				}
+			}
+	}
+	
+	protected void damageContact(Entity entity) {};
+	
+	public void monsterDamageReaction(Player player) {}
 	
 	//Draws dying animation for monsters
 	protected void deathAnimation (Graphics2D g2) {
 		++deathCount;
 		
 		if (deathCount < 41) {
+			
 			if (deathCount%5 == 0 && deathCount%10 != 0) {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));	
+				
 			} else if (deathCount % 10 == 0){
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));	
 			}
 		} else {
 			dying = false;
+			
 		}
 		
 	}
+	
+	
+	public int returnDeathSound() {return 9999;};
 	
 	
 	
