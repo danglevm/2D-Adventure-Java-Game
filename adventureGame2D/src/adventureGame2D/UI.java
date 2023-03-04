@@ -104,6 +104,7 @@ public class UI {
 			this.drawPlayerHearts();
 			if (gp.eHandler.getInteraction()) {
 				drawInteractionKey();
+				System.out.println(gp.eHandler.getInteraction());
 			}
 			
 		} 
@@ -321,10 +322,12 @@ public class UI {
 	
 	//Method for drawing a simple string above the player head for event interaction
 	public void drawInteractionKey() {
-			String text = "Press X to interact";
-			int x = getXCenter(text) - gp.tileSize*2, y = gp.screenHeight/2 - gp.tileSize;
+			String text = "X";
+			int x = getXCenter(text) - gp.tileSize/4
+					, y = gp.screenHeight/2 - gp.tileSize;
 			g2.setColor(Color.white);
-			g2.setFont(g2.getFont().deriveFont(20F));
+			g2.drawRect(gp.player.screenX + 8, gp.player.screenY - 48, 28, 28);
+			g2.setFont(g2.getFont().deriveFont(24F));
 			g2.drawString(text, x, y);
 	}
 	
