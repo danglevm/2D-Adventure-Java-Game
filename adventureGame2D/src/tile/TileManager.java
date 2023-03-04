@@ -25,7 +25,6 @@ public class TileManager extends Tile{
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
 		tilesList = new ArrayList<Tile>();
-		tilesList.ensureCapacity(100);
 		mapTileNum = new int [gp.maxWorldCol][gp.maxWorldRow];
 		
 		getTileImage();
