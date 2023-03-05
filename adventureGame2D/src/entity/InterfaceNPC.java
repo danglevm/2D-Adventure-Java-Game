@@ -1,6 +1,6 @@
 package entity;
 
-interface NPC_Interface {
+interface InterfaceNPC {
 	abstract void setDefaultValues();
 	abstract void getImage();
 	default void setDialogue() {}

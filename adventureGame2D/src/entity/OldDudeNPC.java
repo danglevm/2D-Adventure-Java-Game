@@ -11,12 +11,12 @@ import javax.imageio.ImageIO;
 import adventureGame2D.GamePanel;
 import adventureGame2D.UtilityTool;
 
-public class NPC_OldDude extends Entity implements NPC_Interface{
+public class OldDudeNPC extends Entity implements InterfaceNPC{
 	//Dialogues
 	private ArrayList<String> oldDudeDialogues = new ArrayList <String>();
 	private int dialogueIndex = 0;
 
-	public NPC_OldDude (GamePanel gp, int worldX, int worldY) {
+	public OldDudeNPC (GamePanel gp, int worldX, int worldY) {
 		super(gp);
 		//x, y, width, height
 		solidArea = new Rectangle(8, 8, 36, 36);
@@ -32,14 +32,14 @@ public class NPC_OldDude extends Entity implements NPC_Interface{
 	//-------------------------------NPC RENDER METHODS------------------
 	public void getImage() {
 		
-		up1 = setupCharacter("oldman_up_1", "/npc/", gp.tileSize, gp.tileSize);
-		up2 = setupCharacter("oldman_up_2", "/npc/", gp.tileSize, gp.tileSize);
-		down1 = setupCharacter("oldman_down_1", "/npc/", gp.tileSize, gp.tileSize);
-		down2 = setupCharacter("oldman_down_2", "/npc/", gp.tileSize, gp.tileSize);
-		left1 = setupCharacter("oldman_left_1", "/npc/", gp.tileSize, gp.tileSize);
-		left2 = setupCharacter("oldman_left_2", "/npc/", gp.tileSize, gp.tileSize);
-		right1 = setupCharacter("oldman_right_1", "/npc/", gp.tileSize, gp.tileSize);
-		right2 = setupCharacter("oldman_right_2", "/npc/", gp.tileSize, gp.tileSize);
+		up1 = setupEntity("oldman_up_1", "/npc/", gp.tileSize, gp.tileSize);
+		up2 = setupEntity("oldman_up_2", "/npc/", gp.tileSize, gp.tileSize);
+		down1 = setupEntity("oldman_down_1", "/npc/", gp.tileSize, gp.tileSize);
+		down2 = setupEntity("oldman_down_2", "/npc/", gp.tileSize, gp.tileSize);
+		left1 = setupEntity("oldman_left_1", "/npc/", gp.tileSize, gp.tileSize);
+		left2 = setupEntity("oldman_left_2", "/npc/", gp.tileSize, gp.tileSize);
+		right1 = setupEntity("oldman_right_1", "/npc/", gp.tileSize, gp.tileSize);
+		right2 = setupEntity("oldman_right_2", "/npc/", gp.tileSize, gp.tileSize);
 		
 
 		

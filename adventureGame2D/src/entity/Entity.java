@@ -183,7 +183,7 @@ public class Entity {
 	}
 	
 	//Render and scale the entity
-	protected BufferedImage setupCharacter(String imageName, String pathName, int width, int height) {
+	protected BufferedImage setupEntity(String imageName, String pathName, int width, int height) {
 		
 		UtilityTool uTool = new UtilityTool();
 		BufferedImage scaledImage = null;

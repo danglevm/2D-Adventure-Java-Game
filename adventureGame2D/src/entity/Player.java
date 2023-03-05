@@ -85,28 +85,28 @@ public class Player extends Entity {
 	//-------------------------------CLASS METHODS------------------
 	private final void getPlayerImage() {
 		
-		attackUp1 = setupCharacter("boy_attack_up_1", "/player_attack/", gp.tileSize, gp.tileSize*2);
-		attackUp2 = setupCharacter("boy_attack_up_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
-		attackDown1 = setupCharacter("boy_attack_down_1", "/player_attack/", gp.tileSize, gp.tileSize * 2);
-		attackDown2 = setupCharacter("boy_attack_down_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
-		attackLeft1 = setupCharacter("boy_attack_left_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
-		attackLeft2 = setupCharacter("boy_attack_left_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
-		attackRight1 = setupCharacter("boy_attack_right_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
-		attackRight2 = setupCharacter("boy_attack_right_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackUp1 = setupEntity("boy_attack_up_1", "/player_attack/", gp.tileSize, gp.tileSize*2);
+		attackUp2 = setupEntity("boy_attack_up_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
+		attackDown1 = setupEntity("boy_attack_down_1", "/player_attack/", gp.tileSize, gp.tileSize * 2);
+		attackDown2 = setupEntity("boy_attack_down_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
+		attackLeft1 = setupEntity("boy_attack_left_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackLeft2 = setupEntity("boy_attack_left_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackRight1 = setupEntity("boy_attack_right_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackRight2 = setupEntity("boy_attack_right_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
 		
 		
 	}
 	
 	private final void getPlayerAttackImage() {
 		
-		up1 = setupCharacter("boy_up_1", "/player/", gp.tileSize, gp.tileSize);
-		up2 = setupCharacter("boy_up_2", "/player/", gp.tileSize, gp.tileSize);
-		down1 = setupCharacter("boy_down_1", "/player/", gp.tileSize, gp.tileSize);
-		down2 = setupCharacter("boy_down_2", "/player/", gp.tileSize, gp.tileSize);
-		left1 = setupCharacter("boy_left_1", "/player/", gp.tileSize, gp.tileSize);
-		left2 = setupCharacter("boy_left_2", "/player/", gp.tileSize, gp.tileSize);
-		right1 = setupCharacter("boy_right_1", "/player/", gp.tileSize, gp.tileSize);
-		right2 = setupCharacter ("boy_right_2", "/player/", gp.tileSize, gp.tileSize);
+		up1 = setupEntity("boy_up_1", "/player/", gp.tileSize, gp.tileSize);
+		up2 = setupEntity("boy_up_2", "/player/", gp.tileSize, gp.tileSize);
+		down1 = setupEntity("boy_down_1", "/player/", gp.tileSize, gp.tileSize);
+		down2 = setupEntity("boy_down_2", "/player/", gp.tileSize, gp.tileSize);
+		left1 = setupEntity("boy_left_1", "/player/", gp.tileSize, gp.tileSize);
+		left2 = setupEntity("boy_left_2", "/player/", gp.tileSize, gp.tileSize);
+		right1 = setupEntity("boy_right_1", "/player/", gp.tileSize, gp.tileSize);
+		right2 = setupEntity("boy_right_2", "/player/", gp.tileSize, gp.tileSize);
 		
 	}
 	

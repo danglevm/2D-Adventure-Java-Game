@@ -33,17 +33,17 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	}
 	@Override
 	public final void getImage(int size) {
-		up1 = setupCharacter("greenslime_down_1","/monster/", size, size);
-		up2 = setupCharacter("greenslime_down_2","/monster/", size, size);
+		up1 = setupEntity("greenslime_down_1","/monster/", size, size);
+		up2 = setupEntity("greenslime_down_2","/monster/", size, size);
 
-		down1 = setupCharacter("greenslime_down_1","/monster/", size, size);
-		down2 = setupCharacter("greenslime_down_2","/monster/", size, size);
+		down1 = setupEntity("greenslime_down_1","/monster/", size, size);
+		down2 = setupEntity("greenslime_down_2","/monster/", size, size);
 		
-		right1 = setupCharacter("greenslime_down_1","/monster/", size, size);
-		right2 = setupCharacter("greenslime_down_2","/monster/", size, size);
+		right1 = setupEntity("greenslime_down_1","/monster/", size, size);
+		right2 = setupEntity("greenslime_down_2","/monster/", size, size);
 		
-		left1 = setupCharacter("greenslime_down_1","/monster/", size, size);
-		left2 = setupCharacter("greenslime_down_2","/monster/", size, size);
+		left1 = setupEntity("greenslime_down_1","/monster/", size, size);
+		left2 = setupEntity("greenslime_down_2","/monster/", size, size);
 	}
 	
 	@Override

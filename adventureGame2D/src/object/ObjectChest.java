@@ -22,6 +22,6 @@ public class ObjectChest extends Entity implements ObjectInterface {
 	@Override
 	public void setDefaultAttributes() {
 		 name = "chest";
-		 down1 = setupCharacter("chest","/objects/environment/", gp.tileSize, gp.tileSize);
+		 down1 = setupEntity("chest","/objects/environment/", gp.tileSize, gp.tileSize);
 	}		
 }
