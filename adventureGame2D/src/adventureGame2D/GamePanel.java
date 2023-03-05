@@ -40,7 +40,9 @@ public class GamePanel extends JPanel implements Runnable{
 	//------------------------------IN GAME SETTINGS----------------------------------------------------------------------//
 	//*****************************************************************************************************************
 	
-	//World Map settings
+	/*
+	 * World Map settings
+	 */
 	public int maxWorldCol = 250;
 	public int maxWorldRow = 250;
 	public final int maxMap = 10;
@@ -48,12 +50,15 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int worldHeight = tileSize*maxWorldRow;
 	
 	
-	//Main game state
+	/*
+	 * gameState
+	 */
 	public int gameState;
 	public final int titleState = 0;
 	public final int playState = 1;
 	public final int pauseState = 2;
 	public final int dialogueState = 3;
+	public final int statusState = 4;
 	
 	
 	
