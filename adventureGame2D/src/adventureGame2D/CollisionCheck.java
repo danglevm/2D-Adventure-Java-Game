@@ -123,7 +123,9 @@ public class CollisionCheck{
 				
 				//entity rectangle intersects with object rectangle
 				if (entity.solidArea.intersects(gp.objects.get(i).solidArea)) {
-					entity.collisionOn = true;
+					if (gp.objects.get(i).collisionOn) {
+						entity.collisionOn = true;
+					}
 				};
 				if (player) {
 					index = i;
@@ -177,8 +179,8 @@ public class CollisionCheck{
 						//reset entity's solid Area or else the values increase indefinitely
 						if (entity.solidArea.intersects(entities.get(i).solidArea)) {
 							if (entities.get(i) != entity) {
-								entity.collisionOn = true;
-								index = i;
+									entity.collisionOn = true;
+									index = i;
 							}
 						};
 						entity.solidArea.x = entity.solidAreaDefaultX;
