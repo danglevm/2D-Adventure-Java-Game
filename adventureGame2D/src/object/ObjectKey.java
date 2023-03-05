@@ -23,8 +23,8 @@ public class ObjectKey extends Entity implements ObjectInterface {
 	
 	
 	public void setDefaultAttributes() {
-		name = "Key";
-		collisionOn = false;
+		name = "key";
+		collisionOn = true;
 		down1 = setupEntity("key", "/objects/environment/", gp.tileSize, gp.tileSize);
 		
 	}

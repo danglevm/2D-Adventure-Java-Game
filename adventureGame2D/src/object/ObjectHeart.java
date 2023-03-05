@@ -19,7 +19,7 @@ public class ObjectHeart extends Entity implements ObjectInterface {
 	}
 
 	public void setDefaultAttributes() {
-		name = "Heart";
+		name = "heart";
 		image = setupEntity("heart_full", "/heart/", gp.tileSize, gp.tileSize);
 		image2 = setupEntity("heart_half", "/heart/", gp.tileSize, gp.tileSize);
 		image3 = setupEntity("heart_blank", "/heart/", gp.tileSize, gp.tileSize);

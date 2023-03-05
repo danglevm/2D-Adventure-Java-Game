@@ -20,9 +20,13 @@ public class ObjectSword extends Entity implements ObjectInterface {
 	public void setDefaultAttributes() {
 		
 		name = "sword";
-		
+		down1 = setupEntity("sword", "/objects/equip/", gp.tileSize, gp.tileSize);
 		attackValue = 1;
 		
+	}
+	
+	public int getAttackValue () {
+		return this.attackValue;
 	}
 	
 }

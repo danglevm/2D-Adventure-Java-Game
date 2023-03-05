@@ -22,7 +22,7 @@ public class ObjectBoots extends Entity implements ObjectInterface {
 
 	@Override
 	public void setDefaultAttributes() {
-		name = "Boots";
+		name = "boots";
 		collisionOn = false;
 		down1 = setupEntity("boots", "/objects/equip/", gp.tileSize, gp.tileSize);
 	}
