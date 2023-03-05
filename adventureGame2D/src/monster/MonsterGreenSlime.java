@@ -9,8 +9,8 @@ import entity.Player;
 public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	public MonsterGreenSlime (GamePanel gp, int worldX, int worldY) {
 		super(gp);
-		this.WorldX = worldX * gp.tileSize;
-		this.WorldY = worldY * gp.tileSize;
+		this.worldX = worldX * gp.tileSize;
+		this.worldY = worldY * gp.tileSize;
 		this.setDefaultValues();
 		this.getImage(gp.tileSize);
 		

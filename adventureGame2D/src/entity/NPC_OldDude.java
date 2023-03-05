@@ -20,8 +20,8 @@ public class NPC_OldDude extends Entity implements NPC_Interface{
 		super(gp);
 		//x, y, width, height
 		solidArea = new Rectangle(8, 8, 36, 36);
-		this.WorldX = gp.tileSize * worldX;
-		this.WorldY = gp.tileSize * worldY;
+		this.worldX = gp.tileSize * worldX;
+		this.worldY = gp.tileSize * worldY;
 		
 		this.setDefaultValues();
 		this.getImage();

@@ -27,11 +27,42 @@ public class Player extends Entity {
 	private boolean switchOpacity;
 	private int switchOpacityCounter = 0;
 
-	private int attackCost, attackStamina, maxStamina, staminaRechargeCounter;
+	//attacking and stamina counts
+	private int attackCost, 
+				attackStamina, 	
+				staminaRechargeCounter;
 
 	public boolean playerAttack;
 	
 	private boolean staminaEnabled;
+	
+	/*
+	 * Player attributes
+	 */
+	private	String name;
+	private int maxStamina,
+				speed,
+				level,
+				strength,
+				dexterity,
+				attack,
+				defense,
+				coin,
+				experience,
+				nextLevelExperience;
+	
+	/*
+	 * Equipped weapon and shield
+	 */
+	private Entity currentWeapon,
+				   currentShield;
+				
+	/*
+	 * Item attributes
+	 */
+	private int attackVal,
+				defenseVal;
+				
 
 	
 	
@@ -82,8 +113,8 @@ public class Player extends Entity {
 	
 	private final void setDefaultPlayerValues() {
 		//Default player values
-		WorldX = gp.tileSize * 122;
-		WorldY= gp.tileSize * 132;
+		worldX = gp.tileSize * 122;
+		worldY= gp.tileSize * 132;
 		speed = 3;
 		entityType = 0;
 		direction = "down";
@@ -177,19 +208,19 @@ public class Player extends Entity {
 	
 			if (keyH.upPressed) {
 				this.direction = "up";
-				if (!collisionOn && gp.gameState == gp.playState) {WorldY -= speed;} 
+				if (!collisionOn && gp.gameState == gp.playState) {worldY -= speed;} 
 			} 
 			if (keyH.downPressed) {
 				this.direction = "down";
-				if (!collisionOn && gp.gameState == gp.playState) {WorldY += speed;}
+				if (!collisionOn && gp.gameState == gp.playState) {worldY += speed;}
 			} 
 			if (keyH.leftPressed) {
 				this.direction = "left";
-				if (!collisionOn && gp.gameState == gp.playState) {WorldX -= speed;}
+				if (!collisionOn && gp.gameState == gp.playState) {worldX -= speed;}
 			} 
 			if (keyH.rightPressed) {
 				this.direction = "right";
-				if (!collisionOn && gp.gameState == gp.playState) {WorldX += speed;}
+				if (!collisionOn && gp.gameState == gp.playState) {worldX += speed;}
 			}
 		
 			
@@ -359,17 +390,17 @@ public class Player extends Entity {
 			spriteNum = false;
 
 			//Save player's current location on map
-			int currWorldX = WorldX, 
-				currWorldY = WorldY,
+			int currWorldX = worldX, 
+				currWorldY = worldY,
 				currWidth = solidArea.width,
 				currHeight = solidArea.height;
 			
 		switch (this.direction) {
 		//shift collision area back by the attack area length
-			case "up": WorldY -= attackArea.height; break;
-			case "down": WorldY += attackArea.height; break;
-			case "left": WorldX -= attackArea.width;  break;
-			case "right": WorldX += attackArea.width; break;
+			case "up": worldY -= attackArea.height; break;
+			case "down": worldY += attackArea.height; break;
+			case "left": worldX -= attackArea.width;  break;
+			case "right": worldX += attackArea.width; break;
 		}
 	
 		
@@ -380,13 +411,15 @@ public class Player extends Entity {
 		damageMonster(monsterIndex);
 		
 		//After checking collision, restore original data
-		WorldX = currWorldX;
-		WorldY = currWorldY;
+		worldX = currWorldX;
+		worldY = currWorldY;
 		solidArea.width = currWidth;
 		solidArea.height = currHeight;
 			 
 		//Final frames of receding attack animation
+		
 		} else {
+			
 			spriteNum = true;
 			spriteCounter = 0;
 			playerAttack = false;

@@ -24,7 +24,7 @@ public class Entity {
 	
 	
 	//Entity position
-	public int WorldX, WorldY, speed;
+	public int worldX, worldY, speed;
 	protected int spriteCounter = 0, actionLock = 0, invincibilityCounter = 0;
 	protected boolean spriteNum = true; 
 	
@@ -93,10 +93,10 @@ public class Entity {
 		
 		if (!collisionOn) {
 			switch (direction) {
-			case "up": WorldY -= speed; break;
-			case "down": WorldY += speed; break;
-			case "left": WorldX -= speed; break;
-			case "right": WorldX += speed; break;
+			case "up": worldY -= speed; break;
+			case "down": worldY += speed; break;
+			case "left": worldX -= speed; break;
+			case "right": worldX += speed; break;
 			
 			}
 		}
@@ -123,14 +123,14 @@ public class Entity {
 	public void draw (Graphics2D g2, GamePanel gp) {
 		this.gp = gp;
 		BufferedImage image = null;
-		int entityScreenX = this.WorldX - gp.player.WorldX + gp.player.screenX;
-		int entityScreenY = this.WorldY - gp.player.WorldY + gp.player.screenY;
+		int entityScreenX = this.worldX - gp.player.worldX + gp.player.screenX;
+		int entityScreenY = this.worldY - gp.player.worldY + gp.player.screenY;
 		
 		//Render the monsters on screen - pretty fuzzy about this since just copy
-		if (this.WorldX + gp.tileSize > gp.player.WorldX - gp.player.screenX && 
-			this.WorldX - gp.tileSize < gp.player.WorldX + gp.player.screenX &&
-			this.WorldY + gp.tileSize > gp.player.WorldY - gp.player.screenY &&
-			this.WorldY - gp.tileSize < gp.player.WorldY + gp.player.screenY) {
+		if (this.worldX + gp.tileSize > gp.player.worldX - gp.player.screenX && 
+			this.worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+			this.worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
+			this.worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
 			
 			switch (direction) {
 			case "up": if (spriteNum) {image = up1;} else {image = up2;} break;

@@ -223,7 +223,7 @@ public void paintComponent (Graphics g) {
 
 			@Override
 			public int compare(Entity e1, Entity e2) {
-				int result = Integer.compare(e1.WorldY, e2.WorldY);
+				int result = Integer.compare(e1.worldY, e2.worldY);
 				
 				return result;
 				
@@ -250,7 +250,7 @@ public void paintComponent (Graphics g) {
 			g2.setColor(Color.white);
 			g2.setFont(g2.getFont().deriveFont(Font.PLAIN,25));
 			g2.drawString(FPS_text, FPS_x, FPS_y);
-			g2.drawString("X: " + (player.WorldX)/tileSize + " Y: " + (player.WorldY)/tileSize, FPS_x - tileSize*2, FPS_y + tileSize);
+			g2.drawString("X: " + (player.worldX)/tileSize + " Y: " + (player.worldY)/tileSize, FPS_x - tileSize*2, FPS_y + tileSize);
 		}
 	
 	g2.dispose();

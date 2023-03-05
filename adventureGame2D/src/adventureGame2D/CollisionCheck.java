@@ -18,16 +18,16 @@ public class CollisionCheck{
 		
 		
 		//left side of the solid area - left side of the Entity tile + the entity's X distance from that left side of the tile
-		int entityLeftWorldX = entity.WorldX + entity.solidArea.x;
+		int entityLeftWorldX = entity.worldX + entity.solidArea.x;
 		
 		//right side of the solid area - left side of the Entity tile + the entity's X distance from that left side of the tile + entity width gives the right side
-		int entityRightWorldX = entity.WorldX + entity.solidArea.x + entity.solidArea.width;
+		int entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
 		
 		
 		//Starts from the top side of the tile
-		int entityTopWorldY = entity.WorldY + entity.solidArea.y;
+		int entityTopWorldY = entity.worldY + entity.solidArea.y;
 		
-		int entityBotWorldY = entity.WorldY + entity.solidArea.y + entity.solidArea.height;
+		int entityBotWorldY = entity.worldY + entity.solidArea.y + entity.solidArea.height;
 		
 		
 		//Finds the columns and rows of these locations in tiles
@@ -96,12 +96,12 @@ public class CollisionCheck{
 				
 				//Get entity's solid area position
 				//Location of entity + entity solid area size - 0 is default, can be changed later
-				entity.solidArea.x = entity.WorldX + entity.solidArea.x;
-				entity.solidArea.y = entity.WorldY + entity.solidArea.y;
+				entity.solidArea.x = entity.worldX + entity.solidArea.x;
+				entity.solidArea.y = entity.worldY + entity.solidArea.y;
 				
 				//Get object's solid area position
-				gp.objects.get(i).solidArea.x = gp.objects.get(i).WorldX + gp.objects.get(i).solidArea.x;
-				gp.objects.get(i).solidArea.y = gp.objects.get(i).WorldY + gp.objects.get(i).solidArea.y;
+				gp.objects.get(i).solidArea.x = gp.objects.get(i).worldX + gp.objects.get(i).solidArea.x;
+				gp.objects.get(i).solidArea.y = gp.objects.get(i).worldY + gp.objects.get(i).solidArea.y;
 				
 				//NPC cannot pick up objects
 				switch (entity.direction) {
@@ -150,14 +150,14 @@ public class CollisionCheck{
 						
 						//Get entity's solid area position
 						//Location of entity + entity solid area size - 0 is default, can be changed later
-						entity.solidArea.x = entity.WorldX + entity.solidArea.x;
-						entity.solidArea.y = entity.WorldY + entity.solidArea.y;
+						entity.solidArea.x = entity.worldX + entity.solidArea.x;
+						entity.solidArea.y = entity.worldY + entity.solidArea.y;
 						
 						
 						
 						//Get target's solid area position
-						entities.get(i).solidArea.x = entities.get(i).WorldX + entities.get(i).solidArea.x;
-						entities.get(i).solidArea.y = entities.get(i).WorldY + entities.get(i).solidArea.y;
+						entities.get(i).solidArea.x = entities.get(i).worldX + entities.get(i).solidArea.x;
+						entities.get(i).solidArea.y = entities.get(i).worldY + entities.get(i).solidArea.y;
 						
 						
 						switch (entity.direction) {
@@ -195,14 +195,14 @@ public class CollisionCheck{
 	public final boolean checkPlayer (Entity entity) {
 		//Get entity's solid area position
 		//Location of entity + entity solid area size - 0 is default, can be changed later
-		entity.solidArea.x = entity.WorldX + entity.solidArea.x;
-		entity.solidArea.y = entity.WorldY + entity.solidArea.y;
+		entity.solidArea.x = entity.worldX + entity.solidArea.x;
+		entity.solidArea.y = entity.worldY + entity.solidArea.y;
 		
 		
 		
 		//Get target's solid area position
-		gp.player.solidArea.x = gp.player.WorldX+gp.player.solidArea.x;
-		gp.player.solidArea.y = gp.player.WorldY+gp.player.solidArea.y;
+		gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
+		gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
 		
 		
 		switch (entity.direction) {

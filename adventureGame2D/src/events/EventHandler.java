@@ -55,8 +55,8 @@ public class EventHandler {
 		int tpXback = 153, tpYback = 150;
 		
 		//Check to see if player is 1 tile away from previous event  - works for lava or some damage things
-		int xDistance = Math.abs(gp.player.WorldX - previousEventX),
-			yDistance = Math.abs(gp.player.WorldY - previousEventY),
+		int xDistance = Math.abs(gp.player.worldX - previousEventX),
+			yDistance = Math.abs(gp.player.worldY - previousEventY),
 			distance = Math.max(xDistance, yDistance);
 		
 		
@@ -108,8 +108,8 @@ public class EventHandler {
 			boolean playerCollision = false;
 			
 			//get location of player and event rectangle solid area
-			gp.player.solidArea.x = gp.player.WorldX + gp.player.solidArea.x;
-			gp.player.solidArea.y = gp.player.WorldY + gp.player.solidArea.y;
+			gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
+			gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
 			eventRect[col][row].x = col * gp.tileSize + eventRect[col][row].x;
 			eventRect [col][row].y = row * gp.tileSize + eventRect[col][row].y;
 			
@@ -119,8 +119,8 @@ public class EventHandler {
 				if (gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")) {
 					playerCollision = true;
 					
-					previousEventX = gp.player.WorldX;
-					previousEventY = gp.player.WorldY;
+					previousEventX = gp.player.worldX;
+					previousEventY = gp.player.worldY;
 				}
 			}
 			

@@ -150,12 +150,12 @@ public class TileManager extends Tile{
 			//Render the area viewable only in the player field of view
 			int worldX = worldCol * gp.tileSize;
 			int worldY = worldRow * gp.tileSize;
-			int screenX = worldX - gp.player.WorldX + gp.player.screenX;
-			int screenY = worldY - gp.player.WorldY + gp.player.screenY;
-			if (worldX + gp.tileSize > gp.player.WorldX - gp.player.screenX && 
-				worldX - gp.tileSize < gp.player.WorldX + gp.player.screenX &&
-				worldY + gp.tileSize > gp.player.WorldY - gp.player.screenY&&
-				worldY - gp.tileSize < gp.player.WorldY + gp.player.screenY) {
+			int screenX = worldX - gp.player.worldX + gp.player.screenX;
+			int screenY = worldY - gp.player.worldY + gp.player.screenY;
+			if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX && 
+				worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+				worldY + gp.tileSize > gp.player.worldY - gp.player.screenY&&
+				worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
 				
 				g2.drawImage(tilesList.get(tileNum).image, screenX, screenY, null);
 			}

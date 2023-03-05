@@ -13,8 +13,8 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 import entity.Entity;
-import object.Obj_key;
-import object.Object_heart;
+import object.ObjectKey;
+import object.ObjectHeart;
 import quotes.PauseQuotes;
 
 public class UI {
@@ -60,7 +60,7 @@ public class UI {
 		
 		
 		//Create HUD 
-		Entity heart = new Object_heart(gp);
+		Entity heart = new ObjectHeart(gp);
 		heart_full = heart.image;
 		heart_half = heart.image2;
 		heart_blank = heart.image3;
@@ -104,7 +104,7 @@ public class UI {
 			this.drawPlayerHearts();
 			if (gp.eHandler.getInteraction()) {
 				drawInteractionKey();
-				System.out.println(gp.eHandler.getInteraction());
+				
 			}
 			
 		} 
@@ -322,11 +322,13 @@ public class UI {
 	
 	//Method for drawing a simple string above the player head for event interaction
 	public void drawInteractionKey() {
-			String text = "X";
+			String text = "X Interact";
 			int x = getXCenter(text) - gp.tileSize/4
 					, y = gp.screenHeight/2 - gp.tileSize;
 			g2.setColor(Color.white);
-			g2.drawRect(gp.player.screenX + 8, gp.player.screenY - 48, 28, 28);
+			g2.drawRect(gp.player.screenX + 3, gp.player.screenY - 48
+					
+					, 28, 28);
 			g2.setFont(g2.getFont().deriveFont(24F));
 			g2.drawString(text, x, y);
 	}

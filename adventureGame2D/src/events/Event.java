@@ -33,7 +33,7 @@ public class Event {
 		
 		gp.gameState = gameState;
 		gp.ui.setCurrentDialogue("You sailed to the nearest island");
-		gp.player.WorldX = xTiles *gp.tileSize;
-		gp.player.WorldY = yTiles * gp.tileSize;
+		gp.player.worldX = xTiles *gp.tileSize;
+		gp.player.worldY = yTiles * gp.tileSize;
 	}
 }
