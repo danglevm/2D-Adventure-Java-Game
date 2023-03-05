@@ -70,9 +70,7 @@ public class KeyHandler implements KeyListener{
 		
 		}
 	
-		
 	}
-	
 	
 	/**
 	 * 
@@ -90,14 +88,20 @@ public class KeyHandler implements KeyListener{
 		} 
 		
 		if (code == KeyEvent.VK_ENTER) {
-			//new game
+			/*
+			 * New game
+			 */
 			if (gp.ui.cursorNum == 0) {
 				gp.ui.titleScreenState = 1;
 			} 
 			else if (gp.ui.cursorNum == 1) {
-				//load save
+				/*
+				 * Load save
+				 */
 			} else if (gp.ui.cursorNum == 2) {
-				//settings
+				/*
+				 * Settings
+				 */
 			} else {
 				System.exit(0);
 			}
@@ -122,12 +126,16 @@ public class KeyHandler implements KeyListener{
 		} 
 		
 		if (code == KeyEvent.VK_ENTER) {
-			//Blue boy
+			/*
+			 * Blue boy
+			 */	
 			if (gp.ui.cursorNum == 0) {
 				gp.gameState = gp.playState;
 				gp.playMusic(0);
 			} else {
-				//Yellow Girl
+				/*
+				 * Yellow girl
+				 */	
 			}
 		}
 		
@@ -140,7 +148,9 @@ public class KeyHandler implements KeyListener{
 	}
 	
 	private void playState (int code) {
-		
+		/*
+		 * Player moving
+		 */	
 		if (code == KeyEvent.VK_W) {
 			upPressed = true;
 		} 
@@ -192,15 +202,20 @@ public class KeyHandler implements KeyListener{
 			gp.player.playerAttack = true;
 		}
 		
-		
-		//eventHandling
-		//If player is standing near an interactive event, then they can press X to trigger the interaction
+		/*
+		 * Player stands near interactive event and can trigger events
+		 */
 		if (gp.eHandler.getInteraction()) {
 			if (code == KeyEvent.VK_X) {
 				allowInteraction = true;
 			}
 		}
 	}
+	
+	
+	/*
+	 * Game state methods
+	 */
 	
 	private void pauseState (int code) {
 
@@ -227,7 +242,9 @@ public class KeyHandler implements KeyListener{
 	public void keyReleased(KeyEvent e) {
 		
 		int code = e.getKeyCode();
-		//Check if WASD is in use
+		/*
+		 * Check if keys are in use
+		 */
 		if (code == KeyEvent.VK_W) {
 			upPressed = false;
 		} 

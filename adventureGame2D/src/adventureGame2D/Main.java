@@ -14,14 +14,15 @@ public class Main {
 	window.setResizable (false);
 	window.setTitle("Man having a mid-life crisis set out to beat up some monsters");
 
-	
-	//Game panel object
 	GamePanel gamePanel = new GamePanel();
 	window.add(gamePanel);
 		
-	
-	window.pack(); //Resizes the frame so all contents are at or above preferred size
-	window.setLocationRelativeTo(null);//Center the GUI on the screen
+	/*
+	 * Resizes the frame so all contents are at or above preferred size
+	 * Center the GUI on the screen
+	 */
+	window.pack(); 
+	window.setLocationRelativeTo(null);
 	window.setVisible(true);
 	
 	gamePanel.GameSetup();

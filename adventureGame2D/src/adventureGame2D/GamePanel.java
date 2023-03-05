@@ -62,15 +62,19 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	
 	
-	//FPS
+	/*
+	 * FPS variables
+	 */
 	private int FPS = 60, FPS_x = screenWidth - tileSize*3, FPS_y = tileSize;
 	private String FPS_text = "";
 	
 	//******************************************************************************************************************		
-		//------------------------------IN GAME OBJECTS----------------------------------------------------------------------//
-		//*****************************************************************************************************************
+	//------------------------------IN GAME OBJECTS----------------------------------------------------------------------//
+	//*****************************************************************************************************************
 	
-	//Game Objects
+	/*
+	 * Game Objects
+	 */
 	TileManager tileM = new TileManager(this);
 	public KeyHandler keyH = new KeyHandler(this);
 	public CollisionCheck cChecker = new CollisionCheck(this);
@@ -78,7 +82,9 @@ public class GamePanel extends JPanel implements Runnable{
 	public EventHandler eHandler = new EventHandler (this);
 	public AssetPlacement assetPlace = new AssetPlacement(this);
 	
-	//Entities
+	/*
+	 * Entities
+	 */
 	Thread gameThread;
 	public Player player = new Player(this, keyH);
 	public ArrayList <Entity> NPCs = new ArrayList <> (); 
@@ -88,7 +94,9 @@ public class GamePanel extends JPanel implements Runnable{
 	private ArrayList<Entity> entityList = new ArrayList<>();
 	
 	
-	//sound
+	/*
+	 * Sound
+	 */
 	Sound music = new Sound();
 	Sound se = new Sound();
 	
@@ -131,10 +139,17 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	@Override
-	//Overriding the run method from the Thread class
-	//Game loop
+	/*
+	 * Overriding the run method from the Thread class
+	 * 
+	 * Game Loop
+	 */
+	
 	public void run() {
-		double drawInterval = 1000000000/FPS; //Draw the screen every 0.0166 seconds
+		/*
+		 * Draw the screen every 0.0166 seconds
+		 */
+		double drawInterval = 1000000000/FPS; 
 		double delta = 0;
 		long lastTime = System.nanoTime();
 		long currentTime;
@@ -146,13 +161,17 @@ public class GamePanel extends JPanel implements Runnable{
 			
 			currentTime = System.nanoTime();
 			
-			//Find the change in time
+			/*
+			 * Find change in time
+			 */
 			delta += (currentTime - lastTime)/drawInterval;
 			timer += (currentTime - lastTime);
 			lastTime = currentTime;
 			
 			
-			//When delta reach drawInterval that is equals to 1
+			/*
+			 * When delta reach drawInterval that is equals to 1
+			 */
 			if (delta >= 1) {
 				
 				//1. Update information - character position
@@ -164,7 +183,9 @@ public class GamePanel extends JPanel implements Runnable{
 				++drawCount;
 				
 			}
-			//FPS counter
+			/*
+			 * FPS counter
+			 */
 			if (timer >= 1000000000) {
 				FPS_text = "FPS: "+ drawCount;	
 				timer = 0;
@@ -180,20 +201,24 @@ public class GamePanel extends JPanel implements Runnable{
 	
 
 //************************************ GAME LOOP METHODS**************
-//Takes in KeyH inputs and then updates character model
+/*
+ * Takes in KeyH inputs and updates character model
+ */
 public void update() {
 	
-	
 	if (gameState == playState) {
-		//Player
+		/*
+		 * Update entities
+		 */
 		player.update();
-		//NPCs
 		this.updateEntities(objects);
 		this.updateEntities(NPCs);
 		this.updateEntities(monsters);
 		
 	} else {
-		//nothing happens
+		/*
+		 * Nothing happens
+		 */
 	}
 	
 }
@@ -201,10 +226,14 @@ public void update() {
 
 public void paintComponent (Graphics g) {
 	
-	//Calling parent class JPanel
+	/*
+	 * Calling parent class JPanel
+	 */
 	super.paintComponent(g);
 	
-	//Set 1D graphics to 2d Graphics
+	/*
+	 * Set 1D graphics to 2D Graphics
+	 */
 	Graphics2D g2 = (Graphics2D)g;
 	
 	if (gameState == titleState) {
@@ -212,18 +241,23 @@ public void paintComponent (Graphics g) {
 		
 	} else {
 	
-		//Draw the tiles first before the player characters
-		//TILE
+		/*
+		 * Draw the tiles first before the player characters
+		 */
 		tileM.draw(g2);
 	
 		entityList.add(player);
 	
-		//Add both npcs and objects to the array list 
+		/*
+		 * Add both NPCs and objects to the array list 
+		 */
 		this.addtoEntityList(NPCs);
 		this.addtoEntityList(objects);
 		this.addtoEntityList(monsters);
 		
-		//Sort the entityList
+		/*
+		 * Sort entityList
+		 */
 		Collections.sort(entityList, new Comparator<Entity>() {
 
 			@Override
@@ -236,7 +270,9 @@ public void paintComponent (Graphics g) {
 			
 		});
 		
-		//Draw entities
+		/*
+		 * Draw entities
+		 */
 		for (Entity currentEntity : entityList) {
 			if (currentEntity != player) {
 				currentEntity.draw(g2, this);
@@ -245,12 +281,16 @@ public void paintComponent (Graphics g) {
 				
 			}
 		}
-		//Empty entity list after drawing
+		/*
+		 * Empty entity list after drawing
+		 */
 		entityList.clear();
 		
 		ui.draw(g2);
 	
-	//draws FPS and player location
+	/*
+	 * Draws FPS and player location
+	 */
 		if (keyH.FPS_display) {
 			g2.setColor(Color.white);
 			g2.setFont(g2.getFont().deriveFont(Font.PLAIN,25));
@@ -265,7 +305,9 @@ public void paintComponent (Graphics g) {
 
 }
 
-	//Music playing methods
+	/*
+	 * Music playing methods
+	 */
 	public void playMusic (int i) {
 		music.setFile(i);
 		music.play();
@@ -282,7 +324,9 @@ public void paintComponent (Graphics g) {
 	}
 	
 	
-	//Add from array to array List
+	/*
+	 * Add from array to array List
+	 */
 	private final void addtoEntityList (ArrayList <Entity> entities) {
 		for (Entity currentEntity : entities) {
 			if (currentEntity != null) {

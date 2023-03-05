@@ -21,26 +21,36 @@ public class UI {
 	
 	GamePanel gp;
 	Graphics2D g2;
-	//Sub-states
-	//0 - welcome screen; 1 - story paths
+	/*
+	 * Sub-states
+	 * 0 - welcome screen; 1 - story paths
+	 */
 	public int titleScreenState = 0;
 	
-	//Quotes
+	/*
+	 * Quotes
+	 */
 	PauseQuotes pauseQuotes = new PauseQuotes();
 	String pauseText = "", moveDialogue = "Press ENTER to continue...";
 	
-	//Stylizing
+	/*
+	 * Font stylize
+	 */
 	Font arial_30, arial_50, arial_70, maruMonica, purisa;
 	//Dialogue
 	private String currentDialogue = "";	
 	public void setCurrentDialogue (String dialogue) { currentDialogue = dialogue;}
 	public int cursorNum = 0;
 	
-	//Drawing hearts
+	/*
+	 * Draw hearts on Game UI
+	 */
 	private BufferedImage heart_full, heart_half, heart_blank;
 	
 	
-	//Drawing and setting UI
+	/*
+	 * Drawing and setting UI
+	 */
 	public UI(GamePanel gp) {
 		this.gp = gp;
 		
@@ -54,12 +64,13 @@ public class UI {
 			InputStream is2 = getClass().getResourceAsStream("/fonts/x12y16pxMaruMonica.ttf");
 			maruMonica = Font.createFont(Font.TRUETYPE_FONT, is2);
 		} catch (FontFormatException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		
-		//Create HUD 
+		/*
+		 * Create HUD 
+		 */
 		Entity heart = new ObjectHeart(gp);
 		heart_full = heart.image;
 		heart_half = heart.image2;
@@ -68,7 +79,9 @@ public class UI {
 	}
 	
 
-	
+	/*
+	 * Gets the horizontal center length of text
+	 */
 	protected int getXCenter (String text) {
 		int str_length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 		int x = gp.screenWidth/2 - str_length/2;
@@ -77,7 +90,9 @@ public class UI {
 	
 	
 	
-	//Draws the UI
+	/*
+	 * Draws the UI
+	 */
 	public void draw(Graphics2D g2) {
 		
 		this.g2 = g2;
@@ -119,7 +134,9 @@ public class UI {
 	}
 	
 
-	//draw screen when paused
+	/*
+	 * Draw screen when paused
+	 */
 	protected void drawPauseScreen () {
 		
 	
@@ -141,29 +158,31 @@ public class UI {
 		
 	}
 	
+	/*
+	 * Draws a random quote from Pause Quote arraylist
+	 */
 	protected void drawRandomPauseQuotes() {
-		//Draws a random quote from Pause Quote array
 		g2.setFont(purisa);
 		g2.setFont(g2.getFont().deriveFont(Font.ITALIC, 30));
 		int max = 2, 
 				min = 0,
 				range = max - min + 1,
-				rand = (int)(Math.random()*range)+min;
+				rand = (int)(Math.random()*range) + min;
 		if (gp.keyH.pauseQuote) {
 			pauseText = pauseQuotes.getPauseQuote(rand);
-			gp.keyH.pauseQuote=false;
+			gp.keyH.pauseQuote = false;
 		}
 		int y = gp.screenHeight/2 + gp.tileSize*2, x = getXCenter (pauseText);
 		g2.drawString(pauseText,x, y);
 		
 	}
-	
+	/*
+	 * Draws first title screen
+	 */
 	protected void drawTitleScreen() {
 		g2.setColor(new Color (70,120,80));
 		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
-		if (titleScreenState == 0) {
-			//Draw background
-			
+		if (titleScreenState == 0) {			
 			
 			//Title name
 			g2.setFont(maruMonica);
@@ -185,7 +204,9 @@ public class UI {
 			y += gp.tileSize*1.5;
 			g2.drawImage(gp.player.down1, x, y, gp.tileSize*4, gp.tileSize*4, null);
 			
-			//Menu options
+			/*
+			 * Menu options
+			 */
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
 			text = "NEW GAME";
 			x = getXCenter(text);
@@ -210,9 +231,12 @@ public class UI {
 			y += gp.tileSize;
 			g2.drawString(text,x, y);
 			if (cursorNum == 3) {g2.drawString(">", x-gp.tileSize, y);}
+			
 		} else if (titleScreenState == 1) {
 			
-			//STORY PATH SELECTION
+			/*
+			 * Selects story path 
+			 */
 			g2.setColor(Color.white);
 			g2.setFont(g2.getFont().deriveFont(42F));
 			
@@ -246,7 +270,9 @@ public class UI {
 		int currentPlayerLife = gp.player.getLife();
 		
 		
-		//Draw blank hearts - max hp
+		/*
+		 * Draw blank hearts and fill it up to max HP
+		 */
 		while (i < playerMaxLife/2) {
 			g2.drawImage(heart_blank, xLocation, yLocation, null);
 			++i;
@@ -254,17 +280,23 @@ public class UI {
 		}
 		
 		
-		//Reset drawing location
+		/*
+		 * Reset drawing location of heart
+		 */
 		xLocation = gp.tileSize/2;
 		yLocation = gp.tileSize/2;
 		i = 0;
 		
-		//Draw current hp
+		/*
+		 * Draw current HP
+		 */
 		
 		while (i < currentPlayerLife) {
 			g2.drawImage(heart_half, xLocation, yLocation, null);
 			++i;
-			//if it's an odd value, then continue to draw again
+			/*
+			 * If it's an odd value, then continue to draw again until full
+			 */
 			if (i < currentPlayerLife) {
 				g2.drawImage(heart_full, xLocation, yLocation,null);
 			}
@@ -274,9 +306,11 @@ public class UI {
 	
 		
 	}
-	
+	/*
+	 * Draws dialogue window
+	 */
 	protected void drawDialogueScreen() {
-		// Dialogue window
+		
 		int x = gp.tileSize*2, 
 			y = gp.tileSize/2, 
 			width = gp.screenWidth - (gp.tileSize*4), 
@@ -288,6 +322,7 @@ public class UI {
 		int dialogueX = gp.tileSize*3-20,
 			dialogueY = gp.tileSize/2 +gp.tileSize;
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
+		
 		//Split the string into many parts
 		for (String line : currentDialogue.split("\n")) {
 			g2.drawString(line, dialogueX, dialogueY);
@@ -302,7 +337,9 @@ public class UI {
 		g2.drawString(moveDialogue, dialogueX, dialogueY);
 	}
 	
-	//Receives input and actually draw the window inside the dialogue box
+	/*
+	 * Receives input and draw the window inside the dialogue box
+	 */
 	protected void drawDialogueWindow (int x, int y, int width, int height) {
 		
 		//black color
@@ -320,7 +357,9 @@ public class UI {
 	}
 	
 	
-	//Method for drawing a simple string above the player head for event interaction
+	/*
+	 * Draws a simple interact notification above the head when
+	 */
 	public void drawInteractionKey() {
 			String text = "X Interact";
 			int x = getXCenter(text) - gp.tileSize/4

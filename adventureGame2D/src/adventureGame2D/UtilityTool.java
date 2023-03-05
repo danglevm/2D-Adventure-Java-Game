@@ -4,11 +4,14 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class UtilityTool {
-	//put useful functions in here
 	
+	/*
+	 * Meant to store useful  functions
+	 */
 	
-	
-	//scale tile images
+	/*
+	 * Scale tile images
+	 */
 	public BufferedImage scaleImage (BufferedImage original, int width, int height) {
 		//Scale the image before being drawn - pass width, height, image type
 		BufferedImage scaledImage = new BufferedImage(width, height, original.getType());

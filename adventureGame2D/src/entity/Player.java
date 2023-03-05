@@ -19,18 +19,23 @@ import object.ObjectWoodenShield;
 
 public class Player extends Entity {
 	
-	//Variables
+	/*
+	 * Display variables
+	 */
+	public final int screenX;
+	public final int screenY;
 	KeyHandler keyH;
 	BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 	
-
-	//Where the player is drawn on the screen - camera 
-	public final int screenX;
-	public final int screenY;
+	/*
+	 * Variables for applying opacity to player
+	 */
 	private boolean switchOpacity;
-	private int switchOpacityCounter = 0;
+	private int switchOpacityCounter;
 
-	//attacking and stamina counts
+	/*
+	 * Player attack and stamina
+	 */
 	private int attackCost, 
 				attackStamina, 	
 				staminaRechargeCounter;
@@ -69,8 +74,11 @@ public class Player extends Entity {
 
 	
 	
-	
-	//-------------------------------CONSTRUCTORS------------------
+	/*
+	 * 
+	 * CONSTRUCTORS
+	 * 
+	 */
 	public Player (GamePanel gp, KeyHandler keyH) {
 		super(gp);
 		this.keyH = keyH;
@@ -198,7 +206,11 @@ public class Player extends Entity {
 	
 	public void update() 
 	{
-		collisionOn = false;				
+		collisionOn = false;
+		
+		/*
+		 * Player presses attack key - J
+		 */
 		if (playerAttack) 
 		{
 			if (attackStamina >= attackCost) {
@@ -206,46 +218,61 @@ public class Player extends Entity {
 				staminaRechargeCounter = 0;
 				attack();
 				
-				
-				
 			} else {
 				playerAttack = false;
 			}
 			
+		/*
+		 * Movement and dialogue keys
+		 */
 		} else if (keyH.upPressed||keyH.downPressed||
 				keyH.leftPressed||keyH.rightPressed || keyH.dialoguePressed)
 		{
 			
-			//X and Y values increase as the player moves right and down
-			//Check tile collision
 			
+			/*
+			 * Check tile collision
+			 */
+			gp.cChecker.CheckTile(this);
 			
-			//monster collision;
-			//this might return 9999
+			/*
+			 * Monster collision
+			 */
+			
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
+			
+			/*
+			 * Monster damage contact
+			 */
+			
 			if (monsterIndex != 9999) {
 				gp.monsters.get(monsterIndex).damageContact(this);
 				this.collisionOn = false;
 				gp.playSE(6);
 			}
 			
-			//Collision checker receive subclass
-			gp.cChecker.CheckTile(this);
 			
-			//Check event collision
+			/*
+			 * Check EVENT collision
+			 */
 			gp.eHandler.checkEvent();
 			
-			//Check object collision
+			/*
+			 * Check OBJECT collision
+			 */
 			ObjectPickUp(gp.cChecker.checkObject(this, true));
 			
-			
-			//check NPC collision
+			/*
+			 * Check NPC collision
+			 */
 			if (!collisionNPC(gp.cChecker.checkEntity(this, gp.NPCs)) && keyH.dialoguePressed) {
 				keyH.dialoguePressed = false;
 			}
 			
 			
-	
+			/*
+			 * X and Y values increase as the player moves right and down
+			 */
 			if (keyH.upPressed) {
 				this.direction = "up";
 				if (!collisionOn && gp.gameState == gp.playState) {worldY -= speed;} 
@@ -263,13 +290,10 @@ public class Player extends Entity {
 				if (!collisionOn && gp.gameState == gp.playState) {worldX += speed;}
 			}
 		
-			
-			
-			
-			
-			
+			/*
+			 * Player image changes every 12 frames
+			 */
 			++spriteCounter;
-			//Player image changes every 12 frames
 			if (spriteCounter > 12) {
 				if (spriteNum) {
 					spriteNum = false;
@@ -278,16 +302,18 @@ public class Player extends Entity {
 				else if (!spriteNum) {
 					spriteNum = true;
 				}
+				
 				spriteCounter = 0;
 			}
 			
 		}
 		
-		//Call superclass invincibility time
+		/*
+		 * Check INVINCIBILITY time
+		 */
 		this.checkInvincibilityTime();
 		
-	}//update
-	
+	}
 	private final void ObjectPickUp(int index) {
 		
 		if (index != 9999) {
@@ -296,7 +322,10 @@ public class Player extends Entity {
 	
 	private final boolean collisionNPC (int i) {
 		if (i != 9999) {
-			//player touching npc
+			
+			/*
+			 * Player collides with NPC and in dialogue state
+			 */
 			if (keyH.dialoguePressed) {
 				gp.gameState = gp.dialogueState;
 				gp.NPCs.get(i).speak();
@@ -308,21 +337,22 @@ public class Player extends Entity {
 	}
 	
 	public void draw(Graphics2D g2) {
-		/*
-		g2.setColor(Color.yellow);
-		g2.fillRect(x, y, gp.tileSize,gp.tileSize );
-		*/
+	
 		
 		
 		BufferedImage image = null;
 		int tempScreenX = screenX, tempScreenY = screenY;
 		
-		//stamina starts recharging after 1 second of not attacking and attackStamina recharges
+		/*
+		 * Stamina starts to recharge after 1 second of not attacking
+		 */
 		if (attackStamina < maxStamina && staminaRechargeCounter > 60) {
 			++attackStamina;
 		}
 	
-		//attack cool down period is on
+		/*
+		 * Attack doesn't have enough stamina 
+		 */
 		if (!playerAttack || attackStamina < attackCost) {
 		switch (direction) {
 		case "up":
@@ -336,7 +366,10 @@ public class Player extends Entity {
 			}
 		
 		
-		} //attack cool down period is over - stamina
+		} 
+		/*
+		 * Player attacks with enough stamina
+		 */
 			else if (playerAttack && (attackStamina >= attackCost) )
 		{
 		
@@ -354,7 +387,9 @@ public class Player extends Entity {
 			}	
 		} 
 		
-		//Draw effect when player gets damaged
+		/*
+		 * draw effects when damaged
+		 */
 		if (invincibility) {
 			++switchOpacityCounter;
 			if (!switchOpacity && switchOpacityCounter > 3) {
@@ -367,23 +402,25 @@ public class Player extends Entity {
 			}
 		}
 		
-		
-		//stamina bar not hidden
+		/*
+		 * stamina bar not hidden
+		 */
 		if (staminaEnabled) {
 			double singleStaminaBar = (double) gp.tileSize/this.maxStamina,
 					currentStaminaBar = singleStaminaBar * this.attackStamina;
-			//Draw stamina bar
-			//Gray outline
-			//x, y, width, height
+			
+			/*
+			 * draw gray outline
+			 */
 			
 			g2.setColor(new Color(35, 35, 35));
 			g2.fillRect(screenX - 1 , screenY - 21, gp.tileSize + 2, 12);
 			
-			//Blue stamina bar
+			/*
+			 * draw blue stamina bar
+			 */
 			g2.setColor(new Color(0,100, 255));
 			g2.fillRect(screenX, screenY - 20, (int) currentStaminaBar, 10);
-			
-		
 			
 			if (attackStamina == maxStamina ) {
 				staminaEnabled = false;
@@ -394,14 +431,11 @@ public class Player extends Entity {
 		
 		++staminaRechargeCounter;
 		
-		
-		
-		
-		//16 pixels
+		/*
+		 * draw image
+		 */
 		g2.drawImage(image, tempScreenX, tempScreenY, null);
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-		
-		
 			
 	}
 	
@@ -419,45 +453,56 @@ public class Player extends Entity {
 	}
 	
 	private final void attack() {
-		//Attacking
+
 		++spriteCounter;
 		
-		//10 frames of short attack animation
+		/*
+		 * 10 frames of short attack animation
+		 */
 		if (spriteCounter < 10) {
 			spriteNum = true;
-		//next 20 frames of long attack animation
+		/*
+		 * Next 20 frames of long attack animation
+		 */
 		} else if (spriteCounter < 30) {
 			spriteNum = false;
 
-			//Save player's current location on map
+		/*
+		* Save player's current location on map
+		*/
 			int currWorldX = worldX, 
 				currWorldY = worldY,
 				currWidth = solidArea.width,
 				currHeight = solidArea.height;
 			
 		switch (this.direction) {
-		//shift collision area back by the attack area length
+		
+		/*
+		 * Shift collision area back by the attack area length to account for image stretch
+		 */
 			case "up": worldY -= attackArea.height; break;
 			case "down": worldY += attackArea.height; break;
 			case "left": worldX -= attackArea.width;  break;
 			case "right": worldX += attackArea.width; break;
 		}
 	
-		
 		solidArea.width = attackArea.width;
 		solidArea.height = attackArea.height;
 		
 		int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
 		damageMonster(monsterIndex);
 		
-		//After checking collision, restore original data
+		/*
+		 * After checking collision, restore original data
+		 */
 		worldX = currWorldX;
 		worldY = currWorldY;
 		solidArea.width = currWidth;
 		solidArea.height = currHeight;
 			 
-		//Final frames of receding attack animation
-		
+		/*
+		 * Final frames of receding attack animation
+		 */
 		} else {
 			
 			spriteNum = true;
@@ -473,7 +518,9 @@ public class Player extends Entity {
 		if (i != 9999) {
 			if (!gp.monsters.get(i).invincibility) {
 				gp.playSE(5);
-				//attack lands
+				/*
+				 * Attack lands
+				 */
 				gp.monsters.get(i).setLife(gp.monsters.get(i).getLife() - 1);
 				gp.monsters.get(i).invincibility = true;
 				gp.monsters.get(i).monsterDamageReaction(this);
@@ -484,9 +531,15 @@ public class Player extends Entity {
 				}
 			}
 		} else {
-			//Miss the attack
+			/*
+			 * Attack misses
+			 */
 		}
 	}
+	
+	/*
+	 * Attack and defense get functions
+	 */
 	
 	private int getAttack () {
 		return strength += currentWeapon.getAttackValue();

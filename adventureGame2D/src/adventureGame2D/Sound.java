@@ -9,14 +9,14 @@ import javax.sound.sampled.Clip;
 
 public class Sound {
 
-	//Open audio files
+
 	Clip clip;
-	
-	//Store file path of sound files
 	ArrayList <URL> soundURL = new ArrayList<>();
 	
 	public Sound() {
-		//link to all sounds file
+		/*
+		 * Link to all sounds file
+		 */
 		soundURL.add (getClass().getResource("/sounds/game/BlueBoyAdventure.wav")); //0
 		soundURL.add (getClass().getResource("/sounds/objects/coin.wav")); //1
 		soundURL.add (getClass().getResource("/sounds/objects/powerup.wav")); //2
@@ -33,7 +33,9 @@ public class Sound {
 	public void setFile(int i) {
 		try {
 			
-			//Obtain the clip that can be used for playback
+			/*
+			 * Obtain clip to be used for playback
+			 */
 			AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL.get(i));
 			clip = AudioSystem.getClip();
 			clip.open(ais);

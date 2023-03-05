@@ -50,7 +50,9 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	public final void setAction() {
 	++actionLock;
 		
-		//After every a certain pseudo random amount of time
+	/*
+	 * Changes directions every a certain pseudo random amount of time
+	 */
 	if (actionLock == 240) {
 		Random random = new Random();
 		int i = random.nextInt(100) + 1;//1 to 100
@@ -68,6 +70,10 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 		actionLock = 0;
 		}
 	}
+	
+	/*
+	 * Player reaction functions
+	 */
 	
 	@Override
 	public final void damageContact(Entity entity) {

@@ -18,7 +18,9 @@ public class TileManager extends Tile{
 	GamePanel gp;
 	public ArrayList<Tile> tilesList;
 	public int mapTileNum[][];
-	//Change file path for maps
+	/*
+	 * Change file path for maps
+	 */
 	String filePath1 = "/maps/spawnmap";
 	
 	//-------------------------------CONSTRUCTORS------------------
@@ -31,10 +33,11 @@ public class TileManager extends Tile{
 		loadMap(filePath1);
 	}
 	//-------------------------------CLASS METHODS------------------
-	//Store tile images as entries inside the Tile array
 	public void getTileImage() {
 		
-			//Streams (sequences of bytes) are searched and found, then decoded into buffered image and stored into an object
+			/*
+			 * Streams (sequences of bytes) are searched and found, then decoded into buffered image and stored into an object
+			 */
 			tileSetup(0, "000", false);
 			tileSetup(1, "001", false);
 			tileSetup(2, "002", false);
@@ -86,7 +89,9 @@ public class TileManager extends Tile{
 		 
 		UtilityTool uTool = new UtilityTool();
 		
-		//handle image instantiation, import, scale and collision
+		/*
+		 * Handle image instantiation, import, scale and collision
+		 */
 		try {
 			tilesList.add(new Tile());
 			tilesList.get(index).image = ImageIO.read(getClass().getResourceAsStream("/tiles/"+imageName+".png"));
@@ -103,10 +108,17 @@ public class TileManager extends Tile{
 	
 
 	public void loadMap(String filePath) {
-		try{
-			//Store link to text file as variable and read the text file
+		
+		try
+		{
+			/*
+			 * Store link to text file as variable and read the text file
+			 */
 			InputStream is = getClass().getResourceAsStream(filePath);
-			//Convert bytes from the stream into chars (in this case, numbers 0 - 2)
+			
+			/*
+			 * Convert bytes from the stream into chars (in this case, numbers 0 - 2)
+			 */
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			int col = 0,
 				row = 0;
@@ -115,7 +127,9 @@ public class TileManager extends Tile{
 				String line = br.readLine();
 				
 				while (col < gp.maxWorldCol) {
-					//Get the numbers one by one and store them into mapTileNum
+					/*
+					 * Get the numbers one by one and store them into mapTileNum
+					 */
 					String numbers[] = line.split(" ");
 					
 					int num = Integer.parseInt(numbers[col]);
@@ -135,19 +149,30 @@ public class TileManager extends Tile{
 	}
 	
 	
-	//Draw tiles in the background
+	/*
+	 * Draw tiles in the background
+	 */
 	public void draw(Graphics2D g2) {
 		
 		int worldCol = 0;
 		int worldRow = 0;
 
 		
-		//While the tiles are still within max row and column size, draw the tile
+		/*
+		 * While the tiles are still within max row and column size, draw the tile
+		 */
 		while (worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
-			//Retrieve the tile from mapTileNum
+			/*
+			 * Retrieve the tile from mapTileNum
+			 */
 			int tileNum = mapTileNum[worldCol][worldRow];
-			//Find the drawing location
-			//Render the area viewable only in the player field of view
+			/*
+			 * Find the drawing location
+			 */
+			
+			/*
+			 * Render the area viewable only in the player field of view
+			 */
 			int worldX = worldCol * gp.tileSize;
 			int worldY = worldRow * gp.tileSize;
 			int screenX = worldX - gp.player.worldX + gp.player.screenX;
