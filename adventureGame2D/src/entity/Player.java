@@ -13,6 +13,9 @@ import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
 import adventureGame2D.UI;
 import adventureGame2D.UtilityTool;
+import object.ObjectInterface;
+import object.ObjectSword;
+import object.ObjectWoodenShield;
 
 public class Player extends Entity {
 	
@@ -54,8 +57,8 @@ public class Player extends Entity {
 	/*
 	 * Equipped weapon and shield
 	 */
-	private Entity currentWeapon,
-				   currentShield;
+	private ObjectInterface currentWeapon,
+				   			currentShield;
 				
 	/*
 	 * Item attributes
@@ -112,45 +115,82 @@ public class Player extends Entity {
 	
 	
 	private final void setDefaultPlayerValues() {
-		//Default player values
+
+		/*
+		 * Starting location
+		 */
 		worldX = gp.tileSize * 122;
-		worldY= gp.tileSize * 132;
-		speed = 3;
-		entityType = 0;
+		worldY = gp.tileSize * 132;
 		direction = "down";
-		maxLife = 8;
-		life = maxLife;
 		
-		//x, y, width, length
+		
+		/*
+		 * Player collision area
+		 */
 		solidArea = new Rectangle();
 		solidArea.x = 8;
 		solidArea.y = 8;
-		//Default values so x and y values of the rectangle can be changed later
 		solidAreaDefaultX = solidArea.x;
 		solidAreaDefaultY = solidArea.y;
 		solidArea.width = 24;
-		//attack cooldown period has not 
 		solidArea.height = 32;
 		
 		
-		//Attack area - could really increase this for potions
+		/*
+		 * Attack area - to be increased for potions
+		 */
 		attackArea.width = 32;
 		attackArea.height = 32;
 		playerAttack = false;
 		
 		
-		//stamina
+		/*
+		 * Stamina
+		 */
 		attackCost = 60;
-		maxStamina = 120;
 		attackStamina = maxStamina;
 		staminaRechargeCounter = 0;
 		staminaEnabled = false;
 		
 		
-		//player opacity
+		/*
+		 * Opacity
+		 */
 		switchOpacity = false;
 		switchOpacityCounter = 0;
 		
+		
+		/**
+		 * Player attributes
+		 * @var maxStamina player's max stamina pool. Default: 120. Max: 300
+		 * @var speed player's speed. Default: 3. Max: 5
+		 * @var level player's level. Default: 1. Max: 10/15?
+		 * @var strength natural amount of damage deals. Default 0. Max: 3
+		 * @var defense natural amount of damage negated. Default: 0. Max: 3
+		 * @var dexterity chance of dodging an enemy attack. Default: 0. Max: 20 (%)
+		 * @var coin amount of coins player has. Def: 0. Max: 999
+		 */
+		entityType = 0;
+		name = "player";
+		maxStamina = 120;
+		speed = 3;
+		level = 1;
+		strength = 0;
+		dexterity = 0;
+		coin = 0;
+		experience = 0;
+		nextLevelExperience = 9;
+		maxLife = 8;
+		life = maxLife;
+		currentWeapon = new ObjectSword(gp);
+		currentShield = new ObjectWoodenShield(gp);
+		
+		/**
+		 * @var attackVal natural player's strength + weapon's attack value
+		 * @var defenseVal natural player's defense + shield/armor's defense value
+		 */
+		attackVal = getAttack();
+		defenseVal = getDefense();
 		
 	}
 	
@@ -446,6 +486,14 @@ public class Player extends Entity {
 		} else {
 			//Miss the attack
 		}
+	}
+	
+	private int getAttack () {
+		return strength += currentWeapon.getAttackValue();
+	}
+	
+	private int getDefense () {
+		return defense += currentShield.getDefenseValue();
 	}
 
 	
