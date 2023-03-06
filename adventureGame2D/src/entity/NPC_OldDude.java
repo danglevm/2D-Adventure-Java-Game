@@ -32,14 +32,14 @@ public class NPC_OldDude extends Entity implements NPC_Interface{
 	//-------------------------------NPC RENDER METHODS------------------
 	public void getImage() {
 		
-		up1 = setupCharacter("oldman_up_1", "/npc/", gp.tileSize, gp.tileSize);
-		up2 = setupCharacter("oldman_up_2", "/npc/", gp.tileSize, gp.tileSize);
-		down1 = setupCharacter("oldman_down_1", "/npc/", gp.tileSize, gp.tileSize);
-		down2 = setupCharacter("oldman_down_2", "/npc/", gp.tileSize, gp.tileSize);
-		left1 = setupCharacter("oldman_left_1", "/npc/", gp.tileSize, gp.tileSize);
-		left2 = setupCharacter("oldman_left_2", "/npc/", gp.tileSize, gp.tileSize);
-		right1 = setupCharacter("oldman_right_1", "/npc/", gp.tileSize, gp.tileSize);
-		right2 = setupCharacter("oldman_right_2", "/npc/", gp.tileSize, gp.tileSize);
+		up1 = setupEntity("oldman_up_1", "/npc/", gp.tileSize, gp.tileSize);
+		up2 = setupEntity("oldman_up_2", "/npc/", gp.tileSize, gp.tileSize);
+		down1 = setupEntity("oldman_down_1", "/npc/", gp.tileSize, gp.tileSize);
+		down2 = setupEntity("oldman_down_2", "/npc/", gp.tileSize, gp.tileSize);
+		left1 = setupEntity("oldman_left_1", "/npc/", gp.tileSize, gp.tileSize);
+		left2 = setupEntity("oldman_left_2", "/npc/", gp.tileSize, gp.tileSize);
+		right1 = setupEntity("oldman_right_1", "/npc/", gp.tileSize, gp.tileSize);
+		right2 = setupEntity("oldman_right_2", "/npc/", gp.tileSize, gp.tileSize);
 		
 
 		
