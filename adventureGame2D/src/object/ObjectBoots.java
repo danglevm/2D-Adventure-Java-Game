@@ -24,7 +24,7 @@ public class ObjectBoots extends Entity implements ObjectInterface {
 	public void setDefaultAttributes() {
 		name = "Boots";
 		collisionOn = false;
-		down1 = setupCharacter("boots", "/objects/equip/", gp.tileSize, gp.tileSize);
+		down1 = setupEntity("boots", "/objects/equip/", gp.tileSize, gp.tileSize);
 	}
 }
 

@@ -22,70 +22,135 @@ public class KeyHandler implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		
 		int code = e.getKeyCode();
 		
-		//title state
-		if (gp.gameState == gp.titleState) {
+	/*
+	* TITLE STATE
+	*/
+	if (gp.gameState == gp.titleState) {
+			
 			if (gp.ui.titleScreenState == 0) {
-				//Title screen
-				if (code == KeyEvent.VK_W) {
-					--gp.ui.cursorNum;
-				} 
-				if (code == KeyEvent.VK_S) {
-					++gp.ui.cursorNum;
-				} 
 				
-				if (code == KeyEvent.VK_ENTER) {
-					//new game
-					if (gp.ui.cursorNum == 0) {
-						gp.ui.titleScreenState = 1;
-					} 
-					else if (gp.ui.cursorNum == 1) {
-						//load save
-					} else if (gp.ui.cursorNum == 2) {
-						//settings
-					} else {
-						System.exit(0);
-					}
-				}
+				defaultTitleState(code);	
 				
-				if (gp.ui.cursorNum > 3) {
-					gp.ui.cursorNum = 3;
-				} 
-				if (gp.ui.cursorNum < 0) {
-					gp.ui.cursorNum = 0;
-				}
 			} else if (gp.ui.titleScreenState == 1) {
-				//Path selection screen
-				if (code == KeyEvent.VK_A) {
-					--gp.ui.cursorNum;
-				} 
-				if (code == KeyEvent.VK_D) {
-					++gp.ui.cursorNum;
-				} 
 				
-				if (code == KeyEvent.VK_ENTER) {
-					//Blue boy
-					if (gp.ui.cursorNum == 0) {
-						gp.gameState = gp.playState;
-						gp.playMusic(0);
-					} else {
-						//Yellow Girl
-					}
-				}
+				firstTitleState (code);
 				
-				if (gp.ui.cursorNum > 1) {
-					gp.ui.cursorNum = 1;
-				} 
-				if (gp.ui.cursorNum < 0) {
-					gp.ui.cursorNum = 0;
-				}
 			}
 			
 			
-	
-		
+	/*
+	* PLAY STATE
+	*/
 	} else if (gp.gameState == gp.playState) {
+		
+		playState(code);
+	
+	/*
+	* PAUSE STATE - resumes the game with escape is pressed
+	*/	
+	} else if (gp.gameState == gp.pauseState) {
+			
+		pauseState (code);
+	
+	/*
+	* DIALOGUE STATE - resumes the game with escape is pressed
+	*/
+	} else if (gp.gameState == gp.dialogueState){
+			
+		dialogueState(code);
+	 /*
+	 * DIALOGUE STATE - resumes the game with escape is pressed
+	 */		
+	} else if (gp.gameState == gp.statusState) {
+		
+			statusState (code);
+		
+		}
+	
+	}
+	
+	/**
+	 * 
+	 * PRIVATE METHODS
+	 * 
+	 **/
+	
+	private void defaultTitleState (int code) {
+		
+		if (code == KeyEvent.VK_W) {
+			--gp.ui.cursorNum;
+		} 
+		if (code == KeyEvent.VK_S) {
+			++gp.ui.cursorNum;
+		} 
+		
+		if (code == KeyEvent.VK_ENTER) {
+			/*
+			 * New game
+			 */
+			if (gp.ui.cursorNum == 0) {
+				gp.ui.titleScreenState = 1;
+			} 
+			else if (gp.ui.cursorNum == 1) {
+				/*
+				 * Load save
+				 */
+			} else if (gp.ui.cursorNum == 2) {
+				/*
+				 * Settings
+				 */
+			} else {
+				System.exit(0);
+			}
+		}
+		
+		if (gp.ui.cursorNum > 3) {
+			gp.ui.cursorNum = 3;
+		} 
+		if (gp.ui.cursorNum < 0) {
+			gp.ui.cursorNum = 0;
+		}
+		
+	}
+	
+	private void firstTitleState (int code) {
+		
+		if (code == KeyEvent.VK_A) {
+			--gp.ui.cursorNum;
+		} 
+		if (code == KeyEvent.VK_D) {
+			++gp.ui.cursorNum;
+		} 
+		
+		if (code == KeyEvent.VK_ENTER) {
+			/*
+			 * Blue boy
+			 */	
+			if (gp.ui.cursorNum == 0) {
+				gp.gameState = gp.playState;
+				gp.playMusic(0);
+			} else {
+				/*
+				 * Yellow girl
+				 */	
+			}
+		}
+		
+		if (gp.ui.cursorNum > 1) {
+			gp.ui.cursorNum = 1;
+		} 
+		if (gp.ui.cursorNum < 0) {
+			gp.ui.cursorNum = 0;
+		}
+	}
+	
+	private void playState (int code) {
+		/*
+		 * Player moving
+		 */	
 		if (code == KeyEvent.VK_W) {
 			upPressed = true;
 		} 
@@ -99,11 +164,17 @@ public class KeyHandler implements KeyListener{
 			rightPressed = true;
 		} 
 		
-		//Pause the game
+		/*
+		 * Pause the game
+		 */
 		if (code == KeyEvent.VK_ESCAPE) {
 			gp.gameState = gp.pauseState;
 			pauseQuote = true;
 		} 
+		
+		if (code == KeyEvent.VK_TAB) {
+			gp.gameState = gp.statusState;
+		}
 		
 		if (code == KeyEvent.VK_ENTER) {
 			if (!dialoguePressed) {
@@ -113,7 +184,9 @@ public class KeyHandler implements KeyListener{
 			}
 		} 
 
-		//display FPS and player X and Y
+		/*
+		 * display FPS and player X and Y
+		 */
 		if (code == KeyEvent.VK_T) {
 			if (!FPS_display) {
 				FPS_display = true;
@@ -122,55 +195,56 @@ public class KeyHandler implements KeyListener{
 			}
 		}
 		
-		//Player attack
+		/*
+		 * Trigger player attack
+		 */
 		if (code == KeyEvent.VK_J){
 			gp.player.playerAttack = true;
 		}
 		
-		
-		//eventHandling
-		//If player is standing near an interactive event, then they can press X to trigger the interaction
+		/*
+		 * Player stands near interactive event and can trigger events
+		 */
 		if (gp.eHandler.getInteraction()) {
 			if (code == KeyEvent.VK_X) {
 				allowInteraction = true;
 			}
 		}
-	
-	
-		}
-		
-		else if (gp.gameState == gp.pauseState) {
-			//Pause state
-			//Resumes the game
-			if (code == KeyEvent.VK_ESCAPE) {
-				gp.gameState = gp.playState;
-				
-			} 
-			
-		}
-		
-		else if (gp.gameState == gp.dialogueState){
-			//Dialogue state
-			if (code == KeyEvent.VK_ENTER) {
-				gp.gameState = gp.playState;
-			}
-			
-		}
-		
-		
-		
-		
-		
-		
-		
 	}
 	
 	
+	/*
+	 * Game state methods
+	 */
+	
+	private void pauseState (int code) {
+
+		if (code == KeyEvent.VK_ESCAPE) {
+			gp.gameState = gp.playState;
+			
+		} 
+	}
+	
+	private void dialogueState (int code) {
+		if (code == KeyEvent.VK_ENTER) {
+			gp.gameState = gp.playState;
+		}
+		
+	}
+	
+	private void statusState (int code) {
+		
+		if (code == KeyEvent.VK_TAB) {
+			gp.gameState = gp.playState;
+		}
+	}
 	@Override
 	public void keyReleased(KeyEvent e) {
 		
 		int code = e.getKeyCode();
-		//Check if WASD is in use
+		/*
+		 * Check if keys are in use
+		 */
 		if (code == KeyEvent.VK_W) {
 			upPressed = false;
 		} 
@@ -186,7 +260,7 @@ public class KeyHandler implements KeyListener{
 		}
 		
 	
-	}//keyReleased class
+	}
 	
 
-}//Key Handler class ends
+}

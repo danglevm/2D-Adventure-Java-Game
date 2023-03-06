@@ -25,7 +25,7 @@ public class ObjectKey extends Entity implements ObjectInterface {
 	public void setDefaultAttributes() {
 		name = "Key";
 		collisionOn = false;
-		down1 = setupCharacter("key", "/objects/environment/", gp.tileSize, gp.tileSize);
+		down1 = setupEntity("key", "/objects/environment/", gp.tileSize, gp.tileSize);
 		
 	}
 	
