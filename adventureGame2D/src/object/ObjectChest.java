@@ -14,8 +14,8 @@ public class ObjectChest extends Entity implements ObjectInterface {
 	public ObjectChest(GamePanel gp, int worldX, int worldY) {
 		super(gp);  
 		this.gp = gp;
-		this.worldX = worldX * gp.tileSize;
-		this.worldY = worldY * gp.tileSize;
+		this.WorldX = worldX * gp.tileSize;
+		this.WorldY = worldY * gp.tileSize;
 		setDefaultAttributes();
 	}
 

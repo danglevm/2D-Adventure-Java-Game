@@ -21,8 +21,8 @@ public class ObjectDoor extends Entity implements ObjectInterface {
 		name  = "Door";
 		down1 = setupCharacter("door", "/objects/environment/", gp.tileSize, gp.tileSize);
 		collisionOn = true;
-		this.worldX = worldX * gp.tileSize;
-		this.worldY = worldY * gp.tileSize;
+		this.WorldX = WorldX * gp.tileSize;
+		this.WorldY = WorldY * gp.tileSize;
 		
 		solidArea.x = 0;
 		solidArea.y = 16;

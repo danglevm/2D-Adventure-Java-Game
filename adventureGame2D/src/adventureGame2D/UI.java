@@ -13,8 +13,7 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 import entity.Entity;
-import object.Obj_key;
-import object.Object_heart;
+import object.ObjectHeart;
 import quotes.PauseQuotes;
 
 public class UI {
@@ -60,7 +59,7 @@ public class UI {
 		
 		
 		//Create HUD 
-		Entity heart = new Object_heart(gp);
+		Entity heart = new ObjectHeart(gp);
 		heart_full = heart.image;
 		heart_half = heart.image2;
 		heart_blank = heart.image3;
