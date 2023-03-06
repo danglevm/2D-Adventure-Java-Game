@@ -13,6 +13,10 @@ import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
 import adventureGame2D.UI;
 import adventureGame2D.UtilityTool;
+import object.AttackObjectInterface;
+import object.DefenseObjectInterface;
+import object.ObjectSword;
+import object.ObjectWoodenShield;
 
 public class Player extends Entity {
 	
@@ -27,11 +31,37 @@ public class Player extends Entity {
 	private boolean switchOpacity;
 	private int switchOpacityCounter = 0;
 
-	private int attackCost, attackStamina, maxStamina, staminaRechargeCounter;
+	private int attackCost, attackStamina, staminaRechargeCounter, maxStamina;
 
 	public boolean playerAttack;
 	
 	private boolean staminaEnabled;
+
+	/*
+	 * Player attributes
+	 */
+	private	String name;
+	private int level,
+				strength,
+				dexterity,
+				attack,
+				defense,
+				coin,
+				experience,
+				nextLevelExperience;
+	
+	/*
+	 * Equipped weapon and shield
+	 */
+	private AttackObjectInterface currentWeapon;
+	private	DefenseObjectInterface currentShield;
+				
+	/*
+	 * Item attributes
+	 */
+	private int attackVal,
+				defenseVal;
+				
 
 	
 	
@@ -54,28 +84,28 @@ public class Player extends Entity {
 	//-------------------------------CLASS METHODS------------------
 	private final void getPlayerImage() {
 		
-		attackUp1 = setupCharacter("boy_attack_up_1", "/player_attack/", gp.tileSize, gp.tileSize*2);
-		attackUp2 = setupCharacter("boy_attack_up_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
-		attackDown1 = setupCharacter("boy_attack_down_1", "/player_attack/", gp.tileSize, gp.tileSize * 2);
-		attackDown2 = setupCharacter("boy_attack_down_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
-		attackLeft1 = setupCharacter("boy_attack_left_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
-		attackLeft2 = setupCharacter("boy_attack_left_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
-		attackRight1 = setupCharacter("boy_attack_right_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
-		attackRight2 = setupCharacter("boy_attack_right_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackUp1 = setupEntity("boy_attack_up_1", "/player_attack/", gp.tileSize, gp.tileSize*2);
+		attackUp2 = setupEntity("boy_attack_up_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
+		attackDown1 = setupEntity("boy_attack_down_1", "/player_attack/", gp.tileSize, gp.tileSize * 2);
+		attackDown2 = setupEntity("boy_attack_down_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
+		attackLeft1 = setupEntity("boy_attack_left_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackLeft2 = setupEntity("boy_attack_left_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackRight1 = setupEntity("boy_attack_right_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackRight2 = setupEntity("boy_attack_right_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
 		
 		
 	}
 	
 	private final void getPlayerAttackImage() {
 		
-		up1 = setupCharacter("boy_up_1", "/player/", gp.tileSize, gp.tileSize);
-		up2 = setupCharacter("boy_up_2", "/player/", gp.tileSize, gp.tileSize);
-		down1 = setupCharacter("boy_down_1", "/player/", gp.tileSize, gp.tileSize);
-		down2 = setupCharacter("boy_down_2", "/player/", gp.tileSize, gp.tileSize);
-		left1 = setupCharacter("boy_left_1", "/player/", gp.tileSize, gp.tileSize);
-		left2 = setupCharacter("boy_left_2", "/player/", gp.tileSize, gp.tileSize);
-		right1 = setupCharacter("boy_right_1", "/player/", gp.tileSize, gp.tileSize);
-		right2 = setupCharacter ("boy_right_2", "/player/", gp.tileSize, gp.tileSize);
+		up1 = setupEntity("boy_up_1", "/player/", gp.tileSize, gp.tileSize);
+		up2 = setupEntity("boy_up_2", "/player/", gp.tileSize, gp.tileSize);
+		down1 = setupEntity("boy_down_1", "/player/", gp.tileSize, gp.tileSize);
+		down2 = setupEntity("boy_down_2", "/player/", gp.tileSize, gp.tileSize);
+		left1 = setupEntity("boy_left_1", "/player/", gp.tileSize, gp.tileSize);
+		left2 = setupEntity("boy_left_2", "/player/", gp.tileSize, gp.tileSize);
+		right1 = setupEntity("boy_right_1", "/player/", gp.tileSize, gp.tileSize);
+		right2 = setupEntity ("boy_right_2", "/player/", gp.tileSize, gp.tileSize);
 		
 	}
 	
@@ -120,6 +150,38 @@ public class Player extends Entity {
 		switchOpacity = false;
 		switchOpacityCounter = 0;
 		
+		/**
+		 * Player attributes
+		 * @var maxStamina player's max stamina pool. Default: 120. Max: 300
+		 * @var speed player's speed. Default: 3. Max: 5
+		 * @var level player's level. Default: 1. Max: 10/15?
+		 * @var strength natural amount of damage deals. Default 0. Max: 3
+		 * @var defense natural amount of damage negated. Default: 0. Max: 3
+		 * @var dexterity chance of dodging an enemy attack. Default: 0. Max: 20 (%)
+		 * @var coin amount of coins player has. Def: 0. Max: 999
+		 */
+		entityType = 0;
+		name = "player";
+		maxStamina = 120;
+		speed = 3;
+		level = 1;
+		strength = 0;
+		dexterity = 0;
+		coin = 0;
+		experience = 0;
+		nextLevelExperience = 9;
+		maxLife = 8;
+		life = maxLife;
+		currentWeapon = new ObjectSword(gp);
+		currentShield = new ObjectWoodenShield(gp);
+		
+		/**
+		 * @var attackVal natural player's strength + weapon's attack value
+		 * @var defenseVal natural player's defense + shield/armor's defense value
+		 */
+		attackVal = getAttack();
+		defenseVal = getDefense();
+		
 		
 	}
 	
@@ -154,7 +216,6 @@ public class Player extends Entity {
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
 			if (monsterIndex != 9999) {
 				gp.monsters.get(monsterIndex).damageContact(this);
-				this.collisionOn = false;
 				gp.playSE(6);
 			}
 			
@@ -413,6 +474,18 @@ public class Player extends Entity {
 		} else {
 			//Miss the attack
 		}
+	}
+	
+	/*
+	 * Attack and defense get functions
+	 */
+	
+	private int getAttack () {
+		return strength += currentWeapon.getAttackValue();
+	}
+	
+	private int getDefense () {
+		return defense += currentShield.getDefenseValue();
 	}
 
 	
