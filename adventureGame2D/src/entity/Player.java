@@ -40,21 +40,40 @@ public class Player extends Entity {
 	/*
 	 * Player attributes
 	 */
-	private	String name;
-	private int level,
+	public	String name;
+	public  int level,
+				mana,
 				strength,
 				dexterity,
+				stamina,
 				attack,
 				defense,
 				coin,
 				experience,
 				nextLevelExperience;
+	public String [] labels = {
+			"Name",
+			"Level",
+			"Health",
+			"Mana",
+			"Strength",
+			"Defense",
+			"Dexterity",
+			"Stamina",
+			"Speed",
+			"Weapon",
+			"Shield"
+	};
+	
 	
 	/*
 	 * Equipped weapon and shield
 	 */
 	private AttackObjectInterface currentWeapon;
-	private	DefenseObjectInterface currentShield;
+	private DefenseObjectInterface currentShield;
+	
+	public Entity equippedWeapon,
+					equippedShield;
 				
 	/*
 	 * Item attributes
@@ -163,10 +182,13 @@ public class Player extends Entity {
 		entityType = 0;
 		name = "player";
 		maxStamina = 120;
+		stamina = 0;
 		speed = 3;
 		level = 1;
+		mana = 1;
 		strength = 0;
 		dexterity = 0;
+		stamina = 0;
 		coin = 0;
 		experience = 0;
 		nextLevelExperience = 9;
@@ -175,12 +197,15 @@ public class Player extends Entity {
 		currentWeapon = new ObjectSword(gp);
 		currentShield = new ObjectWoodenShield(gp);
 		
+		equippedWeapon = new ObjectSword(gp);
+		equippedShield = new ObjectWoodenShield(gp);
+		
 		/**
 		 * @var attackVal natural player's strength + weapon's attack value
 		 * @var defenseVal natural player's defense + shield/armor's defense value
 		 */
-		attackVal = getAttack();
-		defenseVal = getDefense();
+		attackVal = strength += currentWeapon.getAttackValue();
+		defenseVal = defense += currentShield.getDefenseValue();
 		
 		
 	}
@@ -476,17 +501,6 @@ public class Player extends Entity {
 		}
 	}
 	
-	/*
-	 * Attack and defense get functions
-	 */
 	
-	private int getAttack () {
-		return strength += currentWeapon.getAttackValue();
-	}
-	
-	private int getDefense () {
-		return defense += currentShield.getDefenseValue();
-	}
-
 	
 }
