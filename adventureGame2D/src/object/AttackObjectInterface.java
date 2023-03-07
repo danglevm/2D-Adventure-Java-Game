@@ -1,6 +1,5 @@
 package object;
 
 public interface AttackObjectInterface {
-
-	abstract int getAttackValue ();
+	abstract int getAttackValue();
 }

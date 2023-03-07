@@ -68,11 +68,16 @@ public class UI {
 	
 
 	
-	protected int getXCenter (String text) {
+	private int getXCenter (String text) {
 		int str_length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-		int x = gp.screenWidth/2 - str_length/2;
-		return x;
+		return gp.screenWidth/2 - str_length/2;
 	}
+	
+	
+	private int getXValuesAlign(String text, int tailX) {
+		int str_length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+		return tailX - str_length/2;
+	};
 	
 	
 	
@@ -103,15 +108,17 @@ public class UI {
 			this.drawPlayerHearts();
 			if (gp.eHandler.getInteraction()) {
 				drawInteractionKey();
-				System.out.println(gp.eHandler.getInteraction());
 			}
 			
 		} 
 		if (gp.gameState == gp.dialogueState){
 			//dialogue state
-			
-			this.drawDialogueScreen();
-			this.drawPlayerHearts();
+			drawDialogueScreen();
+			drawPlayerHearts();
+		}
+		
+		if (gp.gameState == gp.statusState) {
+			drawStatusScreen();
 		}
 		
 		
@@ -119,7 +126,7 @@ public class UI {
 	
 
 	//draw screen when paused
-	protected void drawPauseScreen () {
+	private void drawPauseScreen () {
 		
 	
 		//Draw background
@@ -140,7 +147,7 @@ public class UI {
 		
 	}
 	
-	protected void drawRandomPauseQuotes() {
+	private void drawRandomPauseQuotes() {
 		//Draws a random quote from Pause Quote array
 		g2.setFont(purisa);
 		g2.setFont(g2.getFont().deriveFont(Font.ITALIC, 30));
@@ -157,7 +164,7 @@ public class UI {
 		
 	}
 	
-	protected void drawTitleScreen() {
+	private void drawTitleScreen() {
 		g2.setColor(new Color (70,120,80));
 		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 		if (titleScreenState == 0) {
@@ -237,7 +244,7 @@ public class UI {
 
 	}
 	
-	protected void drawPlayerHearts() {
+	private void drawPlayerHearts() {
 		int xLocation = gp.tileSize/2, 
 			yLocation = gp.tileSize/2, 
 			i = 0;
@@ -274,14 +281,14 @@ public class UI {
 		
 	}
 	
-	protected void drawDialogueScreen() {
+	private void drawDialogueScreen() {
 		// Dialogue window
 		int x = gp.tileSize*2, 
 			y = gp.tileSize/2, 
 			width = gp.screenWidth - (gp.tileSize*4), 
 			height = gp.tileSize*4;
 		
-			drawDialogueWindow (x, y, width, height);
+			drawSubWindow (x, y, width, height);
 			
 		//Dialogue display inside window
 		int dialogueX = gp.tileSize*3-20,
@@ -302,7 +309,7 @@ public class UI {
 	}
 	
 	//Receives input and actually draw the window inside the dialogue box
-	protected void drawDialogueWindow (int x, int y, int width, int height) {
+	private void drawSubWindow (int x, int y, int width, int height) {
 		
 		//black color
 		//alpha value - 220 - some opacity
@@ -320,14 +327,80 @@ public class UI {
 	
 	
 	//Method for drawing a simple string above the player head for event interaction
-	public void drawInteractionKey() {
-			String text = "X";
-			int x = getXCenter(text) - gp.tileSize/4
-					, y = gp.screenHeight/2 - gp.tileSize;
-			g2.setColor(Color.white);
-			g2.drawRect(gp.player.screenX + 8, gp.player.screenY - 48, 28, 28);
-			g2.setFont(g2.getFont().deriveFont(24F));
-			g2.drawString(text, x, y);
+	private void drawInteractionKey() {
+		String text = "X Interact";
+		int x = getXCenter(text) - gp.tileSize/4
+				, y = gp.screenHeight/2 - gp.tileSize;
+		g2.setColor(Color.white);
+		g2.drawRect(gp.player.screenX + 3, gp.player.screenY - 48, 28, 28);
+		g2.setFont(g2.getFont().deriveFont(24F));
+		g2.drawString(text, x, y);
+	}
+	
+	private void drawStatusScreen() {
+		
+		/**
+		 * Frame Creation
+		 */
+		final int frameX = gp.tileSize * 4,
+				  frameY = gp.tileSize,
+				  frameWidth = gp.tileSize * 10,
+				  frameHeight = gp.tileSize * 12;
+		
+		drawSubWindow (frameX, frameY, frameWidth, frameHeight);
+		
+		/**
+		 * Draw Labels
+		 */
+		g2.setFont(maruMonica);
+		g2.setFont(g2.getFont().deriveFont(36F));
+		
+		int valueX = frameX + 30,
+			valueY = frameY + gp.tileSize,
+			lineHeight = 48;
+		
+		for (int i = 0; i < gp.player.labels.length; ++i) {
+			g2.drawString(gp.player.labels[i], valueX, valueY);
+			valueY += lineHeight;
+		}
+		
+		
+		/**
+		 * Draw Matching Values
+		 */
+		int tailX = (frameX + frameWidth) - gp.tileSize * 3 - gp.tileSize/2;
+		valueY = frameY + gp.tileSize;
+		
+		g2.drawString(gp.player.name, getXValuesAlign(gp.player.name, tailX), valueY);
+		valueY += lineHeight;
+		
+		g2.drawString(String.valueOf(gp.player.level), getXValuesAlign(String.valueOf(gp.player.level), tailX), valueY);
+		valueY += lineHeight;
+		
+		String value = String.valueOf(gp.player.getLife() + "/" + gp.player.getMaxLife());
+		g2.drawString(value, getXValuesAlign(value, tailX), valueY);
+		valueY += lineHeight;
+		
+		g2.drawString(String.valueOf(gp.player.mana), getXValuesAlign(String.valueOf(gp.player.mana), tailX), valueY);
+		valueY += lineHeight;
+		
+		g2.drawString(String.valueOf(gp.player.strength), getXValuesAlign(String.valueOf(gp.player.strength), tailX), valueY);
+		valueY += lineHeight;
+		
+		g2.drawString(String.valueOf(gp.player.defense), getXValuesAlign(String.valueOf(gp.player.defense), tailX), valueY);
+		valueY += lineHeight;
+		
+		g2.drawString(String.valueOf(gp.player.dexterity), getXValuesAlign(String.valueOf(gp.player.dexterity), tailX), valueY);
+		valueY += lineHeight;
+		
+		g2.drawString(String.valueOf(gp.player.stamina), getXValuesAlign(String.valueOf(gp.player.stamina), tailX), valueY);
+		valueY += lineHeight;
+		
+		g2.drawString(String.valueOf(gp.player.speed), getXValuesAlign(String.valueOf(gp.player.stamina), tailX), valueY);
+		valueY += 11;
+		
+		g2.drawImage(gp.player.equippedWeapon.down1, tailX - gp.tileSize/2, valueY, null);
+		g2.drawImage(gp.player.equippedShield.down1, tailX - gp.tileSize/2, valueY + 48 , null);
 	}
 	
 }

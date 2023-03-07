@@ -7,7 +7,7 @@ public class ObjectSword extends Entity implements ObjectInterface, AttackObject
 
 	GamePanel gp;
 	
-	public int attackValue;
+	private int attackValue;
 	
 	public ObjectSword(GamePanel gp) {
 		super(gp);
@@ -24,11 +24,13 @@ public class ObjectSword extends Entity implements ObjectInterface, AttackObject
 		attackValue = 1;
 		
 	}
-
-
+	
 	@Override
 	public int getAttackValue() {
-		return 0;
+		return attackValue;
 	}
+
+
+
 	
 }
