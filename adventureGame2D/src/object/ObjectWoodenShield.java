@@ -3,7 +3,7 @@ package object;
 import adventureGame2D.GamePanel;
 import entity.Entity;
 
-public class ObjectWoodenShield extends Entity implements ObjectInterface, DefenseObjectInterface {
+public class ObjectWoodenShield extends Entity implements ObjectInterface, DefenseObjectInterface{
 	
 	private int defenseValue;
 
@@ -12,6 +12,7 @@ public class ObjectWoodenShield extends Entity implements ObjectInterface, Defen
 	public ObjectWoodenShield(GamePanel gp) {
 		super(gp);
 		this.gp = gp;
+		setDefaultAttributes();
 	}
 	
 	public void setDefaultAttributes() {
@@ -21,7 +22,6 @@ public class ObjectWoodenShield extends Entity implements ObjectInterface, Defen
 		
 		
 	}
-
 
 	@Override
 	public int getDefenseValue() {
