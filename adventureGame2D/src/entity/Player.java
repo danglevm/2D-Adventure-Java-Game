@@ -42,27 +42,38 @@ public class Player extends Entity {
 	 */
 	public	String name;
 	public  int level,
+				healthRegen,
 				mana,
+				manaRegen,
 				strength,
 				dexterity,
 				stamina,
 				attack,
 				defense,
+				knockback,
+				criticalHit,
 				coin,
+				displaySpeed,
 				experience,
-				nextLevelExperience;
+				nextLevelExperience,
+				upgradePoints;
 	public String [] labels = {
 			"Name",
 			"Level",
-			"Health",
+			"HP",
+			"HP Regeneration",
 			"Mana",
+			"Mana Regeneration",
 			"Strength",
 			"Defense",
 			"Dexterity",
 			"Stamina",
 			"Speed",
-			"Weapon",
-			"Shield"
+			"Knockback",
+			"Critical Hit",
+			"Coins",
+			"Experience",
+			"Equipment",
 	};
 	
 	
@@ -133,7 +144,6 @@ public class Player extends Entity {
 		//Default player values
 		WorldX = gp.tileSize * 122;
 		WorldY= gp.tileSize * 132;
-		speed = 3;
 		entityType = 0;
 		direction = "down";
 		maxLife = 8;
@@ -181,18 +191,24 @@ public class Player extends Entity {
 		 */
 		entityType = 0;
 		name = "player";
+		healthRegen = 0;
 		maxStamina = 120;
 		stamina = 0;
+		displaySpeed = 0;
 		speed = 3;
 		level = 1;
-		mana = 1;
+		mana = 0;
+		manaRegen = 0;
 		strength = 0;
 		dexterity = 0;
 		stamina = 0;
 		coin = 0;
 		experience = 0;
+		knockback = 0;
+		criticalHit = 0;
 		nextLevelExperience = 9;
-		maxLife = 8;
+		upgradePoints = 0;
+		maxLife = 10;
 		life = maxLife;
 		currentWeapon = new ObjectSword(gp);
 		currentShield = new ObjectWoodenShield(gp);
@@ -204,8 +220,8 @@ public class Player extends Entity {
 		 * @var attackVal natural player's strength + weapon's attack value
 		 * @var defenseVal natural player's defense + shield/armor's defense value
 		 */
-		attackVal = strength += currentWeapon.getAttackValue();
-		defenseVal = defense += currentShield.getDefenseValue();
+		attackVal = strength + currentWeapon.getAttackValue();
+		defenseVal = defense + currentShield.getDefenseValue();
 		
 		
 	}
@@ -487,7 +503,7 @@ public class Player extends Entity {
 			if (!gp.monsters.get(i).invincibility) {
 				gp.playSE(5);
 				//attack lands
-				gp.monsters.get(i).setLife(gp.monsters.get(i).getLife() - 1);
+				gp.monsters.get(i).setLife(gp.monsters.get(i).getLife() - this.attackVal);
 				gp.monsters.get(i).invincibility = true;
 				gp.monsters.get(i).monsterDamageReaction(this);
 				if (gp.monsters.get(i).getLife() < 1) {

@@ -237,6 +237,20 @@ public class KeyHandler implements KeyListener{
 		if (code == KeyEvent.VK_C) {
 			gp.gameState = gp.playState;
 		}
+		
+		if (code == KeyEvent.VK_W) {
+			--gp.ui.statusCursor;
+		} 
+		if (code == KeyEvent.VK_S) {
+			++gp.ui.statusCursor;
+		} 
+		
+		if (gp.ui.statusCursor > 11) {
+			gp.ui.statusCursor = 11;
+		} 
+		if (gp.ui.statusCursor < 0) {
+			gp.ui.statusCursor = 0;
+		}
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {

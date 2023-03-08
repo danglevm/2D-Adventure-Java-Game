@@ -82,15 +82,6 @@ public class OldDudeNPC extends Entity implements NPCInterface{
 		actionLock = 0;
 		}
 	
-		if (collisionOn) {
-			switch (direction) {
-			case "up" : direction = "down"; break;
-			case "down" : direction = "up"; break;
-			case "left" : direction = "right"; break;
-			case "right" : direction = "left"; break;
-			
-			}
-		}
 	}
 	
 	public void speak() {
