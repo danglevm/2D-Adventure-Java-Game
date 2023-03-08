@@ -53,8 +53,10 @@ public class Player extends Entity {
 				knockback,
 				criticalHit,
 				coin,
+				displaySpeed,
 				experience,
-				nextLevelExperience;
+				nextLevelExperience,
+				upgradePoints;
 	public String [] labels = {
 			"Name",
 			"Level",
@@ -142,7 +144,6 @@ public class Player extends Entity {
 		//Default player values
 		WorldX = gp.tileSize * 122;
 		WorldY= gp.tileSize * 132;
-		speed = 3;
 		entityType = 0;
 		direction = "down";
 		maxLife = 8;
@@ -193,7 +194,8 @@ public class Player extends Entity {
 		healthRegen = 0;
 		maxStamina = 120;
 		stamina = 0;
-		speed = 0;
+		displaySpeed = 0;
+		speed = 3;
 		level = 1;
 		mana = 0;
 		manaRegen = 0;
@@ -205,6 +207,7 @@ public class Player extends Entity {
 		knockback = 0;
 		criticalHit = 0;
 		nextLevelExperience = 9;
+		upgradePoints = 0;
 		maxLife = 10;
 		life = maxLife;
 		currentWeapon = new ObjectSword(gp);
