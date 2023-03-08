@@ -342,10 +342,10 @@ public class UI {
 		/**
 		 * Frame Creation
 		 */
-		final int frameX = gp.tileSize * 4,
-				  frameY = gp.tileSize,
-				  frameWidth = gp.tileSize * 10,
-				  frameHeight = gp.tileSize * 12;
+		final int frameX = gp.tileSize,
+				  frameY = gp.tileSize/2,
+				  frameWidth = gp.tileSize * 11,
+				  frameHeight = gp.tileSize * 13 ;
 		
 		drawSubWindow (frameX, frameY, frameWidth, frameHeight);
 		
@@ -353,11 +353,11 @@ public class UI {
 		 * Draw Labels
 		 */
 		g2.setFont(maruMonica);
-		g2.setFont(g2.getFont().deriveFont(36F));
+		g2.setFont(g2.getFont().deriveFont(30F));
 		
 		int valueX = frameX + 30,
 			valueY = frameY + gp.tileSize,
-			lineHeight = 48;
+			lineHeight = 36;
 		
 		for (int i = 0; i < gp.player.labels.length; ++i) {
 			g2.drawString(gp.player.labels[i], valueX, valueY);
@@ -381,7 +381,13 @@ public class UI {
 		g2.drawString(value, getXValuesAlign(value, tailX), valueY);
 		valueY += lineHeight;
 		
+		g2.drawString(String.valueOf(gp.player.healthRegen), getXValuesAlign(String.valueOf(gp.player.healthRegen), tailX), valueY);
+		valueY += lineHeight;
+		
 		g2.drawString(String.valueOf(gp.player.mana), getXValuesAlign(String.valueOf(gp.player.mana), tailX), valueY);
+		valueY += lineHeight;
+		
+		g2.drawString(String.valueOf(gp.player.manaRegen), getXValuesAlign(String.valueOf(gp.player.manaRegen), tailX), valueY);
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.strength), getXValuesAlign(String.valueOf(gp.player.strength), tailX), valueY);
@@ -396,11 +402,25 @@ public class UI {
 		g2.drawString(String.valueOf(gp.player.stamina), getXValuesAlign(String.valueOf(gp.player.stamina), tailX), valueY);
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.speed), getXValuesAlign(String.valueOf(gp.player.stamina), tailX), valueY);
+		g2.drawString(String.valueOf(gp.player.speed), getXValuesAlign(String.valueOf(gp.player.speed), tailX), valueY);
+		valueY += lineHeight;
+		
+		g2.drawString(String.valueOf(gp.player.knockback), getXValuesAlign(String.valueOf(gp.player.knockback), tailX), valueY);
+		valueY += lineHeight;
+		
+		g2.drawString(String.valueOf(gp.player.criticalHit), getXValuesAlign(String.valueOf(gp.player.criticalHit), tailX), valueY);
+		valueY += lineHeight;
+		
+		g2.drawString(String.valueOf(gp.player.coin), getXValuesAlign(String.valueOf(gp.player.coin), tailX), valueY);
+		valueY += lineHeight;
+		
+		
+		value = String.valueOf(gp.player.experience + "/" + gp.player.nextLevelExperience);
+		g2.drawString(value, getXValuesAlign(value, tailX), valueY);
 		valueY += 11;
 		
-		g2.drawImage(gp.player.equippedWeapon.down1, tailX - gp.tileSize/2, valueY, null);
-		g2.drawImage(gp.player.equippedShield.down1, tailX - gp.tileSize/2, valueY + 48 , null);
+		g2.drawImage(gp.player.equippedWeapon.down1, tailX - gp.tileSize, valueY, null);
+		g2.drawImage(gp.player.equippedShield.down1, tailX, valueY , null);
 	}
 	
 }
