@@ -3,6 +3,8 @@ package events;
 import java.awt.Rectangle;
 
 import adventureGame2D.GamePanel;
+import enums.Direction;
+import enums.GameState;
 
 public class EventHandler {
 	
@@ -47,7 +49,6 @@ public class EventHandler {
 	}
 	
 
-	
 	public void checkEvent() {
 		int pitX = 121, pitY = 122; 
 		int healX = 115, healY = 121;
@@ -55,20 +56,20 @@ public class EventHandler {
 		int tpXback = 153, tpYback = 150;
 		
 		//Check to see if player is 1 tile away from previous event  - works for lava or some damage things
-		int xDistance = Math.abs(gp.player.WorldX - previousEventX),
-			yDistance = Math.abs(gp.player.WorldY - previousEventY),
+		int xDistance = Math.abs(gp.player.getWorldX() - previousEventX),
+			yDistance = Math.abs(gp.player.getWorldX() - previousEventY),
 			distance = Math.max(xDistance, yDistance);
 		
 		
 		//damage player
-			if (eventCollision(pitX, pitY, "any")) {
-				eventObject.DamagePit(gp.dialogueState);
+			if (eventCollision(pitX, pitY, Direction.ANY)) {
+				eventObject.DamagePit(GameState.DIALOGUE);
 				eventRect[pitX][pitY].eventTriggered = true;
 			}
 		
 			//heal player
-			if (eventCollision(healX, healY, "any")) {
-				eventObject.healingPool(gp.dialogueState);
+			if (eventCollision(healX, healY, Direction.ANY)) {
+				eventObject.healingPool(GameState.DIALOGUE);
 				eventRect[healX][healY].eventTriggered = true;
 			}
 		
@@ -77,25 +78,25 @@ public class EventHandler {
 		
 			
 			//Boat teleport 
-			if (eventCollision(tpXto, tpYto, "any")) {
+			if (eventCollision(tpXto, tpYto, Direction.ANY)) {
 				//interact is true --> UI draws the string
 				interact = true;
 				if (gp.keyH.allowInteraction) {
-					eventObject.teleport(gp.dialogueState, tpXback, tpYback);
+					eventObject.teleport(GameState.DIALOGUE, tpXback, tpYback);
 					gp.keyH.allowInteraction = false;
 				}
-			} else if (distance > gp.tileSize) {
+			} else if (distance > gp.getTileSize()) {
 				interact = false;
 			}
 			
 			
-			if (eventCollision (tpXback, tpYback, "any")) {
+			if (eventCollision (tpXback, tpYback, Direction.ANY)) {
 				interact = true;
 				if (gp.keyH.allowInteraction) {
-					eventObject.teleport(gp.dialogueState, tpXto, tpYto);
+					eventObject.teleport(GameState.DIALOGUE, tpXto, tpYto);
 					gp.keyH.allowInteraction = false;
 				}
-			} else if (distance > gp.tileSize) {
+			} else if (distance > gp.getTileSize()) {
 				interact = false;
 			}
 			
@@ -103,24 +104,24 @@ public class EventHandler {
 		
 	}
 	
-	public boolean eventCollision (int col, int row, String reqDirection)
+	public boolean eventCollision (int col, int row, Direction reqDirection)
 		{
 			boolean playerCollision = false;
 			
 			//get location of player and event rectangle solid area
-			gp.player.solidArea.x = gp.player.WorldX + gp.player.solidArea.x;
-			gp.player.solidArea.y = gp.player.WorldY + gp.player.solidArea.y;
-			eventRect[col][row].x = col * gp.tileSize + eventRect[col][row].x;
-			eventRect [col][row].y = row * gp.tileSize + eventRect[col][row].y;
+			gp.player.solidArea.x = gp.player.getWorldX() + gp.player.solidArea.x;
+			gp.player.solidArea.y = gp.player.getWorldY() + gp.player.solidArea.y;
+			eventRect[col][row].x = col * gp.getTileSize() + eventRect[col][row].x;
+			eventRect [col][row].y = row * gp.getTileSize() + eventRect[col][row].y;
 			
 			
 			//if player hits the event and the event has not been triggered
 			if (gp.player.solidArea.intersects(eventRect[col][row]) && !eventRect[col][row].eventTriggered) {
-				if (gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")) {
+				if (gp.player.getDirection() == reqDirection || reqDirection == Direction.ANY) {
 					playerCollision = true;
 					
-					previousEventX = gp.player.WorldX;
-					previousEventY = gp.player.WorldY;
+					previousEventX = gp.player.getWorldX();
+					previousEventY = gp.player.getWorldY();
 				}
 			}
 			

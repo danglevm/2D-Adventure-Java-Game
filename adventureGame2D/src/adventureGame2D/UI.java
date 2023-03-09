@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 import entity.Entity;
+import enums.GameState;
 import object.ObjectHeart;
 import quotes.PauseQuotes;
 
@@ -33,7 +34,7 @@ public class UI {
 	//Dialogue
 	private String currentDialogue = "";	
 	public void setCurrentDialogue (String dialogue) { currentDialogue = dialogue;}
-	public int cursorNum = 0, statusCursor = 0;
+	protected int cursorNum = 0, statusCursor = 0;
 	
 	//Drawing hearts
 	private BufferedImage heart_full, heart_half, heart_blank;
@@ -60,9 +61,9 @@ public class UI {
 		
 		//Create HUD 
 		Entity heart = new ObjectHeart(gp);
-		heart_full = heart.image;
-		heart_half = heart.image2;
-		heart_blank = heart.image3;
+		heart_full = heart.getImage1();
+		heart_half = heart.getImage2();
+		heart_blank = heart.getImage3();
 		
 	}
 	
@@ -91,19 +92,19 @@ public class UI {
 		
 		
 		//Drawing gamestate
-		if (gp.gameState == gp.titleState) {
+		if (gp.getGameState() == GameState.TITLE) {
 			//titleScreen
 			this.drawTitleScreen();
 			
 			
 		} 
-		if (gp.gameState == gp.pauseState) {
+		if (gp.getGameState() == GameState.PAUSE) {
 			//pause state
 			drawPauseScreen();
 			drawRandomPauseQuotes();
 			
 		}
-		if (gp.gameState == gp.playState){
+		if (gp.getGameState() == GameState.PLAY){
 			//playing state
 			this.drawPlayerHearts();
 			if (gp.eHandler.getInteraction()) {
@@ -111,13 +112,13 @@ public class UI {
 			}
 			
 		} 
-		if (gp.gameState == gp.dialogueState){
+		if (gp.getGameState() == GameState.DIALOGUE){
 			//dialogue state
 			drawDialogueScreen();
 			drawPlayerHearts();
 		}
 		
-		if (gp.gameState == gp.statusState) {
+		if (gp.getGameState() == GameState.STATUS) {
 			drawStatusScreen();
 		}
 		
@@ -159,7 +160,7 @@ public class UI {
 			pauseText = pauseQuotes.getPauseQuote(rand);
 			gp.keyH.pauseQuote=false;
 		}
-		int y = gp.screenHeight/2 + gp.tileSize*2, x = getXCenter (pauseText);
+		int y = gp.screenHeight/2 + gp.getTileSize()*2, x = getXCenter (pauseText);
 		g2.drawString(pauseText,x, y);
 		
 	}
@@ -176,7 +177,7 @@ public class UI {
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80));
 			String text = "A Fever Dream";
 			int x = getXCenter(text),
-				y = gp.tileSize*3;
+				y = gp.getTileSize()*3;
 			
 			//Draw the shadow
 			g2.setColor(Color.black);
@@ -187,35 +188,35 @@ public class UI {
 			g2.drawString(text, x, y);
 			
 			//Character image
-			x = gp.screenWidth/2 - gp.tileSize * 2;
-			y += gp.tileSize * 1.5;
-			g2.drawImage(gp.player.down1, x, y, gp.tileSize * 4, gp.tileSize * 4, null);
+			x = gp.screenWidth/2 - gp.getTileSize() * 2;
+			y += gp.getTileSize() * 1.5;
+			g2.drawImage(gp.player.getDown1(), x, y, gp.getTileSize() * 4, gp.getTileSize() * 4, null);
 			
 			//Menu options
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
 			text = "NEW GAME";
 			x = getXCenter(text);
-			y += gp.tileSize*5.5;
+			y += gp.getTileSize()*5.5;
 			g2.drawString(text, x, y);
-			if (cursorNum == 0) {g2.drawString(">", x-gp.tileSize, y);}
+			if (cursorNum == 0) {g2.drawString(">", x-gp.getTileSize(), y);}
 			
 			text = "LOAD SAVE";
 			x = getXCenter(text);
-			y += gp.tileSize;
+			y += gp.getTileSize();
 			g2.drawString(text, x, y);
-			if (cursorNum == 1) {g2.drawString(">", x-gp.tileSize, y);}
+			if (cursorNum == 1) {g2.drawString(">", x-gp.getTileSize(), y);}
 			
 			text = "SETTINGS";
 			x = getXCenter(text);
-			y += gp.tileSize;
+			y += gp.getTileSize();
 			g2.drawString(text, x, y);
-			if (cursorNum == 2) {g2.drawString(">", x-gp.tileSize, y);}
+			if (cursorNum == 2) {g2.drawString(">", x-gp.getTileSize(), y);}
 		
 			text = "QUIT";
 			x = getXCenter(text);
-			y += gp.tileSize;
+			y += gp.getTileSize();
 			g2.drawString(text,x, y);
-			if (cursorNum == 3) {g2.drawString(">", x-gp.tileSize, y);}
+			if (cursorNum == 3) {g2.drawString(">", x-gp.getTileSize(), y);}
 		} else if (titleScreenState == 1) {
 			
 			//STORY PATH SELECTION
@@ -224,20 +225,20 @@ public class UI {
 			
 			String text = "Select a story";
 			int x = getXCenter(text),
-				y = gp.tileSize*2;
+				y = gp.getTileSize()*2;
 			g2.drawString(text,x,y);
 			
 			text = "Blue Boy";
-			x = getXCenter(text) - gp.tileSize*4;
+			x = getXCenter(text) - gp.getTileSize()*4;
 			y = gp.screenHeight/2;
 			g2.drawString(text, x, y);
-			if (cursorNum == 0) {g2.drawString(">", x-gp.tileSize, y);}
+			if (cursorNum == 0) {g2.drawString(">", x-gp.getTileSize(), y);}
 			
 			text = "Yellow Girl";
-			x = getXCenter(text) + gp.tileSize*4;
+			x = getXCenter(text) + gp.getTileSize()*4;
 			y = gp.screenHeight/2;
 			g2.drawString(text, x, y);
-			if (cursorNum == 1) {g2.drawString(">", x-gp.tileSize, y);}
+			if (cursorNum == 1) {g2.drawString(">", x-gp.getTileSize(), y);}
 			
 			
 		}
@@ -245,8 +246,8 @@ public class UI {
 	}
 	
 	private void drawPlayerHearts() {
-		int xLocation = gp.tileSize/2, 
-			yLocation = gp.tileSize/2, 
+		int xLocation = gp.getTileSize()/2, 
+			yLocation = gp.getTileSize()/2, 
 			i = 0;
 		int playerMaxLife = gp.player.getMaxLife();
 		int currentPlayerLife = gp.player.getLife();
@@ -256,13 +257,13 @@ public class UI {
 		while (i < playerMaxLife/2) {
 			g2.drawImage(heart_blank, xLocation, yLocation, null);
 			++i;
-			xLocation += gp.tileSize;
+			xLocation += gp.getTileSize();
 		}
 		
 		
 		//Reset drawing location
-		xLocation = gp.tileSize/2;
-		yLocation = gp.tileSize/2;
+		xLocation = gp.getTileSize()/2;
+		yLocation = gp.getTileSize()/2;
 		i = 0;
 		
 		//Draw current hp
@@ -275,7 +276,7 @@ public class UI {
 				g2.drawImage(heart_full, xLocation, yLocation,null);
 			}
 			++i;
-			xLocation += gp.tileSize;
+			xLocation += gp.getTileSize();
 	}
 	
 		
@@ -283,16 +284,16 @@ public class UI {
 	
 	private void drawDialogueScreen() {
 		// Dialogue window
-		int x = gp.tileSize*2, 
-			y = gp.tileSize/2, 
-			width = gp.screenWidth - (gp.tileSize*4), 
-			height = gp.tileSize*4;
+		int x = gp.getTileSize()*2, 
+			y = gp.getTileSize()/2, 
+			width = gp.screenWidth - (gp.getTileSize()*4), 
+			height = gp.getTileSize()*4;
 		
 			drawSubWindow (x, y, width, height);
 			
 		//Dialogue display inside window
-		int dialogueX = gp.tileSize*3-20,
-			dialogueY = gp.tileSize/2 +gp.tileSize;
+		int dialogueX = gp.getTileSize()*3-20,
+			dialogueY = gp.getTileSize()/2 +gp.getTileSize();
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
 		//Split the string into many parts
 		for (String line : currentDialogue.split("\n")) {
@@ -303,7 +304,7 @@ public class UI {
 		
 		//Draw the press next to move on key notification
 		dialogueX += 390;
-		dialogueY = (gp.tileSize/2) + gp.tileSize + 120;
+		dialogueY = (gp.getTileSize()/2) + gp.getTileSize() + 120;
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 14));
 		g2.drawString(moveDialogue, dialogueX, dialogueY);
 	}
@@ -329,10 +330,10 @@ public class UI {
 	//Method for drawing a simple string above the player head for event interaction
 	private void drawInteractionKey() {
 		String text = "X Interact";
-		int x = getXCenter(text) - gp.tileSize/4
-				, y = gp.screenHeight/2 - gp.tileSize;
+		int x = getXCenter(text) - gp.getTileSize()/4, 
+			y = gp.screenHeight/2 - gp.getTileSize();
 		g2.setColor(Color.white);
-		g2.drawRect(gp.player.screenX + 3, gp.player.screenY - 48, 28, 28);
+		g2.drawRect(gp.player.getScreenX() + 3, gp.player.getScreenY() - 48, 28, 28);
 		g2.setFont(g2.getFont().deriveFont(24F));
 		g2.drawString(text, x, y);
 	}
@@ -342,10 +343,10 @@ public class UI {
 		/**
 		 * Frame Creation
 		 */
-		final int frameX = gp.tileSize,
-				  frameY = gp.tileSize/2,
-				  frameWidth = gp.tileSize * 11,
-				  frameHeight = gp.tileSize * 13 ;
+		final int frameX = gp.getTileSize(),
+				  frameY = gp.getTileSize()/2,
+				  frameWidth = gp.getTileSize() * 11,
+				  frameHeight = gp.getTileSize() * 13 ;
 		
 		drawSubWindow (frameX, frameY, frameWidth, frameHeight);
 		
@@ -356,16 +357,16 @@ public class UI {
 		g2.setFont(g2.getFont().deriveFont(30F));
 		
 		int valueX = frameX + 30,
-			valueY = frameY + gp.tileSize,
+			valueY = frameY + gp.getTileSize(),
 			lineHeight = 36,
-			rectTailX = (frameX + frameWidth) - gp.tileSize * 3;
+			rectTailX = (frameX + frameWidth) - gp.getTileSize() * 3;
 		
 		for (int i = 0; i < gp.player.labels.length; ++i) {
 			g2.drawString(gp.player.labels[i], valueX, valueY);
 			valueY += lineHeight;
 		}
 		
-		valueY = frameY + gp.tileSize;
+		valueY = frameY + gp.getTileSize();
 		int defaultRectTailX = rectTailX;
 		g2.setStroke(new java.awt.BasicStroke(1));
 		
@@ -383,8 +384,8 @@ public class UI {
 		/**
 		 * Draw Matching Values
 		 */
-		int tailX = (frameX + frameWidth) - gp.tileSize * 4;
-		valueY = frameY + gp.tileSize;
+		int tailX = (frameX + frameWidth) - gp.getTileSize() * 4;
+		valueY = frameY + gp.getTileSize();
 		
 		g2.drawString(gp.player.name, getXValuesAlign(gp.player.name, tailX), valueY);
 		valueY += lineHeight;
@@ -395,62 +396,62 @@ public class UI {
 		
 		String value = String.valueOf(gp.player.getLife() + "/" + gp.player.getMaxLife());
 		g2.drawString(value, getXValuesAlign(value, tailX), valueY);
-		if (statusCursor == 0) {g2.drawString(">", tailX - gp.tileSize, valueY);}
+		if (statusCursor == 0) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.healthRegen), getXValuesAlign(String.valueOf(gp.player.healthRegen), tailX), valueY);
-		if (statusCursor == 1) {g2.drawString(">", tailX - gp.tileSize, valueY);}
+		if (statusCursor == 1) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.mana), getXValuesAlign(String.valueOf(gp.player.mana), tailX), valueY);
-		if (statusCursor == 2) {g2.drawString(">", tailX - gp.tileSize, valueY);}
+		if (statusCursor == 2) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.manaRegen), getXValuesAlign(String.valueOf(gp.player.manaRegen), tailX), valueY);
-		if (statusCursor == 3) {g2.drawString(">", tailX - gp.tileSize, valueY);}
+		if (statusCursor == 3) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.strength), getXValuesAlign(String.valueOf(gp.player.strength), tailX), valueY);
-		if (statusCursor == 4) {g2.drawString(">", tailX - gp.tileSize, valueY);}
+		if (statusCursor == 4) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.defense), getXValuesAlign(String.valueOf(gp.player.defense), tailX), valueY);
-		if (statusCursor == 5) {g2.drawString(">", tailX - gp.tileSize, valueY);}
+		if (statusCursor == 5) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.dexterity), getXValuesAlign(String.valueOf(gp.player.dexterity), tailX), valueY);
-		if (statusCursor == 6) {g2.drawString(">", tailX - gp.tileSize, valueY);}
+		if (statusCursor == 6) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.stamina), getXValuesAlign(String.valueOf(gp.player.stamina), tailX), valueY);
-		if (statusCursor == 7) {g2.drawString(">", tailX - gp.tileSize, valueY);}
+		if (statusCursor == 7) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.displaySpeed), getXValuesAlign(String.valueOf(gp.player.displaySpeed), tailX), valueY);
-		if (statusCursor == 8) {g2.drawString(">", tailX - gp.tileSize, valueY);}
+		if (statusCursor == 8) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.knockback), getXValuesAlign(String.valueOf(gp.player.knockback), tailX), valueY);
-		if (statusCursor == 9) {g2.drawString(">", tailX - gp.tileSize, valueY);}
+		if (statusCursor == 9) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.criticalHit), getXValuesAlign(String.valueOf(gp.player.criticalHit), tailX), valueY);
-		if (statusCursor == 10) {g2.drawString(">", tailX - gp.tileSize, valueY);}
+		if (statusCursor == 10) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
 		value = String.valueOf(gp.player.experience + "/" + gp.player.nextLevelExperience);
-		g2.drawString(value, getXValuesAlign(value, tailX - gp.tileSize * 2), valueY);
+		g2.drawString(value, getXValuesAlign(value, tailX - gp.getTileSize() * 2), valueY);
 		g2.drawString("Reset", getXValuesAlign("Reset", tailX), valueY);
-		if (statusCursor == 11) {g2.drawString(">", tailX - gp.tileSize, valueY);}
-		g2.drawString("Points: ", getXValuesAlign("Points: ", tailX + gp.tileSize * 2), valueY);
-		g2.drawString(String.valueOf(gp.player.upgradePoints), getXValuesAlign(String.valueOf(gp.player.upgradePoints), tailX + gp.tileSize * 3), valueY);
+		if (statusCursor == 11) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
+		g2.drawString("Points: ", getXValuesAlign("Points: ", tailX + gp.getTileSize() * 2), valueY);
+		g2.drawString(String.valueOf(gp.player.upgradePoints), getXValuesAlign(String.valueOf(gp.player.upgradePoints), tailX + gp.getTileSize() * 3), valueY);
 		valueY += lineHeight;
 		
 		g2.drawString(String.valueOf(gp.player.coin), getXValuesAlign(String.valueOf(gp.player.coin), tailX), valueY);	
 		valueY += 11;
 		
-		g2.drawImage(gp.player.equippedWeapon.down1, tailX - gp.tileSize, valueY, null);
-		g2.drawImage(gp.player.equippedShield.down1, tailX, valueY , null);
+		g2.drawImage(gp.player.equippedWeapon.getDown1(), tailX - gp.getTileSize(), valueY, null);
+		g2.drawImage(gp.player.equippedShield.getDown1(), tailX, valueY , null);
 	}
 	
 }

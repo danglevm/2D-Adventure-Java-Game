@@ -17,7 +17,7 @@ public class ObjectWoodenShield extends Entity implements ObjectInterface, Defen
 	
 	public void setDefaultAttributes() {
 		name = "woodenshield";
-		down1 = setupEntity("shield_wood", "/objects/equip/", gp.tileSize, gp.tileSize);
+		down1 = setupEntity("shield_wood", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 		defenseValue = 1;
 		
 		

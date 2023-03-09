@@ -5,6 +5,7 @@ import java.util.Random;
 import adventureGame2D.GamePanel;
 import entity.Entity;
 import entity.Player;
+import enums.Direction;
 
 public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	
@@ -13,10 +14,10 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	public MonsterGreenSlime (GamePanel gp, int worldX, int worldY) {
 		super(gp);
 		this.gp = gp;
-		this.WorldX = worldX * gp.tileSize;
-		this.WorldY = worldY * gp.tileSize;
+		this.WorldX = worldX * gp.getTileSize();
+		this.WorldY = worldY * gp.getTileSize();
 		this.setDefaultValues();
-		this.getImage(gp.tileSize);
+		this.getImage(gp.getTileSize());
 		
 	}
 	
@@ -26,7 +27,6 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 		maxLife = 6;
 		life = maxLife;
 		entityType = 2;
-		
 		
 		solidArea.x = 8;
 		solidArea.y = 8;
@@ -60,13 +60,13 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 		int i = random.nextInt(100) + 1;//1 to 100
 		
 		if (i < 25) {
-			direction = "up";
+			direction = Direction.UP;
 		} else if (i < 50) {
-			direction = "down";
+			direction = Direction.DOWN;
 		} else if (i < 75) {
-			direction = "left";
+			direction = Direction.LEFT;
 		} else {
-			direction = "right";
+			direction = Direction.RIGHT;
 		}
 		
 		actionLock = 0;
@@ -75,16 +75,16 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	
 	@Override
 	public final void damageContact(Entity entity) {
-		if (!entity.invincibility) {
+		if (!entity.getInvincibility()) {
 			entity.setLife(entity.getLife() - 1);
-			entity.invincibility = true;
+			entity.setInvincibility(true);
 		}
 	}
 	
 	@Override
 	public void monsterDamageReaction(Player player) {
 		this.actionLock = 0;
-		this.direction = player.direction;
+		this.direction = player.getDirection();
 	}
 	
 	@Override

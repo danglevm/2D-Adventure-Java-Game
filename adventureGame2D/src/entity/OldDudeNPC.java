@@ -1,15 +1,10 @@
 package entity;
 
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
-
 import adventureGame2D.GamePanel;
-import adventureGame2D.UtilityTool;
+import enums.Direction;
 
 public class OldDudeNPC extends Entity implements NPCInterface{
 	//Dialogues
@@ -20,8 +15,8 @@ public class OldDudeNPC extends Entity implements NPCInterface{
 		super(gp);
 		//x, y, width, height
 		solidArea = new Rectangle(8, 8, 36, 36);
-		this.WorldX = gp.tileSize * worldX;
-		this.WorldY = gp.tileSize * worldY;
+		this.WorldX = gp.getTileSize() * worldX;
+		this.WorldY = gp.getTileSize() * worldY;
 		
 		this.setDefaultValues();
 		this.getImage();
@@ -32,14 +27,14 @@ public class OldDudeNPC extends Entity implements NPCInterface{
 	//-------------------------------NPC RENDER METHODS------------------
 	public void getImage() {
 		
-		up1 = setupEntity("oldman_up_1", "/npc/", gp.tileSize, gp.tileSize);
-		up2 = setupEntity("oldman_up_2", "/npc/", gp.tileSize, gp.tileSize);
-		down1 = setupEntity("oldman_down_1", "/npc/", gp.tileSize, gp.tileSize);
-		down2 = setupEntity("oldman_down_2", "/npc/", gp.tileSize, gp.tileSize);
-		left1 = setupEntity("oldman_left_1", "/npc/", gp.tileSize, gp.tileSize);
-		left2 = setupEntity("oldman_left_2", "/npc/", gp.tileSize, gp.tileSize);
-		right1 = setupEntity("oldman_right_1", "/npc/", gp.tileSize, gp.tileSize);
-		right2 = setupEntity("oldman_right_2", "/npc/", gp.tileSize, gp.tileSize);
+		up1 = setupEntity("oldman_up_1", "/npc/", gp.getTileSize(), gp.getTileSize());
+		up2 = setupEntity("oldman_up_2", "/npc/", gp.getTileSize(), gp.getTileSize());
+		down1 = setupEntity("oldman_down_1", "/npc/", gp.getTileSize(), gp.getTileSize());
+		down2 = setupEntity("oldman_down_2", "/npc/", gp.getTileSize(), gp.getTileSize());
+		left1 = setupEntity("oldman_left_1", "/npc/", gp.getTileSize(), gp.getTileSize());
+		left2 = setupEntity("oldman_left_2", "/npc/", gp.getTileSize(), gp.getTileSize());
+		right1 = setupEntity("oldman_right_1", "/npc/", gp.getTileSize(), gp.getTileSize());
+		right2 = setupEntity("oldman_right_2", "/npc/", gp.getTileSize(), gp.getTileSize());
 		
 
 		
@@ -70,13 +65,13 @@ public class OldDudeNPC extends Entity implements NPCInterface{
 		
 		
 		if (i < 25) {
-			direction = "up";
+			this.direction = Direction.UP;
 		} else if (i < 50) {
-			direction = "down";
+			this.direction = Direction.DOWN;
 		} else if (i < 75) {
-			direction = "left";
+			this.direction = Direction.LEFT;
 		} else {
-			direction = "right";
+			direction = Direction.RIGHT;
 		}
 		
 		actionLock = 0;
@@ -100,7 +95,7 @@ public class OldDudeNPC extends Entity implements NPCInterface{
 	@Override
 	public final void setDefaultValues() {
 		name = "Old_Dude";
-		direction = "down";
+		direction = Direction.DOWN;
 		speed = 2;
 		maxLife = 6;
 		life = maxLife;

@@ -3,6 +3,8 @@ package adventureGame2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import enums.GameState;
+
 public class KeyHandler implements KeyListener{
 
 	GamePanel gp;
@@ -28,7 +30,7 @@ public class KeyHandler implements KeyListener{
 	/*
 	* TITLE STATE
 	*/
-	if (gp.gameState == gp.titleState) {
+	if (gp.getGameState() == GameState.TITLE) {
 			
 			if (gp.ui.titleScreenState == 0) {
 				
@@ -40,31 +42,30 @@ public class KeyHandler implements KeyListener{
 				
 			}
 			
-			
 	/*
 	* PLAY STATE
 	*/
-	} else if (gp.gameState == gp.playState) {
+	} else if (gp.getGameState() == GameState.PLAY) {
 		
 		playState(code);
 	
 	/*
 	* PAUSE STATE - resumes the game with escape is pressed
 	*/	
-	} else if (gp.gameState == gp.pauseState) {
+	} else if (gp.getGameState() == GameState.PAUSE) {
 			
 		pauseState (code);
 	
 	/*
 	* DIALOGUE STATE - resumes the game with escape is pressed
 	*/
-	} else if (gp.gameState == gp.dialogueState){
+	} else if (gp.getGameState() == GameState.DIALOGUE){
 			
 		dialogueState(code);
 	 /*
 	 * DIALOGUE STATE - resumes the game with escape is pressed
 	 */		
-	} else if (gp.gameState == gp.statusState) {
+	} else if (gp.getGameState() == GameState.STATUS) {
 		
 			statusState (code);
 		
@@ -91,9 +92,8 @@ public class KeyHandler implements KeyListener{
 			/*
 			 * New game
 			 */
-			if (gp.ui.cursorNum == 0) {
-				gp.ui.titleScreenState = 1;
-			} 
+			if (gp.ui.cursorNum == 0) gp.ui.titleScreenState = 1;
+			
 			else if (gp.ui.cursorNum == 1) {
 				/*
 				 * Load save
@@ -107,12 +107,9 @@ public class KeyHandler implements KeyListener{
 			}
 		}
 		
-		if (gp.ui.cursorNum > 3) {
-			gp.ui.cursorNum = 3;
-		} 
-		if (gp.ui.cursorNum < 0) {
-			gp.ui.cursorNum = 0;
-		}
+		if (gp.ui.cursorNum > 3) gp.ui.cursorNum = 3;
+		
+		if (gp.ui.cursorNum < 0) gp.ui.cursorNum = 0;
 		
 	}
 	
@@ -130,7 +127,7 @@ public class KeyHandler implements KeyListener{
 			 * Blue boy
 			 */	
 			if (gp.ui.cursorNum == 0) {
-				gp.gameState = gp.playState;
+				gp.setGameState(GameState.PLAY);
 				gp.playMusic(0);
 			} else {
 				/*
@@ -139,42 +136,35 @@ public class KeyHandler implements KeyListener{
 			}
 		}
 		
-		if (gp.ui.cursorNum > 1) {
-			gp.ui.cursorNum = 1;
-		} 
-		if (gp.ui.cursorNum < 0) {
-			gp.ui.cursorNum = 0;
-		}
+		if (gp.ui.cursorNum > 1) gp.ui.cursorNum = 1;
+		 
+		if (gp.ui.cursorNum < 0) gp.ui.cursorNum = 0;
+		
 	}
 	
 	private void playState (int code) {
 		/*
 		 * Player moving
 		 */	
-		if (code == KeyEvent.VK_W) {
-			upPressed = true;
-		} 
-		if (code == KeyEvent.VK_A) {
-			leftPressed = true;
-		} 
-		if (code == KeyEvent.VK_S) {
-			downPressed = true;
-		} 
-		if (code == KeyEvent.VK_D) {
-			rightPressed = true;
-		} 
+		if (code == KeyEvent.VK_W) upPressed = true;
+		
+		if (code == KeyEvent.VK_A) leftPressed = true;
+	
+		if (code == KeyEvent.VK_S) downPressed = true;
+		
+		if (code == KeyEvent.VK_D) rightPressed = true;
+		
 		
 		/*
 		 * Pause the game
 		 */
 		if (code == KeyEvent.VK_ESCAPE) {
-			gp.gameState = gp.pauseState;
+			gp.setGameState(GameState.PAUSE);
 			pauseQuote = true;
 		} 
 		
-		if (code == KeyEvent.VK_C) {
-			gp.gameState = gp.statusState;
-		}
+		if (code == KeyEvent.VK_C) gp.setGameState(GameState.STATUS);
+		
 		
 		if (code == KeyEvent.VK_ENTER) {
 			if (!dialoguePressed) {
@@ -198,9 +188,7 @@ public class KeyHandler implements KeyListener{
 		/*
 		 * Trigger player attack
 		 */
-		if (code == KeyEvent.VK_J){
-			gp.player.playerAttack = true;
-		}
+		if (code == KeyEvent.VK_J) gp.player.setPlayerAttack(true);
 		
 		/*
 		 * Player stands near interactive event and can trigger events
@@ -218,25 +206,18 @@ public class KeyHandler implements KeyListener{
 	 */
 	
 	private void pauseState (int code) {
-
-		if (code == KeyEvent.VK_ESCAPE) {
-			gp.gameState = gp.playState;
-			
-		} 
+		if (code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.PLAY);
 	}
 	
 	private void dialogueState (int code) {
-		if (code == KeyEvent.VK_ENTER) {
-			gp.gameState = gp.playState;
-		}
+		if (code == KeyEvent.VK_ENTER) gp.setGameState(GameState.PLAY);
 		
 	}
 	
 	private void statusState (int code) {
 		
-		if (code == KeyEvent.VK_C) {
-			gp.gameState = gp.playState;
-		}
+		if (code == KeyEvent.VK_C) gp.setGameState(GameState.PLAY);  
+		
 		
 		if (code == KeyEvent.VK_W) {
 			--gp.ui.statusCursor;
@@ -245,12 +226,10 @@ public class KeyHandler implements KeyListener{
 			++gp.ui.statusCursor;
 		} 
 		
-		if (gp.ui.statusCursor > 11) {
-			gp.ui.statusCursor = 11;
-		} 
-		if (gp.ui.statusCursor < 0) {
-			gp.ui.statusCursor = 0;
-		}
+		if (gp.ui.statusCursor > 11) gp.ui.statusCursor = 11;
+		 
+		if (gp.ui.statusCursor < 0) gp.ui.statusCursor = 0;
+		
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -259,20 +238,13 @@ public class KeyHandler implements KeyListener{
 		/*
 		 * Check if keys are in use
 		 */
-		if (code == KeyEvent.VK_W) {
-			upPressed = false;
-		} 
-		if (code == KeyEvent.VK_A) {
-			leftPressed = false;
-		} 
-		if (code == KeyEvent.VK_S) {
-			downPressed = false;
-		} 
-		if (code == KeyEvent.VK_D) {
-			rightPressed = false;
+		if (code == KeyEvent.VK_W) upPressed = false;
 		
-		}
+		if (code == KeyEvent.VK_A) leftPressed = false;
+		 
+		if (code == KeyEvent.VK_S) downPressed = false;
 		
+		if (code == KeyEvent.VK_D) rightPressed = false;
 	
 	}
 	

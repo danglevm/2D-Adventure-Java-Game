@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import entity.Entity;
 import entity.Player;
+import enums.GameState;
 import events.EventHandler;
 import tile.TileManager;
 
@@ -25,7 +26,7 @@ public class GamePanel extends JPanel implements Runnable{
 	final int originalTileSize = 16; //16x16 size
 	//Scale the 16x16 characters to fit computers' resolutions
 	final int scale = 3;
-	public final int tileSize = originalTileSize*scale;//48x48 tile
+	private final int tileSize = originalTileSize * scale;//48x48 tile
 	
 	//Setting max screen settings 18 tiles x 14 tiles
 	public final int maxScreenColumns = 18;
@@ -49,13 +50,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	
 	//Main game state
-	public int gameState;
-	public final int titleState = 0;
-	public final int playState = 1;
-	public final int pauseState = 2;
-	public final int dialogueState = 3;
-	public final int statusState = 4;
-	
+	private GameState gameState;
 	
 	//FPS
 	private int FPS = 60, FPS_x = screenWidth - tileSize*3, FPS_y = tileSize;
@@ -120,7 +115,7 @@ public class GamePanel extends JPanel implements Runnable{
 		assetPlace.setMonsters();
 		playMusic(0);
 		stopMusic();
-		gameState = titleState;
+		gameState = GameState.TITLE;
 		
 		
 	}
@@ -179,7 +174,7 @@ public class GamePanel extends JPanel implements Runnable{
 public void update() {
 	
 	
-	if (gameState == playState) {
+	if (gameState == GameState.PLAY) {
 		//Player
 		player.update();
 		//NPCs
@@ -202,7 +197,7 @@ public void paintComponent (Graphics g) {
 	//Set 1D graphics to 2d Graphics
 	Graphics2D g2 = (Graphics2D)g;
 	
-	if (gameState == titleState) {
+	if (gameState == GameState.TITLE) {
 		ui.draw(g2);
 		
 	} else {
@@ -223,7 +218,7 @@ public void paintComponent (Graphics g) {
 
 			@Override
 			public int compare(Entity e1, Entity e2) {
-				int result = Integer.compare(e1.WorldY, e2.WorldY);
+				int result = Integer.compare(e1.getWorldY(), e2.getWorldY());
 				
 				return result;
 				
@@ -250,11 +245,10 @@ public void paintComponent (Graphics g) {
 			g2.setColor(Color.white);
 			g2.setFont(g2.getFont().deriveFont(Font.PLAIN,25));
 			g2.drawString(FPS_text, FPS_x, FPS_y);
-			g2.drawString("X: " + (player.WorldX)/tileSize + " Y: " + (player.WorldY)/tileSize, FPS_x - tileSize*2, FPS_y + tileSize);
+			g2.drawString("X: " + (player.getWorldX())/tileSize + " Y: " + (player.getWorldY())/tileSize, FPS_x - tileSize*2, FPS_y + tileSize);
 		}
 	
 	g2.dispose();
-	
 	
 	}
 
@@ -297,6 +291,15 @@ public void paintComponent (Graphics g) {
 	}
 
 }
+	
+	/**
+	 * GETTERS and SETTERS
+	 */
+	public GameState getGameState () { return gameState; }
+	
+	public void setGameState (GameState gameState) { this.gameState = gameState;}
+	
+	public int getTileSize () { return tileSize; }
 }
 
 

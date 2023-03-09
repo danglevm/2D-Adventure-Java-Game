@@ -14,14 +14,14 @@ public class ObjectChest extends Entity implements ObjectInterface {
 	public ObjectChest(GamePanel gp, int worldX, int worldY) {
 		super(gp);  
 		this.gp = gp;
-		this.WorldX = worldX * gp.tileSize;
-		this.WorldY = worldY * gp.tileSize;
+		this.WorldX = worldX * gp.getTileSize();
+		this.WorldY = worldY * gp.getTileSize();
 		setDefaultAttributes();
 	}
 
 	@Override
 	public void setDefaultAttributes() {
 		 name = "chest";
-		 down1 = setupEntity("chest","/objects/environment/", gp.tileSize, gp.tileSize);
+		 down1 = setupEntity("chest","/objects/environment/", gp.getTileSize(), gp.getTileSize());
 	}		
 }
