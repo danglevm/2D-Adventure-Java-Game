@@ -11,13 +11,15 @@ import javax.imageio.ImageIO;
 
 import adventureGame2D.GamePanel;
 import adventureGame2D.UtilityTool;
+import enums.Direction;
 
 public class Entity {
 	
 	GamePanel gp;
 	public BufferedImage image, image2, image3;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-	public String name, direction = "down";
+	public String name;
+	protected Direction direction = Direction.DOWN;
 
 	
 	
@@ -93,10 +95,12 @@ public class Entity {
 		
 		if (!collisionOn) {
 			switch (direction) {
-			case "up": WorldY -= speed; break;
-			case "down": WorldY += speed; break;
-			case "left": WorldX -= speed; break;
-			case "right": WorldX += speed; break;
+			case UP: WorldY -= speed; break;
+			case DOWN: WorldY += speed; break;
+			case LEFT: WorldX -= speed; break;
+			case RIGHT: WorldX += speed; break;
+			default:
+				break;
 			
 			}
 		}
@@ -133,10 +137,10 @@ public class Entity {
 			this.WorldY - gp.tileSize < gp.player.WorldY + gp.player.screenY) {
 			
 			switch (direction) {
-			case "up": if (spriteNum) {image = up1;} else {image = up2;} break;
-			case "down": if (spriteNum) {image = down1;} else {image = down2;} break;
-			case "left": if (spriteNum) {image = left1;} else {image = left2;} break;
-			case "right": if (spriteNum) {image = right1;} else {image = right2;} break;
+			case UP: if (spriteNum) {image = up1;} else {image = up2;} break;
+			case DOWN: if (spriteNum) {image = down1;} else {image = down2;} break;
+			case LEFT: if (spriteNum) {image = left1;} else {image = left2;} break;
+			case RIGHT: if (spriteNum) {image = right1;} else {image = right2;} break;
 			}
 			
 			//Monster HP bar
@@ -197,18 +201,7 @@ public class Entity {
 		return scaledImage;
 	}
 	
-	//Set direction when talking to player
-	protected void talkingDirection (Entity player, Entity NPC) {
-		String direction = "";
-		switch(player.direction) {
-		case "up": direction ="down"; break;
-		case "down": direction = "up"; break;
-		case "right": direction = "left"; break;
-		case "left": direction = "right"; break; 
-		}
-		NPC.direction = direction;
-		
-	}
+	
 	//******************************************************************************************************************		
 	//------------------------------MONSTER OVERRIDE METHODS----------------------------------------------------------------------//
 	//*****************************************************************************************************************
@@ -234,7 +227,7 @@ public class Entity {
 		
 		if (deathCount < 41) {
 			
-			if (deathCount%5 == 0 && deathCount%10 != 0) {
+			if (deathCount % 5 == 0 && deathCount % 10 != 0) {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));	
 				
 			} else if (deathCount % 10 == 0){
@@ -251,5 +244,12 @@ public class Entity {
 	public int returnDeathSound() {return 9999;};
 	
 	
+	
+	/*
+	 * SET AND GET METHODS
+	 */
+	
+	public Direction getDirection () { return direction; }
+	public void setDirection (Direction direction) { this.direction = direction; }
 	
 }

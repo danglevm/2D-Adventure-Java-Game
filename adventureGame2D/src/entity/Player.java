@@ -13,6 +13,7 @@ import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
 import adventureGame2D.UI;
 import adventureGame2D.UtilityTool;
+import enums.Direction;
 import object.AttackObjectInterface;
 import object.DefenseObjectInterface;
 import object.ObjectSword;
@@ -145,7 +146,7 @@ public class Player extends Entity {
 		WorldX = gp.tileSize * 122;
 		WorldY= gp.tileSize * 132;
 		entityType = 0;
-		direction = "down";
+		direction = Direction.DOWN;
 		maxLife = 8;
 		life = maxLife;
 		
@@ -180,7 +181,7 @@ public class Player extends Entity {
 		switchOpacityCounter = 0;
 		
 		/**
-		 * Player attributes
+		 * Player attributesentityDirection
 		 * @var maxStamina player's max stamina pool. Default: 120. Max: 300
 		 * @var speed player's speed. Default: 3. Max: 5
 		 * @var level player's level. Default: 1. Max: 10/15?
@@ -278,19 +279,19 @@ public class Player extends Entity {
 			
 	
 			if (keyH.upPressed) {
-				this.direction = "up";
+				this.direction = Direction.UP;
 				if (!collisionOn && gp.gameState == gp.playState) {WorldY -= speed;} 
 			} 
 			if (keyH.downPressed) {
-				this.direction = "down";
+				this.direction = Direction.DOWN;
 				if (!collisionOn && gp.gameState == gp.playState) {WorldY += speed;}
 			} 
 			if (keyH.leftPressed) {
-				this.direction = "left";
+				this.direction = Direction.LEFT;
 				if (!collisionOn && gp.gameState == gp.playState) {WorldX -= speed;}
 			} 
 			if (keyH.rightPressed) {
-				this.direction = "right";
+				this.direction = Direction.RIGHT;
 				if (!collisionOn && gp.gameState == gp.playState) {WorldX += speed;}
 			}
 		
@@ -356,14 +357,16 @@ public class Player extends Entity {
 		//attack cool down period is on
 		if (!playerAttack || attackStamina < attackCost) {
 		switch (direction) {
-		case "up":
+		case UP:
 			if (spriteNum) {image = up1;} else {image = up2;} break;
-		case "down":
+		case DOWN:
 			if (spriteNum) {image = down1;} else {image = down2;} break;
-		case "left":
+		case LEFT:
 			if (spriteNum) {image = left1;} else {image = left2;} break;
-		case "right":
+		case RIGHT:
 			if (spriteNum) {image = right1;} else {image = right2;} break;
+		default:
+			break;
 			}
 		
 		
@@ -372,16 +375,18 @@ public class Player extends Entity {
 		{
 		
 		switch (direction) {
-		case "up":
+		case UP:
 			tempScreenY = screenY - gp.tileSize;
 			if (spriteNum) {image = attackUp1;} else {image = attackUp2;} break;
-		case "down":
+		case DOWN:
 			if (spriteNum) {image = attackDown1;} else {image = attackDown2;} break;
-		case "left":
+		case LEFT:
 			tempScreenX = screenX - gp.tileSize;
 			if (spriteNum) {image = attackLeft1;} else {image = attackLeft2;} break;
-		case "right":
+		case RIGHT:
 			if (spriteNum) {image = attackRight1;} else {image = attackRight2;} break;
+		default:
+			break;
 			}	
 		} 
 		
@@ -468,10 +473,12 @@ public class Player extends Entity {
 			
 		switch (this.direction) {
 		//shift collision area back by the attack area length
-			case "up": WorldY -= attackArea.height; break;
-			case "down": WorldY += attackArea.height; break;
-			case "left": WorldX -= attackArea.width;  break;
-			case "right": WorldX += attackArea.width; break;
+			case UP: WorldY -= attackArea.height; break;
+			case DOWN: WorldY += attackArea.height; break;
+			case LEFT: WorldX -= attackArea.width;  break;
+			case RIGHT: WorldX += attackArea.width; break;
+		default:
+			break;
 		}
 	
 		

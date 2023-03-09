@@ -1,15 +1,10 @@
 package entity;
 
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
-
 import adventureGame2D.GamePanel;
-import adventureGame2D.UtilityTool;
+import enums.Direction;
 
 public class OldDudeNPC extends Entity implements NPCInterface{
 	//Dialogues
@@ -70,13 +65,13 @@ public class OldDudeNPC extends Entity implements NPCInterface{
 		
 		
 		if (i < 25) {
-			direction = "up";
+			this.direction = Direction.UP;
 		} else if (i < 50) {
-			direction = "down";
+			this.direction = Direction.DOWN;
 		} else if (i < 75) {
-			direction = "left";
+			this.direction = Direction.LEFT;
 		} else {
-			direction = "right";
+			direction = Direction.RIGHT;
 		}
 		
 		actionLock = 0;
@@ -100,7 +95,7 @@ public class OldDudeNPC extends Entity implements NPCInterface{
 	@Override
 	public final void setDefaultValues() {
 		name = "Old_Dude";
-		direction = "down";
+		direction = Direction.DOWN;
 		speed = 2;
 		maxLife = 6;
 		life = maxLife;

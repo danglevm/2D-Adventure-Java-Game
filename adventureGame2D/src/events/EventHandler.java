@@ -3,6 +3,7 @@ package events;
 import java.awt.Rectangle;
 
 import adventureGame2D.GamePanel;
+import enums.Direction;
 
 public class EventHandler {
 	
@@ -61,13 +62,13 @@ public class EventHandler {
 		
 		
 		//damage player
-			if (eventCollision(pitX, pitY, "any")) {
+			if (eventCollision(pitX, pitY, Direction.ANY)) {
 				eventObject.DamagePit(gp.dialogueState);
 				eventRect[pitX][pitY].eventTriggered = true;
 			}
 		
 			//heal player
-			if (eventCollision(healX, healY, "any")) {
+			if (eventCollision(healX, healY, Direction.ANY)) {
 				eventObject.healingPool(gp.dialogueState);
 				eventRect[healX][healY].eventTriggered = true;
 			}
@@ -77,7 +78,7 @@ public class EventHandler {
 		
 			
 			//Boat teleport 
-			if (eventCollision(tpXto, tpYto, "any")) {
+			if (eventCollision(tpXto, tpYto, Direction.ANY)) {
 				//interact is true --> UI draws the string
 				interact = true;
 				if (gp.keyH.allowInteraction) {
@@ -89,7 +90,7 @@ public class EventHandler {
 			}
 			
 			
-			if (eventCollision (tpXback, tpYback, "any")) {
+			if (eventCollision (tpXback, tpYback, Direction.ANY)) {
 				interact = true;
 				if (gp.keyH.allowInteraction) {
 					eventObject.teleport(gp.dialogueState, tpXto, tpYto);
@@ -103,7 +104,7 @@ public class EventHandler {
 		
 	}
 	
-	public boolean eventCollision (int col, int row, String reqDirection)
+	public boolean eventCollision (int col, int row, Direction reqDirection)
 		{
 			boolean playerCollision = false;
 			
@@ -116,7 +117,7 @@ public class EventHandler {
 			
 			//if player hits the event and the event has not been triggered
 			if (gp.player.solidArea.intersects(eventRect[col][row]) && !eventRect[col][row].eventTriggered) {
-				if (gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")) {
+				if (gp.player.getDirection() == reqDirection || reqDirection == Direction.ANY) {
 					playerCollision = true;
 					
 					previousEventX = gp.player.WorldX;

@@ -5,6 +5,7 @@ import java.util.Random;
 import adventureGame2D.GamePanel;
 import entity.Entity;
 import entity.Player;
+import enums.Direction;
 
 public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	
@@ -60,13 +61,13 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 		int i = random.nextInt(100) + 1;//1 to 100
 		
 		if (i < 25) {
-			direction = "up";
+			direction = Direction.UP;
 		} else if (i < 50) {
-			direction = "down";
+			direction = Direction.DOWN;
 		} else if (i < 75) {
-			direction = "left";
+			direction = Direction.LEFT;
 		} else {
-			direction = "right";
+			direction = Direction.RIGHT;
 		}
 		
 		actionLock = 0;
@@ -84,7 +85,7 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	@Override
 	public void monsterDamageReaction(Player player) {
 		this.actionLock = 0;
-		this.direction = player.direction;
+		this.direction = player.getDirection();
 	}
 	
 	@Override

@@ -3,7 +3,7 @@ package adventureGame2D;
 import java.util.ArrayList;
 
 import entity.Entity;
-import tile.Tile;
+
 
 public class CollisionCheck{
 
@@ -38,8 +38,8 @@ public class CollisionCheck{
 		
 		int tileNum1, tileNum2;
 		
-		switch (entity.direction) {
-		case "up":
+		switch (entity.getDirection()) {
+		case UP:
 			//Predict to see where the player will end up next - blocks up ahead
 			//Check the left and right corner of the entity to see if it will collide
 			entityTopRow = (entityTopWorldY - entity.speed)/gp.tileSize;
@@ -51,7 +51,7 @@ public class CollisionCheck{
 				entity.collisionOn = true;
 			}
 			break;
-		case "down":
+		case DOWN:
 			entityBotRow = (entityBotWorldY + entity.speed)/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBotRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBotRow];
@@ -61,7 +61,7 @@ public class CollisionCheck{
 				entity.collisionOn = true;
 			}
 			break;
-		case "left":
+		case LEFT:
 			entityLeftCol = (entityLeftWorldX - entity.speed)/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBotRow];
@@ -71,7 +71,7 @@ public class CollisionCheck{
 				entity.collisionOn = true;
 			}
 			break;
-		case "right":
+		case RIGHT:
 			entityRightCol = (entityRightWorldX + entity.speed)/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBotRow];
@@ -80,6 +80,8 @@ public class CollisionCheck{
 			if (gp.tileM.tilesList.get(tileNum1).collision||gp.tileM.tilesList.get(tileNum2).collision) {
 				entity.collisionOn = true;
 			}
+			break;
+		default:
 			break;
 		}
 	
@@ -104,20 +106,22 @@ public class CollisionCheck{
 				gp.objects.get(i).solidArea.y = gp.objects.get(i).WorldY + gp.objects.get(i).solidArea.y;
 				
 				//NPC cannot pick up objects
-				switch (entity.direction) {
-				case "up":
+				switch (entity.getDirection()) {
+				case UP:
 					entity.solidArea.y -= entity.speed;
 					break;
 					
-				case "down":
+				case DOWN:
 					entity.solidArea.y += entity.speed;
 					break;
-				case "left":
+				case LEFT:
 					entity.solidArea.x -= entity.speed;
 					break;
 					
-				case "right":
+				case RIGHT:
 					entity.solidArea.x += entity.speed;
+					break;
+				default:
 					break;
 				}
 				
@@ -160,18 +164,20 @@ public class CollisionCheck{
 						entities.get(i).solidArea.y = entities.get(i).WorldY + entities.get(i).solidArea.y;
 						
 						
-						switch (entity.direction) {
-						case "up":
+						switch (entity.getDirection()) {
+						case UP:
 							entity.solidArea.y -= entity.speed;
 							break;
-						case "down":
+						case DOWN:
 							entity.solidArea.y += entity.speed;
 							break;
-						case "left":
+						case LEFT:
 							entity.solidArea.x -= entity.speed;
 							break;
-						case "right":
+						case RIGHT:
 							entity.solidArea.x += entity.speed;
+							break;
+						default:
 							break;
 						}
 						//reset entity's solid Area or else the values increase indefinitely
@@ -205,18 +211,20 @@ public class CollisionCheck{
 		gp.player.solidArea.y = gp.player.WorldY+gp.player.solidArea.y;
 		
 		
-		switch (entity.direction) {
-		case "up":
+		switch (entity.getDirection()) {
+		case UP:
 			entity.solidArea.y -= entity.speed;
 			break;
-		case "down":
+		case DOWN:
 			entity.solidArea.y += entity.speed;
 			break;
-		case "left":
+		case LEFT:
 			entity.solidArea.x -= entity.speed;
 			break;
-		case "right":
+		case RIGHT:
 			entity.solidArea.x += entity.speed;
+			break;
+		default:
 			break;
 		}
 		//entity rectangle intersects with target's rectangle

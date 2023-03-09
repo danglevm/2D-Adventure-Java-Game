@@ -151,18 +151,14 @@ public class KeyHandler implements KeyListener{
 		/*
 		 * Player moving
 		 */	
-		if (code == KeyEvent.VK_W) {
-			upPressed = true;
-		} 
-		if (code == KeyEvent.VK_A) {
-			leftPressed = true;
-		} 
-		if (code == KeyEvent.VK_S) {
-			downPressed = true;
-		} 
-		if (code == KeyEvent.VK_D) {
-			rightPressed = true;
-		} 
+		if (code == KeyEvent.VK_W) upPressed = true;
+		
+		if (code == KeyEvent.VK_A) leftPressed = true;
+	
+		if (code == KeyEvent.VK_S) downPressed = true;
+		
+		if (code == KeyEvent.VK_D) rightPressed = true;
+		
 		
 		/*
 		 * Pause the game
@@ -172,9 +168,8 @@ public class KeyHandler implements KeyListener{
 			pauseQuote = true;
 		} 
 		
-		if (code == KeyEvent.VK_C) {
-			gp.gameState = gp.statusState;
-		}
+		if (code == KeyEvent.VK_C) gp.gameState = gp.statusState;
+		
 		
 		if (code == KeyEvent.VK_ENTER) {
 			if (!dialoguePressed) {
