@@ -5,14 +5,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 
 import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
-import adventureGame2D.UI;
-import adventureGame2D.UtilityTool;
 import enums.Direction;
 import enums.GameState;
 import object.AttackObjectInterface;
@@ -28,14 +24,14 @@ public class Player extends Entity {
 	
 
 	//Where the player is drawn on the screen - camera 
-	public final int screenX;
-	public final int screenY;
+	protected final int screenX;
+	protected final int screenY;
 	private boolean switchOpacity;
 	private int switchOpacityCounter = 0;
 
 	private int attackCost, attackStamina, staminaRechargeCounter, maxStamina;
 
-	public boolean playerAttack;
+	private boolean playerAttack;
 	
 	private boolean staminaEnabled;
 
@@ -105,8 +101,8 @@ public class Player extends Entity {
 		
 		//Places the character at the center of the screen
 		//Subtract half of the tile length to be at the center of the player character
-		screenX = gp.screenWidth/2 - (gp.tileSize/2);
-		screenY = gp.screenHeight/2 - (gp.tileSize/2);
+		screenX = gp.screenWidth/2 - (gp.getTileSize()/2);
+		screenY = gp.screenHeight/2 - (gp.getTileSize()/2);
 		
 		this.setDefaultPlayerValues();
 		this.getPlayerImage();
@@ -116,36 +112,36 @@ public class Player extends Entity {
 	//-------------------------------CLASS METHODS------------------
 	private final void getPlayerImage() {
 		
-		attackUp1 = setupEntity("boy_attack_up_1", "/player_attack/", gp.tileSize, gp.tileSize*2);
-		attackUp2 = setupEntity("boy_attack_up_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
-		attackDown1 = setupEntity("boy_attack_down_1", "/player_attack/", gp.tileSize, gp.tileSize * 2);
-		attackDown2 = setupEntity("boy_attack_down_2", "/player_attack/", gp.tileSize, gp.tileSize * 2);
-		attackLeft1 = setupEntity("boy_attack_left_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
-		attackLeft2 = setupEntity("boy_attack_left_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
-		attackRight1 = setupEntity("boy_attack_right_1", "/player_attack/", gp.tileSize * 2, gp.tileSize);
-		attackRight2 = setupEntity("boy_attack_right_2", "/player_attack/", gp.tileSize * 2, gp.tileSize);
+		attackUp1 = setupEntity("boy_attack_up_1", "/player_attack/", gp.getTileSize(), gp.getTileSize()*2);
+		attackUp2 = setupEntity("boy_attack_up_2", "/player_attack/", gp.getTileSize(), gp.getTileSize() * 2);
+		attackDown1 = setupEntity("boy_attack_down_1", "/player_attack/", gp.getTileSize(), gp.getTileSize() * 2);
+		attackDown2 = setupEntity("boy_attack_down_2", "/player_attack/", gp.getTileSize(), gp.getTileSize() * 2);
+		attackLeft1 = setupEntity("boy_attack_left_1", "/player_attack/", gp.getTileSize() * 2, gp.getTileSize());
+		attackLeft2 = setupEntity("boy_attack_left_2", "/player_attack/", gp.getTileSize() * 2, gp.getTileSize());
+		attackRight1 = setupEntity("boy_attack_right_1", "/player_attack/", gp.getTileSize() * 2, gp.getTileSize());
+		attackRight2 = setupEntity("boy_attack_right_2", "/player_attack/", gp.getTileSize() * 2, gp.getTileSize());
 		
 		
 	}
 	
 	private final void getPlayerAttackImage() {
 		
-		up1 = setupEntity("boy_up_1", "/player/", gp.tileSize, gp.tileSize);
-		up2 = setupEntity("boy_up_2", "/player/", gp.tileSize, gp.tileSize);
-		down1 = setupEntity("boy_down_1", "/player/", gp.tileSize, gp.tileSize);
-		down2 = setupEntity("boy_down_2", "/player/", gp.tileSize, gp.tileSize);
-		left1 = setupEntity("boy_left_1", "/player/", gp.tileSize, gp.tileSize);
-		left2 = setupEntity("boy_left_2", "/player/", gp.tileSize, gp.tileSize);
-		right1 = setupEntity("boy_right_1", "/player/", gp.tileSize, gp.tileSize);
-		right2 = setupEntity ("boy_right_2", "/player/", gp.tileSize, gp.tileSize);
+		up1 = setupEntity("boy_up_1", "/player/", gp.getTileSize(), gp.getTileSize());
+		up2 = setupEntity("boy_up_2", "/player/", gp.getTileSize(), gp.getTileSize());
+		down1 = setupEntity("boy_down_1", "/player/", gp.getTileSize(), gp.getTileSize());
+		down2 = setupEntity("boy_down_2", "/player/", gp.getTileSize(), gp.getTileSize());
+		left1 = setupEntity("boy_left_1", "/player/", gp.getTileSize(), gp.getTileSize());
+		left2 = setupEntity("boy_left_2", "/player/", gp.getTileSize(), gp.getTileSize());
+		right1 = setupEntity("boy_right_1", "/player/", gp.getTileSize(), gp.getTileSize());
+		right2 = setupEntity ("boy_right_2", "/player/", gp.getTileSize(), gp.getTileSize());
 		
 	}
 	
 	
 	private final void setDefaultPlayerValues() {
 		//Default player values
-		WorldX = gp.tileSize * 122;
-		WorldY= gp.tileSize * 132;
+		WorldX = gp.getTileSize() * 122;
+		WorldY= gp.getTileSize() * 132;
 		entityType = 0;
 		direction = Direction.DOWN;
 		maxLife = 8;
@@ -250,7 +246,6 @@ public class Player extends Entity {
 			//X and Y values increase as the player moves right and down
 			//Check tile collision
 			
-			
 			//monster collision;
 			//this might return 9999
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
@@ -293,10 +288,6 @@ public class Player extends Entity {
 				if (!collisionOn && gp.getGameState() == GameState.PLAY) {WorldX += speed;}
 			}
 		
-			
-			
-			
-			
 			
 			++spriteCounter;
 			//Player image changes every 12 frames
@@ -374,12 +365,12 @@ public class Player extends Entity {
 		
 		switch (direction) {
 		case UP:
-			tempScreenY = screenY - gp.tileSize;
+			tempScreenY = screenY - gp.getTileSize();
 			if (spriteNum) {image = attackUp1;} else {image = attackUp2;} break;
 		case DOWN:
 			if (spriteNum) {image = attackDown1;} else {image = attackDown2;} break;
 		case LEFT:
-			tempScreenX = screenX - gp.tileSize;
+			tempScreenX = screenX - gp.getTileSize();
 			if (spriteNum) {image = attackLeft1;} else {image = attackLeft2;} break;
 		case RIGHT:
 			if (spriteNum) {image = attackRight1;} else {image = attackRight2;} break;
@@ -404,14 +395,14 @@ public class Player extends Entity {
 		
 		//stamina bar not hidden
 		if (staminaEnabled) {
-			double singleStaminaBar = (double) gp.tileSize/this.maxStamina,
+			double singleStaminaBar = (double) gp.getTileSize()/this.maxStamina,
 					currentStaminaBar = singleStaminaBar * this.attackStamina;
 			//Draw stamina bar
 			//Gray outline
 			//x, y, width, height
 			
 			g2.setColor(new Color(35, 35, 35));
-			g2.fillRect(screenX - 1 , screenY - 21, gp.tileSize + 2, 12);
+			g2.fillRect(screenX - 1 , screenY - 21, gp.getTileSize() + 2, 12);
 			
 			//Blue stamina bar
 			g2.setColor(new Color(0,100, 255));
@@ -428,13 +419,9 @@ public class Player extends Entity {
 		
 		++staminaRechargeCounter;
 		
-		
-		
-		
 		//16 pixels
 		g2.drawImage(image, tempScreenX, tempScreenY, null);
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-		
 		
 			
 	}
@@ -522,6 +509,14 @@ public class Player extends Entity {
 		}
 	}
 	
+	/*
+	 * SETTERS and GETTERS
+	 */
+	public int getScreenX () { return screenX; }
 	
+	public int getScreenY () { return screenY; }
+	
+	public boolean getPlayerAttack () { return playerAttack; }
+	public void setPlayerAttack (boolean playerAttack) { this.playerAttack = playerAttack; }
 	
 }

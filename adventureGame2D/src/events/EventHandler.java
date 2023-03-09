@@ -49,7 +49,6 @@ public class EventHandler {
 	}
 	
 
-	
 	public void checkEvent() {
 		int pitX = 121, pitY = 122; 
 		int healX = 115, healY = 121;
@@ -57,8 +56,8 @@ public class EventHandler {
 		int tpXback = 153, tpYback = 150;
 		
 		//Check to see if player is 1 tile away from previous event  - works for lava or some damage things
-		int xDistance = Math.abs(gp.player.WorldX - previousEventX),
-			yDistance = Math.abs(gp.player.WorldY - previousEventY),
+		int xDistance = Math.abs(gp.player.getWorldX() - previousEventX),
+			yDistance = Math.abs(gp.player.getWorldX() - previousEventY),
 			distance = Math.max(xDistance, yDistance);
 		
 		
@@ -86,7 +85,7 @@ public class EventHandler {
 					eventObject.teleport(GameState.DIALOGUE, tpXback, tpYback);
 					gp.keyH.allowInteraction = false;
 				}
-			} else if (distance > gp.tileSize) {
+			} else if (distance > gp.getTileSize()) {
 				interact = false;
 			}
 			
@@ -97,7 +96,7 @@ public class EventHandler {
 					eventObject.teleport(GameState.DIALOGUE, tpXto, tpYto);
 					gp.keyH.allowInteraction = false;
 				}
-			} else if (distance > gp.tileSize) {
+			} else if (distance > gp.getTileSize()) {
 				interact = false;
 			}
 			
@@ -110,10 +109,10 @@ public class EventHandler {
 			boolean playerCollision = false;
 			
 			//get location of player and event rectangle solid area
-			gp.player.solidArea.x = gp.player.WorldX + gp.player.solidArea.x;
-			gp.player.solidArea.y = gp.player.WorldY + gp.player.solidArea.y;
-			eventRect[col][row].x = col * gp.tileSize + eventRect[col][row].x;
-			eventRect [col][row].y = row * gp.tileSize + eventRect[col][row].y;
+			gp.player.solidArea.x = gp.player.getWorldX() + gp.player.solidArea.x;
+			gp.player.solidArea.y = gp.player.getWorldY() + gp.player.solidArea.y;
+			eventRect[col][row].x = col * gp.getTileSize() + eventRect[col][row].x;
+			eventRect [col][row].y = row * gp.getTileSize() + eventRect[col][row].y;
 			
 			
 			//if player hits the event and the event has not been triggered
@@ -121,8 +120,8 @@ public class EventHandler {
 				if (gp.player.getDirection() == reqDirection || reqDirection == Direction.ANY) {
 					playerCollision = true;
 					
-					previousEventX = gp.player.WorldX;
-					previousEventY = gp.player.WorldY;
+					previousEventX = gp.player.getWorldX();
+					previousEventY = gp.player.getWorldY();
 				}
 			}
 			

@@ -14,10 +14,10 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	public MonsterGreenSlime (GamePanel gp, int worldX, int worldY) {
 		super(gp);
 		this.gp = gp;
-		this.WorldX = worldX * gp.tileSize;
-		this.WorldY = worldY * gp.tileSize;
+		this.WorldX = worldX * gp.getTileSize();
+		this.WorldY = worldY * gp.getTileSize();
 		this.setDefaultValues();
-		this.getImage(gp.tileSize);
+		this.getImage(gp.getTileSize());
 		
 	}
 	
@@ -27,7 +27,6 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 		maxLife = 6;
 		life = maxLife;
 		entityType = 2;
-		
 		
 		solidArea.x = 8;
 		solidArea.y = 8;
@@ -76,9 +75,9 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	
 	@Override
 	public final void damageContact(Entity entity) {
-		if (!entity.invincibility) {
+		if (!entity.getInvincibility()) {
 			entity.setLife(entity.getLife() - 1);
-			entity.invincibility = true;
+			entity.setInvincibility(true);
 		}
 	}
 	

@@ -31,7 +31,7 @@ public class Event {
 	public void teleport (GameState gameState, int xTiles, int yTiles) {
 		gp.setGameState(gameState);;
 		gp.ui.setCurrentDialogue("You sailed to the nearest island");
-		gp.player.WorldX = xTiles *gp.tileSize;
-		gp.player.WorldY = yTiles * gp.tileSize;
+		gp.player.setWorldX(xTiles * gp.getTileSize());
+		gp.player.setWorldY(yTiles * gp.getTileSize()); 
 	}
 }

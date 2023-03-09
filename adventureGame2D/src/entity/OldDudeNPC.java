@@ -15,8 +15,8 @@ public class OldDudeNPC extends Entity implements NPCInterface{
 		super(gp);
 		//x, y, width, height
 		solidArea = new Rectangle(8, 8, 36, 36);
-		this.WorldX = gp.tileSize * worldX;
-		this.WorldY = gp.tileSize * worldY;
+		this.WorldX = gp.getTileSize() * worldX;
+		this.WorldY = gp.getTileSize() * worldY;
 		
 		this.setDefaultValues();
 		this.getImage();
@@ -27,14 +27,14 @@ public class OldDudeNPC extends Entity implements NPCInterface{
 	//-------------------------------NPC RENDER METHODS------------------
 	public void getImage() {
 		
-		up1 = setupEntity("oldman_up_1", "/npc/", gp.tileSize, gp.tileSize);
-		up2 = setupEntity("oldman_up_2", "/npc/", gp.tileSize, gp.tileSize);
-		down1 = setupEntity("oldman_down_1", "/npc/", gp.tileSize, gp.tileSize);
-		down2 = setupEntity("oldman_down_2", "/npc/", gp.tileSize, gp.tileSize);
-		left1 = setupEntity("oldman_left_1", "/npc/", gp.tileSize, gp.tileSize);
-		left2 = setupEntity("oldman_left_2", "/npc/", gp.tileSize, gp.tileSize);
-		right1 = setupEntity("oldman_right_1", "/npc/", gp.tileSize, gp.tileSize);
-		right2 = setupEntity("oldman_right_2", "/npc/", gp.tileSize, gp.tileSize);
+		up1 = setupEntity("oldman_up_1", "/npc/", gp.getTileSize(), gp.getTileSize());
+		up2 = setupEntity("oldman_up_2", "/npc/", gp.getTileSize(), gp.getTileSize());
+		down1 = setupEntity("oldman_down_1", "/npc/", gp.getTileSize(), gp.getTileSize());
+		down2 = setupEntity("oldman_down_2", "/npc/", gp.getTileSize(), gp.getTileSize());
+		left1 = setupEntity("oldman_left_1", "/npc/", gp.getTileSize(), gp.getTileSize());
+		left2 = setupEntity("oldman_left_2", "/npc/", gp.getTileSize(), gp.getTileSize());
+		right1 = setupEntity("oldman_right_1", "/npc/", gp.getTileSize(), gp.getTileSize());
+		right2 = setupEntity("oldman_right_2", "/npc/", gp.getTileSize(), gp.getTileSize());
 		
 
 		

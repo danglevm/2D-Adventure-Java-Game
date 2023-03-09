@@ -19,10 +19,10 @@ public class ObjectDoor extends Entity implements ObjectInterface {
 
 	public void setDefaultAttributes() {
 		name  = "Door";
-		down1 = setupEntity("door", "/objects/environment/", gp.tileSize, gp.tileSize);
+		down1 = setupEntity("door", "/objects/environment/", gp.getTileSize(), gp.getTileSize());
 		collisionOn = true;
-		this.WorldX = WorldX * gp.tileSize;
-		this.WorldY = WorldY * gp.tileSize;
+		this.WorldX = WorldX * gp.getTileSize();
+		this.WorldY = WorldY * gp.getTileSize();
 		
 		solidArea.x = 0;
 		solidArea.y = 16;

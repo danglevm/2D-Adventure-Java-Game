@@ -92,9 +92,8 @@ public class KeyHandler implements KeyListener{
 			/*
 			 * New game
 			 */
-			if (gp.ui.cursorNum == 0) {
-				gp.ui.titleScreenState = 1;
-			} 
+			if (gp.ui.cursorNum == 0) gp.ui.titleScreenState = 1;
+			
 			else if (gp.ui.cursorNum == 1) {
 				/*
 				 * Load save
@@ -108,12 +107,9 @@ public class KeyHandler implements KeyListener{
 			}
 		}
 		
-		if (gp.ui.cursorNum > 3) {
-			gp.ui.cursorNum = 3;
-		} 
-		if (gp.ui.cursorNum < 0) {
-			gp.ui.cursorNum = 0;
-		}
+		if (gp.ui.cursorNum > 3) gp.ui.cursorNum = 3;
+		
+		if (gp.ui.cursorNum < 0) gp.ui.cursorNum = 0;
 		
 	}
 	
@@ -140,12 +136,10 @@ public class KeyHandler implements KeyListener{
 			}
 		}
 		
-		if (gp.ui.cursorNum > 1) {
-			gp.ui.cursorNum = 1;
-		} 
-		if (gp.ui.cursorNum < 0) {
-			gp.ui.cursorNum = 0;
-		}
+		if (gp.ui.cursorNum > 1) gp.ui.cursorNum = 1;
+		 
+		if (gp.ui.cursorNum < 0) gp.ui.cursorNum = 0;
+		
 	}
 	
 	private void playState (int code) {
@@ -194,9 +188,7 @@ public class KeyHandler implements KeyListener{
 		/*
 		 * Trigger player attack
 		 */
-		if (code == KeyEvent.VK_J){
-			gp.player.playerAttack = true;
-		}
+		if (code == KeyEvent.VK_J) gp.player.setPlayerAttack(true);
 		
 		/*
 		 * Player stands near interactive event and can trigger events
@@ -234,12 +226,10 @@ public class KeyHandler implements KeyListener{
 			++gp.ui.statusCursor;
 		} 
 		
-		if (gp.ui.statusCursor > 11) {
-			gp.ui.statusCursor = 11;
-		} 
-		if (gp.ui.statusCursor < 0) {
-			gp.ui.statusCursor = 0;
-		}
+		if (gp.ui.statusCursor > 11) gp.ui.statusCursor = 11;
+		 
+		if (gp.ui.statusCursor < 0) gp.ui.statusCursor = 0;
+		
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -248,20 +238,13 @@ public class KeyHandler implements KeyListener{
 		/*
 		 * Check if keys are in use
 		 */
-		if (code == KeyEvent.VK_W) {
-			upPressed = false;
-		} 
-		if (code == KeyEvent.VK_A) {
-			leftPressed = false;
-		} 
-		if (code == KeyEvent.VK_S) {
-			downPressed = false;
-		} 
-		if (code == KeyEvent.VK_D) {
-			rightPressed = false;
+		if (code == KeyEvent.VK_W) upPressed = false;
 		
-		}
+		if (code == KeyEvent.VK_A) leftPressed = false;
+		 
+		if (code == KeyEvent.VK_S) downPressed = false;
 		
+		if (code == KeyEvent.VK_D) rightPressed = false;
 	
 	}
 	

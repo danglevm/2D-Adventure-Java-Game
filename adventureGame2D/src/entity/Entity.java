@@ -16,29 +16,26 @@ import enums.Direction;
 public class Entity {
 	
 	GamePanel gp;
-	public BufferedImage image, image2, image3;
-	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-	public String name;
+	protected BufferedImage image, image2, image3;
+	protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+	protected String name;
 	protected Direction direction = Direction.DOWN;
-
-	
-	
 	
 	
 	//Entity position
-	public int WorldX, WorldY, speed;
+	protected int WorldX;
+	protected int WorldY;
+	protected int speed;
 	protected int spriteCounter = 0, actionLock = 0, invincibilityCounter = 0;
 	protected boolean spriteNum = true; 
-	
-
-	
 	
 		
 	//specifies the solid area of the character entity for collision
 	//Store data about this rectangle as x, y, width and height
 	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
 	public int solidAreaDefaultX, solidAreaDefaultY;
-	public boolean collisionOn = false, invincibility = false;
+	public boolean collisionOn = false;
+	protected boolean invincibility = false;
 	//0 - player, 1 - npc, 2 - monster
 	protected int entityType;
 	
@@ -55,10 +52,7 @@ public class Entity {
 	//Character HP - both players and monster
 	protected int maxLife, life;
 	//maxLife and Life get and set
-	public int getMaxLife() {return maxLife;}
-	public int getLife() {return life;}
-	public void setMaxLife(int life) {maxLife = life;}
-	public void setLife (int life) {this.life = life;}
+	
 	protected int deathCount = 0;
 	
 	
@@ -127,32 +121,34 @@ public class Entity {
 	public void draw (Graphics2D g2, GamePanel gp) {
 		this.gp = gp;
 		BufferedImage image = null;
-		int entityScreenX = this.WorldX - gp.player.WorldX + gp.player.screenX;
+		int entityScreenX = this.WorldX - gp.player.getWorldX() + gp.player.screenX;
 		int entityScreenY = this.WorldY - gp.player.WorldY + gp.player.screenY;
 		
 		//Render the monsters on screen - pretty fuzzy about this since just copy
-		if (this.WorldX + gp.tileSize > gp.player.WorldX - gp.player.screenX && 
-			this.WorldX - gp.tileSize < gp.player.WorldX + gp.player.screenX &&
-			this.WorldY + gp.tileSize > gp.player.WorldY - gp.player.screenY &&
-			this.WorldY - gp.tileSize < gp.player.WorldY + gp.player.screenY) {
+		if (this.WorldX + gp.getTileSize() > gp.player.getWorldX() - gp.player.screenX && 
+			this.WorldX - gp.getTileSize() < gp.player.getWorldX() + gp.player.screenX &&
+			this.WorldY + gp.getTileSize() > gp.player.WorldY - gp.player.screenY &&
+			this.WorldY - gp.getTileSize() < gp.player.WorldY + gp.player.screenY) {
 			
 			switch (direction) {
 			case UP: if (spriteNum) {image = up1;} else {image = up2;} break;
 			case DOWN: if (spriteNum) {image = down1;} else {image = down2;} break;
 			case LEFT: if (spriteNum) {image = left1;} else {image = left2;} break;
 			case RIGHT: if (spriteNum) {image = right1;} else {image = right2;} break;
+			default:
+				break;
 			}
 			
 			//Monster HP bar
 			if (entityType == 2 && hpBarEnabled) {
-				double oneBarValue = (double) gp.tileSize/this.maxLife,
+				double oneBarValue = (double) gp.getTileSize()/this.maxLife,
 						hpBarValue = oneBarValue * this.life;
 				
 				
 				//Gray outline
 				//x, y, width, height
 				g2.setColor(new Color(35, 35, 35));
-				g2.fillRect(entityScreenX - 1, entityScreenY - 1, gp.tileSize + 2, 12);
+				g2.fillRect(entityScreenX - 1, entityScreenY - 1, gp.getTileSize() + 2, 12);
 				
 			
 				
@@ -181,7 +177,7 @@ public class Entity {
 			
 			
 			//16 pixels
-			g2.drawImage(image, entityScreenX, entityScreenY, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(image, entityScreenX, entityScreenY, gp.getTileSize(), gp.getTileSize(), null);
 			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		}
 	}
@@ -243,13 +239,41 @@ public class Entity {
 	
 	public int returnDeathSound() {return 9999;};
 	
-	
-	
 	/*
 	 * SET AND GET METHODS
 	 */
 	
 	public Direction getDirection () { return direction; }
 	public void setDirection (Direction direction) { this.direction = direction; }
+	
+	public int getWorldX () { return WorldX; }
+	public void setWorldX (int WorldX) { this.WorldX = WorldX; }
+	
+	public int getWorldY () { return WorldY; }
+	public void setWorldY (int WorldY) { this.WorldY = WorldY; }
+	
+	public int getSpeed () { return speed; }
+	public void setSpeed (int speed) { this.speed = speed; }
+	
+	public String getName () { return name; }
+	public void setName (String name) { this.name = name; }
+	
+		/*
+		 * GET buffered image
+		 */
+	
+	public BufferedImage getDown1() { return down1;}
+	public BufferedImage getImage1() { return image;}
+	public BufferedImage getImage2() { return image2;}
+	public BufferedImage getImage3() { return image3;}
+	
+	public boolean getInvincibility () { return invincibility; }
+	public void setInvincibility (boolean invincibility) { this.invincibility = invincibility; }
+	
+	public int getMaxLife() {return maxLife;}
+	public int getLife() {return life;}
+	public void setMaxLife(int life) {maxLife = life;}
+	public void setLife (int life) {this.life = life;}
+	
 	
 }

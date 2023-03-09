@@ -90,17 +90,13 @@ public class TileManager extends Tile{
 		try {
 			tilesList.add(new Tile());
 			tilesList.get(index).image = ImageIO.read(getClass().getResourceAsStream("/tiles/"+imageName+".png"));
-			tilesList.get(index).image = uTool.scaleImage(tilesList.get(index).image, gp.tileSize, gp.tileSize);
+			tilesList.get(index).image = uTool.scaleImage(tilesList.get(index).image, gp.getTileSize(), gp.getTileSize());
 			tilesList.get(index).collision = collision;
 			
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
 	}
-	
 
 	public void loadMap(String filePath) {
 		try{
@@ -148,14 +144,14 @@ public class TileManager extends Tile{
 			int tileNum = mapTileNum[worldCol][worldRow];
 			//Find the drawing location
 			//Render the area viewable only in the player field of view
-			int worldX = worldCol * gp.tileSize;
-			int worldY = worldRow * gp.tileSize;
-			int screenX = worldX - gp.player.WorldX + gp.player.screenX;
-			int screenY = worldY - gp.player.WorldY + gp.player.screenY;
-			if (worldX + gp.tileSize > gp.player.WorldX - gp.player.screenX && 
-				worldX - gp.tileSize < gp.player.WorldX + gp.player.screenX &&
-				worldY + gp.tileSize > gp.player.WorldY - gp.player.screenY&&
-				worldY - gp.tileSize < gp.player.WorldY + gp.player.screenY) {
+			int worldX = worldCol * gp.getTileSize();
+			int worldY = worldRow * gp.getTileSize();
+			int screenX = worldX - gp.player.getWorldX() + gp.player.getScreenX();
+			int screenY = worldY - gp.player.getWorldY() + gp.player.getScreenY();
+			if (worldX + gp.getTileSize() > gp.player.getWorldX() - gp.player.getScreenX() && 
+				worldX - gp.getTileSize() < gp.player.getWorldX() + gp.player.getScreenX() &&
+				worldY + gp.getTileSize() > gp.player.getWorldY() - gp.player.getScreenY() &&
+				worldY - gp.getTileSize() < gp.player.getWorldY() + gp.player.getScreenY()) {
 				
 				g2.drawImage(tilesList.get(tileNum).image, screenX, screenY, null);
 			}
