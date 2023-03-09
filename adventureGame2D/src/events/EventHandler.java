@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 
 import adventureGame2D.GamePanel;
 import enums.Direction;
+import enums.GameState;
 
 public class EventHandler {
 	
@@ -63,13 +64,13 @@ public class EventHandler {
 		
 		//damage player
 			if (eventCollision(pitX, pitY, Direction.ANY)) {
-				eventObject.DamagePit(gp.dialogueState);
+				eventObject.DamagePit(GameState.DIALOGUE);
 				eventRect[pitX][pitY].eventTriggered = true;
 			}
 		
 			//heal player
 			if (eventCollision(healX, healY, Direction.ANY)) {
-				eventObject.healingPool(gp.dialogueState);
+				eventObject.healingPool(GameState.DIALOGUE);
 				eventRect[healX][healY].eventTriggered = true;
 			}
 		
@@ -82,7 +83,7 @@ public class EventHandler {
 				//interact is true --> UI draws the string
 				interact = true;
 				if (gp.keyH.allowInteraction) {
-					eventObject.teleport(gp.dialogueState, tpXback, tpYback);
+					eventObject.teleport(GameState.DIALOGUE, tpXback, tpYback);
 					gp.keyH.allowInteraction = false;
 				}
 			} else if (distance > gp.tileSize) {
@@ -93,7 +94,7 @@ public class EventHandler {
 			if (eventCollision (tpXback, tpYback, Direction.ANY)) {
 				interact = true;
 				if (gp.keyH.allowInteraction) {
-					eventObject.teleport(gp.dialogueState, tpXto, tpYto);
+					eventObject.teleport(GameState.DIALOGUE, tpXto, tpYto);
 					gp.keyH.allowInteraction = false;
 				}
 			} else if (distance > gp.tileSize) {

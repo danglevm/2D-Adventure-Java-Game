@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 import entity.Entity;
+import enums.GameState;
 import object.ObjectHeart;
 import quotes.PauseQuotes;
 
@@ -91,19 +92,19 @@ public class UI {
 		
 		
 		//Drawing gamestate
-		if (gp.gameState == gp.titleState) {
+		if (gp.getGameState() == GameState.TITLE) {
 			//titleScreen
 			this.drawTitleScreen();
 			
 			
 		} 
-		if (gp.gameState == gp.pauseState) {
+		if (gp.getGameState() == GameState.PAUSE) {
 			//pause state
 			drawPauseScreen();
 			drawRandomPauseQuotes();
 			
 		}
-		if (gp.gameState == gp.playState){
+		if (gp.getGameState() == GameState.PLAY){
 			//playing state
 			this.drawPlayerHearts();
 			if (gp.eHandler.getInteraction()) {
@@ -111,13 +112,13 @@ public class UI {
 			}
 			
 		} 
-		if (gp.gameState == gp.dialogueState){
+		if (gp.getGameState() == GameState.DIALOGUE){
 			//dialogue state
 			drawDialogueScreen();
 			drawPlayerHearts();
 		}
 		
-		if (gp.gameState == gp.statusState) {
+		if (gp.getGameState() == GameState.STATUS) {
 			drawStatusScreen();
 		}
 		

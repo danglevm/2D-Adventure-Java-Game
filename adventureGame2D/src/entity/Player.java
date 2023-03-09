@@ -14,6 +14,7 @@ import adventureGame2D.KeyHandler;
 import adventureGame2D.UI;
 import adventureGame2D.UtilityTool;
 import enums.Direction;
+import enums.GameState;
 import object.AttackObjectInterface;
 import object.DefenseObjectInterface;
 import object.ObjectSword;
@@ -237,10 +238,7 @@ public class Player extends Entity {
 			if (attackStamina >= attackCost) {
 				staminaEnabled = true;
 				staminaRechargeCounter = 0;
-				attack();
-				
-				
-				
+				attack();	
 			} else {
 				playerAttack = false;
 			}
@@ -280,19 +278,19 @@ public class Player extends Entity {
 	
 			if (keyH.upPressed) {
 				this.direction = Direction.UP;
-				if (!collisionOn && gp.gameState == gp.playState) {WorldY -= speed;} 
+				if (!collisionOn && gp.getGameState() == GameState.PLAY) {WorldY -= speed;} 
 			} 
 			if (keyH.downPressed) {
 				this.direction = Direction.DOWN;
-				if (!collisionOn && gp.gameState == gp.playState) {WorldY += speed;}
+				if (!collisionOn && gp.getGameState() == GameState.PLAY) {WorldY += speed;}
 			} 
 			if (keyH.leftPressed) {
 				this.direction = Direction.LEFT;
-				if (!collisionOn && gp.gameState == gp.playState) {WorldX -= speed;}
+				if (!collisionOn && gp.getGameState() == GameState.PLAY) {WorldX -= speed;}
 			} 
 			if (keyH.rightPressed) {
 				this.direction = Direction.RIGHT;
-				if (!collisionOn && gp.gameState == gp.playState) {WorldX += speed;}
+				if (!collisionOn && gp.getGameState() == GameState.PLAY) {WorldX += speed;}
 			}
 		
 			
@@ -330,7 +328,7 @@ public class Player extends Entity {
 		if (i != 9999) {
 			//player touching npc
 			if (keyH.dialoguePressed) {
-				gp.gameState = gp.dialogueState;
+				gp.setGameState(GameState.DIALOGUE);;
 				gp.NPCs.get(i).speak();
 				keyH.dialoguePressed = false;
 				return true;

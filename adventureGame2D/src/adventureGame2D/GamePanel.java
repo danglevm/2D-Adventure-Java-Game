@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import entity.Entity;
 import entity.Player;
+import enums.GameState;
 import events.EventHandler;
 import tile.TileManager;
 
@@ -49,13 +50,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	
 	//Main game state
-	public int gameState;
-	public final int titleState = 0;
-	public final int playState = 1;
-	public final int pauseState = 2;
-	public final int dialogueState = 3;
-	public final int statusState = 4;
-	
+	private GameState gameState;
 	
 	//FPS
 	private int FPS = 60, FPS_x = screenWidth - tileSize*3, FPS_y = tileSize;
@@ -120,7 +115,7 @@ public class GamePanel extends JPanel implements Runnable{
 		assetPlace.setMonsters();
 		playMusic(0);
 		stopMusic();
-		gameState = titleState;
+		gameState = GameState.TITLE;
 		
 		
 	}
@@ -179,7 +174,7 @@ public class GamePanel extends JPanel implements Runnable{
 public void update() {
 	
 	
-	if (gameState == playState) {
+	if (gameState == GameState.PLAY) {
 		//Player
 		player.update();
 		//NPCs
@@ -202,7 +197,7 @@ public void paintComponent (Graphics g) {
 	//Set 1D graphics to 2d Graphics
 	Graphics2D g2 = (Graphics2D)g;
 	
-	if (gameState == titleState) {
+	if (gameState == GameState.TITLE) {
 		ui.draw(g2);
 		
 	} else {
@@ -255,7 +250,6 @@ public void paintComponent (Graphics g) {
 	
 	g2.dispose();
 	
-	
 	}
 
 }
@@ -297,6 +291,13 @@ public void paintComponent (Graphics g) {
 	}
 
 }
+	
+	/**
+	 * GETTERS and SETTERS
+	 */
+	public GameState getGameState () { return gameState; }
+	
+	public void setGameState (GameState gameState) { this.gameState = gameState;}
 }
 
 

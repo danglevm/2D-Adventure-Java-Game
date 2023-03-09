@@ -3,6 +3,8 @@ package adventureGame2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import enums.GameState;
+
 public class KeyHandler implements KeyListener{
 
 	GamePanel gp;
@@ -28,7 +30,7 @@ public class KeyHandler implements KeyListener{
 	/*
 	* TITLE STATE
 	*/
-	if (gp.gameState == gp.titleState) {
+	if (gp.getGameState() == GameState.TITLE) {
 			
 			if (gp.ui.titleScreenState == 0) {
 				
@@ -40,31 +42,30 @@ public class KeyHandler implements KeyListener{
 				
 			}
 			
-			
 	/*
 	* PLAY STATE
 	*/
-	} else if (gp.gameState == gp.playState) {
+	} else if (gp.getGameState() == GameState.PLAY) {
 		
 		playState(code);
 	
 	/*
 	* PAUSE STATE - resumes the game with escape is pressed
 	*/	
-	} else if (gp.gameState == gp.pauseState) {
+	} else if (gp.getGameState() == GameState.PAUSE) {
 			
 		pauseState (code);
 	
 	/*
 	* DIALOGUE STATE - resumes the game with escape is pressed
 	*/
-	} else if (gp.gameState == gp.dialogueState){
+	} else if (gp.getGameState() == GameState.DIALOGUE){
 			
 		dialogueState(code);
 	 /*
 	 * DIALOGUE STATE - resumes the game with escape is pressed
 	 */		
-	} else if (gp.gameState == gp.statusState) {
+	} else if (gp.getGameState() == GameState.STATUS) {
 		
 			statusState (code);
 		
@@ -130,7 +131,7 @@ public class KeyHandler implements KeyListener{
 			 * Blue boy
 			 */	
 			if (gp.ui.cursorNum == 0) {
-				gp.gameState = gp.playState;
+				gp.setGameState(GameState.PLAY);
 				gp.playMusic(0);
 			} else {
 				/*
@@ -164,11 +165,11 @@ public class KeyHandler implements KeyListener{
 		 * Pause the game
 		 */
 		if (code == KeyEvent.VK_ESCAPE) {
-			gp.gameState = gp.pauseState;
+			gp.setGameState(GameState.PAUSE);
 			pauseQuote = true;
 		} 
 		
-		if (code == KeyEvent.VK_C) gp.gameState = gp.statusState;
+		if (code == KeyEvent.VK_C) gp.setGameState(GameState.STATUS);
 		
 		
 		if (code == KeyEvent.VK_ENTER) {
@@ -213,25 +214,18 @@ public class KeyHandler implements KeyListener{
 	 */
 	
 	private void pauseState (int code) {
-
-		if (code == KeyEvent.VK_ESCAPE) {
-			gp.gameState = gp.playState;
-			
-		} 
+		if (code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.PLAY);
 	}
 	
 	private void dialogueState (int code) {
-		if (code == KeyEvent.VK_ENTER) {
-			gp.gameState = gp.playState;
-		}
+		if (code == KeyEvent.VK_ENTER) gp.setGameState(GameState.PLAY);
 		
 	}
 	
 	private void statusState (int code) {
 		
-		if (code == KeyEvent.VK_C) {
-			gp.gameState = gp.playState;
-		}
+		if (code == KeyEvent.VK_C) gp.setGameState(GameState.PLAY);  
+		
 		
 		if (code == KeyEvent.VK_W) {
 			--gp.ui.statusCursor;
