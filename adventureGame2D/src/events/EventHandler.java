@@ -1,7 +1,5 @@
 package events;
 
-import java.awt.Rectangle;
-
 import adventureGame2D.GamePanel;
 import enums.Direction;
 import enums.GameState;
@@ -109,14 +107,14 @@ public class EventHandler {
 			boolean playerCollision = false;
 			
 			//get location of player and event rectangle solid area
-			gp.player.solidArea.x = gp.player.getWorldX() + gp.player.solidArea.x;
-			gp.player.solidArea.y = gp.player.getWorldY() + gp.player.solidArea.y;
+			gp.player.getSolidArea().x = gp.player.getWorldX() + gp.player.getSolidArea().x;
+			gp.player.getSolidArea().y = gp.player.getWorldY() + gp.player.getSolidArea().y;
 			eventRect[col][row].x = col * gp.getTileSize() + eventRect[col][row].x;
 			eventRect [col][row].y = row * gp.getTileSize() + eventRect[col][row].y;
 			
 			
 			//if player hits the event and the event has not been triggered
-			if (gp.player.solidArea.intersects(eventRect[col][row]) && !eventRect[col][row].eventTriggered) {
+			if (gp.player.getSolidArea().intersects(eventRect[col][row]) && !eventRect[col][row].eventTriggered) {
 				if (gp.player.getDirection() == reqDirection || reqDirection == Direction.ANY) {
 					playerCollision = true;
 					
@@ -125,8 +123,8 @@ public class EventHandler {
 				}
 			}
 			
-			gp.player.solidArea.x = gp.player.solidAreaDefaultX;
-			gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+			gp.player.getSolidArea().x = gp.player.getSolidAreaDefaultX();
+			gp.player.getSolidArea().y = gp.player.getSolidAreaDefaultY();
 			eventRect[col][row].x = eventRect[col][row].eventDefaultX;
 			eventRect[col][row].y = eventRect[col][row].eventDefaultY;
 		

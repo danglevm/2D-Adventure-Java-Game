@@ -32,9 +32,10 @@ public class Entity {
 		
 	//specifies the solid area of the character entity for collision
 	//Store data about this rectangle as x, y, width and height
-	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-	public int solidAreaDefaultX, solidAreaDefaultY;
-	public boolean collisionOn = false;
+	protected Rectangle solidArea = new Rectangle(0, 0, 48, 48);
+	protected int solidAreaDefaultX;
+	protected int solidAreaDefaultY;
+	protected boolean collisionOn = false;
 	protected boolean invincibility = false;
 	//0 - player, 1 - npc, 2 - monster
 	protected int entityType;
@@ -58,8 +59,7 @@ public class Entity {
 	
 	//alive and in dying animation or not
 	protected boolean alive = true, dying = false;
-	public boolean getAlive() {return alive;}
-	public boolean getDying() { return dying;}
+	
 //	Constructor
 	public Entity (GamePanel gp) {
 		this.gp = gp;
@@ -240,7 +240,7 @@ public class Entity {
 	public int returnDeathSound() {return 9999;};
 	
 	/*
-	 * SET AND GET METHODS
+	 * SETTERS AND GETTERS
 	 */
 	
 	public Direction getDirection () { return direction; }
@@ -258,22 +258,39 @@ public class Entity {
 	public String getName () { return name; }
 	public void setName (String name) { this.name = name; }
 	
-		/*
-		 * GET buffered image
-		 */
+	public boolean getInvincibility () { return invincibility; }
+	public void setInvincibility (boolean invincibility) { this.invincibility = invincibility; }
+	
+	public int getMaxLife() {return maxLife;}
+	public int getLife() {return life;}
+	
+	public void setMaxLife(int life) {maxLife = life;}
+	public void setLife (int life) {this.life = life;}
+	
+	public Rectangle getSolidArea() { return solidArea; }
+	public void setSolidArea (Rectangle solidArea) { this.solidArea = solidArea; }
+	
+	public int getSolidAreaDefaultX() { return solidAreaDefaultX; }
+	public void setSolidAreaDefaultX (int solidAreaDefaultX) { this.solidAreaDefaultX = solidAreaDefaultX; }
+	
+	public int getSolidAreaDefaultY() { return solidAreaDefaultY; }
+	public void setSolidAreaDefaultY (int solidAreaDefaultY) { this.solidAreaDefaultY = solidAreaDefaultY; } 
+	
+	public boolean getCollisionOn() { return collisionOn; }
+	public void setCollisionOn (boolean collisionOn) { this.collisionOn = collisionOn; } 
+	
+	public boolean getAlive() {return alive;}
+	public boolean getDying() { return dying;}
+	/*
+	 * BUFFERED IMAGES SETTERS AND GETTERS
+	 */
 	
 	public BufferedImage getDown1() { return down1;}
 	public BufferedImage getImage1() { return image;}
 	public BufferedImage getImage2() { return image2;}
 	public BufferedImage getImage3() { return image3;}
 	
-	public boolean getInvincibility () { return invincibility; }
-	public void setInvincibility (boolean invincibility) { this.invincibility = invincibility; }
-	
-	public int getMaxLife() {return maxLife;}
-	public int getLife() {return life;}
-	public void setMaxLife(int life) {maxLife = life;}
-	public void setLife (int life) {this.life = life;}
+
 	
 	
 }

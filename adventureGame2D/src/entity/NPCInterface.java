@@ -10,14 +10,14 @@ public interface NPCInterface {
 		default void talkingDirection (Player player, Entity NPC) {
 			Direction entityDirection = Direction.DOWN;
 			switch(player.getDirection()) {
-			case UP: entityDirection = Direction.UP; break;
-			case DOWN: entityDirection = Direction.DOWN; break;
-			case RIGHT: entityDirection = Direction.RIGHT; break;
-			case LEFT: entityDirection = Direction.LEFT; break;
+			case UP: entityDirection = Direction.DOWN; break;
+			case DOWN: entityDirection = Direction.UP; break;
+			case RIGHT: entityDirection = Direction.LEFT; break;
+			case LEFT: entityDirection = Direction.RIGHT; break;
 			case ANY:
 				break;
 			default:
-				entityDirection = Direction.DOWN; 
+				break;
 			}
 			NPC.setDirection(entityDirection); 
 			

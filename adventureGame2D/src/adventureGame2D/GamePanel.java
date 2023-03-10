@@ -18,6 +18,7 @@ import events.EventHandler;
 import tile.TileManager;
 
 //Game Panel inherits all components from JPanel
+@SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable{
 	//******************************************************************************************************************		
 	//------------------------------SCREEN SETTINGS----------------------------------------------------------------------//

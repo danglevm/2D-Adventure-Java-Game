@@ -55,7 +55,6 @@ public class UI {
 			maruMonica = Font.createFont(Font.TRUETYPE_FONT, is2);
 		} catch (FontFormatException | IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		
