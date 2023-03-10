@@ -38,7 +38,7 @@ public class Player extends Entity {
 	/*
 	 * Player attributes
 	 */
-	public  int level,
+	private  int level,
 				healthRegen,
 				mana,
 				manaRegen,
@@ -50,7 +50,6 @@ public class Player extends Entity {
 				knockback,
 				criticalHit,
 				coin,
-				displaySpeed,
 				experience,
 				nextLevelExperience,
 				upgradePoints;
@@ -80,7 +79,7 @@ public class Player extends Entity {
 	private AttackObjectInterface currentWeapon;
 	private DefenseObjectInterface currentShield;
 	
-	public Entity equippedWeapon,
+	private Entity equippedWeapon,
 					equippedShield;
 				
 	/*
@@ -191,7 +190,6 @@ public class Player extends Entity {
 		healthRegen = 0;
 		maxStamina = 120;
 		stamina = 0;
-		displaySpeed = 0;
 		speed = 3;
 		level = 1;
 		mana = 0;
@@ -222,7 +220,6 @@ public class Player extends Entity {
 		
 		
 	}
-	
 	
 	
 	public void update() 
@@ -520,5 +517,40 @@ public class Player extends Entity {
 	
 	public String[] getLabelArray () { return labels; }
 	public String getLabelEntries (int i) { return labels[i]; }
+	
+	public int getLevel () { return level; }
+	
+	public int getHealthRegen () { return healthRegen; }
+	
+	public int getMana () { return mana; }
+	
+	public int getManaRegen () { return manaRegen; }
+	
+	public int getStrength () { return strength; }
+
+	public int getDexterity () { return dexterity; }
+	
+	public int getStamina () { return stamina; }
+	
+	public int getAttack () { return attack; }
+	
+	public int getDefense () { return defense; }
+	
+	public int getKnockback () { return knockback; }
+	
+	public int getCriticalHit () { return criticalHit; }
+	
+	public int getCoin () { return coin; }
+	
+	public int getExperience () { return experience; }
+	
+	public int getNextLevelExperience () { return nextLevelExperience; }
+	
+	public int getUpgradePoints () { return upgradePoints; }
+	
+	public Entity getEquippedWeapon () { return equippedWeapon; }
+	
+	public Entity getEquippedShield () { return equippedShield; }
+	
 	
 }

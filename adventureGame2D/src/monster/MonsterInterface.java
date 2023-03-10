@@ -1,6 +1,5 @@
 package monster;
 
-import entity.Entity;
 
 interface MonsterInterface{
 		//set default values for the entity
