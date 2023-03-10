@@ -74,16 +74,16 @@ public class Entity {
 	public void update() {
 		setAction();
 		collisionOn = false;
-		gp.cChecker.CheckTile(this);
-		gp.cChecker.checkObject(this, false);
-		gp.cChecker.checkEntity(this, gp.NPCs);
-		gp.cChecker.checkEntity(this, gp.monsters);
+		gp.getCollisionCheck().CheckTile(this);
+		gp.getCollisionCheck().checkObject(this, false);
+		gp.getCollisionCheck().checkEntity(this, gp.getNPCS());
+		gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 		
 		
-		if (gp.cChecker.checkPlayer(this) && this.entityType == 2) {
-			if (!gp.player.invincibility) {
-				gp.player.setLife(gp.player.getLife() - 1);
-				gp.player.invincibility = true;
+		if (gp.getCollisionCheck().checkPlayer(this) && this.entityType == 2) {
+			if (!gp.getPlayer().invincibility) {
+				gp.getPlayer().setLife(gp.getPlayer().getLife() - 1);
+				gp.getPlayer().invincibility = true;
 			}
 		}
 		
@@ -102,16 +102,10 @@ public class Entity {
 		spriteCounter++;
 		//Player image changes every 12 frames
 		if (!collisionOn) {
-		if (spriteCounter > 12) {
-			if (spriteNum) {
-				spriteNum = false;
+			if (spriteCounter > 12) {
+				spriteNum = !spriteNum;
+				spriteCounter = 0;
 			}
-			
-			else {
-				spriteNum = true;
-			}
-			spriteCounter = 0;
-		}
 		}
 		this.checkInvincibilityTime();
 	}
@@ -121,14 +115,14 @@ public class Entity {
 	public void draw (Graphics2D g2, GamePanel gp) {
 		this.gp = gp;
 		BufferedImage image = null;
-		int entityScreenX = this.WorldX - gp.player.getWorldX() + gp.player.screenX;
-		int entityScreenY = this.WorldY - gp.player.WorldY + gp.player.screenY;
+		int entityScreenX = this.WorldX - gp.getPlayer().getWorldX() + gp.getPlayer().screenX;
+		int entityScreenY = this.WorldY - gp.getPlayer().WorldY + gp.getPlayer().screenY;
 		
 		//Render the monsters on screen - pretty fuzzy about this since just copy
-		if (this.WorldX + gp.getTileSize() > gp.player.getWorldX() - gp.player.screenX && 
-			this.WorldX - gp.getTileSize() < gp.player.getWorldX() + gp.player.screenX &&
-			this.WorldY + gp.getTileSize() > gp.player.WorldY - gp.player.screenY &&
-			this.WorldY - gp.getTileSize() < gp.player.WorldY + gp.player.screenY) {
+		if (this.WorldX + gp.getTileSize() > gp.getPlayer().getWorldX() - gp.getPlayer().screenX && 
+			this.WorldX - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().screenX &&
+			this.WorldY + gp.getTileSize() > gp.getPlayer().WorldY - gp.getPlayer().screenY &&
+			this.WorldY - gp.getTileSize() < gp.getPlayer().WorldY + gp.getPlayer().screenY) {
 			
 			switch (direction) {
 			case UP: if (spriteNum) {image = up1;} else {image = up2;} break;
@@ -191,7 +185,7 @@ public class Entity {
 		try {
 			scaledImage = ImageIO.read(getClass().getResourceAsStream(pathName + imageName+".png"));
 			scaledImage = uTool.scaleImage(scaledImage, width, height);
-		}catch(IOException e) {
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 		return scaledImage;

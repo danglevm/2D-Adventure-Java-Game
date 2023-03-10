@@ -83,14 +83,13 @@ public class OldDudeNPC extends Entity implements NPCInterface{
 		//Opening speak
 		try {
 		if (oldDudeDialogues.get(dialogueIndex) != null) {
-			gp.ui.setCurrentDialogue(oldDudeDialogues.get(dialogueIndex));
+			gp.getGameUI().setCurrentDialogue(oldDudeDialogues.get(dialogueIndex));
 			++dialogueIndex;
 			}
 		} catch (IndexOutOfBoundsException e){}
-		talkingDirection(gp.player, this);
+		talkingDirection(gp.getPlayer(), this);
 		
 	}
-
 
 	@Override
 	public final void setDefaultValues() {

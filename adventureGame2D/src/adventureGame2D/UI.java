@@ -5,12 +5,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DecimalFormat;
-import java.util.Random;
 
 import entity.Entity;
 import enums.GameState;
@@ -70,7 +67,7 @@ public class UI {
 	
 	private int getXCenter (String text) {
 		int str_length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-		return gp.screenWidth/2 - str_length/2;
+		return gp.getScreenWidth()/2 - str_length/2;
 	}
 	
 	
@@ -106,7 +103,7 @@ public class UI {
 		if (gp.getGameState() == GameState.PLAY){
 			//playing state
 			this.drawPlayerHearts();
-			if (gp.eHandler.getInteraction()) {
+			if (gp.getEventHandler().getInteraction()) {
 				drawInteractionKey();
 			}
 			
@@ -132,14 +129,14 @@ public class UI {
 		//Draw background
 		Color background = new Color (0,0,0, 220);
 		g2.setColor(background);
-		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+		g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
 			
 		
 		g2.setFont(maruMonica);
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80));
 		g2.setColor(Color.white);
 		String text = "Game Paused";
-		int x = getXCenter(text), y = gp.screenHeight/2;
+		int x = getXCenter(text), y = gp.getScreenHeight()/2;
 		g2.drawString(text,x, y);
 		
 		
@@ -154,19 +151,19 @@ public class UI {
 		int max = 2, 
 				min = 0,
 				range = max - min + 1,
-				rand = (int)(Math.random()*range)+min;
-		if (gp.keyH.pauseQuote) {
-			pauseText = pauseQuotes.getPauseQuote(rand);
-			gp.keyH.pauseQuote=false;
+				rand = (int)(Math.random() * range)+min;
+		if (gp.getKeyHandler().getPauseQuote()) {
+			pauseText = pauseQuotes.getPauseNoCombat(rand);
+			gp.getKeyHandler().setPauseQuote(false);
 		}
-		int y = gp.screenHeight/2 + gp.getTileSize()*2, x = getXCenter (pauseText);
+		int y = gp.getScreenHeight()/2 + gp.getTileSize()*2, x = getXCenter (pauseText);
 		g2.drawString(pauseText,x, y);
 		
 	}
 	
 	private void drawTitleScreen() {
 		g2.setColor(new Color (70,120,80));
-		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+		g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
 		if (titleScreenState == 0) {
 			//Draw background
 			
@@ -187,9 +184,9 @@ public class UI {
 			g2.drawString(text, x, y);
 			
 			//Character image
-			x = gp.screenWidth/2 - gp.getTileSize() * 2;
+			x = gp.getScreenWidth()/2 - gp.getTileSize() * 2;
 			y += gp.getTileSize() * 1.5;
-			g2.drawImage(gp.player.getDown1(), x, y, gp.getTileSize() * 4, gp.getTileSize() * 4, null);
+			g2.drawImage(gp.getPlayer().getDown1(), x, y, gp.getTileSize() * 4, gp.getTileSize() * 4, null);
 			
 			//Menu options
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
@@ -229,13 +226,13 @@ public class UI {
 			
 			text = "Blue Boy";
 			x = getXCenter(text) - gp.getTileSize()*4;
-			y = gp.screenHeight/2;
+			y = gp.getScreenHeight()/2;
 			g2.drawString(text, x, y);
 			if (cursorNum == 0) {g2.drawString(">", x-gp.getTileSize(), y);}
 			
 			text = "Yellow Girl";
 			x = getXCenter(text) + gp.getTileSize()*4;
-			y = gp.screenHeight/2;
+			y = gp.getScreenHeight()/2;
 			g2.drawString(text, x, y);
 			if (cursorNum == 1) {g2.drawString(">", x-gp.getTileSize(), y);}
 			
@@ -248,8 +245,8 @@ public class UI {
 		int xLocation = gp.getTileSize()/2, 
 			yLocation = gp.getTileSize()/2, 
 			i = 0;
-		int playerMaxLife = gp.player.getMaxLife();
-		int currentPlayerLife = gp.player.getLife();
+		int playerMaxLife = gp.getPlayer().getMaxLife();
+		int currentPlayerLife = gp.getPlayer().getLife();
 		
 		
 		//Draw blank hearts - max hp
@@ -285,7 +282,7 @@ public class UI {
 		// Dialogue window
 		int x = gp.getTileSize()*2, 
 			y = gp.getTileSize()/2, 
-			width = gp.screenWidth - (gp.getTileSize()*4), 
+			width = gp.getScreenWidth()- (gp.getTileSize()*4), 
 			height = gp.getTileSize()*4;
 		
 			drawSubWindow (x, y, width, height);
@@ -330,9 +327,9 @@ public class UI {
 	private void drawInteractionKey() {
 		String text = "X Interact";
 		int x = getXCenter(text) - gp.getTileSize()/4, 
-			y = gp.screenHeight/2 - gp.getTileSize();
+			y = gp.getScreenHeight()/2 - gp.getTileSize();
 		g2.setColor(Color.white);
-		g2.drawRect(gp.player.getScreenX() + 3, gp.player.getScreenY() - 48, 28, 28);
+		g2.drawRect(gp.getPlayer().getScreenX() + 3, gp.getPlayer().getScreenY() - 48, 28, 28);
 		g2.setFont(g2.getFont().deriveFont(24F));
 		g2.drawString(text, x, y);
 	}
@@ -360,8 +357,9 @@ public class UI {
 			lineHeight = 36,
 			rectTailX = (frameX + frameWidth) - gp.getTileSize() * 3;
 		
-		for (int i = 0; i < gp.player.labels.length; ++i) {
-			g2.drawString(gp.player.labels[i], valueX, valueY);
+		
+		for (int i = 0; i < gp.getPlayer().getLabelArray().length; ++i) {
+			g2.drawString(gp.getPlayer().getLabelEntries(i), valueX, valueY);
 			valueY += lineHeight;
 		}
 		
@@ -369,7 +367,7 @@ public class UI {
 		int defaultRectTailX = rectTailX;
 		g2.setStroke(new java.awt.BasicStroke(1));
 		
-		for (int i = 0; i < gp.player.labels.length - 3; ++i) {
+		for (int i = 0; i < gp.getPlayer().getLabelArray().length - 3; ++i) {
 			for (int a = 0; a < 3; ++a) {
 				if (i == 0 || i == 1) continue;
 				g2.drawRect(rectTailX, valueY - 20, 20, 20);
@@ -386,71 +384,71 @@ public class UI {
 		int tailX = (frameX + frameWidth) - gp.getTileSize() * 4;
 		valueY = frameY + gp.getTileSize();
 		
-		g2.drawString(gp.player.name, getXValuesAlign(gp.player.name, tailX), valueY);
+		g2.drawString(gp.getPlayer().getName(), getXValuesAlign(gp.getPlayer().getName(), tailX), valueY);
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.level), getXValuesAlign(String.valueOf(gp.player.level), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().level), getXValuesAlign(String.valueOf(gp.getPlayer().level), tailX), valueY);
 		valueY += lineHeight;
 	
 		
-		String value = String.valueOf(gp.player.getLife() + "/" + gp.player.getMaxLife());
+		String value = String.valueOf(gp.getPlayer().getLife() + "/" + gp.getPlayer().getMaxLife());
 		g2.drawString(value, getXValuesAlign(value, tailX), valueY);
 		if (statusCursor == 0) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.healthRegen), getXValuesAlign(String.valueOf(gp.player.healthRegen), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().healthRegen), getXValuesAlign(String.valueOf(gp.getPlayer().healthRegen), tailX), valueY);
 		if (statusCursor == 1) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.mana), getXValuesAlign(String.valueOf(gp.player.mana), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().mana), getXValuesAlign(String.valueOf(gp.getPlayer().mana), tailX), valueY);
 		if (statusCursor == 2) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.manaRegen), getXValuesAlign(String.valueOf(gp.player.manaRegen), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().manaRegen), getXValuesAlign(String.valueOf(gp.getPlayer().manaRegen), tailX), valueY);
 		if (statusCursor == 3) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.strength), getXValuesAlign(String.valueOf(gp.player.strength), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().strength), getXValuesAlign(String.valueOf(gp.getPlayer().strength), tailX), valueY);
 		if (statusCursor == 4) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.defense), getXValuesAlign(String.valueOf(gp.player.defense), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().defense), getXValuesAlign(String.valueOf(gp.getPlayer().defense), tailX), valueY);
 		if (statusCursor == 5) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.dexterity), getXValuesAlign(String.valueOf(gp.player.dexterity), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().dexterity), getXValuesAlign(String.valueOf(gp.getPlayer().dexterity), tailX), valueY);
 		if (statusCursor == 6) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.stamina), getXValuesAlign(String.valueOf(gp.player.stamina), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().stamina), getXValuesAlign(String.valueOf(gp.getPlayer().stamina), tailX), valueY);
 		if (statusCursor == 7) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.displaySpeed), getXValuesAlign(String.valueOf(gp.player.displaySpeed), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().displaySpeed), getXValuesAlign(String.valueOf(gp.getPlayer().displaySpeed), tailX), valueY);
 		if (statusCursor == 8) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.knockback), getXValuesAlign(String.valueOf(gp.player.knockback), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().knockback), getXValuesAlign(String.valueOf(gp.getPlayer().knockback), tailX), valueY);
 		if (statusCursor == 9) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.criticalHit), getXValuesAlign(String.valueOf(gp.player.criticalHit), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().criticalHit), getXValuesAlign(String.valueOf(gp.getPlayer().criticalHit), tailX), valueY);
 		if (statusCursor == 10) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		value = String.valueOf(gp.player.experience + "/" + gp.player.nextLevelExperience);
+		value = String.valueOf(gp.getPlayer().experience + "/" + gp.getPlayer().nextLevelExperience);
 		g2.drawString(value, getXValuesAlign(value, tailX - gp.getTileSize() * 2), valueY);
 		g2.drawString("Reset", getXValuesAlign("Reset", tailX), valueY);
 		if (statusCursor == 11) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		g2.drawString("Points: ", getXValuesAlign("Points: ", tailX + gp.getTileSize() * 2), valueY);
-		g2.drawString(String.valueOf(gp.player.upgradePoints), getXValuesAlign(String.valueOf(gp.player.upgradePoints), tailX + gp.getTileSize() * 3), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().upgradePoints), getXValuesAlign(String.valueOf(gp.getPlayer().upgradePoints), tailX + gp.getTileSize() * 3), valueY);
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.player.coin), getXValuesAlign(String.valueOf(gp.player.coin), tailX), valueY);	
+		g2.drawString(String.valueOf(gp.getPlayer().coin), getXValuesAlign(String.valueOf(gp.getPlayer().coin), tailX), valueY);	
 		valueY += 11;
 		
-		g2.drawImage(gp.player.equippedWeapon.getDown1(), tailX - gp.getTileSize(), valueY, null);
-		g2.drawImage(gp.player.equippedShield.getDown1(), tailX, valueY , null);
+		g2.drawImage(gp.getPlayer().equippedWeapon.getDown1(), tailX - gp.getTileSize(), valueY, null);
+		g2.drawImage(gp.getPlayer().equippedShield.getDown1(), tailX, valueY , null);
 	}
 	
 }

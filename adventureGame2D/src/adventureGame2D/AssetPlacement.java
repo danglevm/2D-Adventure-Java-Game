@@ -16,19 +16,19 @@ public class AssetPlacement {
 	}
 	
 	public void setObject() {
-		gp.objects.add(new ObjectKey(gp, 121, 140));
-		gp.objects.add(new ObjectDoor(gp, 121, 123));
-		gp.objects.add(new ObjectBoots(gp, 121, 124));
+		gp.getObjects().add(new ObjectKey(gp, 121, 140));
+		gp.getObjects().add(new ObjectDoor(gp, 121, 123));
+		gp.getObjects().add(new ObjectBoots(gp, 121, 124));
 
 	}
 	
 	public void setNPCs() {
-		gp.NPCs.add(new OldDudeNPC(gp, 121, 139));
+		gp.getNPCS().add(new OldDudeNPC(gp, 121, 139));
 	}
 	
 	public void setMonsters() {
-		gp.monsters.add(new MonsterGreenSlime (gp, 126, 136));
-		gp.monsters.add(new MonsterGreenSlime (gp, 110, 120));
+		gp.getMonsters().add(new MonsterGreenSlime (gp, 126, 136));
+		gp.getMonsters().add(new MonsterGreenSlime (gp, 110, 120));
 	}
 	
 }

@@ -38,7 +38,6 @@ public class Player extends Entity {
 	/*
 	 * Player attributes
 	 */
-	public	String name;
 	public  int level,
 				healthRegen,
 				mana,
@@ -55,7 +54,7 @@ public class Player extends Entity {
 				experience,
 				nextLevelExperience,
 				upgradePoints;
-	public String [] labels = {
+	private String [] labels = {
 			"Name",
 			"Level",
 			"HP",
@@ -101,8 +100,8 @@ public class Player extends Entity {
 		
 		//Places the character at the center of the screen
 		//Subtract half of the tile length to be at the center of the player character
-		screenX = gp.screenWidth/2 - (gp.getTileSize()/2);
-		screenY = gp.screenHeight/2 - (gp.getTileSize()/2);
+		screenX = gp.getScreenWidth()/2 - (gp.getTileSize()/2);
+		screenY = gp.getScreenHeight()/2 - (gp.getTileSize()/2);
 		
 		this.setDefaultPlayerValues();
 		this.getPlayerImage();
@@ -239,8 +238,8 @@ public class Player extends Entity {
 				playerAttack = false;
 			}
 			
-		} else if (keyH.upPressed||keyH.downPressed||
-				keyH.leftPressed||keyH.rightPressed || keyH.dialoguePressed)
+		} else if (keyH.getUpPress()||keyH.getDownPress()||
+				keyH.getLeftPress()||keyH.getRightPress() || keyH.getDialoguePress())
 		{
 			
 			//X and Y values increase as the player moves right and down
@@ -248,42 +247,42 @@ public class Player extends Entity {
 			
 			//monster collision;
 			//this might return 9999
-			int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
+			int monsterIndex = gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 			if (monsterIndex != 9999) {
-				gp.monsters.get(monsterIndex).damageContact(this);
+				gp.getMonsters().get(monsterIndex).damageContact(this);
 				gp.playSE(6);
 			}
 			
 			//Collision checker receive subclass
-			gp.cChecker.CheckTile(this);
+			gp.getCollisionCheck().CheckTile(this);
 			
 			//Check event collision
-			gp.eHandler.checkEvent();
+			gp.getEventHandler().checkEvent();
 			
 			//Check object collision
-			ObjectPickUp(gp.cChecker.checkObject(this, true));
+			ObjectPickUp(gp.getCollisionCheck().checkObject(this, true));
 			
 			
 			//check NPC collision
-			if (!collisionNPC(gp.cChecker.checkEntity(this, gp.NPCs)) && keyH.dialoguePressed) {
-				keyH.dialoguePressed = false;
+			if (!collisionNPC(gp.getCollisionCheck().checkEntity(this, gp.getNPCS())) && keyH.getDialoguePress()) {
+				keyH.setDialoguePress(false);
 			}
 			
 			
 	
-			if (keyH.upPressed) {
+			if (keyH.getUpPress()) {
 				this.direction = Direction.UP;
 				if (!collisionOn && gp.getGameState() == GameState.PLAY) {WorldY -= speed;} 
 			} 
-			if (keyH.downPressed) {
+			if (keyH.getDownPress()) {
 				this.direction = Direction.DOWN;
 				if (!collisionOn && gp.getGameState() == GameState.PLAY) {WorldY += speed;}
 			} 
-			if (keyH.leftPressed) {
+			if (keyH.getLeftPress()) {
 				this.direction = Direction.LEFT;
 				if (!collisionOn && gp.getGameState() == GameState.PLAY) {WorldX -= speed;}
 			} 
-			if (keyH.rightPressed) {
+			if (keyH.getRightPress()) {
 				this.direction = Direction.RIGHT;
 				if (!collisionOn && gp.getGameState() == GameState.PLAY) {WorldX += speed;}
 			}
@@ -318,10 +317,10 @@ public class Player extends Entity {
 	private final boolean collisionNPC (int i) {
 		if (i != 9999) {
 			//player touching npc
-			if (keyH.dialoguePressed) {
+			if (keyH.getDialoguePress()) {
 				gp.setGameState(GameState.DIALOGUE);;
-				gp.NPCs.get(i).speak();
-				keyH.dialoguePressed = false;
+				gp.getNPCS().get(i).speak();
+				keyH.setDialoguePress(false);
 				return true;
 			}
 		} 
@@ -470,7 +469,7 @@ public class Player extends Entity {
 		solidArea.width = attackArea.width;
 		solidArea.height = attackArea.height;
 		
-		int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
+		int monsterIndex = gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 		damageMonster(monsterIndex);
 		
 		//After checking collision, restore original data
@@ -492,16 +491,16 @@ public class Player extends Entity {
 	
 	private final void damageMonster(int i) {
 		if (i != 9999) {
-			if (!gp.monsters.get(i).invincibility) {
+			if (!gp.getMonsters().get(i).invincibility) {
 				gp.playSE(5);
 				//attack lands
-				gp.monsters.get(i).setLife(gp.monsters.get(i).getLife() - this.attackVal);
-				gp.monsters.get(i).invincibility = true;
-				gp.monsters.get(i).monsterDamageReaction(this);
-				if (gp.monsters.get(i).getLife() < 1) {
-					gp.monsters.get(i).alive = false;
-					gp.monsters.get(i).dying = true;
-					gp.playSE(gp.monsters.get(i).returnDeathSound());
+				gp.getMonsters().get(i).setLife(gp.getMonsters().get(i).getLife() - this.attackVal);
+				gp.getMonsters().get(i).invincibility = true;
+				gp.getMonsters().get(i).monsterDamageReaction(this);
+				if (gp.getMonsters().get(i).getLife() < 1) {
+					gp.getMonsters().get(i).alive = false;
+					gp.getMonsters().get(i).dying = true;
+					gp.playSE(gp.getMonsters().get(i).returnDeathSound());
 				}
 			}
 		} else {
@@ -518,5 +517,8 @@ public class Player extends Entity {
 	
 	public boolean getPlayerAttack () { return playerAttack; }
 	public void setPlayerAttack (boolean playerAttack) { this.playerAttack = playerAttack; }
+	
+	public String[] getLabelArray () { return labels; }
+	public String getLabelEntries (int i) { return labels[i]; }
 	
 }

@@ -92,9 +92,9 @@ public class CollisionCheck{
 		//If player is colliding with any object. If player is, returns index of the object
 		int index = 9999;
 		
-		for (int i = 0; i < gp.objects.size(); i++) {
+		for (int i = 0; i < gp.getObjects().size(); i++) {
 			
-			if (gp.objects.get(i) != null) {
+			if (gp.getObjects().get(i) != null) {
 				
 				//Get entity's solid area position
 				//Location of entity + entity solid area size - 0 is default, can be changed later
@@ -102,8 +102,8 @@ public class CollisionCheck{
 				entity.getSolidArea().y = entity.getWorldY() + entity.getSolidArea().y;
 				
 				//Get object's solid area position
-				gp.objects.get(i).getSolidArea().x = gp.objects.get(i).getWorldX() + gp.objects.get(i).getSolidArea().x;
-				gp.objects.get(i).getSolidArea().y = gp.objects.get(i).getWorldY() + gp.objects.get(i).getSolidArea().y;
+				gp.getObjects().get(i).getSolidArea().x = gp.getObjects().get(i).getWorldX() + gp.getObjects().get(i).getSolidArea().x;
+				gp.getObjects().get(i).getSolidArea().y = gp.getObjects().get(i).getWorldY() + gp.getObjects().get(i).getSolidArea().y;
 				
 				//NPC cannot pick up objects
 				switch (entity.getDirection()) {
@@ -126,7 +126,7 @@ public class CollisionCheck{
 				}
 				
 				//entity rectangle intersects with object rectangle
-				if (entity.getSolidArea().intersects(gp.objects.get(i).getSolidArea())) {
+				if (entity.getSolidArea().intersects(gp.getObjects().get(i).getSolidArea())) {
 					entity.setCollisionOn(true);
 				};
 				if (player) {
@@ -135,8 +135,8 @@ public class CollisionCheck{
 				//reset entity's solid Area or else the values increase indefinitely
 				entity.getSolidArea().x = entity.getSolidAreaDefaultX();
 				entity.getSolidArea().y = entity.getSolidAreaDefaultY();
-				gp.objects.get(i).getSolidArea().x = gp.objects.get(i).getSolidAreaDefaultX();
-				gp.objects.get(i).getSolidArea().y = gp.objects.get(i).getSolidAreaDefaultY();
+				gp.getObjects().get(i).getSolidArea().x = gp.getObjects().get(i).getSolidAreaDefaultX();
+				gp.getObjects().get(i).getSolidArea().y = gp.getObjects().get(i).getSolidAreaDefaultY();
 			}
 		}
 		
@@ -202,8 +202,8 @@ public class CollisionCheck{
 		entity.getSolidArea().y = entity.getWorldY() + entity.getSolidArea().y;
 		
 		//Get target's solid area position
-		gp.player.getSolidArea().x = gp.player.getWorldX() + gp.player.getSolidArea().x;
-		gp.player.getSolidArea().y = gp.player.getWorldY() + gp.player.getSolidArea().y;
+		gp.getPlayer().getSolidArea().x = gp.getPlayer().getWorldX() + gp.getPlayer().getSolidArea().x;
+		gp.getPlayer().getSolidArea().y = gp.getPlayer().getWorldY() + gp.getPlayer().getSolidArea().y;
 		
 		
 		switch (entity.getDirection()) {
@@ -223,15 +223,15 @@ public class CollisionCheck{
 			break;
 		}
 		//entity rectangle intersects with target's rectangle
-		if (entity.getSolidArea().intersects(gp.player.getSolidArea())) {
+		if (entity.getSolidArea().intersects(gp.getPlayer().getSolidArea())) {
 			entity.setCollisionOn(true);
 			return true;
 		}
 		//reset entity's solid Area or else the values increase indefinitely
 		entity.getSolidArea().x = entity.getSolidAreaDefaultX();
 		entity.getSolidArea().y = entity.getSolidAreaDefaultY();
-		gp.player.getSolidArea().x = gp.player.getSolidAreaDefaultX();
-		gp.player.getSolidArea().y = gp.player.getSolidAreaDefaultY();
+		gp.getPlayer().getSolidArea().x = gp.getPlayer().getSolidAreaDefaultX();
+		gp.getPlayer().getSolidArea().y = gp.getPlayer().getSolidAreaDefaultY();
 		return false;
 	}
 }
