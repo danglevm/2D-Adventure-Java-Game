@@ -1,14 +1,8 @@
 package object;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import adventureGame2D.GamePanel;
-import entity.Entity;
 
-public class ObjectHeart extends Entity implements ObjectInterface {
+public class ObjectHeart extends GameObject {
 	
 	GamePanel gp;
 	

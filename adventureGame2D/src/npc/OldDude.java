@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 import adventureGame2D.GamePanel;
-import entity.Entity;
 import enums.Direction;
 import enums.EntityType;
 

@@ -29,6 +29,7 @@ public class MonsterGreenSlime extends Monster{
 		defense = 0;
 		speed = 1;
 		maxLife = 6;
+		experience = 2;
 		life = maxLife;
 		entityType = EntityType.HOSTILE;
 		

@@ -159,20 +159,18 @@ public class Entity{
 	//Render and scale the entity
 	protected final BufferedImage setupEntity(String imageName, String pathName, int width, int height) {
 		
-		UtilityTool uTool = new UtilityTool();
 		BufferedImage scaledImage = null;
 		
 		try {
 			scaledImage = ImageIO.read(getClass().getResourceAsStream(pathName + imageName+".png"));
-			scaledImage = uTool.scaleImage(scaledImage, width, height);
+			scaledImage = UtilityTool.scaleImage(scaledImage, width, height);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 		return scaledImage;
 	}
 	
-	
-	
+
 	//Checks to see if player is colliding with a monster
 	private final void checkMonsterCollision() {
 		if (gp.getCollisionCheck().checkPlayer(this) && this.entityType == EntityType.HOSTILE) {

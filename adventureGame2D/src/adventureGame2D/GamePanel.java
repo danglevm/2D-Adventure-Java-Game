@@ -15,6 +15,7 @@ import entity.Entity;
 import entity.Player;
 import enums.GameState;
 import events.EventHandler;
+import monster.Monster;
 import tile.TileManager;
 
 //Game Panel inherits all components from JPanel
@@ -77,6 +78,7 @@ public class GamePanel extends JPanel implements Runnable{
 	private ArrayList <Entity> monsters = new ArrayList <Entity> ();
 	//entity with lowest world Y index 0, highest world y final index
 	private ArrayList<Entity> entityList = new ArrayList<>();
+	private ArrayList <Entity> removeMonsterList = new ArrayList <> ();
 	
 	
 	//sound
@@ -205,6 +207,17 @@ public void update() {
 		updateEntities(NPCs);
 		updateEntities(monsters);
 		
+		monsters.removeAll(removeMonsterList);
+		
+		for (Entity monster : monsters) {
+			
+			if (monster == null) {
+				System.out.println("True");
+				monsters.remove(monster);
+			}
+		}
+		
+		
 	} else {
 		//nothing happens
 	}
@@ -251,11 +264,13 @@ public void paintComponent (Graphics g) {
 		
 		//Draw entities
 		for (Entity currentEntity : entityList) {
-			if (currentEntity != player) {
-				currentEntity.draw(g2, this);
-			} else {
-				player.draw(g2);
+			if (currentEntity != null) {
+				if (currentEntity != player) {
+					currentEntity.draw(g2, this);
+				} else {
+					player.draw(g2);
 				
+				}
 			}
 		}
 		//Empty entity list after drawing
@@ -276,7 +291,6 @@ public void paintComponent (Graphics g) {
 	}
 
 }
-
 	//Music playing methods
 	public void playMusic (int i) {
 		music.setFile(i);
@@ -304,16 +318,26 @@ public void paintComponent (Graphics g) {
 	}
 	
 	private final void updateEntities (ArrayList <Entity> entities) {
-
-		for (Entity currentEntity : entities) {
-			if (currentEntity.getAlive()) {
-				currentEntity.update();
-			} else if (!currentEntity.getAlive() &&  !currentEntity.getDying()) {
-				entities.remove(currentEntity);
-		} 
+		entities.forEach(entity -> {
+			if (!entity.getAlive() && !entity.getDying()) {
+				if (entity instanceof Monster) {
+					removeMonsterList.add(entity);
+				}
+			} else if (entity.getAlive()) {
+				entity.update();
+			}
+		});
 	}
+//		for (Entity currentEntity : entities) {
+//			if (currentEntity.getAlive()) {
+//				currentEntity.update();
+//			} else if (!currentEntity.getAlive() &&  !currentEntity.getDying()) {
+//				entityList.remove(currentEntity);
+//				entities.remove(currentEntity);
+//		} 
+//	}
 
-}
+
 	
 	/**
 	 * GETTERS and SETTERS

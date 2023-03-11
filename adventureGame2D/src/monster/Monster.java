@@ -8,6 +8,8 @@ import entity.Entity;
 
 public abstract class Monster extends Entity implements MonsterInterface{
 
+	protected Integer experience;
+	
 	//Holder class so that all monsters the extends this class can be downcasted from Entity
 	//and also be forced to implement methods from MonsterInterface and then have their methods
 	//invoked when it is needed
@@ -21,7 +23,7 @@ public abstract class Monster extends Entity implements MonsterInterface{
 	public void checkInvincibilityTime() {
 		if (invincibility) {
 			++invincibilityCounter;
-			if (invincibilityCounter > 120) {
+			if (invincibilityCounter > 60) {
 				invincibility = false;
 				invincibilityCounter = 0;
 				
@@ -47,6 +49,8 @@ public abstract class Monster extends Entity implements MonsterInterface{
 		}
 		
 	}
+	
+	public Integer getMonsterExperience () { return experience;}
 
 
 }

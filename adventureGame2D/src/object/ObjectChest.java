@@ -1,18 +1,13 @@
 package object;
-
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import adventureGame2D.GamePanel;
-import entity.Entity;
 
-public class ObjectChest extends Entity implements ObjectInterface {
+
+public class ObjectChest extends GameObject {
 	
 	GamePanel gp;
 	
-	public ObjectChest(GamePanel gp, int worldX, int worldY) {
-		super(gp);  
+	public ObjectChest(GamePanel gp, int worldX, int worldY) {  
+		super(gp);
 		this.gp = gp;
 		this.WorldX = worldX * gp.getTileSize();
 		this.WorldY = worldY * gp.getTileSize();

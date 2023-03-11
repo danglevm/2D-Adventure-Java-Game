@@ -194,7 +194,7 @@ public class Player extends Entity {
 		dexterity = 0;
 		stamina = 0;
 		coin = 0;
-		experience = 0;
+		experience = 8;
 		knockback = 0;
 		criticalHit = 0;
 		nextLevelExperience = 9;
@@ -220,7 +220,8 @@ public class Player extends Entity {
 	
 	public void update() 
 	{
-		collisionOn = false;				
+		collisionOn = false;	
+		this.checkLevelUp();
 		if (playerAttack) 
 		{
 			if (attackStamina >= attackCost) {
@@ -495,33 +496,56 @@ public class Player extends Entity {
 	
 	private final void damageMonster(int i) {
 		if (i != 9999) {
-			if (!gp.getMonsters().get(i).invincibility) {
+			Entity monster = gp.getMonsters().get(i);
+			
+			if (!monster.invincibility) {
 				gp.playSE(5);
 				//attack lands
-				int damage = gp.getMonsters().get(i).getLife() + gp.getMonsters().get(i).getDefense()- this.attackVal;
-				gp.getMonsters().get(i).setLife(damage);
-				gp.getMonsters().get(i).invincibility = true;
+				int damage = monster.getLife() + monster.getDefense()- this.attackVal;
+				monster.setLife(damage);
+				monster.invincibility = true;
 				
-				if (gp.getMonsters().get(i) instanceof Monster) {
-					((Monster)gp.getMonsters().get(i)).monsterDamageReaction(this);
+				if (monster instanceof Monster) {
+					((Monster) monster).monsterDamageReaction(this);
 				}
 				
-				gp.getGameUI().addSubtitleMsg(this.name + " damaged " + gp.getMonsters().get(i).getName());
+				gp.getGameUI().addSubtitleMsg(this.name + " damaged " + monster.getName());
 				
-				if (gp.getMonsters().get(i).getLife() < 1) {
+				if (monster.getLife() < 1) {
 					
-					gp.getMonsters().get(i).alive = false;
-					gp.getMonsters().get(i).dying = true;
+					gp.getGameUI().addSubtitleMsg(this.name + " killed " + monster.getName());
 					
-					if (gp.getMonsters().get(i) instanceof Monster) {
-						gp.playSE(((Monster) gp.getMonsters().get(i)).returnDeathSound());
+					monster.alive = false;
+					monster.dying = true;
+					
+					if (monster instanceof Monster) {
+						gp.getGameUI().addSubtitleMsg(this.name + " gained " + ((Monster)monster).getMonsterExperience()
+																+ " experience ");
+						gp.playSE(((Monster) monster).returnDeathSound());
+						this.experience += ((Monster)monster).getMonsterExperience();
+						
 					}
 					
-					gp.getGameUI().addSubtitleMsg(this.name + " killed " + gp.getMonsters().get(i).getName());
+					
+					
+					
+					
 				}
 			}
-		} else {
+		}
 			//Miss the attack
+	}
+	
+	private final void checkLevelUp() {
+		if (this.experience >= this.nextLevelExperience) {
+			gp.playSE(8);
+			++level;
+			++upgradePoints;
+			this.experience -= this.nextLevelExperience;
+			nextLevelExperience =  nextLevelExperience * 2;
+			gp.setGameState(GameState.DIALOGUE);
+			gp.getGameUI().setCurrentDialogue("You leveled up to " + level + "!");
+			
 		}
 	}
 	
