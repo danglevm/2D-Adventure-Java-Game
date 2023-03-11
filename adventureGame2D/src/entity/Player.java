@@ -87,9 +87,6 @@ public class Player extends Entity {
 	 */
 	private int attackVal,
 				defenseVal;
-				
-
-	
 	
 	
 	//-------------------------------CONSTRUCTORS------------------
@@ -260,11 +257,10 @@ public class Player extends Entity {
 			ObjectPickUp(gp.getCollisionCheck().checkObject(this, true));
 			
 			
-			//check NPC collision
+			//check NPC collision - not colliding but the dialogue key is pressed --> reset it to false
 			if (!collisionNPC(gp.getCollisionCheck().checkEntity(this, gp.getNPCS())) && keyH.getDialoguePress()) {
 				keyH.setDialoguePress(false);
 			}
-			
 			
 	
 			if (keyH.getUpPress()) {
@@ -403,8 +399,6 @@ public class Player extends Entity {
 			//Blue stamina bar
 			g2.setColor(new Color(0,100, 255));
 			g2.fillRect(screenX, screenY - 20, (int) currentStaminaBar, 10);
-			
-		
 			
 			if (attackStamina == maxStamina ) {
 				staminaEnabled = false;

@@ -124,7 +124,7 @@ public class TileManager extends Tile{
 				}
 			}
 			br.close();
-		}catch(Exception e) {
+		} catch(Exception e) {
 			
 		}
 	}

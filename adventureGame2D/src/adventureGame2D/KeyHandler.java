@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import enums.GameState;
+import enums.TitleState;
 
 public class KeyHandler implements KeyListener{
 
@@ -64,49 +65,34 @@ public class KeyHandler implements KeyListener{
 		
 		int code = e.getKeyCode();
 		
-	/*
-	* TITLE STATE
-	*/
-	if (gp.getGameState() == GameState.TITLE) {
-			
-			if (gp.getGameUI().titleScreenState == 0) {
-				
-				defaultTitleState(code);	
-				
-			} else if (gp.getGameUI().titleScreenState == 1) {
-				
-				firstTitleState (code);
-				
-			}
-			
-	/*
-	* PLAY STATE
-	*/
-	} else if (gp.getGameState() == GameState.PLAY) {
 		
-		playState(code);
+	/*
+	 * Get correct keys for each game states
+	 */
+	switch (gp.getGameState()) {
 	
-	/*
-	* PAUSE STATE - resumes the game with escape is pressed
-	*/	
-	} else if (gp.getGameState() == GameState.PAUSE) {
-			
-		pauseState (code);
-	
-	/*
-	* DIALOGUE STATE - resumes the game with escape is pressed
-	*/
-	} else if (gp.getGameState() == GameState.DIALOGUE){
-			
-		dialogueState(code);
-	 /*
-	 * DIALOGUE STATE - resumes the game with escape is pressed
-	 */		
-	} else if (gp.getGameState() == GameState.STATUS) {
+	case TITLE -> {
+		/**
+		 * Multiple states in title screen
+		 */
 		
-			statusState (code);
+		switch (gp.getGameUI().getTitleScreenState()) {
 		
+		case WELCOME -> { welcomeTitleState(code); }
+		
+		case CHARACTERSELECT -> { characterSelectionTitleState(code); }
 		}
+		
+	}
+	
+	case PLAY -> { playState (code); }
+	
+	case PAUSE -> { pauseState (code); }
+	
+	case DIALOGUE -> { dialogueState (code); }
+	
+	case STATUS -> { statusState (code); }
+	}
 	
 	}
 	
@@ -116,20 +102,20 @@ public class KeyHandler implements KeyListener{
 	 * 
 	 **/
 	
-	private void defaultTitleState (int code) {
+	private void welcomeTitleState (int code) {
 		
-		if (code == KeyEvent.VK_W) {
-			--gp.getGameUI().cursorNum;
-		} 
-		if (code == KeyEvent.VK_S) {
-			++gp.getGameUI().cursorNum;
-		} 
+		if (code == KeyEvent.VK_W) --gp.getGameUI().cursorNum;  
+		
+		if (code == KeyEvent.VK_S) ++gp.getGameUI().cursorNum;
+		
 		
 		if (code == KeyEvent.VK_ENTER) {
+			
+			
 			/*
 			 * New game
 			 */
-			if (gp.getGameUI().cursorNum == 0) gp.getGameUI().titleScreenState = 1;
+			if (gp.getGameUI().cursorNum == 0) gp.getGameUI().setTitleScreenState(TitleState.CHARACTERSELECT);
 			
 			else if (gp.getGameUI().cursorNum == 1) {
 				/*
@@ -150,7 +136,7 @@ public class KeyHandler implements KeyListener{
 		
 	}
 	
-	private void firstTitleState (int code) {
+	private void characterSelectionTitleState (int code) {
 		
 		if (code == KeyEvent.VK_A) --gp.getGameUI().cursorNum;
 
@@ -201,20 +187,15 @@ public class KeyHandler implements KeyListener{
 		if (code == KeyEvent.VK_C) gp.setGameState(GameState.STATUS);
 		
 		
-		if (code == KeyEvent.VK_ENTER) {
-			if (!dialoguePress) {
-				dialoguePress = !dialoguePress;
-			}
-		} 
+		if (code == KeyEvent.VK_ENTER) dialoguePress = !dialoguePress;
+			
+		
 
 		/*
 		 * display FPS and player X and Y
 		 */
-		if (code == KeyEvent.VK_T) {
-			if (!fpsDisplay) {
-				fpsDisplay = !fpsDisplay;
-			}
-		}
+		if (code == KeyEvent.VK_T)	fpsDisplay = !fpsDisplay;
+		
 		
 		/*
 		 * Trigger player attack
@@ -248,7 +229,6 @@ public class KeyHandler implements KeyListener{
 	private void statusState (int code) {
 		
 		if (code == KeyEvent.VK_C) gp.setGameState(GameState.PLAY);  
-		
 		
 		if (code == KeyEvent.VK_W) --gp.getGameUI().statusCursor;
 		

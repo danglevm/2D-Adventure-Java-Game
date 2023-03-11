@@ -136,12 +136,12 @@ public class GamePanel extends JPanel implements Runnable{
 	//*******************************GAME SETUP**********************
 	public void GameSetup() {
 		
+		gameState = GameState.TITLE;
 		assetPlace.setObject();
 		assetPlace.setNPCs();
 		assetPlace.setMonsters();
 		playMusic(0);
 		stopMusic();
-		gameState = GameState.TITLE;
 		
 		
 	}
@@ -191,7 +191,6 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	}
 	 
-	
 
 //************************************ GAME LOOP METHODS**************
 //Takes in KeyH inputs and then updates character model
@@ -202,9 +201,9 @@ public void update() {
 		//Player
 		player.update();
 		//NPCs
-		this.updateEntities(objects);
-		this.updateEntities(NPCs);
-		this.updateEntities(monsters);
+		updateEntities(objects);
+		updateEntities(NPCs);
+		updateEntities(monsters);
 		
 	} else {
 		//nothing happens
@@ -233,9 +232,9 @@ public void paintComponent (Graphics g) {
 		entityList.add(player);
 	
 		//Add both npcs and objects to the array list 
-		this.addtoEntityList(NPCs);
-		this.addtoEntityList(objects);
-		this.addtoEntityList(monsters);
+		addtoEntityList(NPCs);
+		addtoEntityList(objects);
+		addtoEntityList(monsters);
 		
 		//Sort the entityList
 		Collections.sort(entityList, new Comparator<Entity>() {

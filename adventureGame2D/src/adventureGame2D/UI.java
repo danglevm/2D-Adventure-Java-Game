@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 import entity.Entity;
 import enums.GameState;
+import enums.TitleState;
 import object.ObjectHeart;
 import quotes.PauseQuotes;
 
@@ -20,13 +21,13 @@ public class UI {
 	Graphics2D g2;
 	//Sub-states
 	//0 - welcome screen; 1 - story paths
-	public int titleScreenState = 0;
+	private TitleState titleScreenState;
 	
 	//Quotes
 	PauseQuotes pauseQuotes = new PauseQuotes();
 	String pauseText = "", moveDialogue = "Press ENTER to continue...";
 	
-	//Stylizing
+	//Font styles
 	Font arial_30, arial_50, arial_70, maruMonica, purisa;
 	//Dialogue
 	private String currentDialogue = "";	
@@ -40,6 +41,8 @@ public class UI {
 	//Drawing and setting UI
 	public UI(GamePanel gp) {
 		this.gp = gp;
+		
+		titleScreenState = TitleState.WELCOME;
 		
 		arial_30 = new Font ("Arial", Font.PLAIN, 30);
 		arial_50 = new Font ("Arial", Font.PLAIN, 50);
@@ -66,8 +69,15 @@ public class UI {
 	 * Setters and getters
 	 */
 	
+	public TitleState getTitleScreenState () { return titleScreenState; }
+	public void setTitleScreenState (TitleState titleScreenState) { this.titleScreenState = titleScreenState; }
+	
 	public void setCurrentDialogue (String dialogue) { currentDialogue = dialogue;}
 	
+	
+	/*
+	 * String aligning values getters
+	 */
 	private int getXCenter (String text) {
 		int str_length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 		return gp.getScreenWidth()/2 - str_length/2;
@@ -89,45 +99,39 @@ public class UI {
 		g2.setFont(purisa);
 		g2.setColor(Color.white);
 		
+		/*
+		 * Draw corresponding game state entities/UI widgets
+		 */
 		
-		//Drawing gamestate
-		if (gp.getGameState() == GameState.TITLE) {
-			//titleScreen
-			this.drawTitleScreen();
-			
-			
-		} 
-		if (gp.getGameState() == GameState.PAUSE) {
-			//pause state
+		switch (gp.getGameState()) {
+		
+		case TITLE -> { drawTitleScreen(); }
+		
+		case DIALOGUE -> {
+			drawDialogueScreen();
+		}
+		
+		case PAUSE -> {	
 			drawPauseScreen();
 			drawRandomPauseQuotes();
-			
 		}
-		if (gp.getGameState() == GameState.PLAY){
-			//playing state
-			this.drawPlayerHearts();
-			if (gp.getEventHandler().getInteraction()) {
-				drawInteractionKey();
-			}
-			
-		} 
-		if (gp.getGameState() == GameState.DIALOGUE){
-			//dialogue state
-			drawDialogueScreen();
+		
+		case PLAY -> {
 			drawPlayerHearts();
+			if (gp.getEventHandler().getInteraction()) { drawInteractionKey(); }
+		
 		}
 		
-		if (gp.getGameState() == GameState.STATUS) {
-			drawStatusScreen();
-		}
+		case STATUS -> {drawStatusScreen();} 
 		
+		default -> throw new IllegalArgumentException("Unknown Game State: " + gp.getGameState());
+		}
 		
 	}
 	
 
 	//draw screen when paused
-	private void drawPauseScreen () {
-		
+	private void drawPauseScreen () {		
 	
 		//Draw background
 		Color background = new Color (0,0,0, 220);
@@ -141,9 +145,6 @@ public class UI {
 		String text = "Game Paused";
 		int x = getXCenter(text), y = gp.getScreenHeight()/2;
 		g2.drawString(text,x, y);
-		
-		
-	
 		
 	}
 	
@@ -167,7 +168,7 @@ public class UI {
 	private void drawTitleScreen() {
 		g2.setColor(new Color (70,120,80));
 		g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
-		if (titleScreenState == 0) {
+		if (titleScreenState == TitleState.WELCOME) {
 			//Draw background
 			
 			
@@ -216,7 +217,7 @@ public class UI {
 			y += gp.getTileSize();
 			g2.drawString(text,x, y);
 			if (cursorNum == 3) {g2.drawString(">", x-gp.getTileSize(), y);}
-		} else if (titleScreenState == 1) {
+		} else if (titleScreenState == TitleState.CHARACTERSELECT) {
 			
 			//STORY PATH SELECTION
 			g2.setColor(Color.white);
@@ -450,7 +451,7 @@ public class UI {
 		g2.drawString(String.valueOf(gp.getPlayer().getCoin()), getXValuesAlign(String.valueOf(gp.getPlayer().getCoin()), tailX), valueY);	
 		valueY += 11;
 		
-		g2.drawImage(gp.getPlayer().getEquippedShield().getDown1(), tailX - gp.getTileSize(), valueY, null);
+		g2.drawImage(gp.getPlayer().getEquippedWeapon().getDown1(), tailX - gp.getTileSize(), valueY, null);
 		g2.drawImage(gp.getPlayer().getEquippedShield().getDown1(), tailX, valueY , null);
 	}
 	
