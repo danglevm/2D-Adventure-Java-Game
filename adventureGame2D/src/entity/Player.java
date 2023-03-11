@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
 import enums.Direction;
+import enums.EntityType;
 import enums.GameState;
 import object.AttackObjectInterface;
 import object.DefenseObjectInterface;
@@ -45,8 +46,6 @@ public class Player extends Entity {
 				strength,
 				dexterity,
 				stamina,
-				attack,
-				defense,
 				knockback,
 				criticalHit,
 				coin,
@@ -136,11 +135,8 @@ public class Player extends Entity {
 	private final void setDefaultPlayerValues() {
 		//Default player values
 		WorldX = gp.getTileSize() * 122;
-		WorldY= gp.getTileSize() * 132;
-		entityType = 0;
+		WorldY = gp.getTileSize() * 132;
 		direction = Direction.DOWN;
-		maxLife = 8;
-		life = maxLife;
 		
 		//x, y, width, length
 		solidArea = new Rectangle();
@@ -182,8 +178,8 @@ public class Player extends Entity {
 		 * @var dexterity chance of dodging an enemy attack. Default: 0. Max: 20 (%)
 		 * @var coin amount of coins player has. Def: 0. Max: 999
 		 */
-		entityType = 0;
-		name = "player";
+		entityType = EntityType.PLAYER;
+		name = "dr8d";
 		healthRegen = 0;
 		maxStamina = 120;
 		stamina = 0;
@@ -192,6 +188,7 @@ public class Player extends Entity {
 		mana = 0;
 		manaRegen = 0;
 		strength = 0;
+		defense = 0;
 		dexterity = 0;
 		stamina = 0;
 		coin = 0;
@@ -243,8 +240,10 @@ public class Player extends Entity {
 			//this might return 9999
 			int monsterIndex = gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 			if (monsterIndex != 9999) {
-				gp.getMonsters().get(monsterIndex).damageContact(this);
-				gp.playSE(6);
+				if (!this.invincibility) {
+					gp.getMonsters().get(monsterIndex).damagePlayer(this);
+					gp.playSE(6);
+				}
 			}
 			
 			//Collision checker receive subclass
@@ -485,13 +484,16 @@ public class Player extends Entity {
 			if (!gp.getMonsters().get(i).invincibility) {
 				gp.playSE(5);
 				//attack lands
-				gp.getMonsters().get(i).setLife(gp.getMonsters().get(i).getLife() - this.attackVal);
+				int damage = gp.getMonsters().get(i).getLife() + gp.getMonsters().get(i).getDefense()- this.attackVal;
+				gp.getMonsters().get(i).setLife(damage);
 				gp.getMonsters().get(i).invincibility = true;
 				gp.getMonsters().get(i).monsterDamageReaction(this);
+				gp.getGameUI().addSubtitleMsg(this.name + " damaged " + gp.getMonsters().get(i).getName());
 				if (gp.getMonsters().get(i).getLife() < 1) {
 					gp.getMonsters().get(i).alive = false;
 					gp.getMonsters().get(i).dying = true;
 					gp.playSE(gp.getMonsters().get(i).returnDeathSound());
+					gp.getGameUI().addSubtitleMsg(this.name + " killed " + gp.getMonsters().get(i).getName());
 				}
 			}
 		} else {
@@ -520,15 +522,13 @@ public class Player extends Entity {
 	
 	public int getManaRegen () { return manaRegen; }
 	
-	public int getStrength () { return strength; }
+	public int getTotalAttack () { return attackVal; }
 
+	public int getTotalDefense () { return defenseVal; }
+	
 	public int getDexterity () { return dexterity; }
 	
 	public int getStamina () { return stamina; }
-	
-	public int getAttack () { return attack; }
-	
-	public int getDefense () { return defense; }
 	
 	public int getKnockback () { return knockback; }
 	

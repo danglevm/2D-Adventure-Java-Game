@@ -2,7 +2,7 @@ package entity;
 
 import enums.Direction;
 
-public interface NPCInterface {
+public interface FriendlyInterface {
 		abstract void setDefaultValues();
 		abstract void getImage();
 		default void setDialogue() {};

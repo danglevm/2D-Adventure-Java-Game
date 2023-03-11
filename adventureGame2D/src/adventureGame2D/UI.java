@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import entity.Entity;
 import enums.GameState;
@@ -36,6 +37,10 @@ public class UI {
 	
 	//Drawing hearts
 	private BufferedImage heart_full, heart_half, heart_blank;
+	
+	//Drawing SubTitles
+	ArrayList <String> subtitleMsg = new ArrayList <String> ();
+	ArrayList <Integer> subtitleMsgCount = new ArrayList <Integer> ();
 	
 	
 	//Drawing and setting UI
@@ -118,6 +123,7 @@ public class UI {
 		
 		case PLAY -> {
 			drawPlayerHearts();
+			drawSubtitleMsg();
 			if (gp.getEventHandler().getInteraction()) { drawInteractionKey(); }
 		
 		}
@@ -412,11 +418,11 @@ public class UI {
 		if (statusCursor == 3) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.getPlayer().getStrength()), getXValuesAlign(String.valueOf(gp.getPlayer().getStrength()), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().getTotalAttack()), getXValuesAlign(String.valueOf(gp.getPlayer().getTotalDefense()), tailX), valueY);
 		if (statusCursor == 4) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.getPlayer().getDefense()), getXValuesAlign(String.valueOf(gp.getPlayer().getDefense()), tailX), valueY);
+		g2.drawString(String.valueOf(gp.getPlayer().getTotalDefense()), getXValuesAlign(String.valueOf(gp.getPlayer().getTotalDefense()), tailX), valueY);
 		if (statusCursor == 5) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
@@ -454,5 +460,41 @@ public class UI {
 		g2.drawImage(gp.getPlayer().getEquippedWeapon().getDown1(), tailX - gp.getTileSize(), valueY, null);
 		g2.drawImage(gp.getPlayer().getEquippedShield().getDown1(), tailX, valueY , null);
 	}
+	
+	public void addSubtitleMsg (String message) {
+		this.subtitleMsg.add(message);
+		this.subtitleMsgCount.add(0);
+	}
+	
+	public void drawSubtitleMsg() {
+		
+		int x = gp.getTileSize() / 2, 
+			y = gp.getTileSize() * 4;
+		g2.setFont(maruMonica);
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20));
+		
+	
+		for (int i = 0; i < subtitleMsg.size(); ++i) {
+			if (subtitleMsg.get(i) != null) {
+				
+				g2.setColor(Color.black);
+				g2.drawString(subtitleMsg.get(i), x + 2, y + 2);
+				g2.setColor(Color.white);
+				g2.drawString(subtitleMsg.get(i), x, y);
+			
+				//make the message disappear after a certain amount of time
+				subtitleMsgCount.set(i, subtitleMsgCount.get(i) + 1);
+				y += 50;
+			
+				if (subtitleMsgCount.get(i) > 90) {
+					subtitleMsg.remove(i);
+					subtitleMsgCount.remove(i);
+				}
+			}
+		}
+		
+		
+	}
+	
 	
 }

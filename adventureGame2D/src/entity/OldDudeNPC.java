@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import adventureGame2D.GamePanel;
 import enums.Direction;
+import enums.EntityType;
 
-public class OldDudeNPC extends Entity implements NPCInterface{
+public class OldDudeNPC extends Entity implements FriendlyInterface{
 	//Dialogues
 	private ArrayList<String> oldDudeDialogues = new ArrayList <String>();
 	private int dialogueIndex = 0;
@@ -98,7 +99,7 @@ public class OldDudeNPC extends Entity implements NPCInterface{
 		speed = 2;
 		maxLife = 6;
 		life = maxLife;
-		entityType = 1;
+		entityType = EntityType.FRIENDLY;
 		
 	}
 

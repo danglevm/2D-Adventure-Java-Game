@@ -6,6 +6,7 @@ import adventureGame2D.GamePanel;
 import entity.Entity;
 import entity.Player;
 import enums.Direction;
+import enums.EntityType;
 
 public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	
@@ -22,11 +23,13 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	}
 	
 	public final void setDefaultValues() {
-		name = "";
+		name = "Green Slime";
+		attack = 2;
+		defense = 0;
 		speed = 1;
 		maxLife = 6;
 		life = maxLife;
-		entityType = 2;
+		entityType = EntityType.HOSTILE;
 		
 		solidArea.x = 8;
 		solidArea.y = 8;
@@ -73,18 +76,19 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 		}
 	}
 	
-	@Override
-	public final void damageContact(Entity entity) {
-		if (!entity.getInvincibility()) {
-			entity.setLife(entity.getLife() - 1);
-			entity.setInvincibility(true);
-		}
-	}
 	
 	@Override
 	public void monsterDamageReaction(Player player) {
 		this.actionLock = 0;
 		this.direction = player.getDirection();
+	}
+	
+	@Override
+	public void damagePlayer (Player player) {
+		int damage = player.getLife() - this.attack + gp.getPlayer().getTotalDefense();
+		player.setLife(damage);
+		player.setInvincibility(true);
+		gp.getGameUI().addSubtitleMsg(gp.getPlayer().getName() + " hurt by " + this.name);
 	}
 	
 	@Override

@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import adventureGame2D.GamePanel;
 import adventureGame2D.UtilityTool;
 import enums.Direction;
+import enums.EntityType;
 
 public class Entity {
 	
@@ -38,10 +39,11 @@ public class Entity {
 	protected boolean collisionOn = false;
 	protected boolean invincibility = false;
 	//0 - player, 1 - npc, 2 - monster
-	protected int entityType;
+	protected EntityType entityType;
 	
 	//Monster HP Bar
 	private boolean hpBarEnabled = false;
+	protected int attack, defense;
 	private int hpBarCounter = 0;
 
 	
@@ -80,7 +82,7 @@ public class Entity {
 		gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 		
 		
-		if (gp.getCollisionCheck().checkPlayer(this) && this.entityType == 2) {
+		if (gp.getCollisionCheck().checkPlayer(this) && this.entityType == entityType.HOSTILE) {
 			if (!gp.getPlayer().invincibility) {
 				gp.getPlayer().setLife(gp.getPlayer().getLife() - 1);
 				gp.getPlayer().invincibility = true;
@@ -134,10 +136,11 @@ public class Entity {
 			}
 			
 			//Monster HP bar
-			if (entityType == 2 && hpBarEnabled) {
+			if (entityType == EntityType.HOSTILE && hpBarEnabled) {
 				double oneBarValue = (double) gp.getTileSize()/this.maxLife,
 						hpBarValue = oneBarValue * this.life;
 				
+				//Draw damage above monster
 				
 				//Gray outline
 				//x, y, width, height
@@ -207,9 +210,14 @@ public class Entity {
 			}
 	}
 	
-	protected void damageContact(Entity entity) {};
+	/**
+	 * 
+	 * @param entity
+	 */
 	
-	public void monsterDamageReaction(Player player) {}
+	protected void damagePlayer(Player player) {};
+	
+	protected void monsterDamageReaction(Player player) {}
 	
 	//Draws dying animation for monsters
 	protected void deathAnimation (Graphics2D g2) {
@@ -231,7 +239,7 @@ public class Entity {
 	}
 	
 	
-	public int returnDeathSound() {return 9999;};
+	protected int returnDeathSound() {return 9999;};
 	
 	/*
 	 * SETTERS AND GETTERS
@@ -275,6 +283,11 @@ public class Entity {
 	
 	public boolean getAlive() {return alive;}
 	public boolean getDying() { return dying;}
+	
+	public int getAttack () { return attack; }
+	
+	public int getDefense () { return defense; }
+	
 	/*
 	 * BUFFERED IMAGES SETTERS AND GETTERS
 	 */

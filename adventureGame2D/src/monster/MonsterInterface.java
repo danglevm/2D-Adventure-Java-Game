@@ -1,5 +1,6 @@
 package monster;
 
+import entity.Player;
 
 interface MonsterInterface{
 		//set default values for the entity
@@ -7,9 +8,8 @@ interface MonsterInterface{
 		//classes that implements the interface, the methods are automatically public
 		abstract void setDefaultValues();
 		abstract void getImage(int size);
-	
-		//for overriding by monsters
-
+		
+		
 	
 }
 
