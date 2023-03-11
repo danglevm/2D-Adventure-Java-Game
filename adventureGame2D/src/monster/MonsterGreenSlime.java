@@ -3,12 +3,11 @@ package monster;
 import java.util.Random;
 
 import adventureGame2D.GamePanel;
-import entity.Entity;
 import entity.Player;
 import enums.Direction;
 import enums.EntityType;
 
-public class MonsterGreenSlime extends Entity implements MonsterInterface{
+public class MonsterGreenSlime extends Monster{
 	
 	GamePanel gp;
 	
@@ -21,7 +20,9 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 		this.getImage(gp.getTileSize());
 		
 	}
-	
+	/**
+	 * Override from MonsterInterface
+	 */
 	public final void setDefaultValues() {
 		name = "Green Slime";
 		attack = 2;
@@ -39,6 +40,9 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 		solidAreaDefaultY = solidArea.y;
 	}
 	@Override
+	/**
+	 * Override from MonsterInterface
+	 */
 	public final void getImage(int size) {
 		up1 = setupEntity("greenslime_down_1","/monster/", size, size);
 		up2 = setupEntity("greenslime_down_2","/monster/", size, size);
@@ -54,7 +58,10 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 	}
 	
 	@Override
-	public final void setAction() {
+	/**
+	 * Override from Entity
+	 */
+	public final void setBehaviour() {
 	++actionLock;
 		
 		//After every a certain pseudo random amount of time
@@ -76,12 +83,19 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 		}
 	}
 	
+	/**
+	 * Override from MonsterInterface
+	 */
 	
 	@Override
 	public void monsterDamageReaction(Player player) {
 		this.actionLock = 0;
 		this.direction = player.getDirection();
 	}
+	
+	/**
+	 * Override from MonsterInterface
+	 */
 	
 	@Override
 	public void damagePlayer (Player player) {
@@ -96,6 +110,10 @@ public class MonsterGreenSlime extends Entity implements MonsterInterface{
 		return 7;
 	};
 	
+	
+	/**
+	 * Inherits the Monster class checkInvincibilityTime method
+	 */
 	
 	
 	

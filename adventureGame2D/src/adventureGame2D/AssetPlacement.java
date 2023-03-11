@@ -1,7 +1,7 @@
 package adventureGame2D;
 
-import entity.OldDudeNPC;
 import monster.MonsterGreenSlime;
+import npc.OldDudeNPC;
 import object.ObjectBoots;
 import object.ObjectChest;
 import object.ObjectDoor;

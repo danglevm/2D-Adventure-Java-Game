@@ -13,8 +13,9 @@ import adventureGame2D.GamePanel;
 import adventureGame2D.UtilityTool;
 import enums.Direction;
 import enums.EntityType;
+import monster.Monster;
 
-public class Entity {
+public class Entity{
 	
 	GamePanel gp;
 	protected BufferedImage image, image2, image3;
@@ -69,12 +70,12 @@ public class Entity {
 	
 	
 // 	Class methods
-	protected void setAction() {}
+	protected void setBehaviour() {}
 	
 	protected void speak() {}
 	
 	public void update() {
-		setAction();
+		setBehaviour();
 		collisionOn = false;
 		gp.getCollisionCheck().CheckTile(this);
 		gp.getCollisionCheck().checkObject(this, false);
@@ -82,7 +83,7 @@ public class Entity {
 		gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 		
 		
-		if (gp.getCollisionCheck().checkPlayer(this) && this.entityType == entityType.HOSTILE) {
+		if (gp.getCollisionCheck().checkPlayer(this) && this.entityType == EntityType.HOSTILE) {
 			if (!gp.getPlayer().invincibility) {
 				gp.getPlayer().setLife(gp.getPlayer().getLife() - 1);
 				gp.getPlayer().invincibility = true;
@@ -109,7 +110,12 @@ public class Entity {
 				spriteCounter = 0;
 			}
 		}
-		this.checkInvincibilityTime();
+		
+		//What this is checking is that it's checking if the entity object that the it's referring to
+		//is also an object of type Monster. if it is then execute the Monster-specific method
+		if (this instanceof Monster) {
+			((Monster) this).checkInvincibilityTime();
+		}
 	}
 	
 	
@@ -195,29 +201,17 @@ public class Entity {
 	}
 	
 	
-	//******************************************************************************************************************		
-	//------------------------------MONSTER OVERRIDE METHODS----------------------------------------------------------------------//
-	//*****************************************************************************************************************
 	
-	protected void checkInvincibilityTime() {
-		if (invincibility) {
-			++invincibilityCounter;
-			if (invincibilityCounter > 120) {
-				invincibility = false;
-				invincibilityCounter = 0;
-				
-				}
-			}
-	}
+	
+	
 	
 	/**
 	 * 
 	 * @param entity
 	 */
 	
-	protected void damagePlayer(Player player) {};
 	
-	protected void monsterDamageReaction(Player player) {}
+
 	
 	//Draws dying animation for monsters
 	protected void deathAnimation (Graphics2D g2) {
@@ -238,9 +232,7 @@ public class Entity {
 		
 	}
 	
-	
-	protected int returnDeathSound() {return 9999;};
-	
+
 	/*
 	 * SETTERS AND GETTERS
 	 */

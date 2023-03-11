@@ -1,19 +1,22 @@
-package entity;
+package npc;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 import adventureGame2D.GamePanel;
+import entity.Entity;
 import enums.Direction;
 import enums.EntityType;
 
 public class OldDudeNPC extends Entity implements FriendlyInterface{
 	//Dialogues
+	GamePanel gp;
 	private ArrayList<String> oldDudeDialogues = new ArrayList <String>();
 	private int dialogueIndex = 0;
 
 	public OldDudeNPC (GamePanel gp, int worldX, int worldY) {
 		super(gp);
+		this.gp = gp;
 		//x, y, width, height
 		solidArea = new Rectangle(8, 8, 36, 36);
 		this.WorldX = gp.getTileSize() * worldX;
@@ -55,7 +58,7 @@ public class OldDudeNPC extends Entity implements FriendlyInterface{
 	}
 	
 	@Override
-	public void setAction() {
+	public void setBehaviour() {
 		
 		++actionLock;
 		

@@ -1,5 +1,7 @@
-package entity;
+package npc;
 
+import entity.Entity;
+import entity.Player;
 import enums.Direction;
 
 interface FriendlyInterface {

@@ -12,6 +12,7 @@ import adventureGame2D.KeyHandler;
 import enums.Direction;
 import enums.EntityType;
 import enums.GameState;
+import monster.Monster;
 import monster.MonsterInterface;
 import object.AttackObjectInterface;
 import object.DefenseObjectInterface;
@@ -242,7 +243,10 @@ public class Player extends Entity {
 			int monsterIndex = gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 			if (monsterIndex != 9999) {
 				if (!this.invincibility) {
-					gp.getMonsters().get(monsterIndex).damagePlayer(this);
+					//Downcasting Entity to Monster to get player index
+					if (gp.getMonsters().get(monsterIndex) instanceof Monster) {
+						((Monster) gp.getMonsters().get(monsterIndex)).damagePlayer(this);;
+					}
 					gp.playSE(6);
 				}
 			}
@@ -338,16 +342,19 @@ public class Player extends Entity {
 		//attack cool down period is on
 		if (!playerAttack || attackStamina < attackCost) {
 		switch (direction) {
+		
 		case UP:
 			if (spriteNum) {image = up1;} else {image = up2;} break;
+			
 		case DOWN:
 			if (spriteNum) {image = down1;} else {image = down2;} break;
+			
 		case LEFT:
 			if (spriteNum) {image = left1;} else {image = left2;} break;
+			
 		case RIGHT:
 			if (spriteNum) {image = right1;} else {image = right2;} break;
-		default:
-			break;
+		default: break;
 			}
 		
 		
@@ -356,16 +363,21 @@ public class Player extends Entity {
 		{
 		
 		switch (direction) {
+		
 		case UP:
 			tempScreenY = screenY - gp.getTileSize();
 			if (spriteNum) {image = attackUp1;} else {image = attackUp2;} break;
+			
 		case DOWN:
 			if (spriteNum) {image = attackDown1;} else {image = attackDown2;} break;
+			
 		case LEFT:
 			tempScreenX = screenX - gp.getTileSize();
 			if (spriteNum) {image = attackLeft1;} else {image = attackLeft2;} break;
+			
 		case RIGHT:
 			if (spriteNum) {image = attackRight1;} else {image = attackRight2;} break;
+			
 		default:
 			break;
 			}	
@@ -374,13 +386,12 @@ public class Player extends Entity {
 		//Draw effect when player gets damaged
 		if (invincibility) {
 			++switchOpacityCounter;
+			switchOpacity = !switchOpacity;
 			if (!switchOpacity && switchOpacityCounter > 3) {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));	
-				switchOpacity = true;
 				switchOpacityCounter = 0;
 			} else {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));	
-				switchOpacity = false;
 			}
 		}
 		
@@ -416,7 +427,6 @@ public class Player extends Entity {
 			
 	}
 	
-	@Override
 	protected final void checkInvincibilityTime() {
 
 		if (invincibility) {
@@ -488,12 +498,22 @@ public class Player extends Entity {
 				int damage = gp.getMonsters().get(i).getLife() + gp.getMonsters().get(i).getDefense()- this.attackVal;
 				gp.getMonsters().get(i).setLife(damage);
 				gp.getMonsters().get(i).invincibility = true;
-				gp.getMonsters().get(i).monsterDamageReaction(this);
+				
+				if (gp.getMonsters().get(i) instanceof Monster) {
+					((Monster)gp.getMonsters().get(i)).monsterDamageReaction(this);
+				}
+				
 				gp.getGameUI().addSubtitleMsg(this.name + " damaged " + gp.getMonsters().get(i).getName());
+				
 				if (gp.getMonsters().get(i).getLife() < 1) {
+					
 					gp.getMonsters().get(i).alive = false;
 					gp.getMonsters().get(i).dying = true;
-					gp.playSE(gp.getMonsters().get(i).returnDeathSound());
+					
+					if (gp.getMonsters().get(i) instanceof Monster) {
+						gp.playSE(((Monster) gp.getMonsters().get(i)).returnDeathSound());
+					}
+					
 					gp.getGameUI().addSubtitleMsg(this.name + " killed " + gp.getMonsters().get(i).getName());
 				}
 			}
