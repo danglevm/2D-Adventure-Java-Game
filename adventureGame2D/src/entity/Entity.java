@@ -59,7 +59,7 @@ public class Entity{
 	
 	protected int deathCount = 0;
 	
-	
+		
 	//alive and in dying animation or not
 	protected boolean alive = true, dying = false;
 	
@@ -72,7 +72,6 @@ public class Entity{
 // 	Class methods
 	protected void setBehaviour() {}
 	
-	protected void speak() {}
 	
 	public void update() {
 		setBehaviour();
@@ -82,14 +81,9 @@ public class Entity{
 		gp.getCollisionCheck().checkEntity(this, gp.getNPCS());
 		gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 		
+		this.checkMonsterCollision();
 		
-		if (gp.getCollisionCheck().checkPlayer(this) && this.entityType == EntityType.HOSTILE) {
-			if (!gp.getPlayer().invincibility) {
-				gp.getPlayer().setLife(gp.getPlayer().getLife() - 1);
-				gp.getPlayer().invincibility = true;
-			}
-		}
-		
+
 		if (!collisionOn) {
 			switch (direction) {
 			case UP: WorldY -= speed; break;
@@ -103,7 +97,7 @@ public class Entity{
 		}
 
 		spriteCounter++;
-		//Player image changes every 12 frames
+		//Entity image changes every 12 frames
 		if (!collisionOn) {
 			if (spriteCounter > 12) {
 				spriteNum = !spriteNum;
@@ -123,15 +117,16 @@ public class Entity{
 	public void draw (Graphics2D g2, GamePanel gp) {
 		this.gp = gp;
 		BufferedImage image = null;
-		int entityScreenX = this.WorldX - gp.getPlayer().getWorldX() + gp.getPlayer().screenX;
-		int entityScreenY = this.WorldY - gp.getPlayer().WorldY + gp.getPlayer().screenY;
+		
+		int entityScreenX = this.WorldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
+		int entityScreenY = this.WorldY - gp.getPlayer().WorldY + gp.getPlayer().getScreenY();
 		
 		//Render the monsters on screen - pretty fuzzy about this since just copy
-		if (this.WorldX + gp.getTileSize() > gp.getPlayer().getWorldX() - gp.getPlayer().screenX && 
-			this.WorldX - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().screenX &&
-			this.WorldY + gp.getTileSize() > gp.getPlayer().WorldY - gp.getPlayer().screenY &&
-			this.WorldY - gp.getTileSize() < gp.getPlayer().WorldY + gp.getPlayer().screenY) {
-			
+		if (this.WorldX + gp.getTileSize() > gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() && 
+			this.WorldX - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX() &&
+			this.WorldY + gp.getTileSize() > gp.getPlayer().WorldY - gp.getPlayer().getScreenY() &&
+			this.WorldY - gp.getTileSize() < gp.getPlayer().WorldY + gp.getPlayer().getScreenY()) {
+		
 			switch (direction) {
 			case UP: if (spriteNum) {image = up1;} else {image = up2;} break;
 			case DOWN: if (spriteNum) {image = down1;} else {image = down2;} break;
@@ -140,44 +135,20 @@ public class Entity{
 			default:
 				break;
 			}
+			//Draw monster HP Bar
+			drawHealthBar(g2, entityScreenX, entityScreenY);
 			
-			//Monster HP bar
-			if (entityType == EntityType.HOSTILE && hpBarEnabled) {
-				double oneBarValue = (double) gp.getTileSize()/this.maxLife,
-						hpBarValue = oneBarValue * this.life;
-				
-				//Draw damage above monster
-				
-				//Gray outline
-				//x, y, width, height
-				g2.setColor(new Color(35, 35, 35));
-				g2.fillRect(entityScreenX - 1, entityScreenY - 1, gp.getTileSize() + 2, 12);
-				
-			
-				
-				//Red hp bar
-				g2.setColor(new Color(255,0,30));
-				g2.fillRect(entityScreenX, entityScreenY, (int) hpBarValue, 10);
-				
-				
-				++hpBarCounter;
-				
-				if (hpBarCounter > 360) {
+			if (this.entityType == EntityType.HOSTILE && this instanceof Monster) {
+				if (invincibility) {
+					hpBarEnabled = true;
 					hpBarCounter = 0;
-					hpBarEnabled = false;
+					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));	
+				}
+				
+				if (dying && !alive) {
+					((Monster)this).drawDeathAnimation(g2);
 				}
 			}
-			
-			if (invincibility) {
-				hpBarEnabled = true;
-				hpBarCounter = 0;
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));	
-			}
-			
-			if (dying && !alive) {
-				this.deathAnimation(g2);
-			}
-			
 			
 			//16 pixels
 			g2.drawImage(image, entityScreenX, entityScreenY, gp.getTileSize(), gp.getTileSize(), null);
@@ -186,7 +157,7 @@ public class Entity{
 	}
 	
 	//Render and scale the entity
-	protected BufferedImage setupEntity(String imageName, String pathName, int width, int height) {
+	protected final BufferedImage setupEntity(String imageName, String pathName, int width, int height) {
 		
 		UtilityTool uTool = new UtilityTool();
 		BufferedImage scaledImage = null;
@@ -202,34 +173,45 @@ public class Entity{
 	
 	
 	
-	
-	
-	
-	/**
-	 * 
-	 * @param entity
-	 */
-	
-	
-
-	
-	//Draws dying animation for monsters
-	protected void deathAnimation (Graphics2D g2) {
-		++deathCount;
-		
-		if (deathCount < 41) {
-			
-			if (deathCount % 5 == 0 && deathCount % 10 != 0) {
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));	
-				
-			} else if (deathCount % 10 == 0){
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));	
+	//Checks to see if player is colliding with a monster
+	private final void checkMonsterCollision() {
+		if (gp.getCollisionCheck().checkPlayer(this) && this.entityType == EntityType.HOSTILE) {
+			if (!gp.getPlayer().invincibility) {
+				gp.getPlayer().invincibility = true;
 			}
-		} else {
-			dying = false;
-			
 		}
+	}
+	
+	
+	//Draws monster's health bar and animation
+	private final void drawHealthBar(Graphics2D g2, int entityScreenX, int entityScreenY) {
+	
+		//Monster HP bar
+		if (entityType == EntityType.HOSTILE && hpBarEnabled) {
+			double oneBarValue = (double) gp.getTileSize()/this.maxLife,
+					hpBarValue = oneBarValue * this.life;
+			
+			//Draw damage above monster
+			
+			//Gray outline
+			//x, y, width, height
+			g2.setColor(new Color(35, 35, 35));
+			g2.fillRect(entityScreenX - 1, entityScreenY - 1, gp.getTileSize() + 2, 12);
+			
 		
+			
+			//Red hp bar
+			g2.setColor(new Color(255,0,30));
+			g2.fillRect(entityScreenX, entityScreenY, (int) hpBarValue, 10);
+			
+			
+			++hpBarCounter;
+			
+			if (hpBarCounter > 360) {
+				hpBarCounter = 0;
+				hpBarEnabled = false;
+			}
+		}
 	}
 	
 

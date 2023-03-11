@@ -8,13 +8,13 @@ import entity.Entity;
 import enums.Direction;
 import enums.EntityType;
 
-public class OldDudeNPC extends Entity implements FriendlyInterface{
+public class OldDude extends NPC implements FriendlyInterface{
 	//Dialogues
 	GamePanel gp;
 	private ArrayList<String> oldDudeDialogues = new ArrayList <String>();
 	private int dialogueIndex = 0;
 
-	public OldDudeNPC (GamePanel gp, int worldX, int worldY) {
+	public OldDude (GamePanel gp, int worldX, int worldY) {
 		super(gp);
 		this.gp = gp;
 		//x, y, width, height
@@ -91,6 +91,7 @@ public class OldDudeNPC extends Entity implements FriendlyInterface{
 			++dialogueIndex;
 			}
 		} catch (IndexOutOfBoundsException e){}
+		
 		talkingDirection(gp.getPlayer(), this);
 		
 	}

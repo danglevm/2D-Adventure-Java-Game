@@ -1,5 +1,8 @@
 package monster;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+
 import adventureGame2D.GamePanel;
 import entity.Entity;
 
@@ -24,6 +27,25 @@ public abstract class Monster extends Entity implements MonsterInterface{
 				
 				}
 			}
+	}
+	
+	//Draws dying animation for monsters
+	public void drawDeathAnimation (Graphics2D g2) {
+		++deathCount;
+		
+		if (deathCount < 41) {
+			
+			if (deathCount % 5 == 0 && deathCount % 10 != 0) {
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));	
+				
+			} else if (deathCount % 10 == 0){
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));	
+			}
+		} else {
+			dying = false;
+			
+		}
+		
 	}
 
 

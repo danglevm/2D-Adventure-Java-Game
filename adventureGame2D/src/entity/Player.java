@@ -13,7 +13,7 @@ import enums.Direction;
 import enums.EntityType;
 import enums.GameState;
 import monster.Monster;
-import monster.MonsterInterface;
+import npc.NPC;
 import object.AttackObjectInterface;
 import object.DefenseObjectInterface;
 import object.ObjectSword;
@@ -27,8 +27,8 @@ public class Player extends Entity {
 	
 
 	//Where the player is drawn on the screen - camera 
-	protected final int screenX;
-	protected final int screenY;
+	private final int screenX;
+	private final int screenY;
 	private boolean switchOpacity;
 	private int switchOpacityCounter = 0;
 
@@ -316,7 +316,10 @@ public class Player extends Entity {
 			//player touching npc
 			if (keyH.getDialoguePress()) {
 				gp.setGameState(GameState.DIALOGUE);;
-				gp.getNPCS().get(i).speak();
+				if (gp.getNPCS().get(i) instanceof NPC) {
+					((NPC) gp.getNPCS().get(i)).speak();
+				}
+				
 				keyH.setDialoguePress(false);
 				return true;
 			}
