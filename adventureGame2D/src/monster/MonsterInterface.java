@@ -2,7 +2,7 @@ package monster;
 
 import entity.Player;
 
-interface MonsterInterface{
+public interface MonsterInterface{
 		//set default values for the entity
 		//an abstract method does not have a body
 		//classes that implements the interface, the methods are automatically public

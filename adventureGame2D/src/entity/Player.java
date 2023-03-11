@@ -12,6 +12,7 @@ import adventureGame2D.KeyHandler;
 import enums.Direction;
 import enums.EntityType;
 import enums.GameState;
+import monster.MonsterInterface;
 import object.AttackObjectInterface;
 import object.DefenseObjectInterface;
 import object.ObjectSword;

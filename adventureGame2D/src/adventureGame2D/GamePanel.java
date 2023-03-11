@@ -296,11 +296,11 @@ public void paintComponent (Graphics g) {
 	
 	//Add from array to array List
 	private final void addtoEntityList (ArrayList <Entity> entities) {
-		for (Entity currentEntity : entities) {
-			if (currentEntity != null) {
-				entityList.add(currentEntity);
+		entities.forEach(entity -> {
+			if (entity != null) {
+				entityList.add(entity);
 			}
-		}
+		});
 	}
 	
 	private final void updateEntities (ArrayList <Entity> entities) {
