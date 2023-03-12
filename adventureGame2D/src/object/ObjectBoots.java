@@ -1,13 +1,10 @@
 package object;
 
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import adventureGame2D.GamePanel;
-import entity.Entity;
 
-public class ObjectBoots extends Entity implements ObjectInterface {
+
+public class ObjectBoots extends GameObject {
 	
 	GamePanel gp;
 	

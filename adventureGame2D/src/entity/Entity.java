@@ -12,8 +12,10 @@ import javax.imageio.ImageIO;
 import adventureGame2D.GamePanel;
 import adventureGame2D.UtilityTool;
 import enums.Direction;
+import enums.EntityType;
+import monster.Monster;
 
-public class Entity {
+public class Entity{
 	
 	GamePanel gp;
 	protected BufferedImage image, image2, image3;
@@ -32,15 +34,17 @@ public class Entity {
 		
 	//specifies the solid area of the character entity for collision
 	//Store data about this rectangle as x, y, width and height
-	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-	public int solidAreaDefaultX, solidAreaDefaultY;
-	public boolean collisionOn = false;
+	protected Rectangle solidArea = new Rectangle(0, 0, 48, 48);
+	protected int solidAreaDefaultX;
+	protected int solidAreaDefaultY;
+	protected boolean collisionOn = false;
 	protected boolean invincibility = false;
 	//0 - player, 1 - npc, 2 - monster
-	protected int entityType;
+	protected EntityType entityType;
 	
 	//Monster HP Bar
 	private boolean hpBarEnabled = false;
+	protected int attack, defense;
 	private int hpBarCounter = 0;
 
 	
@@ -55,11 +59,10 @@ public class Entity {
 	
 	protected int deathCount = 0;
 	
-	
+		
 	//alive and in dying animation or not
 	protected boolean alive = true, dying = false;
-	public boolean getAlive() {return alive;}
-	public boolean getDying() { return dying;}
+	
 //	Constructor
 	public Entity (GamePanel gp) {
 		this.gp = gp;
@@ -67,26 +70,20 @@ public class Entity {
 	
 	
 // 	Class methods
-	protected void setAction() {}
+	protected void setBehaviour() {}
 	
-	protected void speak() {}
 	
 	public void update() {
-		setAction();
+		setBehaviour();
 		collisionOn = false;
-		gp.cChecker.CheckTile(this);
-		gp.cChecker.checkObject(this, false);
-		gp.cChecker.checkEntity(this, gp.NPCs);
-		gp.cChecker.checkEntity(this, gp.monsters);
+		gp.getCollisionCheck().CheckTile(this);
+		gp.getCollisionCheck().checkObject(this, false);
+		gp.getCollisionCheck().checkEntity(this, gp.getNPCS());
+		gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 		
+		this.checkMonsterCollision();
 		
-		if (gp.cChecker.checkPlayer(this) && this.entityType == 2) {
-			if (!gp.player.invincibility) {
-				gp.player.setLife(gp.player.getLife() - 1);
-				gp.player.invincibility = true;
-			}
-		}
-		
+
 		if (!collisionOn) {
 			switch (direction) {
 			case UP: WorldY -= speed; break;
@@ -100,20 +97,19 @@ public class Entity {
 		}
 
 		spriteCounter++;
-		//Player image changes every 12 frames
+		//Entity image changes every 12 frames
 		if (!collisionOn) {
-		if (spriteCounter > 12) {
-			if (spriteNum) {
-				spriteNum = false;
+			if (spriteCounter > 12) {
+				spriteNum = !spriteNum;
+				spriteCounter = 0;
 			}
-			
-			else {
-				spriteNum = true;
-			}
-			spriteCounter = 0;
 		}
+		
+		//What this is checking is that it's checking if the entity object that the it's referring to
+		//is also an object of type Monster. if it is then execute the Monster-specific method
+		if (this instanceof Monster) {
+			((Monster) this).checkInvincibilityTime();
 		}
-		this.checkInvincibilityTime();
 	}
 	
 	
@@ -121,15 +117,16 @@ public class Entity {
 	public void draw (Graphics2D g2, GamePanel gp) {
 		this.gp = gp;
 		BufferedImage image = null;
-		int entityScreenX = this.WorldX - gp.player.getWorldX() + gp.player.screenX;
-		int entityScreenY = this.WorldY - gp.player.WorldY + gp.player.screenY;
+		
+		int entityScreenX = this.WorldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
+		int entityScreenY = this.WorldY - gp.getPlayer().WorldY + gp.getPlayer().getScreenY();
 		
 		//Render the monsters on screen - pretty fuzzy about this since just copy
-		if (this.WorldX + gp.getTileSize() > gp.player.getWorldX() - gp.player.screenX && 
-			this.WorldX - gp.getTileSize() < gp.player.getWorldX() + gp.player.screenX &&
-			this.WorldY + gp.getTileSize() > gp.player.WorldY - gp.player.screenY &&
-			this.WorldY - gp.getTileSize() < gp.player.WorldY + gp.player.screenY) {
-			
+		if (this.WorldX + gp.getTileSize() > gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() && 
+			this.WorldX - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX() &&
+			this.WorldY + gp.getTileSize() > gp.getPlayer().WorldY - gp.getPlayer().getScreenY() &&
+			this.WorldY - gp.getTileSize() < gp.getPlayer().WorldY + gp.getPlayer().getScreenY()) {
+		
 			switch (direction) {
 			case UP: if (spriteNum) {image = up1;} else {image = up2;} break;
 			case DOWN: if (spriteNum) {image = down1;} else {image = down2;} break;
@@ -138,43 +135,20 @@ public class Entity {
 			default:
 				break;
 			}
+			//Draw monster HP Bar
+			drawHealthBar(g2, entityScreenX, entityScreenY);
 			
-			//Monster HP bar
-			if (entityType == 2 && hpBarEnabled) {
-				double oneBarValue = (double) gp.getTileSize()/this.maxLife,
-						hpBarValue = oneBarValue * this.life;
-				
-				
-				//Gray outline
-				//x, y, width, height
-				g2.setColor(new Color(35, 35, 35));
-				g2.fillRect(entityScreenX - 1, entityScreenY - 1, gp.getTileSize() + 2, 12);
-				
-			
-				
-				//Red hp bar
-				g2.setColor(new Color(255,0,30));
-				g2.fillRect(entityScreenX, entityScreenY, (int) hpBarValue, 10);
-				
-				
-				++hpBarCounter;
-				
-				if (hpBarCounter > 360) {
+			if (this.entityType == EntityType.HOSTILE && this instanceof Monster) {
+				if (invincibility) {
+					hpBarEnabled = true;
 					hpBarCounter = 0;
-					hpBarEnabled = false;
+					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));	
+				}
+				
+				if (dying && !alive) {
+					((Monster)this).drawDeathAnimation(g2);
 				}
 			}
-			
-			if (invincibility) {
-				hpBarEnabled = true;
-				hpBarCounter = 0;
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));	
-			}
-			
-			if (dying && !alive) {
-				this.deathAnimation(g2);
-			}
-			
 			
 			//16 pixels
 			g2.drawImage(image, entityScreenX, entityScreenY, gp.getTileSize(), gp.getTileSize(), null);
@@ -183,64 +157,64 @@ public class Entity {
 	}
 	
 	//Render and scale the entity
-	protected BufferedImage setupEntity(String imageName, String pathName, int width, int height) {
+	protected final BufferedImage setupEntity(String imageName, String pathName, int width, int height) {
 		
-		UtilityTool uTool = new UtilityTool();
 		BufferedImage scaledImage = null;
 		
 		try {
 			scaledImage = ImageIO.read(getClass().getResourceAsStream(pathName + imageName+".png"));
-			scaledImage = uTool.scaleImage(scaledImage, width, height);
-		}catch(IOException e) {
+			scaledImage = UtilityTool.scaleImage(scaledImage, width, height);
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 		return scaledImage;
 	}
 	
-	
-	//******************************************************************************************************************		
-	//------------------------------MONSTER OVERRIDE METHODS----------------------------------------------------------------------//
-	//*****************************************************************************************************************
-	
-	protected void checkInvincibilityTime() {
-		if (invincibility) {
-			++invincibilityCounter;
-			if (invincibilityCounter > 120) {
-				invincibility = false;
-				invincibilityCounter = 0;
-				
-				}
+
+	//Checks to see if player is colliding with a monster
+	private final void checkMonsterCollision() {
+		if (gp.getCollisionCheck().checkPlayer(this) && this.entityType == EntityType.HOSTILE) {
+			if (!gp.getPlayer().invincibility) {
+				gp.getPlayer().invincibility = true;
 			}
-	}
-	
-	protected void damageContact(Entity entity) {};
-	
-	public void monsterDamageReaction(Player player) {}
-	
-	//Draws dying animation for monsters
-	protected void deathAnimation (Graphics2D g2) {
-		++deathCount;
-		
-		if (deathCount < 41) {
-			
-			if (deathCount % 5 == 0 && deathCount % 10 != 0) {
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));	
-				
-			} else if (deathCount % 10 == 0){
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));	
-			}
-		} else {
-			dying = false;
-			
 		}
-		
 	}
 	
 	
-	public int returnDeathSound() {return 9999;};
+	//Draws monster's health bar and animation
+	private final void drawHealthBar(Graphics2D g2, int entityScreenX, int entityScreenY) {
 	
+		//Monster HP bar
+		if (entityType == EntityType.HOSTILE && hpBarEnabled) {
+			double oneBarValue = (double) gp.getTileSize()/this.maxLife,
+					hpBarValue = oneBarValue * this.life;
+			
+			//Draw damage above monster
+			
+			//Gray outline
+			//x, y, width, height
+			g2.setColor(new Color(35, 35, 35));
+			g2.fillRect(entityScreenX - 1, entityScreenY - 1, gp.getTileSize() + 2, 12);
+			
+		
+			
+			//Red hp bar
+			g2.setColor(new Color(255,0,30));
+			g2.fillRect(entityScreenX, entityScreenY, (int) hpBarValue, 10);
+			
+			
+			++hpBarCounter;
+			
+			if (hpBarCounter > 360) {
+				hpBarCounter = 0;
+				hpBarEnabled = false;
+			}
+		}
+	}
+	
+
 	/*
-	 * SET AND GET METHODS
+	 * SETTERS AND GETTERS
 	 */
 	
 	public Direction getDirection () { return direction; }
@@ -258,22 +232,44 @@ public class Entity {
 	public String getName () { return name; }
 	public void setName (String name) { this.name = name; }
 	
-		/*
-		 * GET buffered image
-		 */
+	public boolean getInvincibility () { return invincibility; }
+	public void setInvincibility (boolean invincibility) { this.invincibility = invincibility; }
+	
+	public int getMaxLife() {return maxLife;}
+	public int getLife() {return life;}
+	
+	public void setMaxLife(int life) {maxLife = life;}
+	public void setLife (int life) {this.life = life;}
+	
+	public Rectangle getSolidArea() { return solidArea; }
+	public void setSolidArea (Rectangle solidArea) { this.solidArea = solidArea; }
+	
+	public int getSolidAreaDefaultX() { return solidAreaDefaultX; }
+	public void setSolidAreaDefaultX (int solidAreaDefaultX) { this.solidAreaDefaultX = solidAreaDefaultX; }
+	
+	public int getSolidAreaDefaultY() { return solidAreaDefaultY; }
+	public void setSolidAreaDefaultY (int solidAreaDefaultY) { this.solidAreaDefaultY = solidAreaDefaultY; } 
+	
+	public boolean getCollisionOn() { return collisionOn; }
+	public void setCollisionOn (boolean collisionOn) { this.collisionOn = collisionOn; } 
+	
+	public boolean getAlive() {return alive;}
+	public boolean getDying() { return dying;}
+	
+	public int getAttack () { return attack; }
+	
+	public int getDefense () { return defense; }
+	
+	/*
+	 * BUFFERED IMAGES SETTERS AND GETTERS
+	 */
 	
 	public BufferedImage getDown1() { return down1;}
 	public BufferedImage getImage1() { return image;}
 	public BufferedImage getImage2() { return image2;}
 	public BufferedImage getImage3() { return image3;}
 	
-	public boolean getInvincibility () { return invincibility; }
-	public void setInvincibility (boolean invincibility) { this.invincibility = invincibility; }
-	
-	public int getMaxLife() {return maxLife;}
-	public int getLife() {return life;}
-	public void setMaxLife(int life) {maxLife = life;}
-	public void setLife (int life) {this.life = life;}
+
 	
 	
 }

@@ -1,27 +1,27 @@
 package quotes;
 
-import java.util.Random;
+import java.util.ArrayList;
 
 public class PauseQuotes {
 	//Row determines the state of the game to use which sets of quotes
 	//Column determines which quote in that game state to use which quote
 	//0 - starting state
 	//1 - combat already
-	public String [][] pauseQuoteArray = new String[3][10];
+	private ArrayList <String> pauseNoCombat = new ArrayList<String> ();
 	
 	public PauseQuotes() {
-		setPauseQuotes();
+		setNoCombat();
 	}
 	
-	public String getPauseQuote(int i) {
-		return pauseQuoteArray[0][i];
+	public String getPauseNoCombat(int i) {
+		return pauseNoCombat.get(i);
 	}
 	
-	private void setPauseQuotes() {
-		pauseQuoteArray[0][0] = "You can put your game on pause but not your life. Take a break after some gaming!";
-		pauseQuoteArray[0][1] = "Don't be a chicken and stop the game when you are low health";
-		pauseQuoteArray[0][2] = "The narrator can sometimes be an entitled and snobbish jerk. Be kind, his job is tough";
-		pauseQuoteArray[0][3] = "I love being a corny pause screen. It pisses off the overserious kid";
+	private void setNoCombat() {
+		pauseNoCombat.add("You can put your game on pause but not your life. Take a break after some gaming!");
+		pauseNoCombat.add("Don't be a chicken and stop the game when you are low health");
+		pauseNoCombat.add("The narrator can sometimes be an entitled and snobbish jerk. Be kind, his job is tough");
+		pauseNoCombat.add("I love being a corny pause screen. It pisses off the overserious kid");
 	}
 
 }

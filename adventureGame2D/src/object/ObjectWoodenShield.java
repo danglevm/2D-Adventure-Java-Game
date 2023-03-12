@@ -1,9 +1,8 @@
 package object;
 
 import adventureGame2D.GamePanel;
-import entity.Entity;
 
-public class ObjectWoodenShield extends Entity implements ObjectInterface, DefenseObjectInterface{
+public class ObjectWoodenShield extends GameObject implements DefenseObjectInterface{
 	
 	private int defenseValue;
 

@@ -13,25 +13,20 @@ public class Event {
 	
 	public void DamagePit(GameState gameState) {
 		gp.setGameState(gameState);
-		gp.ui.setCurrentDialogue("You fell into a pit");
-		int currentPlayerLife = gp.player.getLife();
-		currentPlayerLife -= 2;
-		gp.player.setLife(currentPlayerLife);
+		gp.getGameUI().setCurrentDialogue("You fell into a pit");
+		gp.getPlayer().setLife(gp.getPlayer().getLife() - 2);
 	}
 	
 	public void healingPool (GameState gameState) {
-		gp.setGameState(gameState);;
-		gp.ui.setCurrentDialogue("You recovered some of your strength");
-		int currentPlayerLife = gp.player.getLife();
-		int maxLife = gp.player.getMaxLife();
-		if (currentPlayerLife < maxLife) {currentPlayerLife += 2;}
-		gp.player.setLife(currentPlayerLife);
+		gp.setGameState(gameState);
+		gp.getGameUI().setCurrentDialogue("You recovered some of your strength");
+		if (gp.getPlayer().getLife() < gp.getPlayer().getMaxLife()) {gp.getPlayer().setLife(gp.getPlayer().getLife() + 2);}
 	}
 	
 	public void teleport (GameState gameState, int xTiles, int yTiles) {
-		gp.setGameState(gameState);;
-		gp.ui.setCurrentDialogue("You sailed to the nearest island");
-		gp.player.setWorldX(xTiles * gp.getTileSize());
-		gp.player.setWorldY(yTiles * gp.getTileSize()); 
+		gp.setGameState(gameState);
+		gp.getGameUI().setCurrentDialogue("You sailed to the nearest island");
+		gp.getPlayer().setWorldX(xTiles * gp.getTileSize());
+		gp.getPlayer().setWorldY(yTiles * gp.getTileSize()); 
 	}
 }

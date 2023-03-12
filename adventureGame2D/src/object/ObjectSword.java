@@ -1,9 +1,8 @@
 package object;
 
 import adventureGame2D.GamePanel;
-import entity.Entity;
 
-public class ObjectSword extends Entity implements ObjectInterface, AttackObjectInterface {
+public class ObjectSword extends GameObject implements AttackObjectInterface {
 
 	GamePanel gp;
 	

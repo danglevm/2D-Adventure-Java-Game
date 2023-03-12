@@ -1,7 +1,5 @@
 package events;
 
-import java.awt.Rectangle;
-
 import adventureGame2D.GamePanel;
 import enums.Direction;
 import enums.GameState;
@@ -23,9 +21,9 @@ public class EventHandler {
 	public EventHandler (GamePanel gp) {
 		this.gp = gp;
 		int col = 0, row = 0;
-		eventRect = new EventRectangle [gp.maxWorldCol][gp.maxWorldRow];
+		eventRect = new EventRectangle [gp.getMaxWorldCol()][gp.getMaxWorldRow()];
 		
-		while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
+		while (col < gp.getMaxWorldCol() && row < gp.getMaxWorldRow()) {
 			
 			//Initializes every tile to be a potential event tile
 			
@@ -40,7 +38,7 @@ public class EventHandler {
 			eventRect[col][row].eventDefaultY = eventRect[col][row].y;
 			
 			++col;
-			if (col == gp.maxWorldCol) {
+			if (col == gp.getMaxWorldCol()) {
 				col = 0;
 				row ++;
 			}
@@ -51,13 +49,13 @@ public class EventHandler {
 
 	public void checkEvent() {
 		int pitX = 121, pitY = 122; 
-		int healX = 115, healY = 121;
+		int healX = 110, healY = 128;
 		int tpXto = 132, tpYto = 152;
 		int tpXback = 153, tpYback = 150;
 		
 		//Check to see if player is 1 tile away from previous event  - works for lava or some damage things
-		int xDistance = Math.abs(gp.player.getWorldX() - previousEventX),
-			yDistance = Math.abs(gp.player.getWorldX() - previousEventY),
+		int xDistance = Math.abs(gp.getPlayer().getWorldX() - previousEventX),
+			yDistance = Math.abs(gp.getPlayer().getWorldX() - previousEventY),
 			distance = Math.max(xDistance, yDistance);
 		
 		
@@ -81,9 +79,9 @@ public class EventHandler {
 			if (eventCollision(tpXto, tpYto, Direction.ANY)) {
 				//interact is true --> UI draws the string
 				interact = true;
-				if (gp.keyH.allowInteraction) {
+				if (gp.getKeyHandler().getInteraction()) {
 					eventObject.teleport(GameState.DIALOGUE, tpXback, tpYback);
-					gp.keyH.allowInteraction = false;
+					gp.getKeyHandler().setInteraction(false);
 				}
 			} else if (distance > gp.getTileSize()) {
 				interact = false;
@@ -92,9 +90,9 @@ public class EventHandler {
 			
 			if (eventCollision (tpXback, tpYback, Direction.ANY)) {
 				interact = true;
-				if (gp.keyH.allowInteraction) {
+				if (gp.getKeyHandler().getInteraction()) {
 					eventObject.teleport(GameState.DIALOGUE, tpXto, tpYto);
-					gp.keyH.allowInteraction = false;
+					gp.getKeyHandler().setInteraction(false);
 				}
 			} else if (distance > gp.getTileSize()) {
 				interact = false;
@@ -109,24 +107,23 @@ public class EventHandler {
 			boolean playerCollision = false;
 			
 			//get location of player and event rectangle solid area
-			gp.player.solidArea.x = gp.player.getWorldX() + gp.player.solidArea.x;
-			gp.player.solidArea.y = gp.player.getWorldY() + gp.player.solidArea.y;
+			gp.getPlayer().getSolidArea().x = gp.getPlayer().getWorldX() + gp.getPlayer().getSolidArea().x;
+			gp.getPlayer().getSolidArea().y = gp.getPlayer().getWorldY() + gp.getPlayer().getSolidArea().y;
 			eventRect[col][row].x = col * gp.getTileSize() + eventRect[col][row].x;
 			eventRect [col][row].y = row * gp.getTileSize() + eventRect[col][row].y;
 			
 			
 			//if player hits the event and the event has not been triggered
-			if (gp.player.solidArea.intersects(eventRect[col][row]) && !eventRect[col][row].eventTriggered) {
-				if (gp.player.getDirection() == reqDirection || reqDirection == Direction.ANY) {
+			if (gp.getPlayer().getSolidArea().intersects(eventRect[col][row]) && !eventRect[col][row].eventTriggered) {
+				if (gp.getPlayer().getDirection() == reqDirection || reqDirection == Direction.ANY) {
 					playerCollision = true;
-					
-					previousEventX = gp.player.getWorldX();
-					previousEventY = gp.player.getWorldY();
+					previousEventX = gp.getPlayer().getWorldX();
+					previousEventY = gp.getPlayer().getWorldY();
 				}
 			}
 			
-			gp.player.solidArea.x = gp.player.solidAreaDefaultX;
-			gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+			gp.getPlayer().getSolidArea().x = gp.getPlayer().getSolidAreaDefaultX();
+			gp.getPlayer().getSolidArea().y = gp.getPlayer().getSolidAreaDefaultY();
 			eventRect[col][row].x = eventRect[col][row].eventDefaultX;
 			eventRect[col][row].y = eventRect[col][row].eventDefaultY;
 		

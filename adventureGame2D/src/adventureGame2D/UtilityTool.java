@@ -9,7 +9,7 @@ public class UtilityTool {
 	
 	
 	//scale tile images
-	public BufferedImage scaleImage (BufferedImage original, int width, int height) {
+	public static BufferedImage scaleImage (BufferedImage original, int width, int height) {
 		//Scale the image before being drawn - pass width, height, image type
 		BufferedImage scaledImage = new BufferedImage(width, height, original.getType());
 		

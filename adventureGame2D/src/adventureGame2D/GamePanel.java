@@ -15,9 +15,11 @@ import entity.Entity;
 import entity.Player;
 import enums.GameState;
 import events.EventHandler;
+import monster.Monster;
 import tile.TileManager;
 
 //Game Panel inherits all components from JPanel
+@SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable{
 	//******************************************************************************************************************		
 	//------------------------------SCREEN SETTINGS----------------------------------------------------------------------//
@@ -29,24 +31,24 @@ public class GamePanel extends JPanel implements Runnable{
 	private final int tileSize = originalTileSize * scale;//48x48 tile
 	
 	//Setting max screen settings 18 tiles x 14 tiles
-	public final int maxScreenColumns = 18;
-	public final int maxScreenRows = 14;
+	private final int maxScreenColumns = 18;
+	private final int maxScreenRows = 14;
 	
 	//A single tile size is 48 pixels
-	public final int screenWidth = tileSize * maxScreenColumns; //864 pixels
-	public final int screenHeight = tileSize * maxScreenRows; //672 pixels
+	private final int screenWidth = tileSize * maxScreenColumns; //864 pixels
+	private final int screenHeight = tileSize * maxScreenRows; //672 pixels
 	
 	
 	//******************************************************************************************************************		
-	//------------------------------IN GAME SETTINGS----------------------------------------------------------------------//
+	//SETTINGS----------------------------------------------------------------------//
 	//*****************************************************************************************************************
 	
 	//World Map settings
-	public int maxWorldCol = 250;
-	public int maxWorldRow = 250;
-	public final int maxMap = 10;
-	public final int worldWidth = tileSize*maxWorldCol;
-	public final int worldHeight = tileSize*maxWorldRow;
+	private int maxWorldCol = 250;
+	private int maxWorldRow = 250;
+	private final int maxMap = 10;
+	private final int worldWidth = tileSize * maxWorldCol;
+	private final int worldHeight = tileSize * maxWorldRow;
 	
 	
 	//Main game state
@@ -62,29 +64,26 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	//Game Objects
 	TileManager tileM = new TileManager(this);
-	public KeyHandler keyH = new KeyHandler(this);
-	public CollisionCheck cChecker = new CollisionCheck(this);
-	public UI ui = new UI(this);
-	public EventHandler eHandler = new EventHandler (this);
-	public AssetPlacement assetPlace = new AssetPlacement(this);
+	private KeyHandler keyH = new KeyHandler(this);
+	private CollisionCheck collisionChecker = new CollisionCheck(this);
+	private UI ui = new UI(this);
+	private EventHandler eHandler = new EventHandler (this);
+	private AssetPlacement assetPlace = new AssetPlacement(this);
 	
 	//Entities
 	Thread gameThread;
-	public Player player = new Player(this, keyH);
-	public ArrayList <Entity> NPCs = new ArrayList <> (); 
-	public ArrayList <Entity> objects = new ArrayList <> ();
-	public ArrayList <Entity> monsters = new ArrayList <> ();
+	private Player player = new Player(this, keyH);
+	private ArrayList <Entity> NPCs = new ArrayList <Entity> (); 
+	private ArrayList <Entity> objects = new ArrayList <Entity> ();
+	private ArrayList <Entity> monsters = new ArrayList <Entity> ();
 	//entity with lowest world Y index 0, highest world y final index
 	private ArrayList<Entity> entityList = new ArrayList<>();
+	private ArrayList <Entity> removeMonsterList = new ArrayList <> ();
 	
 	
 	//sound
 	Sound music = new Sound();
 	Sound se = new Sound();
-	
-	
-	
-	
 	
 	
 	//-------------------------------CONSTRUCTORS------------------
@@ -106,16 +105,45 @@ public class GamePanel extends JPanel implements Runnable{
 		gameThread = new Thread(this); //Pass in the class it's calling and the thread will run through the game's processes
 		gameThread.start();
 	}
+	/**
+	 * GETTERS and SETTERS
+	 */
+	public int getMaxWorldCol () { return maxWorldCol; }
+	
+	public int getMaxWorldRow () { return maxWorldRow; }
+	
+	public int getScreenWidth () { return screenWidth; }
+	
+	public int getScreenHeight () { return screenHeight; }
+	
+	public KeyHandler getKeyHandler () { return keyH; }
+	
+	public CollisionCheck getCollisionCheck () { return collisionChecker; }
+	
+	public UI getGameUI () { return ui; }
+	
+	public EventHandler getEventHandler () { return eHandler;}
+	
+	public AssetPlacement getAssetPlacement () { return assetPlace;}
+	
+	public Player getPlayer () { return player;}
+	
+	public ArrayList<Entity> getNPCS() { return NPCs;}
+	
+	public ArrayList<Entity> getObjects() { return objects;}
+	
+	public ArrayList<Entity> getMonsters() { return monsters;}
+	
 	//Setting up the game
 	//*******************************GAME SETUP**********************
 	public void GameSetup() {
 		
+		gameState = GameState.TITLE;
 		assetPlace.setObject();
 		assetPlace.setNPCs();
 		assetPlace.setMonsters();
 		playMusic(0);
 		stopMusic();
-		gameState = GameState.TITLE;
 		
 		
 	}
@@ -129,8 +157,6 @@ public class GamePanel extends JPanel implements Runnable{
 		long lastTime = System.nanoTime();
 		long currentTime;
 		int timer = 0, drawCount = 0;
-		
-		
 		
 		while (gameThread != null) {
 			
@@ -167,7 +193,6 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	}
 	 
-	
 
 //************************************ GAME LOOP METHODS**************
 //Takes in KeyH inputs and then updates character model
@@ -178,9 +203,20 @@ public void update() {
 		//Player
 		player.update();
 		//NPCs
-		this.updateEntities(objects);
-		this.updateEntities(NPCs);
-		this.updateEntities(monsters);
+		updateEntities(objects);
+		updateEntities(NPCs);
+		updateEntities(monsters);
+		
+		monsters.removeAll(removeMonsterList);
+		
+		for (Entity monster : monsters) {
+			
+			if (monster == null) {
+				System.out.println("True");
+				monsters.remove(monster);
+			}
+		}
+		
 		
 	} else {
 		//nothing happens
@@ -209,9 +245,9 @@ public void paintComponent (Graphics g) {
 		entityList.add(player);
 	
 		//Add both npcs and objects to the array list 
-		this.addtoEntityList(NPCs);
-		this.addtoEntityList(objects);
-		this.addtoEntityList(monsters);
+		addtoEntityList(NPCs);
+		addtoEntityList(objects);
+		addtoEntityList(monsters);
 		
 		//Sort the entityList
 		Collections.sort(entityList, new Comparator<Entity>() {
@@ -228,11 +264,13 @@ public void paintComponent (Graphics g) {
 		
 		//Draw entities
 		for (Entity currentEntity : entityList) {
-			if (currentEntity != player) {
-				currentEntity.draw(g2, this);
-			} else {
-				player.draw(g2);
+			if (currentEntity != null) {
+				if (currentEntity != player) {
+					currentEntity.draw(g2, this);
+				} else {
+					player.draw(g2);
 				
+				}
 			}
 		}
 		//Empty entity list after drawing
@@ -241,7 +279,7 @@ public void paintComponent (Graphics g) {
 		ui.draw(g2);
 	
 	//draws FPS and player location
-		if (keyH.FPS_display) {
+		if (keyH.getFpsDisplay()) {
 			g2.setColor(Color.white);
 			g2.setFont(g2.getFont().deriveFont(Font.PLAIN,25));
 			g2.drawString(FPS_text, FPS_x, FPS_y);
@@ -253,7 +291,6 @@ public void paintComponent (Graphics g) {
 	}
 
 }
-
 	//Music playing methods
 	public void playMusic (int i) {
 		music.setFile(i);
@@ -273,24 +310,34 @@ public void paintComponent (Graphics g) {
 	
 	//Add from array to array List
 	private final void addtoEntityList (ArrayList <Entity> entities) {
-		for (Entity currentEntity : entities) {
-			if (currentEntity != null) {
-				entityList.add(currentEntity);
+		entities.forEach(entity -> {
+			if (entity != null) {
+				entityList.add(entity);
 			}
-		}
+		});
 	}
 	
 	private final void updateEntities (ArrayList <Entity> entities) {
-
-		for (Entity currentEntity : entities) {
-			if (currentEntity.getAlive()) {
-				currentEntity.update();
-			} else if (!currentEntity.getAlive() &&  !currentEntity.getDying()) {
-				entities.remove(currentEntity);
-		} 
+		entities.forEach(entity -> {
+			if (!entity.getAlive() && !entity.getDying()) {
+				if (entity instanceof Monster) {
+					removeMonsterList.add(entity);
+				}
+			} else if (entity.getAlive()) {
+				entity.update();
+			}
+		});
 	}
+//		for (Entity currentEntity : entities) {
+//			if (currentEntity.getAlive()) {
+//				currentEntity.update();
+//			} else if (!currentEntity.getAlive() &&  !currentEntity.getDying()) {
+//				entityList.remove(currentEntity);
+//				entities.remove(currentEntity);
+//		} 
+//	}
 
-}
+
 	
 	/**
 	 * GETTERS and SETTERS
