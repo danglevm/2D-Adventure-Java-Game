@@ -5,5 +5,6 @@ public enum GameState {
 	PLAY,
 	PAUSE,
 	DIALOGUE,
-	STATUS
+	STATUS,
+	INVENTORY
 }

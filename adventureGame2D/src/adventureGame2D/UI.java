@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import entity.Entity;
+import entity.Player;
 import enums.TitleState;
 import object.ObjectHeart;
 import quotes.PauseQuotes;
@@ -31,11 +32,14 @@ public class UI {
 	Font arial_30, arial_50, arial_70, maruMonica, purisa;
 	//Dialogue
 	private String currentDialogue = "";	
+	private int tileSize;
 	
 	protected int cursorNum = 0, statusCursor = 0;
 	
 	//Drawing hearts
 	private BufferedImage heart_full, heart_half, heart_blank;
+	
+	private String [] statusScreenLabels = {"NEW GAME", "LOAD SAVE", "SETTINGS", "QUIT"};
 	
 	//Drawing SubTitles
 	ArrayList <String> subtitleMsg = new ArrayList <String> ();
@@ -47,7 +51,8 @@ public class UI {
 		this.gp = gp;
 		
 		titleScreenState = TitleState.WELCOME;
-		
+	
+		tileSize = gp.getTileSize();
 		arial_30 = new Font ("Arial", Font.PLAIN, 30);
 		arial_50 = new Font ("Arial", Font.PLAIN, 50);
 		arial_70 = new Font ("Arial", Font.BOLD, 70);
@@ -74,11 +79,14 @@ public class UI {
 	 */
 	
 	public TitleState getTitleScreenState () { return titleScreenState; }
-	public void setTitleScreenState (TitleState titleScreenState) { this.titleScreenState = titleScreenState; }
+	public final void setTitleScreenState (TitleState titleScreenState) { this.titleScreenState = titleScreenState; }
 	
-	public void setCurrentDialogue (String dialogue) { currentDialogue = dialogue;}
+	public final void setCurrentDialogue (String dialogue) { currentDialogue = dialogue;}
 	
-	
+	public final void addSubtitleMsg (String message) {
+		this.subtitleMsg.add(message);
+		this.subtitleMsgCount.add(0);
+	}
 	/*
 	 * String aligning values getters
 	 */
@@ -127,7 +135,11 @@ public class UI {
 		
 		}
 		
-		case STATUS -> {drawStatusScreen();} 
+		case STATUS -> { drawStatusScreen(); } 
+		
+		case INVENTORY -> { drawInventoryScreen(); }
+		
+		
 		
 		default -> throw new IllegalArgumentException("Unknown Game State: " + gp.getGameState());
 		}
@@ -197,31 +209,22 @@ public class UI {
 			y += gp.getTileSize() * 1.5;
 			g2.drawImage(gp.getPlayer().getDown1(), x, y, gp.getTileSize() * 4, gp.getTileSize() * 4, null);
 			
+			
+			y += gp.getTileSize()*5.5;
+			int defaultY = y;
 			//Menu options
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-			text = "NEW GAME";
-			x = getXCenter(text);
-			y += gp.getTileSize()*5.5;
-			g2.drawString(text, x, y);
-			if (cursorNum == 0) {g2.drawString(">", x-gp.getTileSize(), y);}
+			for (int i = 0; i < statusScreenLabels.length; ++i) {
+				text = statusScreenLabels[i];
+				x = getXCenter (text);
+				g2.drawString(text, x, y);
+				y += gp.getTileSize();
+				
+			}
 			
-			text = "LOAD SAVE";
-			x = getXCenter(text);
-			y += gp.getTileSize();
-			g2.drawString(text, x, y);
-			if (cursorNum == 1) {g2.drawString(">", x-gp.getTileSize(), y);}
+			y = defaultY + (gp.getTileSize() * cursorNum);
+			g2.drawString(">", x-gp.getTileSize()*2, y);
 			
-			text = "SETTINGS";
-			x = getXCenter(text);
-			y += gp.getTileSize();
-			g2.drawString(text, x, y);
-			if (cursorNum == 2) {g2.drawString(">", x-gp.getTileSize(), y);}
-		
-			text = "QUIT";
-			x = getXCenter(text);
-			y += gp.getTileSize();
-			g2.drawString(text,x, y);
-			if (cursorNum == 3) {g2.drawString(">", x-gp.getTileSize(), y);}
 		} else if (titleScreenState == TitleState.CHARACTERSELECT) {
 			
 			//STORY PATH SELECTION
@@ -396,59 +399,39 @@ public class UI {
 		g2.drawString(gp.getPlayer().getName(), getXValuesAlign(gp.getPlayer().getName(), tailX), valueY);
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.getPlayer().getLevel()), getXValuesAlign(String.valueOf(gp.getPlayer().getLevel()), tailX), valueY);
+		Player player = gp.getPlayer();
+		
+		int [] playerAttributes = {
+				player.getHealthRegen(),
+				player.getMana(),
+				player.getManaRegen(),
+				player.getTotalAttack(),
+				player.getTotalDefense(),
+				player.getDexterity(),
+				player.getStamina(),
+				player.getSpeed() - 3,
+				player.getKnockback(),
+				player.getCriticalHit(),
+		};
+		
+		g2.drawString(String.valueOf(player.getLevel()), getXValuesAlign(String.valueOf(player.getLevel()), tailX), valueY);
 		valueY += lineHeight;
+		int defaultY = valueY;
 	
 		
 		String value = String.valueOf(gp.getPlayer().getLife() + "/" + gp.getPlayer().getMaxLife());
 		g2.drawString(value, getXValuesAlign(value, tailX), valueY);
-		if (statusCursor == 0) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		valueY += lineHeight;
 		
-		g2.drawString(String.valueOf(gp.getPlayer().getHealthRegen()), getXValuesAlign(String.valueOf(gp.getPlayer().getHealthRegen()), tailX), valueY);
-		if (statusCursor == 1) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
-		valueY += lineHeight;
-		
-		g2.drawString(String.valueOf(gp.getPlayer().getMana()), getXValuesAlign(String.valueOf(gp.getPlayer().getMana()), tailX), valueY);
-		if (statusCursor == 2) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
-		valueY += lineHeight;
-		
-		g2.drawString(String.valueOf(gp.getPlayer().getManaRegen()), getXValuesAlign(String.valueOf(gp.getPlayer().getManaRegen()), tailX), valueY);
-		if (statusCursor == 3) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
-		valueY += lineHeight;
-		
-		g2.drawString(String.valueOf(gp.getPlayer().getTotalAttack()), getXValuesAlign(String.valueOf(gp.getPlayer().getTotalDefense()), tailX), valueY);
-		if (statusCursor == 4) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
-		valueY += lineHeight;
-		
-		g2.drawString(String.valueOf(gp.getPlayer().getTotalDefense()), getXValuesAlign(String.valueOf(gp.getPlayer().getTotalDefense()), tailX), valueY);
-		if (statusCursor == 5) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
-		valueY += lineHeight;
-		
-		g2.drawString(String.valueOf(gp.getPlayer().getDexterity()), getXValuesAlign(String.valueOf(gp.getPlayer().getDexterity()), tailX), valueY);
-		if (statusCursor == 6) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
-		valueY += lineHeight;
-		
-		g2.drawString(String.valueOf(gp.getPlayer().getStamina()), getXValuesAlign(String.valueOf(gp.getPlayer().getStamina()), tailX), valueY);
-		if (statusCursor == 7) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
-		valueY += lineHeight;
-		
-		g2.drawString(String.valueOf(gp.getPlayer().getSpeed() - 3), getXValuesAlign(String.valueOf(gp.getPlayer().getSpeed()), tailX), valueY);
-		if (statusCursor == 8) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
-		valueY += lineHeight;
-		
-		g2.drawString(String.valueOf(gp.getPlayer().getKnockback()), getXValuesAlign(String.valueOf(gp.getPlayer().getKnockback()), tailX), valueY);
-		if (statusCursor == 9) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
-		valueY += lineHeight;
-		
-		g2.drawString(String.valueOf(gp.getPlayer().getCriticalHit()), getXValuesAlign(String.valueOf(gp.getPlayer().getCriticalHit()), tailX), valueY);
-		if (statusCursor == 10) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
-		valueY += lineHeight;
-		
+		for (int i = 0; i < playerAttributes.length; ++i) {
+			g2.drawString(String.valueOf(playerAttributes[i]), getXValuesAlign(String.valueOf(playerAttributes[i]), tailX), valueY);
+			valueY += lineHeight;
+		}
+	
+
 		value = String.valueOf(gp.getPlayer().getExperience() + "/" + gp.getPlayer().getNextLevelExperience());
 		g2.drawString(value, getXValuesAlign(value, tailX - gp.getTileSize() * 2), valueY);
 		g2.drawString("Reset", getXValuesAlign("Reset", tailX), valueY);
-		if (statusCursor == 11) {g2.drawString(">", tailX - gp.getTileSize(), valueY);}
 		g2.drawString("Points: ", getXValuesAlign("Points: ", tailX + gp.getTileSize() * 2), valueY);
 		g2.drawString(String.valueOf(gp.getPlayer().getUpgradePoints()), getXValuesAlign(String.valueOf(gp.getPlayer().getUpgradePoints()), tailX + gp.getTileSize() * 3), valueY);
 		valueY += lineHeight;
@@ -458,14 +441,14 @@ public class UI {
 		
 		g2.drawImage(gp.getPlayer().getEquippedWeapon().getDown1(), tailX - gp.getTileSize(), valueY, null);
 		g2.drawImage(gp.getPlayer().getEquippedShield().getDown1(), tailX, valueY , null);
+		
+		int tempValY = defaultY + (lineHeight * statusCursor);
+		g2.drawString(">", tailX - gp.getTileSize(), tempValY);
 	}
 	
-	public void addSubtitleMsg (String message) {
-		this.subtitleMsg.add(message);
-		this.subtitleMsgCount.add(0);
-	}
+
 	
-	public void drawSubtitleMsg() {
+	private final void drawSubtitleMsg() {
 		
 		int x = gp.getTileSize() / 2, 
 			y = gp.getTileSize() * 4;
@@ -493,6 +476,14 @@ public class UI {
 		}
 		
 		
+	}
+	
+	private final void drawInventoryScreen() {
+		int frameX = gp.getTileSize(),
+			frameY,
+			frameWidth,
+			frameHeight;
+			
 	}
 	
 	
