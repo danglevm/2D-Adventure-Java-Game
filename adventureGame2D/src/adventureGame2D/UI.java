@@ -37,6 +37,8 @@ public class UI {
 	//Drawing hearts
 	private BufferedImage heart_full, heart_half, heart_blank;
 	
+	private String [] statusScreenLabels = {"NEW GAME", "LOAD SAVE", "SETTINGS", "QUIT"};
+	
 	//Drawing SubTitles
 	ArrayList <String> subtitleMsg = new ArrayList <String> ();
 	ArrayList <Integer> subtitleMsgCount = new ArrayList <Integer> ();
@@ -197,31 +199,22 @@ public class UI {
 			y += gp.getTileSize() * 1.5;
 			g2.drawImage(gp.getPlayer().getDown1(), x, y, gp.getTileSize() * 4, gp.getTileSize() * 4, null);
 			
+			
+			y += gp.getTileSize()*5.5;
+			int defaultY = y;
 			//Menu options
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-			text = "NEW GAME";
-			x = getXCenter(text);
-			y += gp.getTileSize()*5.5;
-			g2.drawString(text, x, y);
-			if (cursorNum == 0) {g2.drawString(">", x-gp.getTileSize(), y);}
+			for (int i = 0; i < statusScreenLabels.length; ++i) {
+				text = statusScreenLabels[i];
+				x = getXCenter (text);
+				g2.drawString(text, x, y);
+				y += gp.getTileSize();
+				
+			}
 			
-			text = "LOAD SAVE";
-			x = getXCenter(text);
-			y += gp.getTileSize();
-			g2.drawString(text, x, y);
-			if (cursorNum == 1) {g2.drawString(">", x-gp.getTileSize(), y);}
+			y = defaultY + (gp.getTileSize() * cursorNum);
+			g2.drawString(">", x-gp.getTileSize()*2, y);
 			
-			text = "SETTINGS";
-			x = getXCenter(text);
-			y += gp.getTileSize();
-			g2.drawString(text, x, y);
-			if (cursorNum == 2) {g2.drawString(">", x-gp.getTileSize(), y);}
-		
-			text = "QUIT";
-			x = getXCenter(text);
-			y += gp.getTileSize();
-			g2.drawString(text,x, y);
-			if (cursorNum == 3) {g2.drawString(">", x-gp.getTileSize(), y);}
 		} else if (titleScreenState == TitleState.CHARACTERSELECT) {
 			
 			//STORY PATH SELECTION
