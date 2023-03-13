@@ -92,6 +92,8 @@ public class KeyHandler implements KeyListener{
 	case DIALOGUE -> { dialogueState (code); }
 	
 	case STATUS -> { statusState (code); }
+	
+	case INVENTORY -> { inventoryState(code); }
 	}
 	
 	}
@@ -102,7 +104,7 @@ public class KeyHandler implements KeyListener{
 	 * 
 	 **/
 	
-	private void welcomeTitleState (int code) {
+	private final void welcomeTitleState (int code) {
 		
 		if (code == KeyEvent.VK_W) --gp.getGameUI().cursorNum;  
 		
@@ -136,7 +138,7 @@ public class KeyHandler implements KeyListener{
 		
 	}
 	
-	private void characterSelectionTitleState (int code) {
+	private final void characterSelectionTitleState (int code) {
 		
 		if (code == KeyEvent.VK_A) --gp.getGameUI().cursorNum;
 
@@ -163,7 +165,7 @@ public class KeyHandler implements KeyListener{
 		
 	}
 	
-	private void playState (int code) {
+	private final void playState (int code) {
 		/*
 		 * Player moving
 		 */	
@@ -184,11 +186,13 @@ public class KeyHandler implements KeyListener{
 			pauseQuote = true;
 		} 
 		
+		//Change to status state
 		if (code == KeyEvent.VK_C) gp.setGameState(GameState.STATUS);
 		
-		
 		if (code == KeyEvent.VK_ENTER) dialoguePress = !dialoguePress;
-			
+		
+		//Change to inventory state
+		if (code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.INVENTORY); 
 		
 
 		/*
@@ -217,16 +221,16 @@ public class KeyHandler implements KeyListener{
 	 * Game state methods
 	 */
 	
-	private void pauseState (int code) {
+	private final void pauseState (int code) {
 		if (code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.PLAY);
 	}
 	
-	private void dialogueState (int code) {
+	private final void dialogueState (int code) {
 		if (code == KeyEvent.VK_ENTER) gp.setGameState(GameState.PLAY);
 		
 	}
 	
-	private void statusState (int code) {
+	private final void statusState (int code) {
 		
 		if (code == KeyEvent.VK_C) gp.setGameState(GameState.PLAY);  
 		
@@ -239,8 +243,12 @@ public class KeyHandler implements KeyListener{
 		if (gp.getGameUI().statusCursor < 0) gp.getGameUI().statusCursor = 0;
 		
 	}
+	
+	private final void inventoryState (int code) {
+		if (code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.PLAY);
+	}
 	@Override
-	public void keyReleased(KeyEvent e) {
+	public final void keyReleased(KeyEvent e) {
 		
 		int code = e.getKeyCode();
 		/*
