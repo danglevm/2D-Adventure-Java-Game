@@ -245,7 +245,27 @@ public class KeyHandler implements KeyListener{
 	}
 	
 	private final void inventoryState (int code) {
+		
+		UI ui = gp.getGameUI();
+		
 		if (code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.PLAY);
+		
+		if (code == KeyEvent.VK_D) { ui.setSlotColumn(ui.getSlotColumn() + 1); gp.playSE(9); }
+		
+		if (code == KeyEvent.VK_A) { ui.setSlotColumn(ui.getSlotColumn() - 1); gp.playSE(9); }
+		
+		if (code == KeyEvent.VK_W) { ui.setSlotRow(ui.getSlotRow() - 1); gp.playSE(9); }
+		
+		if (code == KeyEvent.VK_S) { ui.setSlotRow(ui.getSlotRow() + 1); gp.playSE(9); }
+		
+		if (ui.getSlotRow() < 0) ui.setSlotRow(0);
+		
+		if (ui.getSlotRow() > 2) ui.setSlotRow(2);
+		
+		if (ui.getSlotColumn() < 0) ui.setSlotColumn(0);
+		
+		if (ui.getSlotColumn() > 3) ui.setSlotColumn(3);
+		
 	}
 	@Override
 	public final void keyReleased(KeyEvent e) {

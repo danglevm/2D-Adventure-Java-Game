@@ -32,7 +32,7 @@ public class UI {
 	Font arial_30, arial_50, arial_70, maruMonica, purisa;
 	//Dialogue
 	private String currentDialogue = "";	
-	private int tileSize;
+	
 	
 	protected int cursorNum = 0, statusCursor = 0;
 	
@@ -41,6 +41,7 @@ public class UI {
 	
 	private String [] statusScreenLabels = {"NEW GAME", "LOAD SAVE", "SETTINGS", "QUIT"};
 	
+	private int slotCol = 0, slotRow = 0;
 	//Drawing SubTitles
 	ArrayList <String> subtitleMsg = new ArrayList <String> ();
 	ArrayList <Integer> subtitleMsgCount = new ArrayList <Integer> ();
@@ -52,7 +53,6 @@ public class UI {
 		
 		titleScreenState = TitleState.WELCOME;
 	
-		tileSize = gp.getTileSize();
 		arial_30 = new Font ("Arial", Font.PLAIN, 30);
 		arial_50 = new Font ("Arial", Font.PLAIN, 50);
 		arial_70 = new Font ("Arial", Font.BOLD, 70);
@@ -79,9 +79,18 @@ public class UI {
 	 */
 	
 	public TitleState getTitleScreenState () { return titleScreenState; }
+	
 	public final void setTitleScreenState (TitleState titleScreenState) { this.titleScreenState = titleScreenState; }
 	
 	public final void setCurrentDialogue (String dialogue) { currentDialogue = dialogue;}
+	
+	public final int getSlotColumn () { return slotCol; }
+	
+	public final int getSlotRow() { return slotRow; }
+	
+	public final void setSlotColumn (int slotColumn) { this.slotCol = slotColumn;}
+	
+	public final void setSlotRow (int slotRow) { this.slotRow = slotRow;}
 	
 	public final void addSubtitleMsg (String message) {
 		this.subtitleMsg.add(message);
@@ -479,11 +488,81 @@ public class UI {
 	}
 	
 	private final void drawInventoryScreen() {
-		int frameX = gp.getTileSize(),
-			frameY,
-			frameWidth,
-			frameHeight;
+		Player player = gp.getPlayer();
+		final int frameX = gp.getTileSize(),
+			frameY = gp.getTileSize(),
+			frameWidth = gp.getTileSize() * 16,
+			frameHeight = gp.getTileSize() * 7 + 10;
+		
+		drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+		
+		final int defaultSlotX = frameX + 40,
+				  defaultSlotY = frameY + 30;
+		int slotX = defaultSlotX,
+			slotY = defaultSlotY;
+		
+		//12 is max inventory size
+		for (int a = 0; a < 12; ++a) {
+			if (a < player.getInventory().size()) {
+				slotX += gp.getTileSize() * 2;
+				if (a % 4 == 3) {
+					slotX = defaultSlotX;
+					slotY += gp.getTileSize() * 2;
+					
+				}
+				continue;
+			}
 			
+			g2.setColor(Color.LIGHT_GRAY);
+			g2.setStroke(new BasicStroke (2));
+			g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
+			g2.setStroke(new BasicStroke (1));
+			g2.drawLine(slotX, slotY, slotX + gp.getTileSize() * 2, slotY + gp.getTileSize() * 2);
+			g2.drawLine(slotX + gp.getTileSize() * 2, slotY, slotX, slotY + gp.getTileSize() * 2);
+					
+			slotX += gp.getTileSize() * 2;
+			if (a % 4 == 3) {
+				slotX = defaultSlotX;
+				slotY += gp.getTileSize() * 2;
+				
+			}		
+			
+		}
+		
+		slotX = defaultSlotX;
+		slotY = defaultSlotY;
+		
+		
+		for (int i = 0; i < player.getInventory().size(); ++i) {
+			Entity currentItem = (Entity) player.getInventory().get(i);
+			g2.drawImage(UtilityTool.scaleImage(currentItem.getDown1(), gp.getTileSize() * 2, gp.getTileSize() * 2), slotX, slotY, null);
+			g2.setColor(Color.LIGHT_GRAY);
+			g2.setStroke(new BasicStroke (2));
+			g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
+			
+			
+			slotX += gp.getTileSize() * 2;
+			
+			if (i % 4 == 3) {
+				slotX = defaultSlotX;
+				slotY += gp.getTileSize() * 2;
+			}
+		}
+		
+	
+		
+		
+		/**
+		 * CURSOR 
+		 */
+		int cursorX = defaultSlotX + (gp.getTileSize() * 2 * slotCol),
+			cursorY = defaultSlotY + (gp.getTileSize() * 2 * slotRow),
+			cursorWidth = gp.getTileSize() * 2,
+			cursorHeight = gp.getTileSize() * 2;
+		
+		g2.setColor(Color.white);
+		g2.setStroke(new BasicStroke (8));
+		g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
 	}
 	
 	

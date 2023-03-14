@@ -26,7 +26,8 @@ public class Sound {
 		soundURL.add (getClass().getResource("/sounds/player/playerdamaged.wav")); //6
 		soundURL.add (getClass().getResource("/sounds/monsters/slime-death-sound.wav")); //7
 		soundURL.add (getClass().getResource("/sounds/player/levelup.wav")); // 8
-		
+		soundURL.add (getClass().getResource("/sounds/player/cursor.wav")); //9
+ 		
 		
 	}
 	
