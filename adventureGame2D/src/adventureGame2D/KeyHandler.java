@@ -192,7 +192,7 @@ public class KeyHandler implements KeyListener{
 		if (code == KeyEvent.VK_ENTER) dialoguePress = !dialoguePress;
 		
 		//Change to inventory state
-		if (code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.INVENTORY); 
+		if (code == KeyEvent.VK_E) gp.setGameState(GameState.INVENTORY); 
 		
 
 		/*
@@ -248,7 +248,7 @@ public class KeyHandler implements KeyListener{
 		
 		UI ui = gp.getGameUI();
 		
-		if (code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.PLAY);
+		if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.PLAY);
 		
 		if (code == KeyEvent.VK_D) { ui.setSlotColumn(ui.getSlotColumn() + 1); gp.playSE(9); }
 		

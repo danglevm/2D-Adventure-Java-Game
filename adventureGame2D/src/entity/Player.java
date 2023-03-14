@@ -532,10 +532,6 @@ public class Player extends Entity {
 						
 					}
 					
-					
-					
-					
-					
 				}
 			}
 		}
@@ -558,10 +554,7 @@ public class Player extends Entity {
 	private final void addInventoryItems() {
 		inventory.add(currentWeapon);
 		inventory.add(currentShield);
-		inventory.add(currentWeapon);
-		inventory.add(currentShield);
-		inventory.add(currentWeapon);
-		inventory.add(currentShield);
+		inventory.add(new ObjectKey(gp, 0, 0));
 		
 	}
 	

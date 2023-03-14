@@ -32,7 +32,8 @@ public class UI {
 	Font arial_30, arial_50, arial_70, maruMonica, purisa;
 	//Dialogue
 	private String currentDialogue = "";	
-	
+	Color objectNameColor1 = new Color(253, 218, 13);
+	Color objectNameColor2 = new Color(196, 30, 58);
 	
 	protected int cursorNum = 0, statusCursor = 0;
 	
@@ -489,6 +490,11 @@ public class UI {
 	
 	private final void drawInventoryScreen() {
 		Player player = gp.getPlayer();
+		
+		/**
+		 * 
+		 * INVENTORY FRAME
+		 */
 		final int frameX = gp.getTileSize(),
 			frameY = gp.getTileSize(),
 			frameWidth = gp.getTileSize() * 16,
@@ -501,45 +507,27 @@ public class UI {
 		int slotX = defaultSlotX,
 			slotY = defaultSlotY;
 		
-		//12 is max inventory size
-		for (int a = 0; a < 12; ++a) {
-			if (a < player.getInventory().size()) {
-				slotX += gp.getTileSize() * 2;
-				if (a % 4 == 3) {
-					slotX = defaultSlotX;
-					slotY += gp.getTileSize() * 2;
-					
-				}
-				continue;
-			}
-			
-			g2.setColor(Color.LIGHT_GRAY);
-			g2.setStroke(new BasicStroke (2));
-			g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
-			g2.setStroke(new BasicStroke (1));
-			g2.drawLine(slotX, slotY, slotX + gp.getTileSize() * 2, slotY + gp.getTileSize() * 2);
-			g2.drawLine(slotX + gp.getTileSize() * 2, slotY, slotX, slotY + gp.getTileSize() * 2);
-					
-			slotX += gp.getTileSize() * 2;
-			if (a % 4 == 3) {
-				slotX = defaultSlotX;
-				slotY += gp.getTileSize() * 2;
+		
+		
+		//max inventory size is 12, as soon as there is no object inside the array, starts drawing out those x'es inside the inventory slot
+		for (int i = 0; i < 12; ++i) {
+			try {
+				Entity currentItem = (Entity) player.getInventory().get(i);
+				if (currentItem == null) { System.out.println ("true");}
+				g2.drawImage(UtilityTool.scaleImage(currentItem.getDown1(), gp.getTileSize() * 2, gp.getTileSize() * 2), slotX, slotY, null);
+				g2.setColor(Color.LIGHT_GRAY);
+				g2.setStroke(new BasicStroke (2));
+				g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
 				
-			}		
-			
-		}
-		
-		slotX = defaultSlotX;
-		slotY = defaultSlotY;
-		
-		
-		for (int i = 0; i < player.getInventory().size(); ++i) {
-			Entity currentItem = (Entity) player.getInventory().get(i);
-			g2.drawImage(UtilityTool.scaleImage(currentItem.getDown1(), gp.getTileSize() * 2, gp.getTileSize() * 2), slotX, slotY, null);
-			g2.setColor(Color.LIGHT_GRAY);
-			g2.setStroke(new BasicStroke (2));
-			g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
-			
+			} catch (IndexOutOfBoundsException e) {
+				
+				g2.setColor(Color.LIGHT_GRAY);
+				g2.setStroke(new BasicStroke (2));
+				g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
+				g2.setStroke(new BasicStroke (1));
+				g2.drawLine(slotX, slotY, slotX + gp.getTileSize() * 2, slotY + gp.getTileSize() * 2);
+				g2.drawLine(slotX + gp.getTileSize() * 2, slotY, slotX, slotY + gp.getTileSize() * 2);
+			}
 			
 			slotX += gp.getTileSize() * 2;
 			
@@ -548,9 +536,6 @@ public class UI {
 				slotY += gp.getTileSize() * 2;
 			}
 		}
-		
-	
-		
 		
 		/**
 		 * CURSOR 
@@ -563,6 +548,60 @@ public class UI {
 		g2.setColor(Color.white);
 		g2.setStroke(new BasicStroke (8));
 		g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+	
+		
+		/**
+		 * DESCRIPTION Frame
+		 */
+		int descriptionFrameX = frameX,
+			descriptionFrameY = frameY + frameHeight + 10,
+			descriptionFrameWidth = frameWidth,
+			descriptionFrameHeight = gp.getTileSize() * 4;
+		drawSubWindow(descriptionFrameX, descriptionFrameY, descriptionFrameWidth, descriptionFrameHeight);
+		
+		//Description text
+		int descriptionTextX = descriptionFrameX + 20,
+			descriptionTextY = descriptionFrameY + gp.getTileSize();
+		String emptySlotDescription = "Nothing to look. Nothing to see. Completely empty... OR?";
+		
+		/*
+		 * Get item index
+		 * 
+		 * Max of 3 rows and 4 columns
+		 */
+		int itemIndex = slotCol + (slotRow * 3);
+		
+		g2.setFont(maruMonica);
+		g2.setFont(g2.getFont().deriveFont(42F));
+		
+		
+		try {
+			//use 1 for normal items, use 2 for much more serious items
+			g2.setColor(objectNameColor1);
+			g2.drawString(player.getInventory().get(itemIndex).getName(), descriptionTextX, descriptionTextY);
+			descriptionTextY += 42;
+			
+			g2.setFont(g2.getFont().deriveFont(36F));
+			g2.setColor(Color.white);
+		for (String desc : player.getInventory().get(itemIndex).getObjectDescription().split("\n")) {
+			
+			g2.drawString(desc, descriptionTextX, descriptionTextY);
+			descriptionTextY += 40;
+			
+		}
+		
+		} catch (IndexOutOfBoundsException e) {
+			
+			//use 1 for normal items, use 2 for much more serious items
+			g2.setColor(objectNameColor1);
+			g2.drawString("Empty Slot", descriptionTextX, descriptionTextY);
+			descriptionTextY += 42;
+			
+			g2.setFont(g2.getFont().deriveFont(36F));
+			g2.setColor(Color.white);
+			g2.drawString(emptySlotDescription, descriptionTextX, descriptionTextY);
+		}
+	
 	}
 	
 	
