@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
+import java.util.ArrayList;
 
 import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
@@ -16,6 +16,8 @@ import monster.Monster;
 import npc.NPC;
 import object.AttackObjectInterface;
 import object.DefenseObjectInterface;
+import object.GameObject;
+import object.ObjectKey;
 import object.ObjectSword;
 import object.ObjectWoodenShield;
 
@@ -28,8 +30,11 @@ public class Player extends Entity {
 
 	//Where the player is drawn on the screen - camera 
 	private final int screenX;
+	
 	private final int screenY;
+	
 	private boolean switchOpacity;
+	
 	private int switchOpacityCounter = 0;
 
 	private int attackCost, attackStamina, staminaRechargeCounter, maxStamina;
@@ -37,6 +42,9 @@ public class Player extends Entity {
 	private boolean playerAttack;
 	
 	private boolean staminaEnabled;
+	
+	private ArrayList <GameObject> inventory = new ArrayList<GameObject>();
+	
 
 	/*
 	 * Player attributes
@@ -77,11 +85,10 @@ public class Player extends Entity {
 	/*
 	 * Equipped weapon and shield
 	 */
-	private AttackObjectInterface currentWeapon;
-	private DefenseObjectInterface currentShield;
+	private GameObject currentWeapon;
+	private GameObject currentShield;
 	
-	private Entity equippedWeapon,
-					equippedShield;
+
 				
 	/*
 	 * Item attributes
@@ -204,17 +211,16 @@ public class Player extends Entity {
 		currentWeapon = new ObjectSword(gp);
 		currentShield = new ObjectWoodenShield(gp);
 		
-		equippedWeapon = new ObjectSword(gp);
-		equippedShield = new ObjectWoodenShield(gp);
+		
 		
 		/**
 		 * @var attackVal natural player's strength + weapon's attack value
 		 * @var defenseVal natural player's defense + shield/armor's defense value
 		 */
-		attackVal = strength + currentWeapon.getAttackValue();
-		defenseVal = defense + currentShield.getDefenseValue();
+		attackVal = strength + ((AttackObjectInterface)currentWeapon).getAttackValue();
+		defenseVal = defense + ((DefenseObjectInterface)currentShield).getDefenseValue();
 		
-		
+		addInventoryItems();
 	}
 	
 	
@@ -549,6 +555,16 @@ public class Player extends Entity {
 		}
 	}
 	
+	private final void addInventoryItems() {
+		inventory.add(currentWeapon);
+		inventory.add(currentShield);
+		inventory.add(currentWeapon);
+		inventory.add(currentShield);
+		inventory.add(currentWeapon);
+		inventory.add(currentShield);
+		
+	}
+	
 	/*
 	 * SETTERS and GETTERS
 	 */
@@ -560,6 +576,7 @@ public class Player extends Entity {
 	public void setPlayerAttack (boolean playerAttack) { this.playerAttack = playerAttack; }
 	
 	public String[] getLabelArray () { return labels; }
+	
 	public String getLabelEntries (int i) { return labels[i]; }
 	
 	public int getLevel () { return level; }
@@ -590,9 +607,11 @@ public class Player extends Entity {
 	
 	public int getUpgradePoints () { return upgradePoints; }
 	
-	public Entity getEquippedWeapon () { return equippedWeapon; }
+	public GameObject getEquippedWeapon () { return currentWeapon; }
 	
-	public Entity getEquippedShield () { return equippedShield; }
+	public GameObject getEquippedShield () { return currentShield; }
+	
+	public ArrayList <GameObject> getInventory () { return inventory; } 
 	
 	
 }
