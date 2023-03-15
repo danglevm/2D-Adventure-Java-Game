@@ -265,7 +265,7 @@ public class Player extends Entity {
 			gp.getEventHandler().checkEvent();
 			
 			//Check object collision
-			ObjectPickUp(gp.getCollisionCheck().checkObject(this, true));
+			ObjectPickUp(gp.getCollisionCheck().checkObject(this));
 			
 			
 			//check NPC collision - not colliding but the dialogue key is pressed --> reset it to false
@@ -314,7 +314,23 @@ public class Player extends Entity {
 	
 	private final void ObjectPickUp(int index) {
 		
+		String text = "";
+		
 		if (index != 9999) {
+			
+			GameObject currentObject = (GameObject) gp.getObjects().get(index);
+			
+			//12 is max inventory size
+			if (inventory.size() != 12) {
+				inventory.add(currentObject);
+				gp.playSE(1);
+				text =  "You picked up " + currentObject.getName() + "!";
+				
+			} else {
+				text = "You cannot carry any more items!";
+			}
+			gp.getObjects().remove(index);
+			gp.getGameUI().addSubtitleMsg(text);
 		}
 	}
 	
@@ -404,7 +420,6 @@ public class Player extends Entity {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));	
 			}
 		}
-		
 		
 		//stamina bar not hidden
 		if (staminaEnabled) {
@@ -532,10 +547,6 @@ public class Player extends Entity {
 						
 					}
 					
-					
-					
-					
-					
 				}
 			}
 		}
@@ -558,10 +569,7 @@ public class Player extends Entity {
 	private final void addInventoryItems() {
 		inventory.add(currentWeapon);
 		inventory.add(currentShield);
-		inventory.add(currentWeapon);
-		inventory.add(currentShield);
-		inventory.add(currentWeapon);
-		inventory.add(currentShield);
+		inventory.add(new ObjectKey(gp, 0, 0));
 		
 	}
 	

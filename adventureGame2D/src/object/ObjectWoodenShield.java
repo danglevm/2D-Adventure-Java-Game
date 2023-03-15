@@ -15,9 +15,10 @@ public class ObjectWoodenShield extends GameObject implements DefenseObjectInter
 	}
 	
 	public void setDefaultAttributes() {
-		name = "woodenshield";
+		name = "Dusty Old Wooden Shield";
 		down1 = setupEntity("shield_wood", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 		defenseValue = 1;
+		objectDescription = "Honed from the finest craftsman in the land. \nTruly unbreakable, until it breaks. \nGives 1 Defense.";
 		
 		
 	}

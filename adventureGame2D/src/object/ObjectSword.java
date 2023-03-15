@@ -18,9 +18,10 @@ public class ObjectSword extends GameObject implements AttackObjectInterface {
 	@Override
 	public void setDefaultAttributes() {
 		
-		name = "sword";
+		name = "Old Shabby Metal Sword";
 		down1 = setupEntity("sword_normal", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 		attackValue = 1;
+		objectDescription = "A most fitting companion for a true hero... \nExcept you are a bum. A piece of scrap metal now. \nGives 1 Attack.";
 		
 	}
 	

@@ -19,9 +19,10 @@ public class ObjectKey extends GameObject {
 	
 	
 	public void setDefaultAttributes() {
-		name = "Key";
+		name = "Dirty Golden Key";
 		collisionOn = false;
 		down1 = setupEntity("key", "/objects/environment/", gp.getTileSize(), gp.getTileSize());
+		objectDescription =  "Looks really like your old mother's bedroom key.\nToo bad she's sleeping in the skies now.\nCan be used to open locked doors.";
 		
 	}
 	
