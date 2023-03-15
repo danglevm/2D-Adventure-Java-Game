@@ -15,6 +15,7 @@ import entity.Player;
 import enums.TitleState;
 import object.ObjectHeart;
 import quotes.PauseQuotes;
+import quotes.StatusAttribute;
 
 public class UI {
 	
@@ -32,8 +33,8 @@ public class UI {
 	Font arial_30, arial_50, arial_70, maruMonica, purisa;
 	//Dialogue
 	private String currentDialogue = "";	
-	Color objectNameColor1 = new Color(253, 218, 13);
-	Color objectNameColor2 = new Color(196, 30, 58);
+	Color nameColor1 = new Color(253, 218, 13);
+	Color nameColor2 = new Color(196, 30, 58);
 	
 	protected int cursorNum = 0, statusCursor = 0;
 	
@@ -356,7 +357,7 @@ public class UI {
 		g2.drawString(text, x, y);
 	}
 	
-	private void drawStatusScreen() {
+	private final void drawStatusScreen() {
 		
 		/**
 		 * Frame Creation
@@ -365,6 +366,7 @@ public class UI {
 				  frameY = gp.getTileSize()/2,
 				  frameWidth = gp.getTileSize() * 11,
 				  frameHeight = gp.getTileSize() * 13 ;
+		Player player = gp.getPlayer();
 		
 		drawSubWindow (frameX, frameY, frameWidth, frameHeight);
 		
@@ -380,8 +382,8 @@ public class UI {
 			rectTailX = (frameX + frameWidth) - gp.getTileSize() * 3;
 		
 		
-		for (int i = 0; i < gp.getPlayer().getLabelArray().length; ++i) {
-			g2.drawString(gp.getPlayer().getLabelEntries(i), valueX, valueY);
+		for (int i = 0; i < player.getLabelArray().length; ++i) {
+			g2.drawString(player.getLabelEntries(i), valueX, valueY);
 			valueY += lineHeight;
 		}
 		
@@ -389,7 +391,7 @@ public class UI {
 		int defaultRectTailX = rectTailX;
 		g2.setStroke(new java.awt.BasicStroke(1));
 		
-		for (int i = 0; i < gp.getPlayer().getLabelArray().length - 3; ++i) {
+		for (int i = 0; i < player.getLabelArray().length - 3; ++i) {
 			for (int a = 0; a < 3; ++a) {
 				if (i == 0 || i == 1) continue;
 				g2.drawRect(rectTailX, valueY - 20, 20, 20);
@@ -406,10 +408,10 @@ public class UI {
 		int tailX = (frameX + frameWidth) - gp.getTileSize() * 4;
 		valueY = frameY + gp.getTileSize();
 		
-		g2.drawString(gp.getPlayer().getName(), getXValuesAlign(gp.getPlayer().getName(), tailX), valueY);
+		g2.drawString(player.getName(), getXValuesAlign(player.getName(), tailX), valueY);
 		valueY += lineHeight;
 		
-		Player player = gp.getPlayer();
+		
 		
 		int [] playerAttributes = {
 				player.getHealthRegen(),
@@ -454,7 +456,34 @@ public class UI {
 		
 		int tempValY = defaultY + (lineHeight * statusCursor);
 		g2.drawString(">", tailX - gp.getTileSize(), tempValY);
+		
+		
+		/**
+		 * DRAWS DESCRIPTION Frame and desc
+		 */
+		
+		final int descFrameX = frameX + frameWidth + 10,
+				  descFrameY = frameY,
+				  descFrameWidth = gp.getTileSize() * 5,
+				  descFrameHeight = gp.getTileSize() * 13;
+		drawSubWindow(descFrameX, descFrameY, descFrameWidth, descFrameHeight);
+		g2.setColor(nameColor1);
+		g2.drawString(player.getLabelEntries(statusCursor + 2), descFrameX + 20, descFrameY + gp.getTileSize());
+		g2.drawString("CURRENT LEVEL: ", descFrameX + 20, descFrameY + descFrameHeight - 20);
+		g2.setColor(Color.white);
+		
+		int descLine = descFrameY;
+		
+		for (String desc : StatusAttribute.getAttributeDescription(statusCursor).split("\n")) {
+			
+			g2.drawString(desc, descFrameX + 20, descLine + gp.getTileSize() * 2);
+			descLine += 40;
+			
+		}
+	
 	}
+	
+	
 	
 
 	
@@ -567,8 +596,6 @@ public class UI {
 		 * Max of 3 rows and 4 columns
 		 */
 		int itemIndex = slotCol + (slotRow * 4);
-		System.out.println("Column is " + slotCol);
-		System.out.println("Row is " + slotRow);
 		
 		g2.setFont(maruMonica);
 		g2.setFont(g2.getFont().deriveFont(42F));
@@ -576,7 +603,7 @@ public class UI {
 		if (itemIndex < player.getInventory().size()) {
 			
 			//use 1 for normal items, use 2 for much more serious items
-			g2.setColor(objectNameColor1);
+			g2.setColor(nameColor1);
 			g2.drawString(player.getInventory().get(itemIndex).getName(), descriptionTextX, descriptionTextY);
 			descriptionTextY += 42;
 			
@@ -592,7 +619,7 @@ public class UI {
 			
 		} else {
 			//use 1 for normal items, use 2 for much more serious items
-			g2.setColor(objectNameColor1);
+			g2.setColor(nameColor1);
 			g2.drawString("Empty Slot", descriptionTextX, descriptionTextY);
 			descriptionTextY += 42;
 			
