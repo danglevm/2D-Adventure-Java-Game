@@ -77,7 +77,7 @@ public class Entity{
 		setBehaviour();
 		collisionOn = false;
 		gp.getCollisionCheck().CheckTile(this);
-		gp.getCollisionCheck().checkObject(this, false);
+		gp.getCollisionCheck().checkObject(this);
 		gp.getCollisionCheck().checkEntity(this, gp.getNPCS());
 		gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 		

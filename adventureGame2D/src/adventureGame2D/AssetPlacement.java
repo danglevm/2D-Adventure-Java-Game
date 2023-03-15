@@ -15,9 +15,9 @@ public class AssetPlacement {
 	}
 	
 	public void setObject() {
-//		gp.getObjects().add(new ObjectKey(gp, 121, 140));
-//		gp.getObjects().add(new ObjectDoor(gp, 121, 123));
-//		gp.getObjects().add(new ObjectBoots(gp, 121, 124));
+		gp.getObjects().add(new ObjectKey(gp, 121, 140));
+		gp.getObjects().add(new ObjectDoor(gp, 121, 123));
+		gp.getObjects().add(new ObjectBoots(gp, 121, 124));
 
 	}
 	

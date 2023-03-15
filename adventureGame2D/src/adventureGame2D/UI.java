@@ -511,16 +511,13 @@ public class UI {
 		
 		//max inventory size is 12, as soon as there is no object inside the array, starts drawing out those x'es inside the inventory slot
 		for (int i = 0; i < 12; ++i) {
-			try {
+			if (i < player.getInventory().size()) {
 				Entity currentItem = (Entity) player.getInventory().get(i);
-				if (currentItem == null) { System.out.println ("true");}
 				g2.drawImage(UtilityTool.scaleImage(currentItem.getDown1(), gp.getTileSize() * 2, gp.getTileSize() * 2), slotX, slotY, null);
 				g2.setColor(Color.LIGHT_GRAY);
 				g2.setStroke(new BasicStroke (2));
 				g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
-				
-			} catch (IndexOutOfBoundsException e) {
-				
+			} else {
 				g2.setColor(Color.LIGHT_GRAY);
 				g2.setStroke(new BasicStroke (2));
 				g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
@@ -569,13 +566,15 @@ public class UI {
 		 * 
 		 * Max of 3 rows and 4 columns
 		 */
-		int itemIndex = slotCol + (slotRow * 3);
+		int itemIndex = slotCol + (slotRow * 4);
+		System.out.println("Column is " + slotCol);
+		System.out.println("Row is " + slotRow);
 		
 		g2.setFont(maruMonica);
 		g2.setFont(g2.getFont().deriveFont(42F));
 		
-		
-		try {
+		if (itemIndex < player.getInventory().size()) {
+			
 			//use 1 for normal items, use 2 for much more serious items
 			g2.setColor(objectNameColor1);
 			g2.drawString(player.getInventory().get(itemIndex).getName(), descriptionTextX, descriptionTextY);
@@ -583,15 +582,15 @@ public class UI {
 			
 			g2.setFont(g2.getFont().deriveFont(36F));
 			g2.setColor(Color.white);
-		for (String desc : player.getInventory().get(itemIndex).getObjectDescription().split("\n")) {
+			
+			for (String desc : player.getInventory().get(itemIndex).getObjectDescription().split("\n")) {
 			
 			g2.drawString(desc, descriptionTextX, descriptionTextY);
 			descriptionTextY += 40;
 			
 		}
-		
-		} catch (IndexOutOfBoundsException e) {
 			
+		} else {
 			//use 1 for normal items, use 2 for much more serious items
 			g2.setColor(objectNameColor1);
 			g2.drawString("Empty Slot", descriptionTextX, descriptionTextY);
@@ -601,6 +600,7 @@ public class UI {
 			g2.setColor(Color.white);
 			g2.drawString(emptySlotDescription, descriptionTextX, descriptionTextY);
 		}
+		
 	
 	}
 	

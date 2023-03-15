@@ -3,6 +3,7 @@ package adventureGame2D;
 import java.util.ArrayList;
 
 import entity.Entity;
+import entity.Player;
 
 
 public class CollisionCheck{
@@ -87,7 +88,7 @@ public class CollisionCheck{
 	
 	}
 	
-	public final int checkObject(Entity entity, boolean player) {
+	public final int checkObject(Entity entity) {
 		
 		//If player is colliding with any object. If player is, returns index of the object
 		int index = 9999;
@@ -128,10 +129,11 @@ public class CollisionCheck{
 				//entity rectangle intersects with object rectangle
 				if (entity.getSolidArea().intersects(gp.getObjects().get(i).getSolidArea())) {
 					entity.setCollisionOn(true);
+					if (entity instanceof Player) {
+						index = i;
+					}
 				};
-				if (player) {
-					index = i;
-				}
+				
 				//reset entity's solid Area or else the values increase indefinitely
 				entity.getSolidArea().x = entity.getSolidAreaDefaultX();
 				entity.getSolidArea().y = entity.getSolidAreaDefaultY();
