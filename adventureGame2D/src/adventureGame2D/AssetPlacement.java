@@ -3,6 +3,7 @@ package adventureGame2D;
 import monster.MonsterGreenSlime;
 import npc.OldDude;
 import object.ObjectBoots;
+import object.ObjectChest;
 import object.ObjectDoor;
 import object.ObjectKey;
 
@@ -15,7 +16,7 @@ public class AssetPlacement {
 	}
 	
 	public void setObject() {
-		gp.getObjects().add(new ObjectKey(gp, 121, 140));
+		gp.getObjects().add(new ObjectChest(gp, 121, 140));
 		gp.getObjects().add(new ObjectDoor(gp, 121, 123));
 		gp.getObjects().add(new ObjectBoots(gp, 121, 124));
 

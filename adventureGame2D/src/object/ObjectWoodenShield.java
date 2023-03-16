@@ -12,6 +12,7 @@ public class ObjectWoodenShield extends GameObject implements DefenseObjectInter
 		super(gp);
 		this.gp = gp;
 		setDefaultAttributes();
+		setPickupState();
 	}
 	
 	public void setDefaultAttributes() {
@@ -27,6 +28,12 @@ public class ObjectWoodenShield extends GameObject implements DefenseObjectInter
 	public int getDefenseValue() {
 		// TODO Auto-generated method stub
 		return defenseValue;
+	}
+
+	@Override
+	public void setPickupState() {
+		this.pickUpState = true;
+		
 	}
 
 }

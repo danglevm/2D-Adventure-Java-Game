@@ -11,4 +11,5 @@ Features:
 8. next video when objects are loaded, add a boat that the player can interact with and tp
 - with events, make lava or ticking damage events
 9. option to interact with event still does not work
-10. stamina bar on top of player, disappears when full, shows when recharge
+10. Add an option to increase magic power - how much magic damage the player deals.
+11. critical hit affects both physical and magic damage

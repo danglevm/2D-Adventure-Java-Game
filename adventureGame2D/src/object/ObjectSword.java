@@ -12,6 +12,7 @@ public class ObjectSword extends GameObject implements AttackObjectInterface {
 		super(gp);
 		this.gp = gp;
 		setDefaultAttributes();
+		setPickupState();
 	}
 
 
@@ -28,6 +29,13 @@ public class ObjectSword extends GameObject implements AttackObjectInterface {
 	@Override
 	public int getAttackValue() {
 		return attackValue;
+	}
+
+
+	@Override
+	public void setPickupState() {
+		this.pickUpState = true;
+		
 	}
 
 

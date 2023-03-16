@@ -12,11 +12,18 @@ public class ObjectChest extends GameObject {
 		this.WorldX = worldX * gp.getTileSize();
 		this.WorldY = worldY * gp.getTileSize();
 		setDefaultAttributes();
+		setPickupState();
 	}
 
 	@Override
 	public void setDefaultAttributes() {
 		 name = "chest";
 		 down1 = setupEntity("chest","/objects/environment/", gp.getTileSize(), gp.getTileSize());
+	}
+
+	@Override
+	public void setPickupState() {
+		this.pickUpState = false;
+		
 	}		
 }

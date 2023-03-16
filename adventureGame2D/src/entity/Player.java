@@ -76,8 +76,8 @@ public class Player extends Entity {
 			"Speed",
 			"Knockback",
 			"Critical Hit",
-			"Coins",
 			"Experience",
+			"Coins",
 			"Equipment",
 	};
 	
@@ -321,15 +321,18 @@ public class Player extends Entity {
 			GameObject currentObject = (GameObject) gp.getObjects().get(index);
 			
 			//12 is max inventory size
-			if (inventory.size() != 12) {
+			if (inventory.size() != 12 && currentObject.getPickUpState()) {
 				inventory.add(currentObject);
 				gp.playSE(1);
 				text =  "You picked up " + currentObject.getName() + "!";
+				gp.getObjects().remove(index);
 				
+			} else if (!currentObject.getPickUpState()){
+				//if you are colliding with something that cannot be picked up
 			} else {
 				text = "You cannot carry any more items!";
 			}
-			gp.getObjects().remove(index);
+		
 			gp.getGameUI().addSubtitleMsg(text);
 		}
 	}

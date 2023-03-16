@@ -14,6 +14,7 @@ public class ObjectKey extends GameObject {
 		this.WorldY = worldY * gp.getTileSize();
 		
 		setDefaultAttributes();
+		setPickupState();
 		
 	}
 	
@@ -23,6 +24,13 @@ public class ObjectKey extends GameObject {
 		collisionOn = false;
 		down1 = setupEntity("key", "/objects/environment/", gp.getTileSize(), gp.getTileSize());
 		objectDescription =  "Looks really like your old mother's bedroom key.\nToo bad she's sleeping in the skies now.\nCan be used to open locked doors.";
+		
+	}
+
+
+	@Override
+	public void setPickupState() {
+		this.pickUpState = false;
 		
 	}
 	
