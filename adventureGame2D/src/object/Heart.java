@@ -2,11 +2,11 @@ package object;
 
 import adventureGame2D.GamePanel;
 
-public class ObjectHeart extends GameObject {
+public class Heart extends GameObject {
 	
 	GamePanel gp;
 	
-	public ObjectHeart(GamePanel gp) {
+	public Heart(GamePanel gp) {
 		super(gp);
 		this.gp = gp;
 		setDefaultAttributes();

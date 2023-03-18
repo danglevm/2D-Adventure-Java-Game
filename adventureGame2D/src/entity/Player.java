@@ -17,9 +17,9 @@ import npc.NPC;
 import object.AttackObjectInterface;
 import object.DefenseObjectInterface;
 import object.GameObject;
-import object.ObjectKey;
-import object.ObjectSword;
-import object.ObjectWoodenShield;
+import object.Key;
+import object.Sword;
+import object.WoodenShield;
 
 public class Player extends Entity {
 	
@@ -87,6 +87,8 @@ public class Player extends Entity {
 	 */
 	private GameObject currentWeapon;
 	private GameObject currentShield;
+	
+	private GameObject hotBarItem;
 	
 
 				
@@ -160,8 +162,10 @@ public class Player extends Entity {
 		
 		
 		//Attack area - could really increase this for potions
-		attackArea.width = 32;
-		attackArea.height = 32;
+		//Attack area inherits from object's attackArea
+//		attackArea.width = 32;
+//		attackArea.height = 32;
+		
 		playerAttack = false;
 		
 		
@@ -208,9 +212,10 @@ public class Player extends Entity {
 		upgradePoints = 0;
 		maxLife = 10;
 		life = maxLife;
-		currentWeapon = new ObjectSword(gp);
-		currentShield = new ObjectWoodenShield(gp);
+		currentWeapon = new Sword(gp);
+		currentShield = new WoodenShield(gp);
 		
+		attackArea = currentWeapon.attackArea;
 		
 		
 		/**
@@ -572,8 +577,7 @@ public class Player extends Entity {
 	private final void addInventoryItems() {
 		inventory.add(currentWeapon);
 		inventory.add(currentShield);
-		inventory.add(new ObjectKey(gp, 0, 0));
-		
+		hotBarItem = inventory.get(0);
 	}
 	
 	/*

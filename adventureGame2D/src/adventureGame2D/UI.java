@@ -12,8 +12,10 @@ import java.util.ArrayList;
 
 import entity.Entity;
 import entity.Player;
+import enums.GameState;
+import enums.InventoryState;
 import enums.TitleState;
-import object.ObjectHeart;
+import object.Heart;
 import quotes.PauseQuotes;
 import quotes.StatusAttribute;
 
@@ -24,6 +26,7 @@ public class UI {
 	//Sub-states
 	//0 - welcome screen; 1 - story paths
 	private TitleState titleScreenState;
+	private InventoryState inventoryState;
 	
 	//Quotes
 	PauseQuotes pauseQuotes = new PauseQuotes();
@@ -54,6 +57,8 @@ public class UI {
 		this.gp = gp;
 		
 		titleScreenState = TitleState.WELCOME;
+		
+		inventoryState = inventoryState.NORMAL;
 	
 		arial_30 = new Font ("Arial", Font.PLAIN, 30);
 		arial_50 = new Font ("Arial", Font.PLAIN, 50);
@@ -70,11 +75,11 @@ public class UI {
 		
 		
 		//Create HUD 
-		Entity heart = new ObjectHeart(gp);
+		Entity heart = new Heart(gp);
 		heart_full = heart.getImage1();
 		heart_half = heart.getImage2();
 		heart_blank = heart.getImage3();
-		
+	
 	}
 	/**
 	 * Setters and getters
@@ -82,7 +87,11 @@ public class UI {
 	
 	public TitleState getTitleScreenState () { return titleScreenState; }
 	
+	public InventoryState getInventoryState () { return inventoryState; }
+	
 	public final void setTitleScreenState (TitleState titleScreenState) { this.titleScreenState = titleScreenState; }
+	
+	public final void setInventoryState (InventoryState inventoryState) { this.inventoryState = inventoryState; }
 	
 	public final void setCurrentDialogue (String dialogue) { currentDialogue = dialogue;}
 	
@@ -98,6 +107,8 @@ public class UI {
 		this.subtitleMsg.add(message);
 		this.subtitleMsgCount.add(0);
 	}
+	
+	
 	/*
 	 * String aligning values getters
 	 */
@@ -148,7 +159,9 @@ public class UI {
 		
 		case STATUS -> { drawStatusScreen(); } 
 		
-		case INVENTORY -> { drawInventoryScreen(); }
+		case INVENTORY -> { 
+			drawInventoryScreen();
+		}
 		
 		
 		
@@ -519,7 +532,7 @@ public class UI {
 	
 	private final void drawInventoryScreen() {
 		Player player = gp.getPlayer();
-		
+		int tileSize = gp.getTileSize();
 		/**
 		 * 
 		 * INVENTORY FRAME
@@ -536,24 +549,36 @@ public class UI {
 		int slotX = defaultSlotX,
 			slotY = defaultSlotY;
 		
-		
-		
+	
+		/**
+		 * DRAW PLAYER'S ITEMS
+		 */
 		//max inventory size is 12, as soon as there is no object inside the array, starts drawing out those x'es inside the inventory slot
 		for (int i = 0; i < 12; ++i) {
-			if (i < player.getInventory().size()) {
+			g2.setColor(Color.LIGHT_GRAY);
+			g2.setStroke(new BasicStroke (2));
+			if (i < player.getInventory().size()) {	
+				
+				//Draw inventory equip cursor
+				if (player.getInventory().get(i).equals(player.getEquippedWeapon()) ||
+						player.getInventory().get(i).equals(player.getEquippedShield())) {
+					g2.setColor(new Color(240,190,90));
+					g2.fillRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);					
+				}
+				
+				//Draws the actual object after equip color
 				Entity currentItem = (Entity) player.getInventory().get(i);
 				g2.drawImage(UtilityTool.scaleImage(currentItem.getDown1(), gp.getTileSize() * 2, gp.getTileSize() * 2), slotX, slotY, null);
-				g2.setColor(Color.LIGHT_GRAY);
-				g2.setStroke(new BasicStroke (2));
 				g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
+				
 			} else {
-				g2.setColor(Color.LIGHT_GRAY);
-				g2.setStroke(new BasicStroke (2));
 				g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
 				g2.setStroke(new BasicStroke (1));
 				g2.drawLine(slotX, slotY, slotX + gp.getTileSize() * 2, slotY + gp.getTileSize() * 2);
 				g2.drawLine(slotX + gp.getTileSize() * 2, slotY, slotX, slotY + gp.getTileSize() * 2);
 			}
+			
+		
 			
 			slotX += gp.getTileSize() * 2;
 			
@@ -628,8 +653,19 @@ public class UI {
 			g2.drawString(emptySlotDescription, descriptionTextX, descriptionTextY);
 		}
 		
+		/*
+		 * Draw use options for cursor items
+		 */
+		
+		
+		
+		if (inventoryState == InventoryState.OPTIONS) {
+			this.drawSubWindow(tileSize * 10, defaultSlotY, tileSize * 3, tileSize * 4);
+		}
+		
 	
 	}
 	
+
 	
 }

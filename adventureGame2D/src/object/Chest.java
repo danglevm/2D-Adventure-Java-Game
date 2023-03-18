@@ -2,11 +2,11 @@ package object;
 import adventureGame2D.GamePanel;
 
 
-public class ObjectChest extends GameObject {
+public class Chest extends GameObject {
 	
 	GamePanel gp;
 	
-	public ObjectChest(GamePanel gp, int worldX, int worldY) {  
+	public Chest(GamePanel gp, int worldX, int worldY) {  
 		super(gp);
 		this.gp = gp;
 		this.WorldX = worldX * gp.getTileSize();

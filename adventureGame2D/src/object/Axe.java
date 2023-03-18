@@ -1,14 +1,11 @@
 package object;
 
-
 import adventureGame2D.GamePanel;
 
-
-public class ObjectBoots extends GameObject {
-	
+public class Axe extends GameObject {
 	GamePanel gp;
 	
-	public ObjectBoots(GamePanel gp, int worldX, int worldY) {
+	public Axe(GamePanel gp, int worldX, int worldY) {
 		super(gp);
 		this.gp = gp;
 		this.WorldX = worldX * gp.getTileSize();
@@ -20,10 +17,10 @@ public class ObjectBoots extends GameObject {
 
 	@Override
 	public void setDefaultAttributes() {
-		name = "Shaggy Soggy Boots";
-		objectDescription = "A timeless generational relic from your late father.\nSo unkempt from years of neglect.\nGives 1 Movement Speed.";
+		name = "Crusty Greasy Axe";
+		objectDescription = "Nearly unusable but full of potential to be greater.\nStrangely, it looks like your farmer uncle's old axe.\nThis can be used to chop down trees.";
 		collisionOn = false;
-		down1 = setupEntity("boots", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
+		down1 = setupEntity("axe", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 	}
 
 	@Override
@@ -31,4 +28,3 @@ public class ObjectBoots extends GameObject {
 		this.pickUpState = true;	
 	}
 }
-

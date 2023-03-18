@@ -3,11 +3,11 @@ package object;
 import adventureGame2D.GamePanel;
 
 
-public class ObjectDoor extends GameObject {
+public class Door extends GameObject {
 
 	GamePanel gp;
 	
-	public ObjectDoor(GamePanel gp, int worldX, int worldY) {
+	public Door(GamePanel gp, int worldX, int worldY) {
 		super(gp);
 		this.gp = gp;
 		this.WorldX = worldX * gp.getTileSize();

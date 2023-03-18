@@ -2,13 +2,13 @@ package object;
 
 import adventureGame2D.GamePanel;
 
-public class ObjectWoodenShield extends GameObject implements DefenseObjectInterface{
+public class WoodenShield extends GameObject implements DefenseObjectInterface{
 	
 	private int defenseValue;
 
 	GamePanel gp;
 	
-	public ObjectWoodenShield(GamePanel gp) {
+	public WoodenShield(GamePanel gp) {
 		super(gp);
 		this.gp = gp;
 		setDefaultAttributes();

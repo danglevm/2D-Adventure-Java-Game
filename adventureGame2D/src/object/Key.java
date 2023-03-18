@@ -3,11 +3,11 @@ package object;
 import adventureGame2D.GamePanel;
 
 
-public class ObjectKey extends GameObject {
+public class Key extends GameObject {
 	
 	GamePanel gp;
 	
-	public ObjectKey(GamePanel gp, int worldX, int worldY) {
+	public Key(GamePanel gp, int worldX, int worldY) {
 		super (gp);
 		this.gp = gp;
 		this.WorldX = worldX * gp.getTileSize();

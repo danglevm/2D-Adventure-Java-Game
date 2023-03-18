@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import enums.GameState;
+import enums.InventoryState;
 import enums.TitleState;
 
 public class KeyHandler implements KeyListener{
@@ -93,9 +94,16 @@ public class KeyHandler implements KeyListener{
 	
 	case STATUS -> { statusState (code); }
 	
-	case INVENTORY -> { inventoryState(code); }
+	case INVENTORY -> { 
+		switch (gp.getGameUI().getInventoryState()) {
+		
+		case NORMAL -> { inventoryState (code); }
+		
+		case OPTIONS -> { inventoryOptionsState(code); }
+		}
 	}
 	
+	}
 	}
 	
 	/**
@@ -261,6 +269,8 @@ public class KeyHandler implements KeyListener{
 		
 		if (code == KeyEvent.VK_S) { ui.setSlotRow(ui.getSlotRow() + 1); gp.playSE(9); }
 		
+		if (code == KeyEvent.VK_ENTER) { ui.setInventoryState(InventoryState.OPTIONS);;}
+		
 		if (ui.getSlotRow() < 0) ui.setSlotRow(0);
 		
 		if (ui.getSlotRow() > 2) ui.setSlotRow(2);
@@ -268,7 +278,13 @@ public class KeyHandler implements KeyListener{
 		if (ui.getSlotColumn() < 0) ui.setSlotColumn(0);
 		
 		if (ui.getSlotColumn() > 3) ui.setSlotColumn(3);
+	
 		
+	}
+	
+	private final void inventoryOptionsState (int code) {
+		UI ui = gp.getGameUI();
+		if (code == KeyEvent.VK_ENTER) {ui.setInventoryState(InventoryState.NORMAL); };
 	}
 	@Override
 	public final void keyReleased(KeyEvent e) {
