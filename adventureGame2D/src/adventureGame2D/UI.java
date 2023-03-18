@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import entity.Entity;
 import entity.Player;
 import enums.GameState;
+import enums.InventoryObjectType;
 import enums.InventoryState;
 import enums.TitleState;
 import object.Heart;
@@ -654,17 +655,51 @@ public class UI {
 		}
 		
 		/*
-		 * Draw use options for cursor items
-		 */
+		 * Draw use options for items currently being pointed at by cursor
+		 * CHECK the type of the object in inventory then call the correct method to draw the correct one
+		*/
 		
 		
-		
-		if (inventoryState == InventoryState.OPTIONS) {
-			this.drawSubWindow(tileSize * 10, defaultSlotY, tileSize * 3, tileSize * 4);
+		if (inventoryState == InventoryState.OPTIONS) {			
+			if (itemIndex < player.getInventory().size()) {
+			InventoryObjectType type = player.getInventory().get(itemIndex).getInventoryType();
+			int inventoryOptionsFrameX = tileSize * 10,
+				inventoryOptionsFrameY = defaultSlotY,
+				inventoryOptionsFrameWidth = tileSize * 3 + 25,
+				inventoryOptionsFrameHeight = tileSize * 3 + 5;
+			
+			this.drawSubWindow(inventoryOptionsFrameX, inventoryOptionsFrameY, inventoryOptionsFrameWidth, inventoryOptionsFrameHeight);
+			//draw cursor for the thing later
+			if (itemIndex < player.getInventory().size()) {
+				this.drawInventoryOptions(inventoryOptionsFrameX, inventoryOptionsFrameY, type);
+			}
+			} else {
+				//value is out of bounds so the inventory state is reset back to normal
+				this.inventoryState = InventoryState.NORMAL;
+			}
 		}
 		
 	
 	}
+	
+	private final void drawInventoryOptions (int x, int y, InventoryObjectType type) {
+		int lineHeight = 36,
+			optionX = x + 20,
+			optionY = y + 50;
+		switch (type) {
+		case CONSUMMABLE, INTERACT -> {
+			g2.drawString("USE", optionX, optionY);
+		}
+		case ATTACK, DEFENSE, TOOL, ACCESSORY ->{
+			g2.drawString("EQUIP", optionX, optionY);
+		}
+		case NONPICKUP -> throw new IllegalArgumentException("Cannot be defined: " + type);
+		default -> throw new IllegalArgumentException("Unexpected value: " + type);
+	}
+		
+		g2.drawString("DISCARD", optionX, optionY + lineHeight);
+		g2.drawString("CANCEL", optionX, optionY + lineHeight * 2);
+}
 	
 
 	

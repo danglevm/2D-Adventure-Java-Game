@@ -1,6 +1,7 @@
 package object;
 
 import adventureGame2D.GamePanel;
+import enums.InventoryObjectType;
 
 public class BlueShield extends GameObject{
 	GamePanel gp;
@@ -12,7 +13,7 @@ public class BlueShield extends GameObject{
 		this.WorldY = worldY * gp.getTileSize();
 		setDefaultAttributes();
 		setPickupState();
-		
+		setInventoryType();
 	}
 
 	@Override
@@ -26,5 +27,11 @@ public class BlueShield extends GameObject{
 	@Override
 	public void setPickupState() {
 		this.pickUpState = true;	
+	}
+
+	@Override
+	public void setInventoryType() {
+		this.inventoryType = InventoryObjectType.DEFENSE;
+		
 	}
 }

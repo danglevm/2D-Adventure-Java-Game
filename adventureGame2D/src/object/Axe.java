@@ -1,6 +1,7 @@
 package object;
 
 import adventureGame2D.GamePanel;
+import enums.InventoryObjectType;
 
 public class Axe extends GameObject {
 	GamePanel gp;
@@ -12,6 +13,7 @@ public class Axe extends GameObject {
 		this.WorldY = worldY * gp.getTileSize();
 		setDefaultAttributes();
 		setPickupState();
+		setInventoryType();
 		
 	}
 
@@ -26,5 +28,10 @@ public class Axe extends GameObject {
 	@Override
 	public void setPickupState() {
 		this.pickUpState = true;	
+	}
+	
+	@Override
+	public void setInventoryType() {
+		this.inventoryType = InventoryObjectType.TOOL;	
 	}
 }

@@ -1,6 +1,7 @@
 package object;
 
 import adventureGame2D.GamePanel;
+import enums.InventoryObjectType;
 
 public class Sword extends GameObject implements AttackObjectInterface {
 
@@ -13,6 +14,7 @@ public class Sword extends GameObject implements AttackObjectInterface {
 		this.gp = gp;
 		setDefaultAttributes();
 		setPickupState();
+		setInventoryType();
 	}
 
 
@@ -22,7 +24,7 @@ public class Sword extends GameObject implements AttackObjectInterface {
 		name = "Old Shabby Metal Sword";
 		down1 = setupEntity("sword_normal", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 		attackValue = 2;
-		objectDescription = "A most fitting companion for a true hero... \nExcept you are a bum. A piece of scrap metal now. \nGives 1 Attack.";
+		objectDescription = "A most fitting companion for a true hero... \nExcept you are a bum. A piece of scrap metal now. \nGives 1 Physical Attack.";
 		attackArea.width = 36;
 		attackArea.height = 36;
 	}
@@ -36,6 +38,13 @@ public class Sword extends GameObject implements AttackObjectInterface {
 	@Override
 	public void setPickupState() {
 		this.pickUpState = true;
+		
+	}
+
+
+	@Override
+	public void setInventoryType() {
+		this.inventoryType = InventoryObjectType.ATTACK;
 		
 	}
 

@@ -1,6 +1,7 @@
 package object;
 
 import adventureGame2D.GamePanel;
+import enums.InventoryObjectType;
 
 
 public class Door extends GameObject {
@@ -14,6 +15,7 @@ public class Door extends GameObject {
 		this.WorldY = worldY * gp.getTileSize();
 		setDefaultAttributes();
 		setPickupState();
+		setInventoryType();
 	}
 
 	public void setDefaultAttributes() {
@@ -35,6 +37,12 @@ public class Door extends GameObject {
 		this.pickUpState = false;
 		
 	}
+	
+	@Override
+	public void setInventoryType() {
+		this.inventoryType = InventoryObjectType.NONPICKUP;
+		
+	}	
 	
 	
 } 

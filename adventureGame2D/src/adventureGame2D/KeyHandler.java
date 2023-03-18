@@ -284,8 +284,9 @@ public class KeyHandler implements KeyListener{
 	
 	private final void inventoryOptionsState (int code) {
 		UI ui = gp.getGameUI();
-		if (code == KeyEvent.VK_ENTER) {ui.setInventoryState(InventoryState.NORMAL); };
-	}
+		
+		if (code == KeyEvent.VK_ENTER) ui.setInventoryState(InventoryState.NORMAL); };
+		
 	@Override
 	public final void keyReleased(KeyEvent e) {
 		
