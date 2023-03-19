@@ -1,18 +1,20 @@
 package object;
 
 import adventureGame2D.GamePanel;
+import enums.InventoryObjectType;
 
-public class ObjectWoodenShield extends GameObject implements DefenseObjectInterface{
+public class WoodenShield extends GameObject implements DefenseObjectInterface{
 	
 	private int defenseValue;
 
 	GamePanel gp;
 	
-	public ObjectWoodenShield(GamePanel gp) {
+	public WoodenShield(GamePanel gp) {
 		super(gp);
 		this.gp = gp;
 		setDefaultAttributes();
 		setPickupState();
+		setInventoryType();
 	}
 	
 	public void setDefaultAttributes() {
@@ -33,6 +35,12 @@ public class ObjectWoodenShield extends GameObject implements DefenseObjectInter
 	@Override
 	public void setPickupState() {
 		this.pickUpState = true;
+		
+	}
+
+	@Override
+	protected void setInventoryType() {
+		this.inventoryType = InventoryObjectType.DEFENSE;
 		
 	}
 

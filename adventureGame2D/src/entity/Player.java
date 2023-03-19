@@ -12,14 +12,16 @@ import adventureGame2D.KeyHandler;
 import enums.Direction;
 import enums.EntityType;
 import enums.GameState;
+import enums.InventoryObjectType;
 import monster.Monster;
 import npc.NPC;
 import object.AttackObjectInterface;
+import object.BlueShield;
 import object.DefenseObjectInterface;
 import object.GameObject;
-import object.ObjectKey;
-import object.ObjectSword;
-import object.ObjectWoodenShield;
+import object.Key;
+import object.Sword;
+import object.WoodenShield;
 
 public class Player extends Entity {
 	
@@ -44,6 +46,8 @@ public class Player extends Entity {
 	private boolean staminaEnabled;
 	
 	private ArrayList <GameObject> inventory = new ArrayList<GameObject>();
+	
+	
 	
 
 	/*
@@ -87,9 +91,16 @@ public class Player extends Entity {
 	 */
 	private GameObject currentWeapon;
 	private GameObject currentShield;
+	private GameObject currentTool;
+	private GameObject currentConsummable;
+	private GameObject currentAccessory1;
+	private GameObject currentAccessory2;
+	/**
+	 * Default weapon/shield
+	 */
+	private GameObject defaultWeapon;
+	private GameObject defaultShield;
 	
-
-				
 	/*
 	 * Item attributes
 	 */
@@ -160,8 +171,10 @@ public class Player extends Entity {
 		
 		
 		//Attack area - could really increase this for potions
-		attackArea.width = 32;
-		attackArea.height = 32;
+		//Attack area inherits from object's attackArea
+//		attackArea.width = 32;
+//		attackArea.height = 32;
+		
 		playerAttack = false;
 		
 		
@@ -208,9 +221,17 @@ public class Player extends Entity {
 		upgradePoints = 0;
 		maxLife = 10;
 		life = maxLife;
-		currentWeapon = new ObjectSword(gp);
-		currentShield = new ObjectWoodenShield(gp);
+		defaultWeapon = new Sword(gp);
+		defaultShield = new WoodenShield(gp);
 		
+		currentWeapon = defaultWeapon;
+		currentShield = defaultShield;
+		currentAccessory1 = null;
+		currentAccessory2 = null;
+		currentConsummable = null;
+		currentTool = null;
+		
+		attackArea = currentWeapon.attackArea;
 		
 		
 		/**
@@ -572,8 +593,39 @@ public class Player extends Entity {
 	private final void addInventoryItems() {
 		inventory.add(currentWeapon);
 		inventory.add(currentShield);
-		inventory.add(new ObjectKey(gp, 0, 0));
+		inventory.add(new BlueShield(gp, 0, 0));
+		inventory.add(new Key(gp, 0, 0));
+	}
+	
+	public void handleInventoryOptions(int option) {
+		GameObject selectedItem = inventory.get(gp.getGameUI().getItemIndex());
+		InventoryObjectType type = selectedItem.getInventoryType();
 		
+		if (option == 0) {
+			switch (type) {
+			case CONSUMMABLE -> {
+				
+			}
+			case ACCESSORY -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+			case ATTACK -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+			case DEFENSE -> {
+				currentShield = selectedItem;
+			}
+			case INTERACT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+			case TOOL -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+			case NONPICKUP -> throw new UnsupportedOperationException("Unknown case: " + type);
+			default -> throw new IllegalArgumentException("Unknown case: " + type);
+			
+			}
+			
+			
+		} else if (option == 1){
+			//inventory.remove(selectedItem);
+			inventory.remove(selectedItem);
+			
+		} else if (option == 2) {
+			gp.setGameState(GameState.INVENTORY);
+		}
 	}
 	
 	/*

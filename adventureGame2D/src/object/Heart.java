@@ -1,16 +1,18 @@
 package object;
 
 import adventureGame2D.GamePanel;
+import enums.InventoryObjectType;
 
-public class ObjectHeart extends GameObject {
+public class Heart extends GameObject {
 	
 	GamePanel gp;
 	
-	public ObjectHeart(GamePanel gp) {
+	public Heart(GamePanel gp) {
 		super(gp);
 		this.gp = gp;
 		setDefaultAttributes();
 		setPickupState();
+		setInventoryType();
 	}
 
 	public void setDefaultAttributes() {
@@ -26,4 +28,10 @@ public class ObjectHeart extends GameObject {
 		this.pickUpState = false;
 		
 	}
+	
+	@Override
+	public void setInventoryType() {
+		this.inventoryType = InventoryObjectType.NONPICKUP;
+		
+	}	
 }

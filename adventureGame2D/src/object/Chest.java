@@ -1,18 +1,20 @@
 package object;
 import adventureGame2D.GamePanel;
+import enums.InventoryObjectType;
 
 
-public class ObjectChest extends GameObject {
+public class Chest extends GameObject {
 	
 	GamePanel gp;
 	
-	public ObjectChest(GamePanel gp, int worldX, int worldY) {  
+	public Chest(GamePanel gp, int worldX, int worldY) {  
 		super(gp);
 		this.gp = gp;
 		this.WorldX = worldX * gp.getTileSize();
 		this.WorldY = worldY * gp.getTileSize();
 		setDefaultAttributes();
 		setPickupState();
+		setInventoryType();
 	}
 
 	@Override
@@ -24,6 +26,12 @@ public class ObjectChest extends GameObject {
 	@Override
 	public void setPickupState() {
 		this.pickUpState = false;
+		
+	}
+
+	@Override
+	public void setInventoryType() {
+		this.inventoryType = InventoryObjectType.NONPICKUP;
 		
 	}		
 }

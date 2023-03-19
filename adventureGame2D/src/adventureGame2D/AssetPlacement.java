@@ -2,10 +2,11 @@ package adventureGame2D;
 
 import monster.MonsterGreenSlime;
 import npc.OldDude;
-import object.ObjectBoots;
-import object.ObjectChest;
-import object.ObjectDoor;
-import object.ObjectKey;
+import object.Axe;
+import object.Boots;
+import object.Chest;
+import object.Door;
+import object.Key;
 
 public class AssetPlacement {
 	//Class managed object placement
@@ -16,9 +17,10 @@ public class AssetPlacement {
 	}
 	
 	public void setObject() {
-		gp.getObjects().add(new ObjectChest(gp, 121, 140));
-		gp.getObjects().add(new ObjectDoor(gp, 121, 123));
-		gp.getObjects().add(new ObjectBoots(gp, 121, 124));
+		gp.getObjects().add(new Chest(gp, 121, 140));
+		gp.getObjects().add(new Door(gp, 121, 123));
+		gp.getObjects().add(new Boots(gp, 121, 124));
+		gp.getObjects().add(new Axe(gp, 121, 125));
 
 	}
 	

@@ -12,8 +12,11 @@ import java.util.ArrayList;
 
 import entity.Entity;
 import entity.Player;
+import enums.GameState;
+import enums.InventoryObjectType;
+import enums.InventoryState;
 import enums.TitleState;
-import object.ObjectHeart;
+import object.Heart;
 import quotes.PauseQuotes;
 import quotes.StatusAttribute;
 
@@ -24,6 +27,7 @@ public class UI {
 	//Sub-states
 	//0 - welcome screen; 1 - story paths
 	private TitleState titleScreenState;
+	private InventoryState inventoryState;
 	
 	//Quotes
 	PauseQuotes pauseQuotes = new PauseQuotes();
@@ -36,7 +40,7 @@ public class UI {
 	Color nameColor1 = new Color(253, 218, 13);
 	Color nameColor2 = new Color(196, 30, 58);
 	
-	protected int cursorNum = 0, statusCursor = 0;
+	protected int cursorNum = 0, statusCursor = 0, inventoryOptionCursor = 0;
 	
 	//Drawing hearts
 	private BufferedImage heart_full, heart_half, heart_blank;
@@ -54,6 +58,8 @@ public class UI {
 		this.gp = gp;
 		
 		titleScreenState = TitleState.WELCOME;
+		
+		inventoryState = inventoryState.NORMAL;
 	
 		arial_30 = new Font ("Arial", Font.PLAIN, 30);
 		arial_50 = new Font ("Arial", Font.PLAIN, 50);
@@ -70,11 +76,11 @@ public class UI {
 		
 		
 		//Create HUD 
-		Entity heart = new ObjectHeart(gp);
+		Entity heart = new Heart(gp);
 		heart_full = heart.getImage1();
 		heart_half = heart.getImage2();
 		heart_blank = heart.getImage3();
-		
+	
 	}
 	/**
 	 * Setters and getters
@@ -82,7 +88,13 @@ public class UI {
 	
 	public TitleState getTitleScreenState () { return titleScreenState; }
 	
+	public InventoryState getInventoryState () { return inventoryState; }
+	
+	public final int getItemIndex () { return slotCol + (slotRow * 4);}
+	
 	public final void setTitleScreenState (TitleState titleScreenState) { this.titleScreenState = titleScreenState; }
+	
+	public final void setInventoryState (InventoryState inventoryState) { this.inventoryState = inventoryState; }
 	
 	public final void setCurrentDialogue (String dialogue) { currentDialogue = dialogue;}
 	
@@ -98,6 +110,9 @@ public class UI {
 		this.subtitleMsg.add(message);
 		this.subtitleMsgCount.add(0);
 	}
+	
+	
+	
 	/*
 	 * String aligning values getters
 	 */
@@ -148,7 +163,9 @@ public class UI {
 		
 		case STATUS -> { drawStatusScreen(); } 
 		
-		case INVENTORY -> { drawInventoryScreen(); }
+		case INVENTORY -> { 
+			drawInventoryScreen();
+		}
 		
 		
 		
@@ -519,7 +536,7 @@ public class UI {
 	
 	private final void drawInventoryScreen() {
 		Player player = gp.getPlayer();
-		
+		int tileSize = gp.getTileSize();
 		/**
 		 * 
 		 * INVENTORY FRAME
@@ -536,24 +553,38 @@ public class UI {
 		int slotX = defaultSlotX,
 			slotY = defaultSlotY;
 		
-		
-		
+	
+		/**
+		 * DRAW PLAYER'S ITEMS
+		 */
 		//max inventory size is 12, as soon as there is no object inside the array, starts drawing out those x'es inside the inventory slot
 		for (int i = 0; i < 12; ++i) {
-			if (i < player.getInventory().size()) {
+			g2.setColor(Color.LIGHT_GRAY);
+			g2.setStroke(new BasicStroke (2));
+			if (i < player.getInventory().size()) {	
 				Entity currentItem = (Entity) player.getInventory().get(i);
-				g2.drawImage(UtilityTool.scaleImage(currentItem.getDown1(), gp.getTileSize() * 2, gp.getTileSize() * 2), slotX, slotY, null);
-				g2.setColor(Color.LIGHT_GRAY);
-				g2.setStroke(new BasicStroke (2));
-				g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
+				
+				//Draw inventory equipment cursor
+				if (currentItem.equals(player.getEquippedWeapon())) {
+					g2.setColor(new Color(240,190,90));		
+					g2.fillRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);	
+				} else if (currentItem.equals(player.getEquippedShield())) {
+					g2.setColor(new Color(121,68,59));	
+					g2.fillRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);	
+				}
+					
+				//Draws the actual object after equip color
+				g2.drawImage(UtilityTool.scaleImage(currentItem.getDown1(), tileSize * 2, tileSize * 2), slotX, slotY, null);
+				g2.drawRoundRect(slotX, slotY, tileSize * 2, tileSize * 2, 10, 10);
+				
 			} else {
-				g2.setColor(Color.LIGHT_GRAY);
-				g2.setStroke(new BasicStroke (2));
 				g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
 				g2.setStroke(new BasicStroke (1));
 				g2.drawLine(slotX, slotY, slotX + gp.getTileSize() * 2, slotY + gp.getTileSize() * 2);
 				g2.drawLine(slotX + gp.getTileSize() * 2, slotY, slotX, slotY + gp.getTileSize() * 2);
 			}
+			
+		
 			
 			slotX += gp.getTileSize() * 2;
 			
@@ -628,8 +659,57 @@ public class UI {
 			g2.drawString(emptySlotDescription, descriptionTextX, descriptionTextY);
 		}
 		
+		/*
+		 * Draw use options for items currently being pointed at by cursor
+		 * CHECK the type of the object in inventory then call the correct method to draw the correct one
+		*/
+		
+		
+		if (inventoryState == InventoryState.OPTIONS) {			
+			if (itemIndex < player.getInventory().size()) {
+			InventoryObjectType type = player.getInventory().get(itemIndex).getInventoryType();
+			int inventoryOptionsFrameX = tileSize * 10,
+				inventoryOptionsFrameY = defaultSlotY,
+				inventoryOptionsFrameWidth = tileSize * 3 + 25,
+				inventoryOptionsFrameHeight = tileSize * 3 + 5,
+				optionCursorX = inventoryOptionsFrameX + inventoryOptionsFrameWidth - 35,
+				lineHeight = 36,
+				optionCursorY = inventoryOptionsFrameY + tileSize + lineHeight * inventoryOptionCursor;
+			
+			this.drawSubWindow(inventoryOptionsFrameX, inventoryOptionsFrameY, inventoryOptionsFrameWidth, inventoryOptionsFrameHeight);
+			//draw cursor for the thing later
+			this.drawInventoryOptions(inventoryOptionsFrameX, inventoryOptionsFrameY, type);
+			g2.drawString("<", optionCursorX, optionCursorY);
+			
+			
+			} else {
+				//value is out of bounds so the inventory state is reset back to normal
+				this.inventoryState = InventoryState.NORMAL;
+			}
+		}
+		
 	
 	}
 	
+	private final void drawInventoryOptions (int x, int y, InventoryObjectType type) {
+		int lineHeight = 36,
+			optionX = x + 20,
+			optionY = y + 50;
+		switch (type) {
+		case CONSUMMABLE, INTERACT -> {
+			g2.drawString("USE", optionX, optionY);
+		}
+		case ATTACK, DEFENSE, TOOL, ACCESSORY ->{
+			g2.drawString("EQUIP", optionX, optionY);
+		}
+		case NONPICKUP -> throw new IllegalArgumentException("Cannot be defined: " + type);
+		default -> throw new IllegalArgumentException("Unexpected value: " + type);
+	}
+		
+		g2.drawString("DISCARD", optionX, optionY + lineHeight);
+		g2.drawString("CANCEL", optionX, optionY + lineHeight * 2);
+}
+	
+
 	
 }

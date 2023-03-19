@@ -1,13 +1,14 @@
 package object;
 
 import adventureGame2D.GamePanel;
+import enums.InventoryObjectType;
 
 
-public class ObjectKey extends GameObject {
+public class Key extends GameObject {
 	
 	GamePanel gp;
 	
-	public ObjectKey(GamePanel gp, int worldX, int worldY) {
+	public Key(GamePanel gp, int worldX, int worldY) {
 		super (gp);
 		this.gp = gp;
 		this.WorldX = worldX * gp.getTileSize();
@@ -15,7 +16,7 @@ public class ObjectKey extends GameObject {
 		
 		setDefaultAttributes();
 		setPickupState();
-		
+		setInventoryType();
 	}
 	
 	
@@ -33,6 +34,15 @@ public class ObjectKey extends GameObject {
 		this.pickUpState = false;
 		
 	}
+
+
+	@Override
+	public void setInventoryType() {
+		this.inventoryType = InventoryObjectType.INTERACT;
+		
+	}
+	
+	
 	
 }
 
