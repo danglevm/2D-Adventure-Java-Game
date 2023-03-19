@@ -121,7 +121,7 @@ public class KeyHandler implements KeyListener{
 		
 		if (code == KeyEvent.VK_ENTER) {
 			
-			
+		
 			/*
 			 * New game
 			 */
@@ -138,6 +138,7 @@ public class KeyHandler implements KeyListener{
 			} else {
 				System.exit(0);
 			}
+			gp.playSE(11);
 		}
 		
 		if (gp.getGameUI().cursorNum > 3) gp.getGameUI().cursorNum = 3;
@@ -165,6 +166,7 @@ public class KeyHandler implements KeyListener{
 				 * Yellow girl
 				 */	
 			}
+			gp.playSE(11);
 		}
 		
 		if (gp.getGameUI().cursorNum > 1) gp.getGameUI().cursorNum = 1;
@@ -269,7 +271,10 @@ public class KeyHandler implements KeyListener{
 		
 		if (code == KeyEvent.VK_S) { ui.setSlotRow(ui.getSlotRow() + 1); gp.playSE(9); }
 		
-		if (code == KeyEvent.VK_ENTER) { ui.setInventoryState(InventoryState.OPTIONS);;}
+		if (code == KeyEvent.VK_ENTER) { 
+			ui.setInventoryState(InventoryState.OPTIONS);
+			gp.playSE(12);
+			}
 		
 		if (ui.getSlotRow() < 0) ui.setSlotRow(0);
 		
@@ -285,7 +290,27 @@ public class KeyHandler implements KeyListener{
 	private final void inventoryOptionsState (int code) {
 		UI ui = gp.getGameUI();
 		
-		if (code == KeyEvent.VK_ENTER) ui.setInventoryState(InventoryState.NORMAL); };
+		if (code == KeyEvent.VK_W) --ui.inventoryOptionCursor;
+		
+		if (code == KeyEvent.VK_S) ++ui.inventoryOptionCursor;
+		
+		if (ui.inventoryOptionCursor < 0) ui.inventoryOptionCursor = 0;
+		
+		if (ui.inventoryOptionCursor > 2) ui.inventoryOptionCursor = 2;
+		
+		if (code == KeyEvent.VK_ENTER) {
+			ui.setInventoryState(InventoryState.NORMAL); 
+			gp.playSE(12);
+			gp.getPlayer().handleInventoryOptions(ui.inventoryOptionCursor);
+			ui.inventoryOptionCursor = 0;
+		}
+		
+		if (code == KeyEvent.VK_ESCAPE) {
+			ui.setInventoryState(InventoryState.NORMAL);
+			ui.inventoryOptionCursor = 0;
+		}
+		
+	}
 		
 	@Override
 	public final void keyReleased(KeyEvent e) {

@@ -19,7 +19,7 @@ public class BlueShield extends GameObject{
 	@Override
 	public void setDefaultAttributes() {
 		name = "Gooey Blue Shield";
-		objectDescription = "An unstoppable monstrosity of defense.\nSadly, you can only barely able to move it with one hand.\nGives 3 defense but slows you down by 2 movement speed.";
+		objectDescription = "An unstoppable monstrosity of defense.\nSadly, you can only barely able to move it with one hand.\nGives 3 defense but slows player speed by 2.";
 		collisionOn = false;
 		down1 = setupEntity("shield_blue", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 	}

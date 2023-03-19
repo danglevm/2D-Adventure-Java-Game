@@ -40,7 +40,7 @@ public class UI {
 	Color nameColor1 = new Color(253, 218, 13);
 	Color nameColor2 = new Color(196, 30, 58);
 	
-	protected int cursorNum = 0, statusCursor = 0;
+	protected int cursorNum = 0, statusCursor = 0, inventoryOptionCursor = 0;
 	
 	//Drawing hearts
 	private BufferedImage heart_full, heart_half, heart_blank;
@@ -90,6 +90,8 @@ public class UI {
 	
 	public InventoryState getInventoryState () { return inventoryState; }
 	
+	public final int getItemIndex () { return slotCol + (slotRow * 4);}
+	
 	public final void setTitleScreenState (TitleState titleScreenState) { this.titleScreenState = titleScreenState; }
 	
 	public final void setInventoryState (InventoryState inventoryState) { this.inventoryState = inventoryState; }
@@ -108,6 +110,7 @@ public class UI {
 		this.subtitleMsg.add(message);
 		this.subtitleMsgCount.add(0);
 	}
+	
 	
 	
 	/*
@@ -559,18 +562,20 @@ public class UI {
 			g2.setColor(Color.LIGHT_GRAY);
 			g2.setStroke(new BasicStroke (2));
 			if (i < player.getInventory().size()) {	
-				
-				//Draw inventory equip cursor
-				if (player.getInventory().get(i).equals(player.getEquippedWeapon()) ||
-						player.getInventory().get(i).equals(player.getEquippedShield())) {
-					g2.setColor(new Color(240,190,90));
-					g2.fillRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);					
-				}
-				
-				//Draws the actual object after equip color
 				Entity currentItem = (Entity) player.getInventory().get(i);
-				g2.drawImage(UtilityTool.scaleImage(currentItem.getDown1(), gp.getTileSize() * 2, gp.getTileSize() * 2), slotX, slotY, null);
-				g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
+				
+				//Draw inventory equipment cursor
+				if (currentItem.equals(player.getEquippedWeapon())) {
+					g2.setColor(new Color(240,190,90));		
+					g2.fillRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);	
+				} else if (currentItem.equals(player.getEquippedShield())) {
+					g2.setColor(new Color(121,68,59));	
+					g2.fillRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);	
+				}
+					
+				//Draws the actual object after equip color
+				g2.drawImage(UtilityTool.scaleImage(currentItem.getDown1(), tileSize * 2, tileSize * 2), slotX, slotY, null);
+				g2.drawRoundRect(slotX, slotY, tileSize * 2, tileSize * 2, 10, 10);
 				
 			} else {
 				g2.drawRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);
@@ -666,13 +671,17 @@ public class UI {
 			int inventoryOptionsFrameX = tileSize * 10,
 				inventoryOptionsFrameY = defaultSlotY,
 				inventoryOptionsFrameWidth = tileSize * 3 + 25,
-				inventoryOptionsFrameHeight = tileSize * 3 + 5;
+				inventoryOptionsFrameHeight = tileSize * 3 + 5,
+				optionCursorX = inventoryOptionsFrameX + inventoryOptionsFrameWidth - 35,
+				lineHeight = 36,
+				optionCursorY = inventoryOptionsFrameY + tileSize + lineHeight * inventoryOptionCursor;
 			
 			this.drawSubWindow(inventoryOptionsFrameX, inventoryOptionsFrameY, inventoryOptionsFrameWidth, inventoryOptionsFrameHeight);
 			//draw cursor for the thing later
-			if (itemIndex < player.getInventory().size()) {
-				this.drawInventoryOptions(inventoryOptionsFrameX, inventoryOptionsFrameY, type);
-			}
+			this.drawInventoryOptions(inventoryOptionsFrameX, inventoryOptionsFrameY, type);
+			g2.drawString("<", optionCursorX, optionCursorY);
+			
+			
 			} else {
 				//value is out of bounds so the inventory state is reset back to normal
 				this.inventoryState = InventoryState.NORMAL;

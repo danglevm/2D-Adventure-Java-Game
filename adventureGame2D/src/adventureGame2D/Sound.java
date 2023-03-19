@@ -28,6 +28,8 @@ public class Sound {
 		soundURL.add (getClass().getResource("/sounds/player/levelup.wav")); // 8
 		soundURL.add (getClass().getResource("/sounds/player/cursor.wav")); //9
 		soundURL.add (getClass().getResource("/sounds/player/inventory-open.wav")); //10
+		soundURL.add (getClass().getResource("/sounds/game/cursor_select.wav")); //11
+		soundURL.add (getClass().getResource("/sounds/player/inventory_select.wav")); //12
  		
 		
 	}
