@@ -222,7 +222,7 @@ public class KeyHandler implements KeyListener{
 		/**
 		 * Trigger player to use current equipped tool
 		 */
-		if (code == KeyEvent.VK_L) gp.getPlayer().setPlayerUseTool(true);
+		if (code == KeyEvent.VK_K) gp.getPlayer().setPlayerUseTool(true);
 		/*
 		 * Player stands near interactive event and can trigger events
 		 */

@@ -2,7 +2,7 @@ package object;
 
 
 import adventureGame2D.GamePanel;
-import enums.InventoryObjectType;
+import enums.ObjectType;
 
 
 public class Boots extends GameObject {
@@ -34,7 +34,7 @@ public class Boots extends GameObject {
 
 	@Override
 	public void setInventoryType() {
-		this.inventoryType = InventoryObjectType.ACCESSORY;
+		this.inventoryType = ObjectType.ACCESSORY;
 	}
 }
 

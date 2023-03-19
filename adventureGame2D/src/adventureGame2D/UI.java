@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import entity.Entity;
 import entity.Player;
 import enums.GameState;
-import enums.InventoryObjectType;
+import enums.ObjectType;
 import enums.InventoryState;
 import enums.TitleState;
 import object.Heart;
@@ -684,7 +684,7 @@ public class UI {
 		
 		if (inventoryState == InventoryState.OPTIONS) {			
 			if (itemIndex < player.getInventory().size()) {
-			InventoryObjectType type = player.getInventory().get(itemIndex).getInventoryType();
+			ObjectType type = player.getInventory().get(itemIndex).getInventoryType();
 			int inventoryOptionsFrameX = tileSize * 10,
 				inventoryOptionsFrameY = defaultSlotY,
 				inventoryOptionsFrameWidth = tileSize * 3 + 25,
@@ -711,7 +711,7 @@ public class UI {
 	
 	}
 	
-	private final void drawInventoryOptions (int x, int y, InventoryObjectType type, int cursorLoc) {
+	private final void drawInventoryOptions (int x, int y, ObjectType type, int cursorLoc) {
 		int lineHeight = 36,
 			optionX = x + 20,
 			optionY = y + 50;

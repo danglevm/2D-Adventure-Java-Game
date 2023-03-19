@@ -7,6 +7,7 @@ import object.Boots;
 import object.Chest;
 import object.Door;
 import object.Key;
+import object.Sword;
 
 public class AssetPlacement {
 	//Class managed object placement
@@ -21,6 +22,7 @@ public class AssetPlacement {
 		gp.getObjects().add(new Door(gp, 121, 123));
 		gp.getObjects().add(new Boots(gp, 121, 124));
 		gp.getObjects().add(new Axe(gp, 121, 125));
+		gp.getObjects().add(new Sword(gp, 124, 126));
 
 	}
 	

@@ -1,7 +1,7 @@
 package object;
 
 import adventureGame2D.GamePanel;
-import enums.InventoryObjectType;
+import enums.ObjectType;
 
 public class Sword extends GameObject implements AttackObjectInterface {
 
@@ -9,9 +9,11 @@ public class Sword extends GameObject implements AttackObjectInterface {
 	
 	private int attackValue;
 	
-	public Sword(GamePanel gp) {
+	public Sword(GamePanel gp, int WorldX, int WorldY) {
 		super(gp);
 		this.gp = gp;
+		this.WorldX = WorldX * gp.getTileSize();
+		this.WorldY = WorldY * gp.getTileSize();
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
@@ -44,7 +46,7 @@ public class Sword extends GameObject implements AttackObjectInterface {
 
 	@Override
 	public void setInventoryType() {
-		this.inventoryType = InventoryObjectType.ATTACK;
+		this.inventoryType = ObjectType.ATTACK;
 		
 	}
 

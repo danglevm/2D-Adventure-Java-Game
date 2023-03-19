@@ -12,7 +12,8 @@ import adventureGame2D.KeyHandler;
 import enums.Direction;
 import enums.EntityType;
 import enums.GameState;
-import enums.InventoryObjectType;
+import enums.ObjectType;
+import enums.ToolType;
 import monster.Monster;
 import npc.NPC;
 import object.AttackObjectInterface;
@@ -29,6 +30,7 @@ public class Player extends Entity {
 	//Variables
 	KeyHandler keyH;
 	BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+	BufferedImage axeUp1, axeUp2, axeDown1, axeDown2, axeLeft1, axeLeft2, axeRight1, axeRight2;
 	
 	protected Rectangle defaultAttackArea = new Rectangle (0, 0, 0, 0);
 
@@ -51,7 +53,7 @@ public class Player extends Entity {
 	
 	private ArrayList <GameObject> inventory = new ArrayList<GameObject>();
 	
-	private int totalEncumbrance;
+	private int totalEncumbrance, netSpeed;
 	
 
 	/*
@@ -123,12 +125,13 @@ public class Player extends Entity {
 		screenY = gp.getScreenHeight()/2 - (gp.getTileSize()/2);
 		
 		this.setDefaultPlayerValues();
-		this.getPlayerImage();
+		this.getPlayerImage();	
 		this.getPlayerAttackImage();
+		this.getPlayerAxeImage();
 	}
 	
 	//-------------------------------CLASS METHODS------------------
-	private final void getPlayerImage() {
+	private final void getPlayerAttackImage() {
 		
 		attackUp1 = setupEntity("boy_attack_up_1", "/player_attack/", gp.getTileSize(), gp.getTileSize()*2);
 		attackUp2 = setupEntity("boy_attack_up_2", "/player_attack/", gp.getTileSize(), gp.getTileSize() * 2);
@@ -142,7 +145,7 @@ public class Player extends Entity {
 		
 	}
 	
-	private final void getPlayerAttackImage() {
+	private final void getPlayerImage() {
 		up1 = setupEntity("boy_up_1", "/player/", gp.getTileSize(), gp.getTileSize());
 		up2 = setupEntity("boy_up_2", "/player/", gp.getTileSize(), gp.getTileSize());
 		down1 = setupEntity("boy_down_1", "/player/", gp.getTileSize(), gp.getTileSize());
@@ -155,14 +158,14 @@ public class Player extends Entity {
 	}
 	
 	private final void getPlayerAxeImage() {
-		up1 = setupEntity("boy_axe_up_1", "/player/axe/", gp.getTileSize(), gp.getTileSize());
-		up2 = setupEntity("boy_axe_up_2", "/player/axe/", gp.getTileSize(), gp.getTileSize());
-		down1 = setupEntity("boy_axe_down_1", "/player/axe/", gp.getTileSize(), gp.getTileSize());
-		down2 = setupEntity("boy_axe_down_2", "/player/axe/", gp.getTileSize(), gp.getTileSize());
-		left1 = setupEntity("boy_axe_left_1", "/player/axe/", gp.getTileSize(), gp.getTileSize());
-		left2 = setupEntity("boy_axe_left_2", "/player/axe/", gp.getTileSize(), gp.getTileSize());
-		right1 = setupEntity("boy_axe_right_1", "/player/axe/", gp.getTileSize(), gp.getTileSize());
-		right2 = setupEntity ("boy_axe_right_2", "/player/axe/", gp.getTileSize(), gp.getTileSize());
+		axeUp1 = setupEntity("boy_axe_up_1", "/player/axe/", gp.getTileSize(), gp.getTileSize() * 2);
+		axeUp2 = setupEntity("boy_axe_up_2", "/player/axe/", gp.getTileSize(), gp.getTileSize() * 2);
+		axeDown1 = setupEntity("boy_axe_down_1", "/player/axe/", gp.getTileSize(), gp.getTileSize() * 2);
+		axeDown2 = setupEntity("boy_axe_down_2", "/player/axe/", gp.getTileSize(), gp.getTileSize() * 2);
+		axeLeft1 = setupEntity("boy_axe_left_1", "/player/axe/", gp.getTileSize() * 2, gp.getTileSize());
+		axeLeft2 = setupEntity("boy_axe_left_2", "/player/axe/", gp.getTileSize() * 2, gp.getTileSize());
+		axeRight1 = setupEntity("boy_axe_right_1", "/player/axe/", gp.getTileSize() * 2, gp.getTileSize());
+		axeRight2 = setupEntity ("boy_axe_right_2", "/player/axe/", gp.getTileSize() * 2, gp.getTileSize());
 	}
 	
 	
@@ -206,7 +209,7 @@ public class Player extends Entity {
 		
 		/**
 		 * Player attributesentityDirection
-		 * @var maxStamina player's max stamina pool. Default: 120. Max: 300
+		 * @var maxStamina player's max stamina pool.	ToolType type = ((ToolObjectInterface)this.equippedTool).getToolType(); Default: 120. Max: 300
 		 * @var speed player's speed. Default: 3. Max: 5
 		 * @var level player's level. Default: 1. Max: 10/15?
 		 * @var strength natural amount of damage deals. Default 0. Max: 3
@@ -236,8 +239,8 @@ public class Player extends Entity {
 		upgradePoints = 0;
 		maxLife = 10;
 		life = maxLife;
-		defaultWeapon = new Sword(gp);
-		defaultShield = new WoodenShield(gp);
+		defaultWeapon = new Sword(gp, 0, 0);
+		defaultShield = new WoodenShield(gp, 0, 0);
 		
 		equippedWeapon = defaultWeapon;
 		equippedShield = defaultShield;
@@ -251,6 +254,11 @@ public class Player extends Entity {
 	}
 	
 	private final void updatePlayerAttributes() {
+		
+		/**
+		 * netspeed = default speed of 3 + speed upgrades - encumbrance - temporarily not
+		 */
+		netSpeed = 3;
 		/**
 		 * @var attackVal natural player's strength + weapon's attack value
 		 * @var defenseVal natural player's defense + shield/armor's defense value
@@ -273,7 +281,7 @@ public class Player extends Entity {
 		
 		if (equippedTool != null) totalEncumbrance += equippedTool.getEncumbrance();
 				
-		speed = 3 - totalEncumbrance;
+		speed = netSpeed - totalEncumbrance;
 		
 		if (speed < 0) speed = 0;
 		
@@ -290,43 +298,25 @@ public class Player extends Entity {
 	
 	public void update() 
 	{
+		System.out.println(useTool);
 		this.updatePlayerAttributes();
 		collisionOn = false;	
 		this.checkLevelUp();
-		if (playerAttack) 
+		if ((playerAttack && this.equippedWeapon != null) || (useTool && this.equippedTool != null)) 
 		{
 			if (actionStamina >= actionCost) {
 				staminaEnabled = true;
-				staminaRechargeCounter = 0;
-				attack();	
-			} else {
-				playerAttack = false;
-			}
-			
-		} else if (useTool) {
-			
-			if (!equippedTool.equals(null)) {
-				//Check the type of the tool that is being used
-				if (actionStamina >= actionCost) {
-					staminaEnabled = true;
-					staminaRechargeCounter = 0;
-					switch(((ToolObjectInterface)equippedTool).getToolType()) {
-					case AXE -> {
-					
-					}
+				staminaRechargeCounter = 0;	
 				
-					case PICKAXE -> {
-					
-					}
-				
-				
-					};
-						
-				} else {
-					useTool = false;
+				if (playerAttack) {
+					attackVal = strength + ((AttackObjectInterface)equippedWeapon).getAttackValue();
+				} else if (useTool) {
+					attackVal = strength + ((AttackObjectInterface)equippedTool).getAttackValue();
 				}
 				
+				swing();
 			} else {
+				playerAttack = false;
 				useTool = false;
 			}
 			
@@ -462,7 +452,7 @@ public class Player extends Entity {
 		}
 	
 		//attack cool down period is on
-		if (!playerAttack || actionStamina < actionCost) {
+		if (!playerAttack || !useTool ||actionStamina < actionCost) {
 		switch (direction) {
 		
 		case UP:
@@ -481,29 +471,66 @@ public class Player extends Entity {
 		
 		
 		} //attack cool down period is over - stamina
-			else if (playerAttack && (actionStamina >= actionCost) )
+		if (playerAttack && (actionStamina >= actionCost) && equippedWeapon != null)
 		{
 		
 		switch (direction) {
 		
-		case UP:
+		case UP -> {
 			tempScreenY = screenY - gp.getTileSize();
 			if (spriteNum) {image = attackUp1;} else {image = attackUp2;} break;
-			
-		case DOWN:
+		}
+		case DOWN -> {
 			if (spriteNum) {image = attackDown1;} else {image = attackDown2;} break;
-			
-		case LEFT:
+		}
+		case LEFT -> {
 			tempScreenX = screenX - gp.getTileSize();
 			if (spriteNum) {image = attackLeft1;} else {image = attackLeft2;} break;
-			
-		case RIGHT:
+		}
+		case RIGHT -> {
 			if (spriteNum) {image = attackRight1;} else {image = attackRight2;} break;
+			}
+		}
+		
+		} else {
+			playerAttack = false;
+		}
+		
+		if (useTool && (actionStamina >= actionCost) && equippedTool != null && equippedTool != null) {
+	
 			
-		default:
-			break;
-			}	
-		} 
+		ToolType type = ((ToolObjectInterface)this.equippedTool).getToolType();
+			
+		if (type == ToolType.AXE) {
+			switch (direction) {
+			
+			case UP -> {
+				tempScreenY = screenY - gp.getTileSize();
+				if (spriteNum) {image = axeUp1;} else {image = axeUp2;} break;
+			}
+			case DOWN -> {
+				if (spriteNum) {image = axeDown1;} else {image = axeDown2;} break;
+			}
+			case LEFT -> {
+				tempScreenX = screenX - gp.getTileSize();
+				if (spriteNum) {image = axeLeft1;} else {image = axeLeft2;} break;
+			}
+			case RIGHT -> {
+				if (spriteNum) {image = axeRight1;} else {image = axeRight2;} break;
+			}
+			}
+			
+		}
+		
+		if (type == ToolType.PICKAXE) {
+			
+		}
+	
+		} else {
+			useTool = false;
+		}
+		
+		
 		
 		//Draw effect when player gets damaged
 		if (invincibility) {
@@ -560,7 +587,8 @@ public class Player extends Entity {
 		}
 	}
 	
-	private final void attack() {
+	//Method for swinging anything that is a weapon or a tool
+	private final void swing() {
 		//Attacking
 		++spriteCounter;
 		
@@ -605,16 +633,14 @@ public class Player extends Entity {
 			spriteNum = true;
 			spriteCounter = 0;
 			playerAttack = false;
+			useTool = false;
 			actionStamina -= actionCost;
 			
 		}
 		
 	}
 	
-	private final void useAxe() {
-		
-	}
-	
+
 	private final void damageMonster(int i) {
 		if (i != 9999) {
 			Entity monster = gp.getMonsters().get(i);
@@ -622,7 +648,7 @@ public class Player extends Entity {
 			if (!monster.invincibility) {
 				gp.playSE(5);
 				//attack lands
-				int damage = monster.getLife() + monster.getDefense()- this.attackVal;
+				int damage = monster.getLife() + monster.getDefense() - this.attackVal;
 				monster.setLife(damage);
 				monster.invincibility = true;
 				
@@ -675,7 +701,7 @@ public class Player extends Entity {
 	
 	public void handleInventoryOptions(int option) {
 		GameObject selectedItem = inventory.get(gp.getGameUI().getItemIndex());
-		InventoryObjectType type = selectedItem.getInventoryType();
+		ObjectType type = selectedItem.getInventoryType();
 		
 		if (option == 0) {
 			switch (type) {
