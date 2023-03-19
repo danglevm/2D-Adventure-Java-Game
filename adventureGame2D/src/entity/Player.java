@@ -21,6 +21,7 @@ import object.DefenseObjectInterface;
 import object.GameObject;
 import object.Key;
 import object.Sword;
+import object.ToolObjectInterface;
 import object.WoodenShield;
 
 public class Player extends Entity {
@@ -29,6 +30,7 @@ public class Player extends Entity {
 	KeyHandler keyH;
 	BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 	
+	protected Rectangle defaultAttackArea = new Rectangle (0, 0, 0, 0);
 
 	//Where the player is drawn on the screen - camera 
 	private final int screenX;
@@ -39,15 +41,17 @@ public class Player extends Entity {
 	
 	private int switchOpacityCounter = 0;
 
-	private int attackCost, attackStamina, staminaRechargeCounter, maxStamina;
+	private int actionCost, actionStamina, staminaRechargeCounter, maxStamina;
 
 	private boolean playerAttack;
+	
+	private boolean useTool;
 	
 	private boolean staminaEnabled;
 	
 	private ArrayList <GameObject> inventory = new ArrayList<GameObject>();
 	
-	
+	private int totalEncumbrance;
 	
 
 	/*
@@ -89,12 +93,12 @@ public class Player extends Entity {
 	/*
 	 * Equipped weapon and shield
 	 */
-	private GameObject currentWeapon;
-	private GameObject currentShield;
-	private GameObject currentTool;
-	private GameObject currentConsummable;
-	private GameObject currentAccessory1;
-	private GameObject currentAccessory2;
+	private GameObject equippedWeapon;
+	private GameObject equippedShield;
+	private GameObject equippedTool;
+	private GameObject equippedConsummable;
+	private GameObject equippedAccessory1;
+	private GameObject equippedAccessory2;
 	/**
 	 * Default weapon/shield
 	 */
@@ -139,7 +143,6 @@ public class Player extends Entity {
 	}
 	
 	private final void getPlayerAttackImage() {
-		
 		up1 = setupEntity("boy_up_1", "/player/", gp.getTileSize(), gp.getTileSize());
 		up2 = setupEntity("boy_up_2", "/player/", gp.getTileSize(), gp.getTileSize());
 		down1 = setupEntity("boy_down_1", "/player/", gp.getTileSize(), gp.getTileSize());
@@ -149,6 +152,17 @@ public class Player extends Entity {
 		right1 = setupEntity("boy_right_1", "/player/", gp.getTileSize(), gp.getTileSize());
 		right2 = setupEntity ("boy_right_2", "/player/", gp.getTileSize(), gp.getTileSize());
 		
+	}
+	
+	private final void getPlayerAxeImage() {
+		up1 = setupEntity("boy_axe_up_1", "/player/axe/", gp.getTileSize(), gp.getTileSize());
+		up2 = setupEntity("boy_axe_up_2", "/player/axe/", gp.getTileSize(), gp.getTileSize());
+		down1 = setupEntity("boy_axe_down_1", "/player/axe/", gp.getTileSize(), gp.getTileSize());
+		down2 = setupEntity("boy_axe_down_2", "/player/axe/", gp.getTileSize(), gp.getTileSize());
+		left1 = setupEntity("boy_axe_left_1", "/player/axe/", gp.getTileSize(), gp.getTileSize());
+		left2 = setupEntity("boy_axe_left_2", "/player/axe/", gp.getTileSize(), gp.getTileSize());
+		right1 = setupEntity("boy_axe_right_1", "/player/axe/", gp.getTileSize(), gp.getTileSize());
+		right2 = setupEntity ("boy_axe_right_2", "/player/axe/", gp.getTileSize(), gp.getTileSize());
 	}
 	
 	
@@ -176,12 +190,12 @@ public class Player extends Entity {
 //		attackArea.height = 32;
 		
 		playerAttack = false;
-		
+		useTool = false;
 		
 		//stamina
-		attackCost = 60;
+		actionCost = 60;
 		maxStamina = 120;
-		attackStamina = maxStamina;
+		actionStamina = maxStamina;
 		staminaRechargeCounter = 0;
 		staminaEnabled = false;
 		
@@ -206,6 +220,7 @@ public class Player extends Entity {
 		maxStamina = 120;
 		stamina = 0;
 		speed = 3;
+		totalEncumbrance = 0;
 		level = 1;
 		mana = 0;
 		manaRegen = 0;
@@ -224,34 +239,63 @@ public class Player extends Entity {
 		defaultWeapon = new Sword(gp);
 		defaultShield = new WoodenShield(gp);
 		
-		currentWeapon = defaultWeapon;
-		currentShield = defaultShield;
-		currentAccessory1 = null;
-		currentAccessory2 = null;
-		currentConsummable = null;
-		currentTool = null;
+		equippedWeapon = defaultWeapon;
+		equippedShield = defaultShield;
+		equippedAccessory1 = null;
+		equippedAccessory2 = null;
+		equippedConsummable = null;
+		equippedTool = null;
+	
 		
-		attackArea = currentWeapon.attackArea;
-		
-		
+		addDefaultInventoryItems();
+	}
+	
+	private final void updatePlayerAttributes() {
 		/**
 		 * @var attackVal natural player's strength + weapon's attack value
 		 * @var defenseVal natural player's defense + shield/armor's defense value
 		 */
-		attackVal = strength + ((AttackObjectInterface)currentWeapon).getAttackValue();
-		defenseVal = defense + ((DefenseObjectInterface)currentShield).getDefenseValue();
+		if (equippedWeapon != null) attackVal = strength + ((AttackObjectInterface)equippedWeapon).getAttackValue();
+		else attackVal = strength;
 		
-		addInventoryItems();
+		if (equippedShield != null) defenseVal = defense + ((DefenseObjectInterface)equippedShield).getDefenseValue();
+		else defenseVal = defense;
+		
+		
+		//set the speed to be affected by equipment's encumbrance
+		if (equippedShield != null) totalEncumbrance += equippedShield.getEncumbrance();
+		
+		if (equippedWeapon != null) totalEncumbrance += equippedWeapon.getEncumbrance();
+		
+		if (equippedAccessory1 != null) totalEncumbrance += equippedAccessory1.getEncumbrance();
+
+		if (equippedAccessory2 != null) totalEncumbrance += equippedAccessory2.getEncumbrance();
+		
+		if (equippedTool != null) totalEncumbrance += equippedTool.getEncumbrance();
+				
+		speed = 3 - totalEncumbrance;
+		
+		if (speed < 0) speed = 0;
+		
+		totalEncumbrance = 0;
+		
+		
+		/**
+		 * Attack area
+		 */
+		if (equippedWeapon != null)attackArea = equippedWeapon.attackArea;
+		else attackArea = defaultAttackArea;
 	}
 	
 	
 	public void update() 
 	{
+		this.updatePlayerAttributes();
 		collisionOn = false;	
 		this.checkLevelUp();
 		if (playerAttack) 
 		{
-			if (attackStamina >= attackCost) {
+			if (actionStamina >= actionCost) {
 				staminaEnabled = true;
 				staminaRechargeCounter = 0;
 				attack();	
@@ -259,7 +303,35 @@ public class Player extends Entity {
 				playerAttack = false;
 			}
 			
+		} else if (useTool) {
+			
+			if (!equippedTool.equals(null)) {
+				//Check the type of the tool that is being used
+				if (actionStamina >= actionCost) {
+					staminaEnabled = true;
+					staminaRechargeCounter = 0;
+					switch(((ToolObjectInterface)equippedTool).getToolType()) {
+					case AXE -> {
+					
+					}
+				
+					case PICKAXE -> {
+					
+					}
+				
+				
+					};
+						
+				} else {
+					useTool = false;
+				}
+				
+			} else {
+				useTool = false;
+			}
+			
 		} else if (keyH.getUpPress()||keyH.getDownPress()||
+		
 				keyH.getLeftPress()||keyH.getRightPress() || keyH.getDialoguePress())
 		{
 			
@@ -385,12 +457,12 @@ public class Player extends Entity {
 		int tempScreenX = screenX, tempScreenY = screenY;
 		
 		//stamina starts recharging after 1 second of not attacking and attackStamina recharges
-		if (attackStamina < maxStamina && staminaRechargeCounter > 60) {
-			++attackStamina;
+		if (actionStamina < maxStamina && staminaRechargeCounter > 60) {
+			++actionStamina;
 		}
 	
 		//attack cool down period is on
-		if (!playerAttack || attackStamina < attackCost) {
+		if (!playerAttack || actionStamina < actionCost) {
 		switch (direction) {
 		
 		case UP:
@@ -409,7 +481,7 @@ public class Player extends Entity {
 		
 		
 		} //attack cool down period is over - stamina
-			else if (playerAttack && (attackStamina >= attackCost) )
+			else if (playerAttack && (actionStamina >= actionCost) )
 		{
 		
 		switch (direction) {
@@ -448,7 +520,7 @@ public class Player extends Entity {
 		//stamina bar not hidden
 		if (staminaEnabled) {
 			double singleStaminaBar = (double) gp.getTileSize()/this.maxStamina,
-					currentStaminaBar = singleStaminaBar * this.attackStamina;
+					currentStaminaBar = singleStaminaBar * this.actionStamina;
 			//Draw stamina bar
 			//Gray outline
 			//x, y, width, height
@@ -460,7 +532,7 @@ public class Player extends Entity {
 			g2.setColor(new Color(0,100, 255));
 			g2.fillRect(screenX, screenY - 20, (int) currentStaminaBar, 10);
 			
-			if (attackStamina == maxStamina ) {
+			if (actionStamina == maxStamina ) {
 				staminaEnabled = false;
 			}
 			
@@ -533,9 +605,13 @@ public class Player extends Entity {
 			spriteNum = true;
 			spriteCounter = 0;
 			playerAttack = false;
-			attackStamina -= attackCost;
+			actionStamina -= actionCost;
 			
 		}
+		
+	}
+	
+	private final void useAxe() {
 		
 	}
 	
@@ -590,9 +666,9 @@ public class Player extends Entity {
 		}
 	}
 	
-	private final void addInventoryItems() {
-		inventory.add(currentWeapon);
-		inventory.add(currentShield);
+	private final void addDefaultInventoryItems() {
+		inventory.add(equippedWeapon);
+		inventory.add(equippedShield);
 		inventory.add(new BlueShield(gp, 0, 0));
 		inventory.add(new Key(gp, 0, 0));
 	}
@@ -607,12 +683,16 @@ public class Player extends Entity {
 				
 			}
 			case ACCESSORY -> throw new UnsupportedOperationException("Unimplemented case: " + type);
-			case ATTACK -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+			case ATTACK -> {
+				this.equippedWeapon = selectedItem;
+			}
 			case DEFENSE -> {
-				currentShield = selectedItem;
+				this.equippedShield = selectedItem;
 			}
 			case INTERACT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
-			case TOOL -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+			case TOOL -> {
+				this.equippedTool = selectedItem;
+			}
 			case NONPICKUP -> throw new UnsupportedOperationException("Unknown case: " + type);
 			default -> throw new IllegalArgumentException("Unknown case: " + type);
 			
@@ -622,6 +702,25 @@ public class Player extends Entity {
 		} else if (option == 1){
 			//inventory.remove(selectedItem);
 			inventory.remove(selectedItem);
+			switch (type) {
+			case CONSUMMABLE -> {
+				
+			}
+			case ACCESSORY -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+			case ATTACK -> {
+				if (selectedItem == this.equippedWeapon) this.equippedWeapon = null;
+			}
+			case DEFENSE -> {
+				if (selectedItem == this.equippedShield) this.equippedShield = null;
+			}
+			case INTERACT -> {}
+			case TOOL -> {
+				if (selectedItem == this.equippedTool) this.equippedTool = null;
+			}
+			case NONPICKUP -> throw new UnsupportedOperationException("Unknown case: " + type);
+			default -> throw new IllegalArgumentException("Unknown case: " + type);
+			
+			}
 			
 		} else if (option == 2) {
 			gp.setGameState(GameState.INVENTORY);
@@ -636,7 +735,12 @@ public class Player extends Entity {
 	public int getScreenY () { return screenY; }
 	
 	public boolean getPlayerAttack () { return playerAttack; }
+	
 	public void setPlayerAttack (boolean playerAttack) { this.playerAttack = playerAttack; }
+	
+	public boolean getPlayerUseTool () { return useTool; }
+	
+	public void setPlayerUseTool (boolean useTool) { this.useTool = useTool; }
 	
 	public String[] getLabelArray () { return labels; }
 	
@@ -670,9 +774,9 @@ public class Player extends Entity {
 	
 	public int getUpgradePoints () { return upgradePoints; }
 	
-	public GameObject getEquippedWeapon () { return currentWeapon; }
+	public GameObject getEquippedWeapon () { return equippedWeapon; }
 	
-	public GameObject getEquippedShield () { return currentShield; }
+	public GameObject getEquippedShield () { return equippedShield; }
 	
 	public ArrayList <GameObject> getInventory () { return inventory; } 
 	

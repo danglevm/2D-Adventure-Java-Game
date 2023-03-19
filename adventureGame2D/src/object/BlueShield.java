@@ -3,7 +3,7 @@ package object;
 import adventureGame2D.GamePanel;
 import enums.InventoryObjectType;
 
-public class BlueShield extends GameObject{
+public class BlueShield extends GameObject implements DefenseObjectInterface{
 	GamePanel gp;
 	
 	public BlueShield(GamePanel gp, int worldX, int worldY) {
@@ -14,6 +14,7 @@ public class BlueShield extends GameObject{
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		encumbrance = 2;
 	}
 
 	@Override
@@ -33,5 +34,11 @@ public class BlueShield extends GameObject{
 	public void setInventoryType() {
 		this.inventoryType = InventoryObjectType.DEFENSE;
 		
+	}
+
+	@Override
+	public int getDefenseValue() {
+		// TODO Auto-generated method stub
+		return 3;
 	}
 }

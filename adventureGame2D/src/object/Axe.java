@@ -2,8 +2,9 @@ package object;
 
 import adventureGame2D.GamePanel;
 import enums.InventoryObjectType;
+import enums.ToolType;
 
-public class Axe extends GameObject {
+public class Axe extends GameObject implements AttackObjectInterface, ToolObjectInterface{
 	GamePanel gp;
 	
 	public Axe(GamePanel gp, int worldX, int worldY) {
@@ -20,7 +21,7 @@ public class Axe extends GameObject {
 	@Override
 	public void setDefaultAttributes() {
 		name = "Crusty Greasy Axe";
-		objectDescription = "Nearly unusable but full of potential to be greater.\nStrangely, it looks like your farmer uncle's old axe.\nThis can be used to chop down trees.";
+		objectDescription = "Nearly unusable but full of potential to be greater.\nStrangely, it looks like your farmer uncle's old axe.\nCan be used to chop down trees and gives 1 physical attack.";
 		collisionOn = false;
 		down1 = setupEntity("axe", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 	}
@@ -33,5 +34,15 @@ public class Axe extends GameObject {
 	@Override
 	public void setInventoryType() {
 		this.inventoryType = InventoryObjectType.TOOL;	
+	}
+
+	@Override
+	public int getAttackValue() {
+		return 1;
+	}
+
+	@Override
+	public ToolType getToolType() {
+		return ToolType.AXE;
 	}
 }

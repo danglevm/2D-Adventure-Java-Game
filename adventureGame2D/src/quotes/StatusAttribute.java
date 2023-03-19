@@ -9,7 +9,7 @@ public class StatusAttribute {
 											"Total physical \ndamage dealt \nto an enesmy. \n\nIncludes \nnatural and\nweapon damage. \n\nEach level \nincreases \nnatural \nstrength by 1.",
 											"Total damage \nnegated from \nenemy attacks. \n\nIncludes \nnatural and \nequipment defense. \n\nEach level \nincreases negation \nby 1.",
 											"Chances of \ndodging an \nincoming \nenemy attack.\n\nEach level \nincreases \nyour chances \nby 10%.",
-											"Amount of energy \navailable \nbefore player \ncan't attack \nanymore. \n\nEach level \nincreases \ntotal by 1 \nphysical attack",
+											"Amount of energy \navailable \nbefore player \ncan't attack or use \ntools anymore. \n\nEach level \nincreases \ntotal by 1 \nphysical attack",
 											"The rate \nat which \nthe player \nmoves. \n\nEach level \nincreases \nmovement speed \nby 1 unit.",
 											"Amount of \nknockback \nplayer inflicts \nupon enemies. \n\nEach level \nincreases \nknockback rate \nby 1.",
 											"Chances of \ndealing a \ncritical attack \nto an enemy.\n\nEach level \nincreases \nyour chances \nby 10%.",

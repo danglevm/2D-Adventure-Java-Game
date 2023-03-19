@@ -100,10 +100,17 @@ public class MonsterGreenSlime extends Monster{
 	
 	@Override
 	public void damagePlayer (Player player) {
-		int damage = player.getLife() - this.attack + gp.getPlayer().getTotalDefense();
-		player.setLife(damage);
+		int postDmgLife = player.getLife() - this.attack + player.getTotalDefense();
+		
+		if (postDmgLife > player.getLife()) postDmgLife = player.getLife();
+		
+		if (postDmgLife != player.getLife()) {
+			gp.getGameUI().addSubtitleMsg(gp.getPlayer().getName() + " hurt by " + this.name);
+		}
+		
+		player.setLife(postDmgLife);
 		player.setInvincibility(true);
-		gp.getGameUI().addSubtitleMsg(gp.getPlayer().getName() + " hurt by " + this.name);
+		
 	}
 	
 	@Override
