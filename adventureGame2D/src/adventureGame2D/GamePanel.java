@@ -279,11 +279,11 @@ public void paintComponent (Graphics g) {
 		ui.draw(g2);
 	
 	//draws FPS and player location
-		if (keyH.getFpsDisplay()) {
+		if (keyH.getFpsDisplay() && this.gameState == GameState.PLAY) {
 			g2.setColor(Color.white);
 			g2.setFont(g2.getFont().deriveFont(Font.PLAIN,25));
 			g2.drawString(FPS_text, FPS_x, FPS_y);
-			g2.drawString("X: " + (player.getWorldX())/tileSize + " Y: " + (player.getWorldY())/tileSize, FPS_x - tileSize*2, FPS_y + tileSize);
+			g2.drawString("X: " + (player.getWorldX())/tileSize + " Y: " + (player.getWorldY())/tileSize, FPS_x - tileSize/2, FPS_y + tileSize);
 		}
 	
 	g2.dispose();

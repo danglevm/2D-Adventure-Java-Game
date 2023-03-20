@@ -215,10 +215,14 @@ public class KeyHandler implements KeyListener{
 		
 		
 		/*
-		 * Trigger player attack
+		 * Trigger player to use current equipped weapon
 		 */
 		if (code == KeyEvent.VK_J) gp.getPlayer().setPlayerAttack(true);
 		
+		/**
+		 * Trigger player to use current equipped tool
+		 */
+		if (code == KeyEvent.VK_K) gp.getPlayer().setPlayerUseTool(true);
 		/*
 		 * Player stands near interactive event and can trigger events
 		 */

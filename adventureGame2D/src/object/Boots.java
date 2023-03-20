@@ -2,7 +2,7 @@ package object;
 
 
 import adventureGame2D.GamePanel;
-import enums.InventoryObjectType;
+import enums.ObjectType;
 
 
 public class Boots extends GameObject {
@@ -22,7 +22,7 @@ public class Boots extends GameObject {
 	@Override
 	public void setDefaultAttributes() {
 		name = "Shaggy Soggy Boots";
-		objectDescription = "A timeless generational relic from your late father.\nSo unkempt from years of neglect.\nGives 1 Movement Speed.";
+		objectDescription = "A timeless generational relic from your late father.\nSo unkempt from years of neglect.\nGrants 1 Movement Speed.";
 		collisionOn = false;
 		down1 = setupEntity("boots", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 	}
@@ -34,7 +34,7 @@ public class Boots extends GameObject {
 
 	@Override
 	public void setInventoryType() {
-		this.inventoryType = InventoryObjectType.ACCESSORY;
+		this.inventoryType = ObjectType.ACCESSORY;
 	}
 }
 

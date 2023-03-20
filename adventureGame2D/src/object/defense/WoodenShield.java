@@ -1,7 +1,9 @@
-package object;
+package object.defense;
 
 import adventureGame2D.GamePanel;
-import enums.InventoryObjectType;
+import enums.ObjectType;
+import object.GameObject;
+import object.interfaces.DefenseObjectInterface;
 
 public class WoodenShield extends GameObject implements DefenseObjectInterface{
 	
@@ -9,9 +11,11 @@ public class WoodenShield extends GameObject implements DefenseObjectInterface{
 
 	GamePanel gp;
 	
-	public WoodenShield(GamePanel gp) {
+	public WoodenShield(GamePanel gp, int WorldX, int WorldY) {
 		super(gp);
 		this.gp = gp;
+		this.WorldX = WorldX * gp.getTileSize();
+		this.WorldY = WorldY * gp.getTileSize();
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
@@ -21,7 +25,7 @@ public class WoodenShield extends GameObject implements DefenseObjectInterface{
 		name = "Dusty Old Wooden Shield";
 		down1 = setupEntity("shield_wood", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 		defenseValue = 1;
-		objectDescription = "Honed from the finest craftsman in the land. \nTruly unbreakable, until it breaks. \nGives 1 Defense.";
+		objectDescription = "Honed from the finest craftsman in the land. \nTruly unbreakable, until it breaks. \nGrants 1 Defense.";
 		
 		
 	}
@@ -40,7 +44,7 @@ public class WoodenShield extends GameObject implements DefenseObjectInterface{
 
 	@Override
 	protected void setInventoryType() {
-		this.inventoryType = InventoryObjectType.DEFENSE;
+		this.inventoryType = ObjectType.DEFENSE;
 		
 	}
 

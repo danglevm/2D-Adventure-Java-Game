@@ -1,7 +1,8 @@
-package object;
+package object.nonpickup;
 
 import adventureGame2D.GamePanel;
-import enums.InventoryObjectType;
+import enums.ObjectType;
+import object.GameObject;
 
 
 public class Door extends GameObject {
@@ -40,7 +41,7 @@ public class Door extends GameObject {
 	
 	@Override
 	public void setInventoryType() {
-		this.inventoryType = InventoryObjectType.NONPICKUP;
+		this.inventoryType = ObjectType.NONPICKUP;
 		
 	}	
 	

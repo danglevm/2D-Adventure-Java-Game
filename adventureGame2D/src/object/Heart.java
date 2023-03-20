@@ -1,7 +1,7 @@
 package object;
 
 import adventureGame2D.GamePanel;
-import enums.InventoryObjectType;
+import enums.ObjectType;
 
 public class Heart extends GameObject {
 	
@@ -31,7 +31,7 @@ public class Heart extends GameObject {
 	
 	@Override
 	public void setInventoryType() {
-		this.inventoryType = InventoryObjectType.NONPICKUP;
+		this.inventoryType = ObjectType.NONPICKUP;
 		
 	}	
 }

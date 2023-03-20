@@ -1,7 +1,7 @@
 package object;
 
 import adventureGame2D.GamePanel;
-import enums.InventoryObjectType;
+import enums.ObjectType;
 
 
 public class Key extends GameObject {
@@ -38,7 +38,7 @@ public class Key extends GameObject {
 
 	@Override
 	public void setInventoryType() {
-		this.inventoryType = InventoryObjectType.INTERACT;
+		this.inventoryType = ObjectType.INTERACT;
 		
 	}
 	

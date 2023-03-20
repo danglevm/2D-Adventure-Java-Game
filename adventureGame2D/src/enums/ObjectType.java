@@ -12,7 +12,7 @@ package enums;
  * ACCESSORY - objects that add additional stats but does not lie in defense or attack
  * NONPICKUP - objects that cannot be pick up
  */
-public enum InventoryObjectType {
+public enum ObjectType {
 	ATTACK,
 	DEFENSE,
 	TOOL,

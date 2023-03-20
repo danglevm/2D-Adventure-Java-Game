@@ -2,7 +2,8 @@ package object;
 
 import adventureGame2D.GamePanel;
 import entity.Entity;
-import enums.InventoryObjectType;
+import enums.ObjectType;
+import object.interfaces.ObjectInterface;
 
 public abstract class GameObject extends Entity implements ObjectInterface{
 
@@ -10,11 +11,14 @@ public abstract class GameObject extends Entity implements ObjectInterface{
 	
 	protected boolean pickUpState;
 	
-	protected InventoryObjectType inventoryType;
+	protected ObjectType inventoryType;
+	
+	protected int encumbrance;
 
 	
 	public GameObject(GamePanel gp) {
 		super(gp);
+		encumbrance = 0;
 		
 	} 
 	
@@ -27,5 +31,7 @@ public abstract class GameObject extends Entity implements ObjectInterface{
 	
 	public boolean getPickUpState () { return pickUpState; }
 	
-	public InventoryObjectType getInventoryType () { return inventoryType; }
+	public int getEncumbrance () { return encumbrance; }
+	
+	public ObjectType getInventoryType () { return inventoryType; }
 }

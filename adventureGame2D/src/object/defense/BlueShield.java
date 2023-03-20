@@ -1,9 +1,11 @@
-package object;
+package object.defense;
 
 import adventureGame2D.GamePanel;
-import enums.InventoryObjectType;
+import enums.ObjectType;
+import object.GameObject;
+import object.interfaces.DefenseObjectInterface;
 
-public class BlueShield extends GameObject{
+public class BlueShield extends GameObject implements DefenseObjectInterface{
 	GamePanel gp;
 	
 	public BlueShield(GamePanel gp, int worldX, int worldY) {
@@ -14,12 +16,13 @@ public class BlueShield extends GameObject{
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		encumbrance = 2;
 	}
 
 	@Override
 	public void setDefaultAttributes() {
 		name = "Gooey Blue Shield";
-		objectDescription = "An unstoppable monstrosity of defense.\nSadly, you can only barely able to move it with one hand.\nGives 3 defense but slows player speed by 2.";
+		objectDescription = "An unstoppable monstrosity of defense.\nSadly, you can only barely able to move it with one hand.\nGrants 3 defense but slows you down by 2.";
 		collisionOn = false;
 		down1 = setupEntity("shield_blue", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 	}
@@ -31,7 +34,13 @@ public class BlueShield extends GameObject{
 
 	@Override
 	public void setInventoryType() {
-		this.inventoryType = InventoryObjectType.DEFENSE;
+		this.inventoryType = ObjectType.DEFENSE;
 		
+	}
+
+	@Override
+	public int getDefenseValue() {
+		// TODO Auto-generated method stub
+		return 3;
 	}
 }
