@@ -16,14 +16,16 @@ import enums.ObjectType;
 import enums.ToolType;
 import monster.Monster;
 import npc.NPC;
-import object.AttackObjectInterface;
-import object.BlueShield;
-import object.DefenseObjectInterface;
 import object.GameObject;
 import object.Key;
-import object.Sword;
-import object.ToolObjectInterface;
-import object.WoodenShield;
+import object.attack.Sword;
+import object.consummable.HealingPotion;
+import object.defense.BlueShield;
+import object.defense.WoodenShield;
+import object.interfaces.AttackObjectInterface;
+import object.interfaces.ConsummableInterface;
+import object.interfaces.DefenseObjectInterface;
+import object.interfaces.ToolObjectInterface;
 
 public class Player extends Entity {
 	
@@ -98,7 +100,6 @@ public class Player extends Entity {
 	private GameObject equippedWeapon;
 	private GameObject equippedShield;
 	private GameObject equippedTool;
-	private GameObject equippedConsummable;
 	private GameObject equippedAccessory1;
 	private GameObject equippedAccessory2;
 	/**
@@ -246,7 +247,6 @@ public class Player extends Entity {
 		equippedShield = defaultShield;
 		equippedAccessory1 = null;
 		equippedAccessory2 = null;
-		equippedConsummable = null;
 		equippedTool = null;
 	
 		
@@ -298,7 +298,6 @@ public class Player extends Entity {
 	
 	public void update() 
 	{
-		System.out.println(useTool);
 		this.updatePlayerAttributes();
 		collisionOn = false;	
 		this.checkLevelUp();
@@ -697,6 +696,7 @@ public class Player extends Entity {
 		inventory.add(equippedShield);
 		inventory.add(new BlueShield(gp, 0, 0));
 		inventory.add(new Key(gp, 0, 0));
+		inventory.add(new HealingPotion(gp, 0, 0));
 	}
 	
 	public void handleInventoryOptions(int option) {
@@ -706,7 +706,10 @@ public class Player extends Entity {
 		if (option == 0) {
 			switch (type) {
 			case CONSUMMABLE -> {
-				
+				//if player successfully uses consummable
+				if (((ConsummableInterface)selectedItem).useConsummable(this)) {
+					inventory.remove(selectedItem);
+				}
 			}
 			case ACCESSORY -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case ATTACK -> {
@@ -730,7 +733,7 @@ public class Player extends Entity {
 			inventory.remove(selectedItem);
 			switch (type) {
 			case CONSUMMABLE -> {
-				
+				//Doesn't do anything besides removing the item
 			}
 			case ACCESSORY -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case ATTACK -> {

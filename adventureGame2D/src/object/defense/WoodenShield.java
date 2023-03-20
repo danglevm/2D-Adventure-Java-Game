@@ -1,7 +1,9 @@
-package object;
+package object.defense;
 
 import adventureGame2D.GamePanel;
 import enums.ObjectType;
+import object.GameObject;
+import object.interfaces.DefenseObjectInterface;
 
 public class WoodenShield extends GameObject implements DefenseObjectInterface{
 	
@@ -23,7 +25,7 @@ public class WoodenShield extends GameObject implements DefenseObjectInterface{
 		name = "Dusty Old Wooden Shield";
 		down1 = setupEntity("shield_wood", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 		defenseValue = 1;
-		objectDescription = "Honed from the finest craftsman in the land. \nTruly unbreakable, until it breaks. \nGives 1 Defense.";
+		objectDescription = "Honed from the finest craftsman in the land. \nTruly unbreakable, until it breaks. \nGrants 1 Defense.";
 		
 		
 	}

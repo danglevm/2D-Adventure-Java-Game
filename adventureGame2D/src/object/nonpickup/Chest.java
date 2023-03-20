@@ -1,14 +1,14 @@
-package object;
-
+package object.nonpickup;
 import adventureGame2D.GamePanel;
 import enums.ObjectType;
+import object.GameObject;
 
 
-public class Door extends GameObject {
-
+public class Chest extends GameObject {
+	
 	GamePanel gp;
 	
-	public Door(GamePanel gp, int worldX, int worldY) {
+	public Chest(GamePanel gp, int worldX, int worldY) {  
 		super(gp);
 		this.gp = gp;
 		this.WorldX = worldX * gp.getTileSize();
@@ -18,18 +18,10 @@ public class Door extends GameObject {
 		setInventoryType();
 	}
 
+	@Override
 	public void setDefaultAttributes() {
-		name  = "Door";
-		 down1 = setupEntity("door","/objects/environment/", gp.getTileSize(), gp.getTileSize());
-		collisionOn = true;
-		
-		solidArea.x = 0;
-		solidArea.y = 16;
-		solidArea.width = 48;
-		solidArea.height = 32;
-		solidAreaDefaultX = solidArea.x;
-		solidAreaDefaultY = solidArea.y;
-		
+		 name = "chest";
+		 down1 = setupEntity("chest","/objects/environment/", gp.getTileSize(), gp.getTileSize());
 	}
 
 	@Override
@@ -37,14 +29,10 @@ public class Door extends GameObject {
 		this.pickUpState = false;
 		
 	}
-	
+
 	@Override
 	public void setInventoryType() {
 		this.inventoryType = ObjectType.NONPICKUP;
 		
-	}	
-	
-	
-} 
-
-
+	}		
+}

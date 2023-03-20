@@ -3,6 +3,7 @@ package object;
 import adventureGame2D.GamePanel;
 import entity.Entity;
 import enums.ObjectType;
+import object.interfaces.ObjectInterface;
 
 public abstract class GameObject extends Entity implements ObjectInterface{
 

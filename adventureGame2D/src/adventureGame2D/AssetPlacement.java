@@ -2,12 +2,12 @@ package adventureGame2D;
 
 import monster.MonsterGreenSlime;
 import npc.OldDude;
-import object.Axe;
 import object.Boots;
-import object.Chest;
-import object.Door;
 import object.Key;
-import object.Sword;
+import object.attack.Sword;
+import object.nonpickup.Chest;
+import object.nonpickup.Door;
+import object.tool.Axe;
 
 public class AssetPlacement {
 	//Class managed object placement

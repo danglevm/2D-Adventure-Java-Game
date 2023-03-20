@@ -1,7 +1,9 @@
-package object;
+package object.defense;
 
 import adventureGame2D.GamePanel;
 import enums.ObjectType;
+import object.GameObject;
+import object.interfaces.DefenseObjectInterface;
 
 public class BlueShield extends GameObject implements DefenseObjectInterface{
 	GamePanel gp;
@@ -20,7 +22,7 @@ public class BlueShield extends GameObject implements DefenseObjectInterface{
 	@Override
 	public void setDefaultAttributes() {
 		name = "Gooey Blue Shield";
-		objectDescription = "An unstoppable monstrosity of defense.\nSadly, you can only barely able to move it with one hand.\nGives 3 defense but slows player speed by 2.";
+		objectDescription = "An unstoppable monstrosity of defense.\nSadly, you can only barely able to move it with one hand.\nGrants 3 defense but slows you down by 2.";
 		collisionOn = false;
 		down1 = setupEntity("shield_blue", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 	}
