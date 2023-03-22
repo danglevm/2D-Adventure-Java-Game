@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
@@ -57,6 +59,7 @@ public class Player extends Entity {
 	
 	private int totalEncumbrance, netSpeed;
 	
+	private LinkedHashMap <String, String> attributeUpgrades = new LinkedHashMap <String, String>();
 
 	/*
 	 * Player attributes
@@ -74,31 +77,13 @@ public class Player extends Entity {
 				experience,
 				nextLevelExperience,
 				upgradePoints;
-	private String [] labels = {
-			"Name",
-			"Level",
-			"HP",
-			"HP Regeneration",
-			"Mana",
-			"Mana Regeneration",
-			"Strength",
-			"Defense",
-			"Dexterity",
-			"Stamina",
-			"Speed",
-			"Knockback",
-			"Critical Hit",
-			"Experience",
-			"Coins",
-			"Equipment",
-	};
-	
+
 	
 	/*
 	 * Equipped weapon and shield
 	 */
 	private GameObject equippedWeapon;
-	private GameObject equippedShield;
+	private GameObject equippedDefense;
 	private GameObject equippedTool;
 	private GameObject equippedAccessory1;
 	private GameObject equippedAccessory2;
@@ -220,37 +205,51 @@ public class Player extends Entity {
 		 */
 		entityType = EntityType.PLAYER;
 		name = "dr8d";
-		healthRegen = 0;
-		maxStamina = 120;
-		stamina = 0;
-		speed = 3;
 		totalEncumbrance = 0;
 		level = 1;
-		mana = 0;
-		manaRegen = 0;
-		strength = 0;
-		defense = 0;
-		dexterity = 0;
-		stamina = 0;
-		coin = 0;
-		experience = 8;
-		knockback = 0;
-		criticalHit = 0;
-		nextLevelExperience = 9;
-		upgradePoints = 0;
 		maxLife = 10;
 		life = maxLife;
+		stamina = 0;
+		
+		coin = 0;
+		experience = 8;
+	
+		nextLevelExperience = 9;
+		upgradePoints = 0;
+		
 		defaultWeapon = new Sword(gp, 0, 0);
 		defaultShield = new WoodenShield(gp, 0, 0);
 		
 		equippedWeapon = defaultWeapon;
-		equippedShield = defaultShield;
+		equippedDefense = defaultShield;
 		equippedAccessory1 = null;
 		equippedAccessory2 = null;
 		equippedTool = null;
 	
 		
 		addDefaultInventoryItems();
+		setAttributeDefaultUpgrades();
+		
+	}
+	
+	//store the number of upgrades
+	private final void setAttributeDefaultUpgrades() {
+		attributeUpgrades.put ("Name","null");
+		attributeUpgrades.put ("Level", "null");
+		attributeUpgrades.put ("HP", "0");
+		attributeUpgrades.put ("HP Regeneration", "0");
+		attributeUpgrades.put ("Mana", "0");
+		attributeUpgrades.put ("Mana Regeneration", "0");
+		attributeUpgrades.put ("Physical Strength", "0");
+		attributeUpgrades.put ("Defense", "0");
+		attributeUpgrades.put ("Dexterity", "0");
+		attributeUpgrades.put ("Stamina", "0");
+		attributeUpgrades.put ("Speed", "0");
+		attributeUpgrades.put ("Knockback", "0");
+		attributeUpgrades.put ("Critical Hit", "0");
+		attributeUpgrades.put ("Experience", "null");
+		attributeUpgrades.put ("Coins", "null");
+		attributeUpgrades.put ("Equipment", "null");
 	}
 	
 	private final void updatePlayerAttributes() {
@@ -259,19 +258,10 @@ public class Player extends Entity {
 		 * netspeed = default speed of 3 + speed upgrades - encumbrance - temporarily not
 		 */
 		netSpeed = 3;
-		/**
-		 * @var attackVal natural player's strength + weapon's attack value
-		 * @var defenseVal natural player's defense + shield/armor's defense value
-		 */
-		if (equippedWeapon != null) attackVal = strength + ((AttackObjectInterface)equippedWeapon).getAttackValue();
-		else attackVal = strength;
-		
-		if (equippedShield != null) defenseVal = defense + ((DefenseObjectInterface)equippedShield).getDefenseValue();
-		else defenseVal = defense;
-		
+
 		
 		//set the speed to be affected by equipment's encumbrance
-		if (equippedShield != null) totalEncumbrance += equippedShield.getEncumbrance();
+		if (equippedDefense != null) totalEncumbrance += equippedDefense.getEncumbrance();
 		
 		if (equippedWeapon != null) totalEncumbrance += equippedWeapon.getEncumbrance();
 		
@@ -281,7 +271,7 @@ public class Player extends Entity {
 		
 		if (equippedTool != null) totalEncumbrance += equippedTool.getEncumbrance();
 				
-		speed = netSpeed - totalEncumbrance;
+		speed = netSpeed - totalEncumbrance + Integer.parseInt(attributeUpgrades.get("Speed"));
 		
 		if (speed < 0) speed = 0;
 		
@@ -293,6 +283,33 @@ public class Player extends Entity {
 		 */
 		if (equippedWeapon != null)attackArea = equippedWeapon.attackArea;
 		else attackArea = defaultAttackArea;
+		
+		/**
+		 * UPDATING ATTRIBUTES AND UPGRADES
+		 */
+		maxLife = 10 + Integer.parseInt(attributeUpgrades.get("HP"));
+		healthRegen = 0 + Integer.parseInt(attributeUpgrades.get("HP Regeneration"));
+		knockback = 0 + Integer.parseInt(attributeUpgrades.get("Knockback"));
+		criticalHit = 0 + Integer.parseInt(attributeUpgrades.get("Critical Hit"));
+		mana = 0 + Integer.parseInt(attributeUpgrades.get("Mana"));
+		manaRegen = 0 + Integer.parseInt(attributeUpgrades.get("Mana Regeneration"));
+		strength = 0 + Integer.parseInt(attributeUpgrades.get("Physical Strength"));
+		defense = 0 + Integer.parseInt(attributeUpgrades.get("Defense"));
+		dexterity = 0 + Integer.parseInt(attributeUpgrades.get("Dexterity"));
+		maxStamina = 120 + Integer.parseInt(attributeUpgrades.get("Stamina")) * 60;
+		
+		
+		/**
+		 * @var attackVal natural player's strength + weapon's attack value
+		 * @var defenseVal natural player's defense + shield/armor's defense value
+		 */
+		if (equippedWeapon != null) attackVal = strength + ((AttackObjectInterface)equippedWeapon).getAttackValue();
+		else attackVal = strength;
+		
+		if (equippedDefense != null) defenseVal = defense + ((DefenseObjectInterface)equippedDefense).getDefenseValue();
+		else defenseVal = defense;
+		
+		
 	}
 	
 	
@@ -693,7 +710,7 @@ public class Player extends Entity {
 	
 	private final void addDefaultInventoryItems() {
 		inventory.add(equippedWeapon);
-		inventory.add(equippedShield);
+		inventory.add(equippedDefense);
 		inventory.add(new BlueShield(gp, 0, 0));
 		inventory.add(new Key(gp, 0, 0));
 		inventory.add(new HealingPotion(gp, 0, 0));
@@ -713,14 +730,26 @@ public class Player extends Entity {
 			}
 			case ACCESSORY -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case ATTACK -> {
-				this.equippedWeapon = selectedItem;
+				if (selectedItem == this.equippedWeapon) {
+					this.equippedWeapon = null;
+				} else {
+					this.equippedWeapon = selectedItem;
+				}
 			}
 			case DEFENSE -> {
-				this.equippedShield = selectedItem;
+				if (selectedItem == this.equippedDefense) {
+					this.equippedDefense = null;
+				} else {
+					this.equippedDefense = selectedItem;
+				}
 			}
 			case INTERACT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case TOOL -> {
-				this.equippedTool = selectedItem;
+				if (selectedItem == this.equippedTool) {
+					this.equippedTool = null;
+				} else {
+					this.equippedTool = selectedItem;
+				}
 			}
 			case NONPICKUP -> throw new UnsupportedOperationException("Unknown case: " + type);
 			default -> throw new IllegalArgumentException("Unknown case: " + type);
@@ -737,10 +766,10 @@ public class Player extends Entity {
 			}
 			case ACCESSORY -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case ATTACK -> {
-				if (selectedItem == this.equippedWeapon) this.equippedWeapon = null;
+				this.equippedWeapon = null;
 			}
 			case DEFENSE -> {
-				if (selectedItem == this.equippedShield) this.equippedShield = null;
+				if (selectedItem == this.equippedDefense) this.equippedDefense = null;
 			}
 			case INTERACT -> {}
 			case TOOL -> {
@@ -770,10 +799,6 @@ public class Player extends Entity {
 	public boolean getPlayerUseTool () { return useTool; }
 	
 	public void setPlayerUseTool (boolean useTool) { this.useTool = useTool; }
-	
-	public String[] getLabelArray () { return labels; }
-	
-	public String getLabelEntries (int i) { return labels[i]; }
 	
 	public int getLevel () { return level; }
 	
@@ -805,9 +830,13 @@ public class Player extends Entity {
 	
 	public GameObject getEquippedWeapon () { return equippedWeapon; }
 	
-	public GameObject getEquippedShield () { return equippedShield; }
+	public GameObject getEquippedDefense () { return equippedDefense; }
+	
+	public GameObject getEquippedTool () { return equippedTool; }
 	
 	public ArrayList <GameObject> getInventory () { return inventory; } 
+	
+	public LinkedHashMap <String, String> getUpgradeValue() { return attributeUpgrades;}
 	
 	
 }

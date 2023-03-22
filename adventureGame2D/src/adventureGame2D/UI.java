@@ -16,6 +16,7 @@ import enums.GameState;
 import enums.ObjectType;
 import enums.InventoryState;
 import enums.TitleState;
+import object.GameObject;
 import object.Heart;
 import quotes.PauseQuotes;
 import quotes.StatusAttribute;
@@ -40,7 +41,12 @@ public class UI {
 	Color nameColor1 = new Color(253, 218, 13);
 	Color nameColor2 = new Color(196, 30, 58);
 	
+	//Inventory option cursor color
 	Color optionColor = new Color(247, 135, 2);
+	
+	Color equippedWeaponColor = new Color(240,190,90),
+		  equippedDefenseColor = new Color(121,68,59),
+		  equippedToolColor = new Color(175, 225, 175);
 	
 	protected int cursorNum = 0, statusCursor = 0, inventoryOptionCursor = 0;
 	
@@ -398,12 +404,27 @@ public class UI {
 		int valueX = frameX + 30,
 			valueY = frameY + gp.getTileSize(),
 			lineHeight = 36,
-			rectTailX = (frameX + frameWidth) - gp.getTileSize() * 3;
+			rectTailX = (frameX + frameWidth) - gp.getTileSize() * 3,
+			tempCount = 0;
 		
+		/**
+		 * DRAWS DESCRIPTION Frame 
+		 */
 		
-		for (int i = 0; i < player.getLabelArray().length; ++i) {
-			if (i == statusCursor + 2) g2.setColor(optionColor);
-			g2.drawString(player.getLabelEntries(i), valueX, valueY);
+		final int descFrameX = frameX + frameWidth + 10,
+				  descFrameY = frameY,
+				  descFrameWidth = gp.getTileSize() * 5,
+				  descFrameHeight = gp.getTileSize() * 13;
+		drawSubWindow(descFrameX, descFrameY, descFrameWidth, descFrameHeight);
+		
+		for (String label : player.getUpgradeValue().keySet()) {
+			if (tempCount == statusCursor + 2)  {
+				g2.setColor(nameColor1);
+				g2.drawString(label, frameX + frameWidth + 30, frameY + gp.getTileSize());
+				g2.setColor(optionColor);
+			}
+			g2.drawString(label, valueX, valueY);
+			++tempCount;
 			valueY += lineHeight;
 			g2.setColor(Color.white);
 		}
@@ -412,11 +433,15 @@ public class UI {
 		int defaultRectTailX = rectTailX;
 		g2.setStroke(new java.awt.BasicStroke(1));
 		
-		for (int i = 0; i < player.getLabelArray().length - 3; ++i) {
+		
+		/**
+		 * DRAW UPGRADE SQUARES
+		 */
+		for (int i = 0; i < player.getUpgradeValue().size() - 3; ++i) {
 			for (int a = 0; a < 3; ++a) {
 				if (i == 0 || i == 1) continue;
 				//skips the first two labels
-				if (i == statusCursor + 2)g2.setColor(optionColor);
+				if (i == statusCursor + 2) g2.setColor(optionColor);
 				g2.drawRect(rectTailX, valueY - 20, 20, 20);
 				rectTailX += 30;
 			}
@@ -445,7 +470,7 @@ public class UI {
 				player.getTotalDefense(),
 				player.getDexterity(),
 				player.getStamina(),
-				player.getSpeed() - 3,
+				player.getSpeed(),
 				player.getKnockback(),
 				player.getCriticalHit(),
 		};
@@ -479,30 +504,22 @@ public class UI {
 		
 		g2.drawString(String.valueOf(player.getCoin()), getXValuesAlign(String.valueOf(gp.getPlayer().getCoin()), tailX), valueY);	
 		valueY += 11;
-		
-		g2.drawImage(player.getEquippedWeapon().getDown1(), tailX - gp.getTileSize(), valueY, null);
-		g2.drawImage(player.getEquippedShield().getDown1(), tailX, valueY , null);
-		
+		if (player.getEquippedWeapon() != null) {
+			g2.drawImage(player.getEquippedWeapon().getDown1(), tailX - gp.getTileSize(), valueY, null);
+		}
+		if (player.getEquippedDefense() != null) {
+			g2.drawImage(player.getEquippedDefense().getDown1(), tailX, valueY , null);
+		}
 		
 		/**
-		 * Draw cursor
+		 * Draw status cursor
 		 */
 		g2.setColor(optionColor);
 		int tempValY = defaultY + (lineHeight * statusCursor);
 		g2.drawString(">", tailX - gp.getTileSize(), tempValY);
 		g2.setColor(Color.white);
 		
-		/**
-		 * DRAWS DESCRIPTION Frame and desc
-		 */
 		
-		final int descFrameX = frameX + frameWidth + 10,
-				  descFrameY = frameY,
-				  descFrameWidth = gp.getTileSize() * 5,
-				  descFrameHeight = gp.getTileSize() * 13;
-		drawSubWindow(descFrameX, descFrameY, descFrameWidth, descFrameHeight);
-		g2.setColor(nameColor1);
-		g2.drawString(player.getLabelEntries(statusCursor + 2), descFrameX + 20, descFrameY + gp.getTileSize());
 		g2.drawString("CURRENT LEVEL: ", descFrameX + 20, descFrameY + descFrameHeight - 20);
 		g2.setColor(Color.white);
 		
@@ -581,12 +598,15 @@ public class UI {
 			if (i < player.getInventory().size()) {	
 				Entity currentItem = (Entity) player.getInventory().get(i);
 				
-				//Draw inventory equipment cursor
+				//Draw equipped inventory items
 				if (currentItem.equals(player.getEquippedWeapon())) {
-					g2.setColor(new Color(240,190,90));		
+					g2.setColor(equippedWeaponColor);		
 					g2.fillRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);	
-				} else if (currentItem.equals(player.getEquippedShield())) {
-					g2.setColor(new Color(121,68,59));	
+				} else if (currentItem.equals(player.getEquippedDefense())) {
+					g2.setColor(equippedDefenseColor);	
+					g2.fillRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);	
+				} else if (currentItem.equals(player.getEquippedTool())) {
+					g2.setColor(equippedToolColor);
 					g2.fillRoundRect(slotX, slotY, gp.getTileSize() * 2, gp.getTileSize() * 2, 10, 10);	
 				}
 					
@@ -685,6 +705,7 @@ public class UI {
 		if (inventoryState == InventoryState.OPTIONS) {			
 			if (itemIndex < player.getInventory().size()) {
 			ObjectType type = player.getInventory().get(itemIndex).getInventoryType();
+			GameObject selectedItem = player.getInventory().get(itemIndex);
 			int inventoryOptionsFrameX = tileSize * 10,
 				inventoryOptionsFrameY = defaultSlotY,
 				inventoryOptionsFrameWidth = tileSize * 3 + 25,
@@ -695,7 +716,7 @@ public class UI {
 			
 			this.drawSubWindow(inventoryOptionsFrameX, inventoryOptionsFrameY, inventoryOptionsFrameWidth, inventoryOptionsFrameHeight);
 			//draw cursor for the thing later
-			this.drawInventoryOptions(inventoryOptionsFrameX, inventoryOptionsFrameY, type, inventoryOptionCursor);
+			this.drawInventoryOptions(inventoryOptionsFrameX, inventoryOptionsFrameY, type, inventoryOptionCursor, selectedItem);
 			
 			g2.setColor(optionColor);
 			g2.drawString("<", optionCursorX, optionCursorY);
@@ -711,26 +732,29 @@ public class UI {
 	
 	}
 	
-	private final void drawInventoryOptions (int x, int y, ObjectType type, int cursorLoc) {
+	private final void drawInventoryOptions (int x, int y, ObjectType type, int cursorLoc, GameObject selectedItem) {
 		int lineHeight = 36,
 			optionX = x + 20,
 			optionY = y + 50;
+		Player player = gp.getPlayer();
+		if (cursorLoc == 0) g2.setColor(optionColor);
 		switch (type) {
 		case CONSUMMABLE, INTERACT -> {
-			
-			if (cursorLoc == 0) g2.setColor(optionColor);
-			
 			g2.drawString("USE", optionX, optionY);
 		}
 		case ATTACK, DEFENSE, TOOL, ACCESSORY -> {
+			if (selectedItem.equals(player.getEquippedDefense()) || selectedItem.equals(player.getEquippedWeapon()) 
+					|| selectedItem.equals(player.getEquippedTool())){
+				g2.drawString("UNEQUIP", optionX, optionY);
+			} else {
+				g2.drawString("EQUIP", optionX, optionY);
+			}
 			
-			if (cursorLoc == 0) g2.setColor(optionColor);
-			
-			g2.drawString("EQUIP", optionX, optionY);
-		}
+		} 
 		case NONPICKUP -> throw new IllegalArgumentException("Cannot be defined: " + type);
 		default -> throw new IllegalArgumentException("Unexpected value: " + type);
 	}
+		
 		g2.setColor(Color.white);
 		
 		if ( cursorLoc == 1) { g2.setColor(optionColor);}

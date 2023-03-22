@@ -3,9 +3,9 @@ package object;
 import adventureGame2D.GamePanel;
 import entity.Entity;
 import enums.ObjectType;
-import object.interfaces.ObjectInterface;
 
-public abstract class GameObject extends Entity implements ObjectInterface{
+
+public abstract class GameObject extends Entity{
 
 	protected String objectDescription;
 	
@@ -26,6 +26,8 @@ public abstract class GameObject extends Entity implements ObjectInterface{
 	protected abstract void setPickupState();
 	
 	protected abstract void setInventoryType();
+	
+	protected abstract void setDefaultAttributes();
 
 	public String getObjectDescription () { return objectDescription; }
 	

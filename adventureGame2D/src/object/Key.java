@@ -19,8 +19,8 @@ public class Key extends GameObject {
 		setInventoryType();
 	}
 	
-	
-	public void setDefaultAttributes() {
+	@Override
+	protected void setDefaultAttributes() {
 		name = "Dirty Golden Key";
 		collisionOn = false;
 		down1 = setupEntity("key", "/objects/environment/", gp.getTileSize(), gp.getTileSize());
