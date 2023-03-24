@@ -259,6 +259,8 @@ public class KeyHandler implements KeyListener{
 		 
 		if (gp.getGameUI().statusCursor < 0) gp.getGameUI().statusCursor = 0;
 		
+		if (code == KeyEvent.VK_ENTER) gp.getPlayer().upgradeAttribute(gp.getGameUI().statusCursor);
+		
 	}
 	
 	private final void inventoryState (int code) {
