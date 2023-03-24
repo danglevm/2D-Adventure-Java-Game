@@ -236,17 +236,17 @@ public class Player extends Entity {
 	private final void setAttributeDefaultUpgrades() {
 		attributeUpgrades.put ("Name","null");
 		attributeUpgrades.put ("Level", "null");
-		attributeUpgrades.put ("HP", "0");
-		attributeUpgrades.put ("HP Regeneration", "0");
-		attributeUpgrades.put ("Mana", "0");
-		attributeUpgrades.put ("Mana Regeneration", "0");
-		attributeUpgrades.put ("Physical Strength", "0");
-		attributeUpgrades.put ("Defense", "0");
-		attributeUpgrades.put ("Dexterity", "0");
-		attributeUpgrades.put ("Stamina", "0");
-		attributeUpgrades.put ("Speed", "0");
-		attributeUpgrades.put ("Knockback", "0");
-		attributeUpgrades.put ("Critical Hit", "0");
+		attributeUpgrades.put ("HP", "2");
+		attributeUpgrades.put ("HP Regeneration", "3");
+		attributeUpgrades.put ("Mana", "2");
+		attributeUpgrades.put ("Mana Regeneration", "2");
+		attributeUpgrades.put ("Physical Strength", "3");
+		attributeUpgrades.put ("Defense", "2");
+		attributeUpgrades.put ("Dexterity", "1");
+		attributeUpgrades.put ("Stamina", "2");
+		attributeUpgrades.put ("Speed", "3");
+		attributeUpgrades.put ("Knockback", "3");
+		attributeUpgrades.put ("Critical Hit", "2");
 		attributeUpgrades.put ("Experience", "null");
 		attributeUpgrades.put ("Coins", "null");
 		attributeUpgrades.put ("Equipment", "null");

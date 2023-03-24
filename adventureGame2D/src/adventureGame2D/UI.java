@@ -9,6 +9,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import entity.Entity;
 import entity.Player;
@@ -437,13 +441,30 @@ public class UI {
 		/**
 		 * DRAW UPGRADE SQUARES
 		 */
+		//Use iterator to loop through the hashmap
+		//entry.set().iterator - retrieves all the elements from the hashmap and places the cursor of the
+		//iterator at the first element
+		Iterator<Entry<String, String>> upgradeIterator = player.getUpgradeValue().entrySet().iterator();
+		int upgradeLevel = 0;
+		
 		for (int i = 0; i < player.getUpgradeValue().size() - 3; ++i) {
+			
+			if (upgradeIterator.hasNext()) {
+					Map.Entry<String,String> entry = upgradeIterator.next();
+					if (entry.getValue() != "null") { 
+						upgradeLevel = Integer.parseInt(entry.getValue());
+					}
+			}
+			
+		
 			for (int a = 0; a < 3; ++a) {
 				if (i == 0 || i == 1) continue;
 				//skips the first two labels
 				if (i == statusCursor + 2) g2.setColor(optionColor);
-				g2.drawRect(rectTailX, valueY - 20, 20, 20);
-				rectTailX += 30;
+				g2.drawRect(rectTailX + 30 * a, valueY - 20, 21, 21);
+				for (int b = 0; b < upgradeLevel; ++b) {
+					g2.fillRect(rectTailX + 2 + 30 * b, valueY - 18, 18, 18);
+				}
 			}
 			g2.setColor(Color.white);
 			valueY += lineHeight;
@@ -479,7 +500,6 @@ public class UI {
 		valueY += lineHeight;
 		int defaultY = valueY;
 	
-		
 		if (statusCursor == 0) g2.setColor(optionColor);
 		String value = String.valueOf(player.getLife() + "/" + player.getMaxLife());
 		g2.drawString(value, getXValuesAlign(value, tailX), valueY);
