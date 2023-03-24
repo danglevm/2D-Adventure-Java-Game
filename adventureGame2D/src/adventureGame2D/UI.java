@@ -444,15 +444,15 @@ public class UI {
 		//Use iterator to loop through the hashmap
 		//entry.set().iterator - retrieves all the elements from the hashmap and places the cursor of the
 		//iterator at the first element
-		Iterator<Entry<String, String>> upgradeIterator = player.getUpgradeValue().entrySet().iterator();
+		Iterator<Entry<String, Integer>> upgradeIterator = player.getUpgradeValue().entrySet().iterator();
 		int upgradeLevel = 0;
 		
 		for (int i = 0; i < player.getUpgradeValue().size() - 3; ++i) {
 			
 			if (upgradeIterator.hasNext()) {
-					Map.Entry<String,String> entry = upgradeIterator.next();
-					if (entry.getValue() != "null") { 
-						upgradeLevel = Integer.parseInt(entry.getValue());
+					Map.Entry<String,Integer> entry = upgradeIterator.next();
+					if (entry.getValue() != null) { 
+						upgradeLevel = entry.getValue();
 					}
 			}
 			

@@ -7,7 +7,10 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
@@ -59,7 +62,9 @@ public class Player extends Entity {
 	
 	private int totalEncumbrance, netSpeed;
 	
-	private LinkedHashMap <String, String> attributeUpgrades = new LinkedHashMap <String, String>();
+	private LinkedHashMap <String, Integer> attributeUpgrades = new LinkedHashMap <String, Integer>();
+	
+	private int upgradePoints = 0;
 
 	/*
 	 * Player attributes
@@ -75,8 +80,7 @@ public class Player extends Entity {
 				criticalHit,
 				coin,
 				experience,
-				nextLevelExperience,
-				upgradePoints;
+				nextLevelExperience;
 
 	
 	/*
@@ -100,7 +104,14 @@ public class Player extends Entity {
 				defenseVal;
 	
 	
+	
+	
 	//-------------------------------CONSTRUCTORS------------------
+	/**
+	 * 
+	 * @param gp
+	 * @param keyH
+	 */
 	public Player (GamePanel gp, KeyHandler keyH) {
 		super(gp);
 		this.keyH = keyH;
@@ -234,22 +245,22 @@ public class Player extends Entity {
 	
 	//store the number of upgrades
 	private final void setAttributeDefaultUpgrades() {
-		attributeUpgrades.put ("Name","null");
-		attributeUpgrades.put ("Level", "null");
-		attributeUpgrades.put ("HP", "2");
-		attributeUpgrades.put ("HP Regeneration", "3");
-		attributeUpgrades.put ("Mana", "2");
-		attributeUpgrades.put ("Mana Regeneration", "2");
-		attributeUpgrades.put ("Physical Strength", "3");
-		attributeUpgrades.put ("Defense", "2");
-		attributeUpgrades.put ("Dexterity", "1");
-		attributeUpgrades.put ("Stamina", "2");
-		attributeUpgrades.put ("Speed", "3");
-		attributeUpgrades.put ("Knockback", "3");
-		attributeUpgrades.put ("Critical Hit", "2");
-		attributeUpgrades.put ("Experience", "null");
-		attributeUpgrades.put ("Coins", "null");
-		attributeUpgrades.put ("Equipment", "null");
+		attributeUpgrades.put ("Name", null);
+		attributeUpgrades.put ("Level", null);
+		attributeUpgrades.put ("HP", 0);
+		attributeUpgrades.put ("HP Regeneration", 0);
+		attributeUpgrades.put ("Mana", 0);
+		attributeUpgrades.put ("Mana Regeneration", 0);
+		attributeUpgrades.put ("Physical Strength", 0);
+		attributeUpgrades.put ("Defense", 0);
+		attributeUpgrades.put ("Dexterity", 0);
+		attributeUpgrades.put ("Stamina", 0);
+		attributeUpgrades.put ("Speed", 0);
+		attributeUpgrades.put ("Knockback", 0);
+		attributeUpgrades.put ("Critical Hit", 0);
+		attributeUpgrades.put ("Experience", null);
+		attributeUpgrades.put ("Coins", null);
+		attributeUpgrades.put ("Equipment", null);
 	}
 	
 	private final void updatePlayerAttributes() {
@@ -271,7 +282,7 @@ public class Player extends Entity {
 		
 		if (equippedTool != null) totalEncumbrance += equippedTool.getEncumbrance();
 				
-		speed = netSpeed - totalEncumbrance + Integer.parseInt(attributeUpgrades.get("Speed"));
+		speed = netSpeed - totalEncumbrance + attributeUpgrades.get("Speed");
 		
 		if (speed < 0) speed = 0;
 		
@@ -287,16 +298,16 @@ public class Player extends Entity {
 		/**
 		 * UPDATING ATTRIBUTES AND UPGRADES
 		 */
-		maxLife = 10 + Integer.parseInt(attributeUpgrades.get("HP"));
-		healthRegen = 0 + Integer.parseInt(attributeUpgrades.get("HP Regeneration"));
-		knockback = 0 + Integer.parseInt(attributeUpgrades.get("Knockback"));
-		criticalHit = 0 + Integer.parseInt(attributeUpgrades.get("Critical Hit"));
-		mana = 0 + Integer.parseInt(attributeUpgrades.get("Mana"));
-		manaRegen = 0 + Integer.parseInt(attributeUpgrades.get("Mana Regeneration"));
-		strength = 0 + Integer.parseInt(attributeUpgrades.get("Physical Strength"));
-		defense = 0 + Integer.parseInt(attributeUpgrades.get("Defense"));
-		dexterity = 0 + Integer.parseInt(attributeUpgrades.get("Dexterity"));
-		maxStamina = 120 + Integer.parseInt(attributeUpgrades.get("Stamina")) * 60;
+		maxLife = 10 + attributeUpgrades.get("HP");
+		healthRegen = 0 + attributeUpgrades.get("HP Regeneration");
+		knockback = 0 + attributeUpgrades.get("Knockback");
+		criticalHit = 0 + attributeUpgrades.get("Critical Hit");
+		mana = 0 + attributeUpgrades.get("Mana");
+		manaRegen = 0 + attributeUpgrades.get("Mana Regeneration");
+		strength = 0 + attributeUpgrades.get("Physical Strength");
+		defense = 0 + attributeUpgrades.get("Defense");
+		dexterity = 0 + attributeUpgrades.get("Dexterity");
+		maxStamina = 120 + attributeUpgrades.get("Stamina") * 60;
 		
 		
 		/**
@@ -579,9 +590,7 @@ public class Player extends Entity {
 				staminaEnabled = false;
 			}
 			
-			
 		}
-		
 		++staminaRechargeCounter;
 		
 		//16 pixels
@@ -785,6 +794,32 @@ public class Player extends Entity {
 		}
 	}
 	
+	public final boolean upgradeAttribute (int attributeLocation) {
+		
+		Iterator<Entry<String, Integer>> upgradeIterator = this.attributeUpgrades.entrySet().iterator();
+		Map.Entry<String,Integer> entry = null;
+		
+		//Set the starting cursor of the iterator
+		for (int a  = 0; a < 3; ++a) {
+			if (upgradeIterator.hasNext()) {
+				entry = upgradeIterator.next();
+			}
+		}
+		for (int i  = 0; i < attributeLocation; ++i) {
+			if (upgradeIterator.hasNext()) {
+				entry = upgradeIterator.next();
+		}
+		
+		}
+		System.out.println(entry.getValue());
+		if (entry.getValue() < 3 && entry.getValue() != null) {
+			attributeUpgrades.put(entry.getKey(), attributeUpgrades.getOrDefault(entry.getKey(), 0) + 1);
+			return true;
+		}
+		
+		return false;
+	}
+	
 	/*
 	 * SETTERS and GETTERS
 	 */
@@ -836,7 +871,7 @@ public class Player extends Entity {
 	
 	public ArrayList <GameObject> getInventory () { return inventory; } 
 	
-	public LinkedHashMap <String, String> getUpgradeValue() { return attributeUpgrades;}
+	public LinkedHashMap <String, Integer> getUpgradeValue() { return attributeUpgrades;}
 	
 	
 }
