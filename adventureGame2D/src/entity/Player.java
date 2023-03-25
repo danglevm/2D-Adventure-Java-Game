@@ -31,6 +31,7 @@ import object.interfaces.AttackObjectInterface;
 import object.interfaces.ConsummableInterface;
 import object.interfaces.DefenseObjectInterface;
 import object.interfaces.ToolObjectInterface;
+import projectile.Projectile;
 
 public class Player extends Entity {
 	
@@ -56,6 +57,8 @@ public class Player extends Entity {
 	
 	private boolean useTool;
 	
+	private boolean castSpell;
+	
 	private boolean staminaEnabled;
 	
 	private ArrayList <GameObject> inventory = new ArrayList<GameObject>();
@@ -64,7 +67,8 @@ public class Player extends Entity {
 	
 	private LinkedHashMap <String, Integer> attributeUpgrades = new LinkedHashMap <String, Integer>();
 	
-	private int upgradePoints = 0;
+	private int upgradePoints = 0,
+				usedPoints = 0;
 
 	/*
 	 * Player attributes
@@ -96,6 +100,7 @@ public class Player extends Entity {
 	 */
 	private GameObject defaultWeapon;
 	private GameObject defaultShield;
+	private Projectile currentProjectile;
 	
 	/*
 	 * Item attributes
@@ -191,6 +196,7 @@ public class Player extends Entity {
 		
 		playerAttack = false;
 		useTool = false;
+		castSpell = false;
 		
 		//stamina
 		actionCost = 60;
@@ -223,10 +229,10 @@ public class Player extends Entity {
 		stamina = 0;
 		
 		coin = 0;
-		experience = 8;
+		experience = 0;
 	
 		nextLevelExperience = 9;
-		upgradePoints = 0;
+		upgradePoints = 10;
 		
 		defaultWeapon = new Sword(gp, 0, 0);
 		defaultShield = new WoodenShield(gp, 0, 0);
@@ -251,7 +257,7 @@ public class Player extends Entity {
 		attributeUpgrades.put ("HP Regeneration", 0);
 		attributeUpgrades.put ("Mana", 0);
 		attributeUpgrades.put ("Mana Regeneration", 0);
-		attributeUpgrades.put ("Physical Strength", 0);
+		attributeUpgrades.put ("Power", 0);
 		attributeUpgrades.put ("Defense", 0);
 		attributeUpgrades.put ("Dexterity", 0);
 		attributeUpgrades.put ("Stamina", 0);
@@ -298,13 +304,13 @@ public class Player extends Entity {
 		/**
 		 * UPDATING ATTRIBUTES AND UPGRADES
 		 */
-		maxLife = 10 + attributeUpgrades.get("HP");
+		maxLife = 10 + 2 * attributeUpgrades.get("HP");
 		healthRegen = 0 + attributeUpgrades.get("HP Regeneration");
 		knockback = 0 + attributeUpgrades.get("Knockback");
 		criticalHit = 0 + attributeUpgrades.get("Critical Hit");
 		mana = 0 + attributeUpgrades.get("Mana");
 		manaRegen = 0 + attributeUpgrades.get("Mana Regeneration");
-		strength = 0 + attributeUpgrades.get("Physical Strength");
+		strength = 0 + attributeUpgrades.get("Power");
 		defense = 0 + attributeUpgrades.get("Defense");
 		dexterity = 0 + attributeUpgrades.get("Dexterity");
 		maxStamina = 120 + attributeUpgrades.get("Stamina") * 60;
@@ -364,7 +370,7 @@ public class Player extends Entity {
 					if (gp.getMonsters().get(monsterIndex) instanceof Monster) {
 						((Monster) gp.getMonsters().get(monsterIndex)).damagePlayer(this);;
 					}
-					gp.playSE(6);
+					
 				}
 			}
 			
@@ -690,6 +696,10 @@ public class Player extends Entity {
 					monster.alive = false;
 					monster.dying = true;
 					
+				
+					
+
+					
 					if (monster instanceof Monster) {
 						gp.getGameUI().addSubtitleMsg(this.name + " gained " + ((Monster)monster).getMonsterExperience()
 																+ " experience ");
@@ -808,17 +818,32 @@ public class Player extends Entity {
 		for (int i  = 0; i < attributeLocation; ++i) {
 			if (upgradeIterator.hasNext()) {
 				entry = upgradeIterator.next();
+			}
 		}
 		
-		}
-		System.out.println(entry.getValue());
-		if (entry.getValue() < 3 && entry.getValue() != null) {
-			attributeUpgrades.put(entry.getKey(), attributeUpgrades.getOrDefault(entry.getKey(), 0) + 1);
+		if (entry.getKey() == "Experience" && entry.getValue() == null) {
+			resetUpgradePoints();
 			return true;
 		}
 		
+		if (entry.getValue() < 3 && entry.getValue() != null && upgradePoints != 0) {
+			attributeUpgrades.put(entry.getKey(), attributeUpgrades.getOrDefault(entry.getKey(), 0) + 1);
+			--upgradePoints;
+			++usedPoints;
+			return true;
+		}
+		
+	
+		
 		return false;
 	}
+	
+	private final void resetUpgradePoints () {
+		upgradePoints += usedPoints;
+		usedPoints = 0;
+		this.setAttributeDefaultUpgrades();
+	}
+
 	
 	/*
 	 * SETTERS and GETTERS
@@ -834,6 +859,10 @@ public class Player extends Entity {
 	public boolean getPlayerUseTool () { return useTool; }
 	
 	public void setPlayerUseTool (boolean useTool) { this.useTool = useTool; }
+	
+	public boolean getPlayerCastSpell () { return castSpell; }
+	
+	public void setPlayerCastSpell (boolean castSpell) { this.castSpell = castSpell; }
 	
 	public int getLevel () { return level; }
 	

@@ -28,7 +28,7 @@ public class Sword extends GameObject implements AttackObjectInterface {
 		name = "Old Shabby Metal Sword";
 		down1 = setupEntity("sword_normal", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 		attackValue = 2;
-		objectDescription = "A most fitting companion for a true hero... \nExcept you are a bum. A piece of scrap metal now. \nGrants 1 physical attack.";
+		objectDescription = "A most fitting companion for a true hero... \nExcept you are a bum. A piece of scrap metal now. \nGrants 1 power and sword swinging.";
 		attackArea.width = 36;
 		attackArea.height = 36;
 	}
