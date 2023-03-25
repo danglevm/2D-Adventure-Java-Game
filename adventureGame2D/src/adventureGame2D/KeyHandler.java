@@ -12,15 +12,16 @@ public class KeyHandler implements KeyListener{
 	GamePanel gp;
 
 	private boolean upPress, downPress, leftPress, rightPress; 
-	private boolean dialoguePress; 
+	private boolean dialogue; 
 	private boolean fpsDisplay; 
 	private boolean pauseQuote;
 	private boolean interaction;
+	
 
 	
 	public KeyHandler (GamePanel gp) {
 		this.gp = gp;
-		dialoguePress = false;
+		dialogue = false;
 		fpsDisplay = false;
 		pauseQuote = false;
 		interaction = false;
@@ -29,8 +30,8 @@ public class KeyHandler implements KeyListener{
 	/**
 	 * Setters and getters
 	 */
-	public boolean getDialoguePress () { return dialoguePress;}
-	public void setDialoguePress (boolean dialoguePressed) { this.dialoguePress = dialoguePressed; }
+	public boolean getDialoguePress () { return dialogue;}
+	public void setDialoguePress (boolean dialoguePressed) { this.dialogue = dialoguePressed; }
 	
 	public boolean getFpsDisplay () { return fpsDisplay;}
 	public void getFpsDisplay (boolean fpsDisplay) { this.fpsDisplay = fpsDisplay; }
@@ -199,7 +200,7 @@ public class KeyHandler implements KeyListener{
 		//Change to status state
 		if (code == KeyEvent.VK_C) gp.setGameState(GameState.STATUS);
 		
-		if (code == KeyEvent.VK_ENTER) dialoguePress = !dialoguePress;
+		if (code == KeyEvent.VK_ENTER) dialogue = !dialogue;
 		
 		//Change to inventory state
 		if (code == KeyEvent.VK_E) {
@@ -223,6 +224,11 @@ public class KeyHandler implements KeyListener{
 		 * Trigger player to use current equipped tool
 		 */
 		if (code == KeyEvent.VK_K) gp.getPlayer().setPlayerUseTool(true);
+	
+		/**
+		 * Trigger player to use current spell
+		 */
+		if (code == KeyEvent.VK_L) gp.getPlayer().setPlayerCastSpell(true);
 		/*
 		 * Player stands near interactive event and can trigger events
 		 */
@@ -323,7 +329,7 @@ public class KeyHandler implements KeyListener{
 		
 		int code = e.getKeyCode();
 		/*
-		 * Check if keys are in use
+		 * Check if keys are being pressed
 		 */
 		if (code == KeyEvent.VK_W) upPress = false;
 		
@@ -332,6 +338,8 @@ public class KeyHandler implements KeyListener{
 		if (code == KeyEvent.VK_S) downPress = false;
 		
 		if (code == KeyEvent.VK_D) rightPress = false;
+		
+		if (code == KeyEvent.VK_L) gp.getPlayer().setPlayerCastSpell(false);
 	
 	}
 	

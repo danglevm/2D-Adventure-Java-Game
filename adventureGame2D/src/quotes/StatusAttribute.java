@@ -6,7 +6,7 @@ public class StatusAttribute {
 											"Amount of health \nregenerated \nper 5 seconds.\n\nEach level \nincreases \nregeneration \nby half heart.",
 											"Max magic energy \navailable \nbefore player \ncan't cast \nanymore spells.\n\nEach level \nincreases \ntotal mana by 1 \ncrystal.",
 											"Amount of mana\nregenerated \nper 5 seconds.\n\nEach level \nincreases \nregeneration \nby half crystal.",
-											"Total physical \ndamage dealt \nto an enesmy. \n\nIncludes \nnatural and\nweapon damage. \n\nEach level \nincreases \nnatural \nstrength by 1.",
+											"Total \ndamage dealt \nto an enemy. \n\nIncludes \nnatural and\nweapon damage. \n\nEach level \nincreases \nnatural \nstrength by 1.",
 											"Total damage \nnegated from \nenemy attacks. \n\nIncludes \nnatural and \nequipment defense. \n\nEach level \nincreases negation \nby 1.",
 											"Chances of \ndodging an \nincoming \nenemy attack.\n\nEach level \nincreases \nyour chances \nby 10%.",
 											"Amount of energy \navailable \nbefore player \ncan't attack or use \ntools anymore. \n\nEach level \nincreases \ntotal by 1 \nphysical attack",

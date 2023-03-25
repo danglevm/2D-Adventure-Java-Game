@@ -76,6 +76,7 @@ public class GamePanel extends JPanel implements Runnable{
 	private ArrayList <Entity> NPCs = new ArrayList <Entity> (); 
 	private ArrayList <Entity> objects = new ArrayList <Entity> ();
 	private ArrayList <Entity> monsters = new ArrayList <Entity> ();
+	private ArrayList <Entity> projectiles = new ArrayList <Entity> ();
 	//entity with lowest world Y index 0, highest world y final index
 	private ArrayList<Entity> entityList = new ArrayList<>();
 	private ArrayList <Entity> removeMonsterList = new ArrayList <> ();
