@@ -1,6 +1,7 @@
 package projectile;
 
 import adventureGame2D.GamePanel;
+import enums.Direction;
 
 public class Fireball extends Projectile{
 
@@ -12,10 +13,11 @@ public class Fireball extends Projectile{
 		
 		name = "Fireball";
 		speed = 5;
-		maxLife = 2;
-		attack = 2;
+		maxLife = 90;
+		attack = 1;
 		life = maxLife;
 		this.alive = false;
+		this.getImage();
 		
 	}
 	
@@ -30,5 +32,6 @@ public class Fireball extends Projectile{
 		right1 = setupEntity("fireball_right_1", "/projectile/", gp.getTileSize(), gp.getTileSize());
 		right2 = setupEntity ("fireball_right_2", "/projectile/", gp.getTileSize(), gp.getTileSize());
 	}
+
 
 }

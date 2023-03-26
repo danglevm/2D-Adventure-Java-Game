@@ -16,6 +16,7 @@ import entity.Player;
 import enums.GameState;
 import events.EventHandler;
 import monster.Monster;
+import projectile.Projectile;
 import tile.TileManager;
 
 //Game Panel inherits all components from JPanel
@@ -78,8 +79,9 @@ public class GamePanel extends JPanel implements Runnable{
 	private ArrayList <Entity> monsters = new ArrayList <Entity> ();
 	private ArrayList <Entity> projectiles = new ArrayList <Entity> ();
 	//entity with lowest world Y index 0, highest world y final index
-	private ArrayList<Entity> entityList = new ArrayList<>();
-	private ArrayList <Entity> removeMonsterList = new ArrayList <> ();
+	private ArrayList<Entity> entityList = new ArrayList<Entity>();
+	private ArrayList <Entity> removeMonsterList = new ArrayList <Entity> ();
+	private ArrayList <Entity> removeProjectileList = new ArrayList <Entity> ();
 	
 	
 	//sound
@@ -207,16 +209,13 @@ public void update() {
 		updateEntities(objects);
 		updateEntities(NPCs);
 		updateEntities(monsters);
+		updateEntities (projectiles);
 		
 		monsters.removeAll(removeMonsterList);
-		
-		for (Entity monster : monsters) {
+		projectiles.removeAll(removeProjectileList);
+		removeMonsterList.clear();
+		removeProjectileList.clear();
 			
-			if (monster == null) {
-				System.out.println("True");
-				monsters.remove(monster);
-			}
-		}
 		
 		
 	} else {
@@ -249,6 +248,7 @@ public void paintComponent (Graphics g) {
 		addtoEntityList(NPCs);
 		addtoEntityList(objects);
 		addtoEntityList(monsters);
+		addtoEntityList (projectiles);
 		
 		//Sort the entityList
 		Collections.sort(entityList, new Comparator<Entity>() {
@@ -312,18 +312,22 @@ public void paintComponent (Graphics g) {
 	//Add from array to array List
 	private final void addtoEntityList (ArrayList <Entity> entities) {
 		entities.forEach(entity -> {
-			if (entity != null) {
 				entityList.add(entity);
-			}
 		});
 	}
 	
 	private final void updateEntities (ArrayList <Entity> entities) {
 		entities.forEach(entity -> {
-			if (!entity.getAlive() && !entity.getDying()) {
-				if (entity instanceof Monster) {
+			
+			if (!entity.getAlive() ) {
+				if (entity instanceof Monster && !entity.getDying()) {
 					removeMonsterList.add(entity);
 				}
+				if (entity instanceof Projectile) {
+					removeProjectileList.add(entity);
+				}
+			
+			
 			} else if (entity.getAlive()) {
 				entity.update();
 			}
@@ -348,6 +352,8 @@ public void paintComponent (Graphics g) {
 	public void setGameState (GameState gameState) { this.gameState = gameState;}
 	
 	public int getTileSize () { return tileSize; }
+	
+	public ArrayList<Entity> getProjectiles () { return projectiles;}
 }
 
 

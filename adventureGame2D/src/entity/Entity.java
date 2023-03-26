@@ -96,14 +96,7 @@ public class Entity{
 			}
 		}
 
-		spriteCounter++;
-		//Entity image changes every 12 frames
-		if (!collisionOn) {
-			if (spriteCounter > 12) {
-				spriteNum = !spriteNum;
-				spriteCounter = 0;
-			}
-		}
+		
 		
 		//What this is checking is that it's checking if the entity object that the it's referring to
 		//is also an object of type Monster. if it is then execute the Monster-specific method
