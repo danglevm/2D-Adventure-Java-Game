@@ -265,7 +265,12 @@ public class KeyHandler implements KeyListener{
 		 
 		if (gp.getGameUI().statusCursor < 0) gp.getGameUI().statusCursor = 0;
 		
-		if (code == KeyEvent.VK_ENTER) gp.getPlayer().upgradeAttribute(gp.getGameUI().statusCursor);
+		if (code == KeyEvent.VK_ENTER) 
+			if (gp.getPlayer().upgradeAttribute(gp.getGameUI().statusCursor)) {
+				gp.playSE(15);
+			} else {
+				gp.playSE(13);
+			};
 		
 	}
 	

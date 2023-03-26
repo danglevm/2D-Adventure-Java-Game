@@ -46,7 +46,7 @@ public class HealingPotion extends GameObject implements ConsummableInterface {
 		//Heals for 4 hp
 		if (player.getLife() < player.getMaxLife()) {
 			player.setLife(player.getLife() + healValue);
-			gp.playSE(13);
+			gp.playSE(14);
 			//if after drinking the player's life is larger than max life
 			if (player.getLife() > player.getMaxLife()) player.setLife(player.getMaxLife());
 			return true;

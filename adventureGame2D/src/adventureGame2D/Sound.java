@@ -30,7 +30,11 @@ public class Sound {
 		soundURL.add (getClass().getResource("/sounds/player/inventory-open.wav")); //10
 		soundURL.add (getClass().getResource("/sounds/game/cursor_select.wav")); //11
 		soundURL.add (getClass().getResource("/sounds/player/inventory_select.wav")); //12
-		soundURL.add (getClass().getResource("/sounds/objects/health-potion-drink.wav")); //13
+		soundURL.add (getClass().getResource("/sounds/player/upgrade-failed.wav")); //13
+		soundURL.add (getClass().getResource("/sounds/objects/health-potion-drink.wav")); //14
+		soundURL.add (getClass().getResource("/sounds/player/upgrade-success.wav")); //15
+		soundURL.add (getClass().getResource("/sounds/objects/burning.wav")); //16
+		
 		
 	}
 	

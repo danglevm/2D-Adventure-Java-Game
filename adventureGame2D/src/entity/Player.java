@@ -31,6 +31,7 @@ import object.interfaces.AttackObjectInterface;
 import object.interfaces.ConsummableInterface;
 import object.interfaces.DefenseObjectInterface;
 import object.interfaces.ToolObjectInterface;
+import projectile.Fireball;
 import projectile.Projectile;
 
 public class Player extends Entity {
@@ -79,7 +80,6 @@ public class Player extends Entity {
 				manaRegen,
 				strength,
 				dexterity,
-				stamina,
 				knockback,
 				criticalHit,
 				coin,
@@ -225,9 +225,7 @@ public class Player extends Entity {
 		totalEncumbrance = 0;
 		level = 1;
 		maxLife = 10;
-		life = maxLife;
-		stamina = 0;
-		
+		life = maxLife;	
 		coin = 0;
 		experience = 0;
 	
@@ -236,6 +234,7 @@ public class Player extends Entity {
 		
 		defaultWeapon = new Sword(gp, 0, 0);
 		defaultShield = new WoodenShield(gp, 0, 0);
+		currentProjectile = new Fireball (gp);
 		
 		equippedWeapon = defaultWeapon;
 		equippedDefense = defaultShield;
@@ -368,7 +367,7 @@ public class Player extends Entity {
 				if (!this.invincibility) {
 					//Downcasting Entity to Monster to get player index
 					if (gp.getMonsters().get(monsterIndex) instanceof Monster) {
-						((Monster) gp.getMonsters().get(monsterIndex)).damagePlayer(this);;
+						((Monster) gp.getMonsters().get(monsterIndex)).damagePlayer(this);
 					}
 					
 				}
@@ -411,19 +410,23 @@ public class Player extends Entity {
 			++spriteCounter;
 			//Player image changes every 12 frames
 			if (spriteCounter > 12) {
-				if (spriteNum) {
-					spriteNum = false;
-				}
-				
-				else if (!spriteNum) {
-					spriteNum = true;
-				}
+				spriteNum = !spriteNum;
 				spriteCounter = 0;
 			}
 			
 		}
+		//player casts this spell and the last fireball shot has dissipated
+		if (this.castSpell && actionStamina >= actionCost) {
+			staminaEnabled = true;
+			staminaRechargeCounter = 0;	
+			actionStamina -= actionCost;
+			Projectile projectile = new Fireball(gp);
+			projectile.set(this.WorldX, this.WorldY, this.direction, this);
+			gp.getProjectiles().add(projectile);
+			gp.playSE(16);
+			castSpell = false;
+		}
 		
-		//Call superclass invincibility time
 		this.checkInvincibilityTime();
 		
 	}//update
@@ -606,7 +609,7 @@ public class Player extends Entity {
 			
 	}
 	
-	protected final void checkInvincibilityTime() {
+	public final void checkInvincibilityTime() {
 
 		if (invincibility) {
 		++invincibilityCounter;
@@ -672,7 +675,7 @@ public class Player extends Entity {
 	}
 	
 
-	private final void damageMonster(int i) {
+	public final void damageMonster(int i) {
 		if (i != 9999) {
 			Entity monster = gp.getMonsters().get(i);
 			
@@ -878,7 +881,7 @@ public class Player extends Entity {
 	
 	public int getDexterity () { return dexterity; }
 	
-	public int getStamina () { return stamina; }
+	public int getStamina () { return maxStamina; }
 	
 	public int getKnockback () { return knockback; }
 	

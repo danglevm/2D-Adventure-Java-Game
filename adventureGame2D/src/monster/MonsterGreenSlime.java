@@ -114,6 +114,7 @@ public class MonsterGreenSlime extends Monster{
 		{
 			player.setLife(postDmgLife);
 			player.setInvincibility(true);
+			player.checkInvincibilityTime();
 		}
 		
 	}
