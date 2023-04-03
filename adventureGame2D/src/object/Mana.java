@@ -3,11 +3,11 @@ package object;
 import adventureGame2D.GamePanel;
 import enums.ObjectType;
 
-public class Heart extends GameObject {
+public class Mana extends GameObject {
 	
 	GamePanel gp;
 	
-	public Heart(GamePanel gp) {
+	public Mana (GamePanel gp) {
 		super(gp);
 		this.gp = gp;
 		setDefaultAttributes();
@@ -16,11 +16,9 @@ public class Heart extends GameObject {
 	}
 
 	public void setDefaultAttributes() {
-		name = "Heart";
-		image = setupEntity("heart_full", "/hud/", gp.getTileSize(), gp.getTileSize());
-		image2 = setupEntity("heart_half", "/hud/", gp.getTileSize(), gp.getTileSize());
-		image3 = setupEntity("heart_blank", "/hud/", gp.getTileSize(), gp.getTileSize());
-		
+		name = "Mana Crystal";
+		image = setupEntity("manacrystal_full", "/hud/", gp.getTileSize(), gp.getTileSize());
+		image2 = setupEntity("manacrystal_blank", "/hud/", gp.getTileSize(), gp.getTileSize());
 	}
 
 	@Override
