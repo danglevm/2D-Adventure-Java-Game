@@ -1,7 +1,6 @@
 package projectile;
 
 import adventureGame2D.GamePanel;
-import enums.Direction;
 
 public class Fireball extends Projectile{
 
@@ -16,6 +15,7 @@ public class Fireball extends Projectile{
 		maxLife = 90;
 		attack = 1;
 		life = maxLife;
+		spellCost = 2;
 		this.alive = false;
 		this.getImage();
 		

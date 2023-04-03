@@ -5,10 +5,13 @@ import java.awt.Graphics2D;
 
 import adventureGame2D.GamePanel;
 import entity.Entity;
+import projectile.Projectile;
 
 public abstract class Monster extends Entity implements MonsterInterface{
 
 	protected Integer experience;
+	
+	protected Projectile projectile;
 	
 	//Holder class so that all monsters the extends this class can be downcasted from Entity
 	//and also be forced to implement methods from MonsterInterface and then have their methods

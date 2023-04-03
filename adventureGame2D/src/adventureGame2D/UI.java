@@ -22,6 +22,7 @@ import enums.InventoryState;
 import enums.TitleState;
 import object.GameObject;
 import object.Heart;
+import object.Mana;
 import quotes.PauseQuotes;
 import quotes.StatusAttribute;
 
@@ -56,6 +57,11 @@ public class UI {
 	
 	//Drawing hearts
 	private BufferedImage heart_full, heart_half, heart_blank;
+	GameObject heart;
+	
+	//drawing mana crystals
+	private BufferedImage crystal_full, crystal_blank;
+	GameObject mana;
 	
 	private String [] statusScreenLabels = {"NEW GAME", "LOAD SAVE", "SETTINGS", "QUIT"};
 	
@@ -88,11 +94,19 @@ public class UI {
 		
 		
 		//Create HUD 
-		Entity heart = new Heart(gp);
+		/*
+		 * HP
+		 */
+		heart = new Heart(gp);
 		heart_full = heart.getImage1();
 		heart_half = heart.getImage2();
 		heart_blank = heart.getImage3();
-	
+		/*
+		 * Mana
+		 */
+		mana = new Mana (gp);
+		crystal_full = mana.getImage1();
+		crystal_blank = mana.getImage2();
 	}
 	/**
 	 * Setters and getters
@@ -167,7 +181,7 @@ public class UI {
 		}
 		
 		case PLAY -> {
-			drawPlayerHearts();
+			drawPlayerHUD();
 			drawSubtitleMsg();
 			if (gp.getEventHandler().getInteraction()) { drawInteractionKey(); }
 		
@@ -293,7 +307,7 @@ public class UI {
 
 	}
 	
-	private void drawPlayerHearts() {
+	private void drawPlayerHUD() {
 		int xLocation = gp.getTileSize()/2, 
 			yLocation = gp.getTileSize()/2, 
 			i = 0;
@@ -315,19 +329,37 @@ public class UI {
 		i = 0;
 		
 		//Draw current hp
-		
 		while (i < currentPlayerLife) {
 			g2.drawImage(heart_half, xLocation, yLocation, null);
 			++i;
 			//if it's an odd value, then continue to draw again
 			if (i < currentPlayerLife) {
-				g2.drawImage(heart_full, xLocation, yLocation,null);
+				g2.drawImage(heart_full, xLocation, yLocation, null);
 			}
 			++i;
 			xLocation += gp.getTileSize();
-	}
-	
+		}
 		
+		xLocation = gp.getTileSize()/2;
+		yLocation = gp.getTileSize() * 2;
+		i = 0;
+		
+		//Draw blank mana - max mana
+		while (i < gp.getPlayer().getMaxMana()) {
+			g2.drawImage(crystal_blank, xLocation, yLocation, null);
+			++i;
+			xLocation += gp.getTileSize();
+		}
+		
+		i = 0;
+		xLocation = gp.getTileSize()/2;
+		yLocation = gp.getTileSize() * 2;
+		//Draw the current player's mana
+		while (i < gp.getPlayer().getMana()) {
+			g2.drawImage(crystal_full, xLocation, yLocation, null);
+			++i;
+			xLocation += gp.getTileSize();
+		}
 	}
 	
 	private void drawDialogueScreen() {
@@ -485,7 +517,7 @@ public class UI {
 		
 		int [] playerAttributes = {
 				player.getHealthRegen(),
-				player.getMana(),
+				player.getMaxMana(),
 				player.getManaRegen(),
 				player.getTotalAttack(),
 				player.getTotalDefense(),

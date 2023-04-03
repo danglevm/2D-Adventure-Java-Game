@@ -53,6 +53,8 @@ public class Player extends Entity {
 	private int switchOpacityCounter = 0;
 
 	private int actionCost, actionStamina, staminaRechargeCounter, maxStamina;
+	
+	private int manaRegenCount, healthRegenCount;
 
 	private boolean playerAttack;
 	
@@ -77,6 +79,7 @@ public class Player extends Entity {
 	private  int level,
 				healthRegen,
 				mana,
+				manaMax,
 				manaRegen,
 				strength,
 				dexterity,
@@ -86,7 +89,6 @@ public class Player extends Entity {
 				experience,
 				nextLevelExperience;
 
-	
 	/*
 	 * Equipped weapon and shield
 	 */
@@ -204,7 +206,8 @@ public class Player extends Entity {
 		actionStamina = maxStamina;
 		staminaRechargeCounter = 0;
 		staminaEnabled = false;
-		
+		manaRegenCount = 0;
+		healthRegenCount = 0;
 		
 		//player opacity
 		switchOpacity = false;
@@ -224,8 +227,8 @@ public class Player extends Entity {
 		name = "dr8d";
 		totalEncumbrance = 0;
 		level = 1;
-		maxLife = 10;
-		life = maxLife;	
+		life = 12;	
+		mana = 6;
 		coin = 0;
 		experience = 0;
 	
@@ -303,12 +306,12 @@ public class Player extends Entity {
 		/**
 		 * UPDATING ATTRIBUTES AND UPGRADES
 		 */
-		maxLife = 10 + 2 * attributeUpgrades.get("HP");
-		healthRegen = 0 + attributeUpgrades.get("HP Regeneration");
+		maxLife = 12 + 2 * attributeUpgrades.get("HP");
+		healthRegen = 1 + attributeUpgrades.get("HP Regeneration");
 		knockback = 0 + attributeUpgrades.get("Knockback");
 		criticalHit = 0 + attributeUpgrades.get("Critical Hit");
-		mana = 0 + attributeUpgrades.get("Mana");
-		manaRegen = 0 + attributeUpgrades.get("Mana Regeneration");
+		manaMax = 6 + attributeUpgrades.get("Mana");
+		manaRegen = 1 + attributeUpgrades.get("Mana Regeneration");
 		strength = 0 + attributeUpgrades.get("Power");
 		defense = 0 + attributeUpgrades.get("Defense");
 		dexterity = 0 + attributeUpgrades.get("Dexterity");
@@ -416,10 +419,8 @@ public class Player extends Entity {
 			
 		}
 		//player casts this spell and the last fireball shot has dissipated
-		if (this.castSpell && actionStamina >= actionCost) {
-			staminaEnabled = true;
-			staminaRechargeCounter = 0;	
-			actionStamina -= actionCost;
+		if (this.castSpell && this.mana >= this.currentProjectile.getSpellCost()) {
+			this.mana -= this.currentProjectile.getSpellCost();
 			Projectile projectile = new Fireball(gp);
 			projectile.set(this.WorldX, this.WorldY, this.direction, this);
 			gp.getProjectiles().add(projectile);
@@ -427,6 +428,27 @@ public class Player extends Entity {
 			castSpell = false;
 		}
 		
+		++manaRegenCount;
+		++healthRegenCount;
+		
+		if (manaRegenCount > 480) {
+			if (this.mana < this.manaMax) {
+				this.mana += manaRegen;
+			}
+			
+			manaRegenCount = 0;
+		}
+		
+		if (healthRegenCount > 600) {
+			if (this.life < this.maxLife) {
+				this.life += healthRegen;
+				
+			}
+			
+			healthRegenCount = 0;
+		}
+		
+	
 		this.checkInvincibilityTime();
 		
 	}//update
@@ -872,6 +894,8 @@ public class Player extends Entity {
 	public int getHealthRegen () { return healthRegen; }
 	
 	public int getMana () { return mana; }
+	
+	public int getMaxMana () { return manaMax; }
 	
 	public int getManaRegen () { return manaRegen; }
 	

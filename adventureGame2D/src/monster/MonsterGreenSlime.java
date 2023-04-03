@@ -6,6 +6,7 @@ import adventureGame2D.GamePanel;
 import entity.Player;
 import enums.Direction;
 import enums.EntityType;
+import projectile.Rock;
 
 public class MonsterGreenSlime extends Monster{
 	
@@ -18,7 +19,7 @@ public class MonsterGreenSlime extends Monster{
 		this.WorldY = worldY * gp.getTileSize();
 		this.setDefaultValues();
 		this.getImage(gp.getTileSize());
-		
+		projectile = new Rock(gp);
 	}
 	/**
 	 * Override from MonsterInterface
@@ -64,23 +65,22 @@ public class MonsterGreenSlime extends Monster{
 	 */
 	public final void setBehaviour() {
 	++actionLock;
-		
 		//After every a certain pseudo random amount of time
 	if (actionLock == 240) {
 		Random random = new Random();
 		int i = random.nextInt(100) + 1;//1 to 100
-		
-		if (i < 25) {
-			direction = Direction.UP;
-		} else if (i < 50) {
-			direction = Direction.DOWN;
-		} else if (i < 75) {
-			direction = Direction.LEFT;
-		} else {
-			direction = Direction.RIGHT;
-		}
-		
+		if (i < 25) direction = Direction.UP;
+		else if (i < 50) direction = Direction.DOWN;
+		else if (i < 75) direction = Direction.LEFT;
+		else direction = Direction.RIGHT;
 		actionLock = 0;
+	}
+	
+	int i = new Random().nextInt(100) + 1;
+		if (i > 99 && !projectile.getAlive()) {
+			projectile.set(this.WorldX, this.WorldY, direction, this);
+			gp.getProjectiles().add(projectile);
+			this.projectile.setCollisionOn(false);
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class MonsterGreenSlime extends Monster{
 		
 		if (postDmgLife > player.getLife()) postDmgLife = player.getLife();
 		
-		if (postDmgLife != player.getLife() && !this.dying) {
+		if (postDmgLife != player.getLife() && !this.dying && this.alive) {
 			gp.getGameUI().addSubtitleMsg(gp.getPlayer().getName() + " hurt by " + this.name);
 			gp.playSE(6);
 		}

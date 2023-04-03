@@ -9,6 +9,10 @@ public abstract class Projectile extends Entity {
 	
 	protected Entity user;
 	
+	protected Integer spellCost;
+	
+	Player player;
+	
 	GamePanel gp;
 
 	public Projectile(GamePanel gp) {
@@ -23,6 +27,7 @@ public abstract class Projectile extends Entity {
 			this.direction = direction;
 			this.alive = true;
 			this.user = entity;
+			this.player = gp.getPlayer();
 			this.life = this.maxLife;
 		}
 	};
@@ -30,13 +35,22 @@ public abstract class Projectile extends Entity {
 	@Override
 	public void update () {
 		
-		if (user == gp.getPlayer()) {
+		if (user == player) {
 			int monsterIndex = gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 			if (monsterIndex != 9999) {
 				this.alive = false;
 				gp.getPlayer().damageMonster(monsterIndex);
-				
-				
+					
+			}
+		} else if (user != player) {
+			if (!gp.getPlayer().getInvincibility() && gp.getCollisionCheck().checkPlayer(this)) {
+				int postDmgLife = player.getLife() - this.attack + player.getTotalDefense();
+				if (postDmgLife > player.getLife()) postDmgLife = player.getLife();
+				player.setLife(postDmgLife);
+				player.setInvincibility(true);
+				player.checkInvincibilityTime();
+				gp.playSE(6);
+				this.alive = false;
 			}
 		}
 		
@@ -71,6 +85,10 @@ public abstract class Projectile extends Entity {
 			}
 		}
 
+	}
+	
+	public Integer getSpellCost() {
+		return spellCost;
 	}
 
 }
