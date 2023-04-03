@@ -3,6 +3,7 @@ package adventureGame2D;
 import monster.MonsterGreenSlime;
 import npc.OldDude;
 import object.Boots;
+import object.BronzeCoin;
 import object.Key;
 import object.attack.Sword;
 import object.nonpickup.Chest;
@@ -23,6 +24,8 @@ public class AssetPlacement {
 		gp.getObjects().add(new Boots(gp, 121, 124));
 		gp.getObjects().add(new Axe(gp, 121, 125));
 		gp.getObjects().add(new Sword(gp, 124, 126));
+		gp.getObjects().add(new Key(gp, 125, 126));
+		gp.getObjects().add(new BronzeCoin(gp, 114, 132));
 
 	}
 	

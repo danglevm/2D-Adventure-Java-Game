@@ -17,6 +17,7 @@ public enum ObjectType {
 	DEFENSE,
 	TOOL,
 	CONSUMMABLE,
+	POWERUP,
 	INTERACT,
 	ACCESSORY,
 	NONPICKUP;

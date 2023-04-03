@@ -463,7 +463,8 @@ public class Player extends Entity {
 			
 			//12 is max inventory size
 			if (inventory.size() != 12 && currentObject.getPickUpState()) {
-				inventory.add(currentObject);
+				if (currentObject.getInventoryType() == ObjectType.POWERUP) this.coin += 1;
+				else inventory.add(currentObject);
 				gp.playSE(1);
 				text =  "You picked up " + currentObject.getName() + "!";
 				gp.getObjects().remove(index);

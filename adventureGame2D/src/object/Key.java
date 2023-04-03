@@ -31,7 +31,7 @@ public class Key extends GameObject {
 
 	@Override
 	public void setPickupState() {
-		this.pickUpState = false;
+		this.pickUpState = true;
 		
 	}
 
