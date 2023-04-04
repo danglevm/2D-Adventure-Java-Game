@@ -144,7 +144,7 @@ public class Entity{
 			}
 			
 			//16 pixels
-			g2.drawImage(image, entityScreenX, entityScreenY, gp.getTileSize(), gp.getTileSize(), null);
+			g2.drawImage(image, entityScreenX, entityScreenY, null);
 			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		}
 	}

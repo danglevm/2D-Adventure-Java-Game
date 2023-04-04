@@ -21,6 +21,7 @@ import enums.ObjectType;
 import enums.ToolType;
 import monster.Monster;
 import npc.NPC;
+import object.BronzeCoin;
 import object.GameObject;
 import object.Key;
 import object.attack.Sword;
@@ -30,6 +31,7 @@ import object.defense.WoodenShield;
 import object.interfaces.AttackObjectInterface;
 import object.interfaces.ConsummableInterface;
 import object.interfaces.DefenseObjectInterface;
+import object.interfaces.PowerUpObjectInterface;
 import object.interfaces.ToolObjectInterface;
 import projectile.Fireball;
 import projectile.Projectile;
@@ -334,6 +336,7 @@ public class Player extends Entity {
 	
 	public void update() 
 	{
+		
 		this.updatePlayerAttributes();
 		collisionOn = false;	
 		this.checkLevelUp();
@@ -463,11 +466,14 @@ public class Player extends Entity {
 			
 			//12 is max inventory size
 			if (inventory.size() != 12 && currentObject.getPickUpState()) {
-				inventory.add(currentObject);
 				gp.playSE(1);
 				text =  "You picked up " + currentObject.getName() + "!";
 				gp.getObjects().remove(index);
 				
+				if (currentObject instanceof PowerUpObjectInterface) 
+					((PowerUpObjectInterface)currentObject).grantPowerUpEffects();
+				else inventory.add(currentObject);
+					
 			} else if (!currentObject.getPickUpState()){
 				//if you are colliding with something that cannot be picked up
 			} else {
@@ -721,15 +727,14 @@ public class Player extends Entity {
 					monster.alive = false;
 					monster.dying = true;
 					
-				
-					
-
+//					
 					
 					if (monster instanceof Monster) {
 						gp.getGameUI().addSubtitleMsg(this.name + " gained " + ((Monster)monster).getMonsterExperience()
 																+ " experience ");
 						gp.playSE(((Monster) monster).returnDeathSound());
 						this.experience += ((Monster)monster).getMonsterExperience();
+						((Monster)monster).getMonsterDrop();
 						
 					}
 					
@@ -768,7 +773,7 @@ public class Player extends Entity {
 			switch (type) {
 			case CONSUMMABLE -> {
 				//if player successfully uses consummable
-				if (((ConsummableInterface)selectedItem).useConsummable(this)) {
+				if (((ConsummableInterface)selectedItem).useConsummable()) {
 					inventory.remove(selectedItem);
 				}
 			}
@@ -895,6 +900,8 @@ public class Player extends Entity {
 	
 	public int getMana () { return mana; }
 	
+	public void setMana (int mana) { this.mana = mana; }
+	
 	public int getMaxMana () { return manaMax; }
 	
 	public int getManaRegen () { return manaRegen; }
@@ -913,6 +920,8 @@ public class Player extends Entity {
 	
 	public int getCoin () { return coin; }
 	
+	public void setCoin (int coin) { this.coin = coin; }
+	
 	public int getExperience () { return experience; }
 	
 	public int getNextLevelExperience () { return nextLevelExperience; }
@@ -928,6 +937,8 @@ public class Player extends Entity {
 	public ArrayList <GameObject> getInventory () { return inventory; } 
 	
 	public LinkedHashMap <String, Integer> getUpgradeValue() { return attributeUpgrades;}
+
+	
 	
 	
 }

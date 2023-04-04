@@ -2,13 +2,19 @@ package monster;
 
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
+import java.util.Random;
 
 import adventureGame2D.GamePanel;
 import entity.Entity;
+import object.BronzeCoin;
+import object.Heart;
+import object.Mana;
 import projectile.Projectile;
 
 public abstract class Monster extends Entity implements MonsterInterface{
 
+	protected GamePanel gp;
+	
 	protected Integer experience;
 	
 	protected Projectile projectile;
@@ -20,6 +26,7 @@ public abstract class Monster extends Entity implements MonsterInterface{
 	//Do not want Entity to implement MonsterInterface for downcasting
 	public Monster(GamePanel gp) {
 		super(gp);
+		this.gp = gp;
 	}
 	
 	
@@ -39,21 +46,20 @@ public abstract class Monster extends Entity implements MonsterInterface{
 		++deathCount;
 		
 		if (deathCount < 41) {
-			
-			if (deathCount % 5 == 0 && deathCount % 10 != 0) {
+			if (deathCount % 5 == 0 && deathCount % 10 != 0) 
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));	
-				
-			} else if (deathCount % 10 == 0){
+			else if (deathCount % 10 == 0)
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));	
-			}
 		} else {
 			dying = false;
-			
 		}
 		
 	}
 	
 	public Integer getMonsterExperience () { return experience;}
 
+	public void getMonsterDrop() {};
+	
+	public void getMonsterDrops() {};
 
 }

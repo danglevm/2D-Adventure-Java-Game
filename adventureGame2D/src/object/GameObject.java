@@ -2,6 +2,7 @@ package object;
 
 import adventureGame2D.GamePanel;
 import entity.Entity;
+import entity.Player;
 import enums.ObjectType;
 
 
@@ -14,11 +15,14 @@ public abstract class GameObject extends Entity{
 	protected ObjectType inventoryType;
 	
 	protected int encumbrance;
+	
+	protected Player player;
 
 	
 	public GameObject(GamePanel gp) {
 		super(gp);
 		encumbrance = 0;
+		player = gp.getPlayer();
 		
 	} 
 	
