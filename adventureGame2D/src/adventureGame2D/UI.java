@@ -97,14 +97,14 @@ public class UI {
 		/*
 		 * HP
 		 */
-		heart = new Heart(gp);
+		heart = new Heart(gp, 0, 0);
 		heart_full = heart.getImage1();
 		heart_half = heart.getImage2();
 		heart_blank = heart.getImage3();
 		/*
 		 * Mana
 		 */
-		mana = new Mana (gp);
+		mana = new Mana (gp, 0, 0);
 		crystal_full = mana.getImage1();
 		crystal_blank = mana.getImage2();
 	}

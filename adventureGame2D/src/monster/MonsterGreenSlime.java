@@ -6,9 +6,12 @@ import adventureGame2D.GamePanel;
 import entity.Player;
 import enums.Direction;
 import enums.EntityType;
+import object.BronzeCoin;
+import object.Heart;
+import object.Mana;
 import projectile.Rock;
 
-public class MonsterGreenSlime extends Monster{
+public class MonsterGreenSlime extends Monster {
 	
 	GamePanel gp;
 	
@@ -124,10 +127,41 @@ public class MonsterGreenSlime extends Monster{
 		return 7;
 	};
 	
-	
-	/**
-	 * Inherits the Monster class checkInvincibilityTime method
-	 */
+	@Override
+	public void getMonsterDrop() {
+		int i = new Random().nextInt(300) + 1;
+		int entityWorldX = this.WorldX/gp.getTileSize();
+		int entityWorldY = this.WorldY/gp.getTileSize();
+		System.out.println(i);
+		
+		if (i < 40) {
+			gp.getObjects().add(new BronzeCoin(gp, entityWorldX, entityWorldY));
+		}
+		
+		if (i > 60 && i < 80) {
+			gp.getObjects().add(new BronzeCoin (gp, entityWorldX, entityWorldY));
+			gp.getObjects().add(new Heart (gp, entityWorldX, entityWorldY));
+		}
+		
+		if (i > 100 && i < 130) {
+			gp.getObjects().add(new Mana (gp, entityWorldX, entityWorldY));
+			gp.getObjects().add(new Heart (gp, entityWorldX, entityWorldY));
+		}
+		
+		if (i > 200 && i < 230) {
+			gp.getObjects().add(new Mana (gp, entityWorldX, entityWorldY));
+			gp.getObjects().add(new BronzeCoin (gp, entityWorldX, entityWorldY));
+		}
+		
+		
+		if (i > 180 && i < 200) {
+			gp.getObjects().add(new Mana (gp, entityWorldX, entityWorldY));
+		}
+		
+		if (i > 250 && i < 270) {
+			gp.getObjects().add(new Heart(gp, entityWorldX, entityWorldY));
+		}
+	}
 	
 	
 	

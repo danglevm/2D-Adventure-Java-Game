@@ -1,7 +1,6 @@
 package object.consummable;
 
 import adventureGame2D.GamePanel;
-import entity.Player;
 import enums.ObjectType;
 import object.GameObject;
 import object.interfaces.ConsummableInterface;
@@ -42,13 +41,11 @@ public class HealingPotion extends GameObject implements ConsummableInterface {
 	}
 
 	@Override
-	public boolean useConsummable(Player player) {
+	public boolean useConsummable() {
 		//Heals for 4 hp
 		if (player.getLife() < player.getMaxLife()) {
 			player.setLife(player.getLife() + healValue);
 			gp.playSE(14);
-			//if after drinking the player's life is larger than max life
-			if (player.getLife() > player.getMaxLife()) player.setLife(player.getMaxLife());
 			return true;
 		} else {
 			//Do something if player drinks at full HP

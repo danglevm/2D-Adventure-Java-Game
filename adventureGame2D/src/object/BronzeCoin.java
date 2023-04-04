@@ -2,9 +2,10 @@ package object;
 
 import adventureGame2D.GamePanel;
 import enums.ObjectType;
+import object.interfaces.PowerUpObjectInterface;
 
 
-public class BronzeCoin extends GameObject {
+public class BronzeCoin extends PowerUpObject {
 	
 	GamePanel gp;
 	
@@ -43,6 +44,11 @@ public class BronzeCoin extends GameObject {
 	}
 	
 	public int getMonetaryValue() {return 1;}
+
+	@Override
+	public void grantPowerUpEffects() {
+		gp.getPlayer().setCoin(gp.getPlayer().getCoin() + 1);
+	}
 	
 	
 	

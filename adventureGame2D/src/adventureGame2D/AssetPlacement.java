@@ -4,7 +4,9 @@ import monster.MonsterGreenSlime;
 import npc.OldDude;
 import object.Boots;
 import object.BronzeCoin;
+import object.Heart;
 import object.Key;
+import object.Mana;
 import object.attack.Sword;
 import object.nonpickup.Chest;
 import object.nonpickup.Door;
@@ -26,6 +28,8 @@ public class AssetPlacement {
 		gp.getObjects().add(new Sword(gp, 124, 126));
 		gp.getObjects().add(new Key(gp, 125, 126));
 		gp.getObjects().add(new BronzeCoin(gp, 114, 132));
+		gp.getObjects().add(new Heart(gp, 115, 132));
+		gp.getObjects().add(new Mana (gp, 116, 132));
 
 	}
 	
