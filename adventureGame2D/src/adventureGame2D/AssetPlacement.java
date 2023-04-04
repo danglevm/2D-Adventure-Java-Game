@@ -11,6 +11,7 @@ import object.attack.Sword;
 import object.nonpickup.Chest;
 import object.nonpickup.Door;
 import object.tool.Axe;
+import tile.DryTree;
 
 public class AssetPlacement {
 	//Class managed object placement
@@ -20,7 +21,7 @@ public class AssetPlacement {
 		this.gp = gp;
 	}
 	
-	public void setObject() {
+	public final void setObject() {
 		gp.getObjects().add(new Chest(gp, 121, 140));
 		gp.getObjects().add(new Door(gp, 121, 123));
 		gp.getObjects().add(new Boots(gp, 121, 124));
@@ -33,17 +34,32 @@ public class AssetPlacement {
 
 	}
 	
-	public void setNPCs() {
+	public final void setNPCs() {
 		gp.getNPCS().add(new OldDude(gp, 121, 139));
 	}
 	
-	public void setMonsters() {
+	public final void setMonsters() {
 		gp.getMonsters().add(new MonsterGreenSlime (gp, 126, 136));
 		gp.getMonsters().add(new MonsterGreenSlime (gp, 125, 120));
 		gp.getMonsters().add(new MonsterGreenSlime (gp, 124, 121));
 		gp.getMonsters().add(new MonsterGreenSlime (gp, 127, 122));
 		gp.getMonsters().add(new MonsterGreenSlime (gp, 127, 123));
 		gp.getMonsters().add(new MonsterGreenSlime (gp, 127, 124));
+	}
+	
+	final void setInteractiveTiles() {
+		gp.getInteractiveTiles().add(new DryTree (gp, 140, 130));
+		gp.getInteractiveTiles().add(new DryTree (gp, 137, 127));
+		gp.getInteractiveTiles().add(new DryTree (gp, 136, 126));
+		gp.getInteractiveTiles().add(new DryTree (gp, 135, 126));
+		gp.getInteractiveTiles().add(new DryTree (gp, 135, 127));
+		gp.getInteractiveTiles().add(new DryTree (gp, 136, 127));
+		gp.getInteractiveTiles().add(new DryTree (gp, 137, 126));
+		gp.getInteractiveTiles().add(new DryTree (gp, 138, 128));
+		gp.getInteractiveTiles().add(new DryTree (gp, 138, 127));
+		gp.getInteractiveTiles().add(new DryTree (gp, 138, 129));
+		gp.getInteractiveTiles().add(new DryTree (gp, 139, 128));
+		
 	}
 	
 }

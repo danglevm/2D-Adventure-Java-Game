@@ -80,6 +80,7 @@ public class Entity{
 		gp.getCollisionCheck().checkObject(this);
 		gp.getCollisionCheck().checkEntity(this, gp.getNPCS());
 		gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
+		gp.getCollisionCheck().checkEntity(this, gp.getInteractiveTiles());
 		
 		this.checkMonsterCollision();
 		

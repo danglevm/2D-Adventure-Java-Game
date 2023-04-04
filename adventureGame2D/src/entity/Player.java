@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,7 +20,6 @@ import enums.ObjectType;
 import enums.ToolType;
 import monster.Monster;
 import npc.NPC;
-import object.BronzeCoin;
 import object.GameObject;
 import object.Key;
 import object.attack.Sword;
@@ -35,6 +33,7 @@ import object.interfaces.PowerUpObjectInterface;
 import object.interfaces.ToolObjectInterface;
 import projectile.Fireball;
 import projectile.Projectile;
+import tile.InteractiveTile;
 
 public class Player extends Entity {
 	
@@ -388,6 +387,9 @@ public class Player extends Entity {
 			//Check object collision
 			ObjectPickUp(gp.getCollisionCheck().checkObject(this));
 			
+			//Check Collision with interactive Tiles
+			gp.getCollisionCheck().checkEntity(this, gp.getInteractiveTiles());
+			
 			
 			//check NPC collision - not colliding but the dialogue key is pressed --> reset it to false
 			if (!collisionNPC(gp.getCollisionCheck().checkEntity(this, gp.getNPCS())) && keyH.getDialoguePress()) {
@@ -431,8 +433,12 @@ public class Player extends Entity {
 			castSpell = false;
 		}
 		
-		++manaRegenCount;
-		++healthRegenCount;
+		if (this.mana < this.manaMax )++manaRegenCount;
+		else manaRegenCount = 0;
+		
+		if (this.life < this.maxLife) ++healthRegenCount;
+		else healthRegenCount = 0;
+		
 		
 		if (manaRegenCount > 480) {
 			if (this.mana < this.manaMax) {
@@ -684,6 +690,12 @@ public class Player extends Entity {
 		int monsterIndex = gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 		damageMonster(monsterIndex);
 		
+		
+		//Check collision with an interactive tile
+		int interactiveTileIndex = gp.getCollisionCheck().checkEntity(this, gp.getInteractiveTiles());
+		if (interactiveTileIndex != 9999) {
+			((InteractiveTile)gp.getInteractiveTiles().get(interactiveTileIndex)).interactTile(interactiveTileIndex);
+		}
 		//After checking collision, restore original data
 		WorldX = currWorldX;
 		WorldY = currWorldY;
