@@ -13,8 +13,8 @@ public abstract class InteractiveTile extends Entity {
 		super(gp);
 		this.gp = gp;
 	}
-	
-	public abstract void updateInteractiveTile();
+	@Override
+	public abstract void update();
 	
 	public abstract void interactTile(int index, boolean useTool);
 

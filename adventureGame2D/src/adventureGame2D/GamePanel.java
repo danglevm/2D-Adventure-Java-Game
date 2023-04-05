@@ -12,6 +12,7 @@ import java.util.Comparator;
 import javax.swing.JPanel;
 
 import entity.Entity;
+import entity.Particle;
 import entity.Player;
 import enums.GameState;
 import events.EventHandler;
@@ -79,11 +80,13 @@ public class GamePanel extends JPanel implements Runnable{
 	private ArrayList <Entity> objects = new ArrayList <Entity> ();
 	private ArrayList <Entity> monsters = new ArrayList <Entity> ();
 	private ArrayList <Entity> projectiles = new ArrayList <Entity> ();
+	private ArrayList <Entity> particles = new ArrayList <Entity> ();
 	private ArrayList <Entity> interactiveTiles = new ArrayList <Entity> ();
 	//entity with lowest world Y index 0, highest world y final index
 	private ArrayList<Entity> entityList = new ArrayList<Entity>();
 	private ArrayList <Entity> removeMonsterList = new ArrayList <Entity> ();
 	private ArrayList <Entity> removeProjectileList = new ArrayList <Entity> ();
+	private ArrayList <Entity> removeParticleList = new ArrayList <Entity> ();
 	
 	
 	//sound
@@ -213,10 +216,12 @@ public void update() {
 		updateEntities(NPCs);
 		updateEntities(monsters);
 		updateEntities (projectiles);
-		updateInteractiveTiles();
+		updateEntities(interactiveTiles);
+		updateEntities (particles);
 		
 		monsters.removeAll(removeMonsterList);
 		projectiles.removeAll(removeProjectileList);
+		particles.removeAll(removeParticleList);
 		removeMonsterList.clear();
 		removeProjectileList.clear();
 			
@@ -245,14 +250,14 @@ public void paintComponent (Graphics g) {
 		//Draw the tiles first before the player characters
 		//TILE
 		tileM.draw(g2);
-		
-		//Draw all interactive tiles
-		for (int i = 0; i < interactiveTiles.size(); ++i) {
-			if (interactiveTiles.get(i) != null) {
-				interactiveTiles.get(i).draw(g2, this);
-			}
-		}
-	
+//		
+//		//Draw all interactive tiles
+//		for (int i = 0; i < interactiveTiles.size(); ++i) {
+//			if (interactiveTiles.get(i) != null) {
+//				interactiveTiles.get(i).draw(g2, this);
+//			}
+//		}
+//	
 		entityList.add(player);
 	
 		//Add both npcs and objects to the array list 
@@ -260,6 +265,8 @@ public void paintComponent (Graphics g) {
 		addtoEntityList(objects);
 		addtoEntityList(monsters);
 		addtoEntityList (projectiles);
+		addtoEntityList(interactiveTiles);
+		addtoEntityList(particles);
 		
 		//Sort the entityList
 		Collections.sort(entityList, new Comparator<Entity>() {
@@ -337,7 +344,10 @@ public void paintComponent (Graphics g) {
 				if (entity instanceof Projectile) {
 					removeProjectileList.add(entity);
 				}
-			
+				
+				if (entity instanceof Particle) {
+					removeParticleList.add(entity);
+				}
 			
 			} else if (entity.getAlive()) {
 				entity.update();
@@ -345,13 +355,13 @@ public void paintComponent (Graphics g) {
 		});
 	}
 	
-	private final void updateInteractiveTiles () {
-		for (int i = 0; i < interactiveTiles.size(); ++i) {
-			if (interactiveTiles.get(i) != null) {
-				((InteractiveTile)interactiveTiles.get(i)).updateInteractiveTile();;
-			}
-		}
-	}
+//	private final void updateInteractiveTiles () {
+//		for (int i = 0; i < interactiveTiles.size(); ++i) {
+//			if (interactiveTiles.get(i) != null) {
+//				((InteractiveTile)interactiveTiles.get(i)).updateInteractiveTile();
+//			}
+//		}
+//	}
 
 	
 	/**
@@ -366,6 +376,8 @@ public void paintComponent (Graphics g) {
 	public ArrayList<Entity> getProjectiles () { return projectiles;}
 	
 	public ArrayList<Entity> getInteractiveTiles () { return interactiveTiles;}
+	
+	public ArrayList<Entity> getParticles() { return particles; }
 }
 
 
