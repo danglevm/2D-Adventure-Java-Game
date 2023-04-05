@@ -22,7 +22,6 @@ public class AssetPlacement {
 	}
 	
 	public final void setObject() {
-		gp.getObjects().add(new Chest(gp, 121, 140));
 		gp.getObjects().add(new Door(gp, 121, 123));
 		gp.getObjects().add(new Boots(gp, 121, 124));
 		gp.getObjects().add(new Axe(gp, 121, 125));
@@ -51,7 +50,6 @@ public class AssetPlacement {
 		gp.getInteractiveTiles().add(new DryTree (gp, 140, 130));
 		gp.getInteractiveTiles().add(new DryTree (gp, 137, 127));
 		gp.getInteractiveTiles().add(new DryTree (gp, 136, 126));
-		gp.getInteractiveTiles().add(new DryTree (gp, 135, 126));
 		gp.getInteractiveTiles().add(new DryTree (gp, 135, 127));
 		gp.getInteractiveTiles().add(new DryTree (gp, 136, 127));
 		gp.getInteractiveTiles().add(new DryTree (gp, 137, 126));
@@ -59,6 +57,7 @@ public class AssetPlacement {
 		gp.getInteractiveTiles().add(new DryTree (gp, 138, 127));
 		gp.getInteractiveTiles().add(new DryTree (gp, 138, 129));
 		gp.getInteractiveTiles().add(new DryTree (gp, 139, 128));
+		gp.getInteractiveTiles().add(new DryTree(gp, 121, 140));
 		
 	}
 	

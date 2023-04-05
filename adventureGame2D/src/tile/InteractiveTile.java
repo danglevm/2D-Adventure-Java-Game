@@ -16,6 +16,7 @@ public abstract class InteractiveTile extends Entity {
 	
 	public abstract void updateInteractiveTile();
 	
-	public abstract void interactTile(int index);
+	public abstract void interactTile(int index, boolean useTool);
 
+	
 }

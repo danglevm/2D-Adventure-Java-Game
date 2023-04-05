@@ -31,6 +31,7 @@ import object.interfaces.ConsummableInterface;
 import object.interfaces.DefenseObjectInterface;
 import object.interfaces.PowerUpObjectInterface;
 import object.interfaces.ToolObjectInterface;
+import object.tool.Axe;
 import projectile.Fireball;
 import projectile.Projectile;
 import tile.InteractiveTile;
@@ -131,12 +132,12 @@ public class Player extends Entity {
 		
 		this.setDefaultPlayerValues();
 		this.getPlayerImage();	
-		this.getPlayerAttackImage();
+		this.getPlayerSwordImage();
 		this.getPlayerAxeImage();
 	}
 	
 	//-------------------------------CLASS METHODS------------------
-	private final void getPlayerAttackImage() {
+	private final void getPlayerSwordImage() {
 		
 		attackUp1 = setupEntity("boy_attack_up_1", "/player_attack/", gp.getTileSize(), gp.getTileSize()*2);
 		attackUp2 = setupEntity("boy_attack_up_2", "/player_attack/", gp.getTileSize(), gp.getTileSize() * 2);
@@ -541,8 +542,11 @@ public class Player extends Entity {
 		
 		
 		} //attack cool down period is over - stamina
+		//player attack so uses sword attack
 		if (playerAttack && (actionStamina >= actionCost) && equippedWeapon != null)
 		{
+			
+		useTool = false;
 		
 		switch (direction) {
 		
@@ -566,8 +570,11 @@ public class Player extends Entity {
 			playerAttack = false;
 		}
 		
+		
+		//Player uses tool so uses axe image
 		if (useTool && (actionStamina >= actionCost) && equippedTool != null && equippedTool != null) {
-	
+			
+		playerAttack = false;
 			
 		ToolType type = ((ToolObjectInterface)this.equippedTool).getToolType();
 			
@@ -646,7 +653,7 @@ public class Player extends Entity {
 	public final void checkInvincibilityTime() {
 
 		if (invincibility) {
-		++invincibilityCounter;
+			++invincibilityCounter;
 		if (invincibilityCounter > 90) {
 			invincibility = false;
 			invincibilityCounter = 0;
@@ -694,7 +701,7 @@ public class Player extends Entity {
 		//Check collision with an interactive tile
 		int interactiveTileIndex = gp.getCollisionCheck().checkEntity(this, gp.getInteractiveTiles());
 		if (interactiveTileIndex != 9999) {
-			((InteractiveTile)gp.getInteractiveTiles().get(interactiveTileIndex)).interactTile(interactiveTileIndex);
+			((InteractiveTile)gp.getInteractiveTiles().get(interactiveTileIndex)).interactTile(interactiveTileIndex, useTool);
 		}
 		//After checking collision, restore original data
 		WorldX = currWorldX;
@@ -773,6 +780,7 @@ public class Player extends Entity {
 		inventory.add(equippedWeapon);
 		inventory.add(equippedDefense);
 		inventory.add(new BlueShield(gp, 0, 0));
+		inventory.add(new Axe(gp, 0, 0));
 		inventory.add(new Key(gp, 0, 0));
 		inventory.add(new HealingPotion(gp, 0, 0));
 	}
