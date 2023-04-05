@@ -19,7 +19,7 @@ public class Mana extends PowerUpObject {
 	}
 
 	public void setDefaultAttributes() {
-		name = "Mana Crystal";
+		name = "a Mana Crystal";
 		image = setupEntity("manacrystal_full", "/hud/", gp.getTileSize(), gp.getTileSize());
 		image2 = setupEntity("manacrystal_blank", "/hud/", gp.getTileSize(), gp.getTileSize());
 		down1 = setupEntity("manacrystal_full", "/hud/", gp.getTileSize(), gp.getTileSize());

@@ -34,6 +34,7 @@ public class Sound {
 		soundURL.add (getClass().getResource("/sounds/objects/health-potion-drink.wav")); //14
 		soundURL.add (getClass().getResource("/sounds/player/upgrade-success.wav")); //15
 		soundURL.add (getClass().getResource("/sounds/objects/burning.wav")); //16
+		soundURL.add (getClass().getResource("/sounds/player/cuttree.wav")); //17
 		
 		
 	}

@@ -17,6 +17,7 @@ import enums.GameState;
 import events.EventHandler;
 import monster.Monster;
 import projectile.Projectile;
+import tile.InteractiveTile;
 import tile.TileManager;
 
 //Game Panel inherits all components from JPanel
@@ -78,6 +79,7 @@ public class GamePanel extends JPanel implements Runnable{
 	private ArrayList <Entity> objects = new ArrayList <Entity> ();
 	private ArrayList <Entity> monsters = new ArrayList <Entity> ();
 	private ArrayList <Entity> projectiles = new ArrayList <Entity> ();
+	private ArrayList <Entity> interactiveTiles = new ArrayList <Entity> ();
 	//entity with lowest world Y index 0, highest world y final index
 	private ArrayList<Entity> entityList = new ArrayList<Entity>();
 	private ArrayList <Entity> removeMonsterList = new ArrayList <Entity> ();
@@ -145,6 +147,7 @@ public class GamePanel extends JPanel implements Runnable{
 		assetPlace.setObject();
 		assetPlace.setNPCs();
 		assetPlace.setMonsters();
+		assetPlace.setInteractiveTiles();
 		playMusic(0);
 		stopMusic();
 		
@@ -210,6 +213,7 @@ public void update() {
 		updateEntities(NPCs);
 		updateEntities(monsters);
 		updateEntities (projectiles);
+		updateInteractiveTiles();
 		
 		monsters.removeAll(removeMonsterList);
 		projectiles.removeAll(removeProjectileList);
@@ -241,6 +245,13 @@ public void paintComponent (Graphics g) {
 		//Draw the tiles first before the player characters
 		//TILE
 		tileM.draw(g2);
+		
+		//Draw all interactive tiles
+		for (int i = 0; i < interactiveTiles.size(); ++i) {
+			if (interactiveTiles.get(i) != null) {
+				interactiveTiles.get(i).draw(g2, this);
+			}
+		}
 	
 		entityList.add(player);
 	
@@ -333,15 +344,14 @@ public void paintComponent (Graphics g) {
 			}
 		});
 	}
-//		for (Entity currentEntity : entities) {
-//			if (currentEntity.getAlive()) {
-//				currentEntity.update();
-//			} else if (!currentEntity.getAlive() &&  !currentEntity.getDying()) {
-//				entityList.remove(currentEntity);
-//				entities.remove(currentEntity);
-//		} 
-//	}
-
+	
+	private final void updateInteractiveTiles () {
+		for (int i = 0; i < interactiveTiles.size(); ++i) {
+			if (interactiveTiles.get(i) != null) {
+				((InteractiveTile)interactiveTiles.get(i)).updateInteractiveTile();;
+			}
+		}
+	}
 
 	
 	/**
@@ -354,6 +364,8 @@ public void paintComponent (Graphics g) {
 	public int getTileSize () { return tileSize; }
 	
 	public ArrayList<Entity> getProjectiles () { return projectiles;}
+	
+	public ArrayList<Entity> getInteractiveTiles () { return interactiveTiles;}
 }
 
 

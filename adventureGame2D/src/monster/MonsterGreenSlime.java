@@ -132,9 +132,7 @@ public class MonsterGreenSlime extends Monster {
 		int i = new Random().nextInt(300) + 1;
 		int entityWorldX = this.WorldX/gp.getTileSize();
 		int entityWorldY = this.WorldY/gp.getTileSize();
-		System.out.println(i);
-		
-		if (i < 40) {
+		if (i < 100) {
 			gp.getObjects().add(new BronzeCoin(gp, entityWorldX, entityWorldY));
 		}
 		

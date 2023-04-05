@@ -2,13 +2,9 @@ package monster;
 
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
-import java.util.Random;
 
 import adventureGame2D.GamePanel;
 import entity.Entity;
-import object.BronzeCoin;
-import object.Heart;
-import object.Mana;
 import projectile.Projectile;
 
 public abstract class Monster extends Entity implements MonsterInterface{
@@ -58,8 +54,7 @@ public abstract class Monster extends Entity implements MonsterInterface{
 	
 	public Integer getMonsterExperience () { return experience;}
 
-	public void getMonsterDrop() {};
+	public abstract void getMonsterDrop();
 	
-	public void getMonsterDrops() {};
 
 }

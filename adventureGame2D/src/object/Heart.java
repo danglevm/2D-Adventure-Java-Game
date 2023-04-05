@@ -19,7 +19,7 @@ public class Heart extends PowerUpObject {
 	}
 
 	public void setDefaultAttributes() {
-		name = "Heart Crystal";
+		name = "a Heart Crystal";
 		image = setupEntity("heart_full", "/hud/", gp.getTileSize(), gp.getTileSize());
 		image2 = setupEntity("heart_half", "/hud/", gp.getTileSize(), gp.getTileSize());
 		image3 = setupEntity("heart_blank", "/hud/", gp.getTileSize(), gp.getTileSize());
@@ -41,7 +41,7 @@ public class Heart extends PowerUpObject {
 
 	@Override
 	public void grantPowerUpEffects() {
-		player.setLife(player.getLife() + 1);
+		player.setLife(player.getLife() + 2);
 		if (player.getLife() >= player.getMaxLife()) player.setLife(player.getMaxLife());
 	}	
 }
