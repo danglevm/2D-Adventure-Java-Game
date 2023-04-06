@@ -224,10 +224,10 @@ public class Entity{
 	
 
 	protected final void generateParticles(Entity generator, Entity target) {
-		gp.getParticles().add(new Particle (gp, generator, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, -1));
-		gp.getParticles().add(new Particle (gp, generator, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, -1));
-		gp.getParticles().add(new Particle (gp, generator, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, 1));
-		gp.getParticles().add(new Particle (gp, generator, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, 1));
+		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, -1));
+		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, -1));
+		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, 1));
+		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, 1));
 	}
 	/*
 	 * SETTERS AND GETTERS

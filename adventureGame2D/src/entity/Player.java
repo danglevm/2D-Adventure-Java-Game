@@ -202,6 +202,11 @@ public class Player extends Entity {
 		useTool = false;
 		castSpell = false;
 		
+		this.pColor = new Color (136, 8, 8);
+		this.pSize = 6;
+		this.pSpeed = 1;
+		this.pDuration = 18;
+		
 		//stamina
 		actionCost = 60;
 		maxStamina = 120;
@@ -695,8 +700,10 @@ public class Player extends Entity {
 		solidArea.height = attackArea.height;
 		
 		int monsterIndex = gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
-		damageMonster(monsterIndex);
-		
+		if (monsterIndex != 9999) {
+			damageMonster(monsterIndex);
+			this.generateParticles(this, gp.getMonsters().get(monsterIndex));
+		}
 		
 		//Check collision with an interactive tile
 		int interactiveTileIndex = gp.getCollisionCheck().checkEntity(this, gp.getInteractiveTiles());
@@ -731,7 +738,9 @@ public class Player extends Entity {
 				//attack lands
 				int damage = monster.getLife() + monster.getDefense() - this.attackVal;
 				monster.setLife(damage);
+
 				monster.invincibility = true;
+				
 				
 				if (monster instanceof Monster) {
 					((Monster) monster).monsterDamageReaction(this);
@@ -745,8 +754,7 @@ public class Player extends Entity {
 					
 					monster.alive = false;
 					monster.dying = true;
-					
-//					
+		
 					
 					if (monster instanceof Monster) {
 						gp.getGameUI().addSubtitleMsg(this.name + " gained " + ((Monster)monster).getMonsterExperience()
@@ -953,6 +961,8 @@ public class Player extends Entity {
 	public GameObject getEquippedDefense () { return equippedDefense; }
 	
 	public GameObject getEquippedTool () { return equippedTool; }
+	
+	public Projectile getCurrentProjectile() { return currentProjectile;}
 	
 	public ArrayList <GameObject> getInventory () { return inventory; } 
 	

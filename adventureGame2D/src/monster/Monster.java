@@ -53,6 +53,8 @@ public abstract class Monster extends Entity implements MonsterInterface{
 	}
 	
 	public Integer getMonsterExperience () { return experience;}
+	
+	public Projectile getMonsterProjectile() {return projectile;}
 
 	public abstract void getMonsterDrop();
 	

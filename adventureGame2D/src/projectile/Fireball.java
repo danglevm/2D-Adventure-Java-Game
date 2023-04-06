@@ -1,5 +1,7 @@
 package projectile;
 
+import java.awt.Color;
+
 import adventureGame2D.GamePanel;
 
 public class Fireball extends Projectile{
@@ -18,6 +20,10 @@ public class Fireball extends Projectile{
 		spellCost = 2;
 		this.alive = false;
 		this.getImage();
+		this.pColor = new Color (195, 82, 50);
+		this.pSize = 6;
+		this.pSpeed = 1;
+		this.pDuration = 18;
 		
 	}
 	

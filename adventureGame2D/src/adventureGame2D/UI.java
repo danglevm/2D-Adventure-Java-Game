@@ -222,7 +222,7 @@ public class UI {
 	private void drawRandomPauseQuotes() {
 		//Draws a random quote from Pause Quote array
 		g2.setFont(purisa);
-		g2.setFont(g2.getFont().deriveFont(Font.ITALIC, 30));
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16));
 		int max = 2, 
 				min = 0,
 				range = max - min + 1,
@@ -423,7 +423,7 @@ public class UI {
 		/**
 		 * Frame Creation
 		 */
-		final int frameX = gp.getTileSize(),
+		final int frameX = gp.getTileSize() * 2,
 				  frameY = gp.getTileSize()/2,
 				  frameWidth = gp.getTileSize() * 11,
 				  frameHeight = gp.getTileSize() * 13 ;
@@ -627,7 +627,7 @@ public class UI {
 		 * 
 		 * INVENTORY FRAME
 		 */
-		final int frameX = gp.getTileSize(),
+		final int frameX = gp.getTileSize() *2,
 			frameY = gp.getTileSize(),
 			frameWidth = gp.getTileSize() * 16,
 			frameHeight = gp.getTileSize() * 7 + 10;
@@ -758,7 +758,7 @@ public class UI {
 			if (itemIndex < player.getInventory().size()) {
 			ObjectType type = player.getInventory().get(itemIndex).getInventoryType();
 			GameObject selectedItem = player.getInventory().get(itemIndex);
-			int inventoryOptionsFrameX = tileSize * 10,
+			int inventoryOptionsFrameX = tileSize * 11,
 				inventoryOptionsFrameY = defaultSlotY,
 				inventoryOptionsFrameWidth = tileSize * 3 + 25,
 				inventoryOptionsFrameHeight = tileSize * 3 + 5,

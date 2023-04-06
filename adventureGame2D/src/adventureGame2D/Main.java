@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 public class Main {
 	ImageIcon jarLogo = new ImageIcon(this.getClass().getClassLoader().getResource("player/"
 			+ "boy_down_1.png"));
-	
+	public static JFrame window;
 	
 		
 		//*****************************************************************************************************************		
@@ -14,11 +14,11 @@ public class Main {
 		//*****************************************************************************************************************
 		
 	public Main() {
-		JFrame window = new JFrame("Game Window");
+		window = new JFrame("Game Window");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable (false);
 		window.setTitle("Man having a mid-life crisis set out to beat up some monsters");
-	
+		window.setUndecorated(true);
 		window.setIconImage(jarLogo.getImage());
 			
 		//Game panel object
