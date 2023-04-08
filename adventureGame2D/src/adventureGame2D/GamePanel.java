@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +15,7 @@ import java.util.Comparator;
 import javax.swing.JPanel;
 
 import entity.Entity;
+import entity.Particle;
 import entity.Player;
 import enums.GameState;
 import events.EventHandler;
@@ -33,12 +37,19 @@ public class GamePanel extends JPanel implements Runnable{
 	private final int tileSize = originalTileSize * scale;//48x48 tile
 	
 	//Setting max screen settings 18 tiles x 14 tiles
-	private final int maxScreenColumns = 18;
+	private final int maxScreenColumns = 20;
 	private final int maxScreenRows = 14;
 	
 	//A single tile size is 48 pixels
 	private final int screenWidth = tileSize * maxScreenColumns; //864 pixels
 	private final int screenHeight = tileSize * maxScreenRows; //672 pixels
+	
+	
+	//Playing on full screen - draws everything to the buffer before drawing it to the JPANEL
+	int screenWidth2 = screenWidth;
+	int screenHeight2 = screenHeight;
+	BufferedImage bufferScreen;
+	Graphics2D g2;
 	
 	
 	//******************************************************************************************************************		
@@ -79,11 +90,13 @@ public class GamePanel extends JPanel implements Runnable{
 	private ArrayList <Entity> objects = new ArrayList <Entity> ();
 	private ArrayList <Entity> monsters = new ArrayList <Entity> ();
 	private ArrayList <Entity> projectiles = new ArrayList <Entity> ();
+	private ArrayList <Entity> particles = new ArrayList <Entity> ();
 	private ArrayList <Entity> interactiveTiles = new ArrayList <Entity> ();
 	//entity with lowest world Y index 0, highest world y final index
 	private ArrayList<Entity> entityList = new ArrayList<Entity>();
 	private ArrayList <Entity> removeMonsterList = new ArrayList <Entity> ();
 	private ArrayList <Entity> removeProjectileList = new ArrayList <Entity> ();
+	private ArrayList <Entity> removeParticleList = new ArrayList <Entity> ();
 	
 	
 	//sound
@@ -151,7 +164,10 @@ public class GamePanel extends JPanel implements Runnable{
 		playMusic(0);
 		stopMusic();
 		
+		bufferScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
+		g2 = (Graphics2D)bufferScreen.getGraphics();
 		
+		this.drawFullScreen();
 	}
 	
 	@Override
@@ -181,7 +197,9 @@ public class GamePanel extends JPanel implements Runnable{
 				update();
 				//2. Draw the screen with the updated information
 				//Repaint internally calls paint to repaint the component
-				repaint();
+				drawBuffer();
+				drawScreen();
+//				repaint();
 				delta--;
 				++drawCount;
 				
@@ -209,14 +227,17 @@ public void update() {
 		//Player
 		player.update();
 		//NPCs
+		updateEntities (particles);
 		updateEntities(objects);
 		updateEntities(NPCs);
 		updateEntities(monsters);
 		updateEntities (projectiles);
-		updateInteractiveTiles();
+		updateEntities(interactiveTiles);
+		
 		
 		monsters.removeAll(removeMonsterList);
 		projectiles.removeAll(removeProjectileList);
+		particles.removeAll(removeParticleList);
 		removeMonsterList.clear();
 		removeProjectileList.clear();
 			
@@ -228,15 +249,7 @@ public void update() {
 	
 }
 
-
-public void paintComponent (Graphics g) {
-	
-	//Calling parent class JPanel
-	super.paintComponent(g);
-	
-	//Set 1D graphics to 2d Graphics
-	Graphics2D g2 = (Graphics2D)g;
-	
+public void drawBuffer() {
 	if (gameState == GameState.TITLE) {
 		ui.draw(g2);
 		
@@ -245,14 +258,14 @@ public void paintComponent (Graphics g) {
 		//Draw the tiles first before the player characters
 		//TILE
 		tileM.draw(g2);
-		
-		//Draw all interactive tiles
-		for (int i = 0; i < interactiveTiles.size(); ++i) {
-			if (interactiveTiles.get(i) != null) {
-				interactiveTiles.get(i).draw(g2, this);
-			}
-		}
-	
+//		
+//		//Draw all interactive tiles
+//		for (int i = 0; i < interactiveTiles.size(); ++i) {
+//			if (interactiveTiles.get(i) != null) {
+//				interactiveTiles.get(i).draw(g2, this);
+//			}
+//		}
+//	
 		entityList.add(player);
 	
 		//Add both npcs and objects to the array list 
@@ -260,6 +273,8 @@ public void paintComponent (Graphics g) {
 		addtoEntityList(objects);
 		addtoEntityList(monsters);
 		addtoEntityList (projectiles);
+		addtoEntityList(interactiveTiles);
+		addtoEntityList(particles);
 		
 		//Sort the entityList
 		Collections.sort(entityList, new Comparator<Entity>() {
@@ -297,18 +312,31 @@ public void paintComponent (Graphics g) {
 			g2.drawString(FPS_text, FPS_x, FPS_y);
 			g2.drawString("X: " + (player.getWorldX())/tileSize + " Y: " + (player.getWorldY())/tileSize, FPS_x - tileSize/2, FPS_y + tileSize);
 		}
-	
-	g2.dispose();
-	
 	}
+}
 
+public void drawScreen() {
+	Graphics g = getGraphics();
+	g.drawImage(bufferScreen, 0, 0, screenWidth2, screenHeight2, null);
+	g.dispose();
+}
+
+public void drawFullScreen() {
+	
+	//Get screen device parameters
+	GraphicsEnvironment gEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	GraphicsDevice gDevice = gEnvironment.getDefaultScreenDevice();
+	gDevice.setFullScreenWindow(Main.window);
+	
+	screenWidth2 = Main.window.getWidth();
+	screenHeight2 = Main.window.getHeight();
 }
 	//Music playing methods
-	public void playMusic (int i) {
-		music.setFile(i);
-		music.play();
-		music.loop();
-	}
+public void playMusic (int i) {
+	music.setFile(i);
+	music.play();
+	music.loop();
+}
 	
 	public void stopMusic () {
 		music.stop();
@@ -337,7 +365,10 @@ public void paintComponent (Graphics g) {
 				if (entity instanceof Projectile) {
 					removeProjectileList.add(entity);
 				}
-			
+				
+				if (entity instanceof Particle) {
+					removeParticleList.add(entity);
+				}
 			
 			} else if (entity.getAlive()) {
 				entity.update();
@@ -345,13 +376,13 @@ public void paintComponent (Graphics g) {
 		});
 	}
 	
-	private final void updateInteractiveTiles () {
-		for (int i = 0; i < interactiveTiles.size(); ++i) {
-			if (interactiveTiles.get(i) != null) {
-				((InteractiveTile)interactiveTiles.get(i)).updateInteractiveTile();;
-			}
-		}
-	}
+//	private final void updateInteractiveTiles () {
+//		for (int i = 0; i < interactiveTiles.size(); ++i) {
+//			if (interactiveTiles.get(i) != null) {
+//				((InteractiveTile)interactiveTiles.get(i)).updateInteractiveTile();
+//			}
+//		}
+//	}
 
 	
 	/**
@@ -366,6 +397,8 @@ public void paintComponent (Graphics g) {
 	public ArrayList<Entity> getProjectiles () { return projectiles;}
 	
 	public ArrayList<Entity> getInteractiveTiles () { return interactiveTiles;}
+	
+	public ArrayList<Entity> getParticles() { return particles; }
 }
 
 

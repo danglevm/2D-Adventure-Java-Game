@@ -1,5 +1,6 @@
 package monster;
 
+import java.awt.Color;
 import java.util.Random;
 
 import adventureGame2D.GamePanel;
@@ -23,6 +24,10 @@ public class MonsterGreenSlime extends Monster {
 		this.setDefaultValues();
 		this.getImage(gp.getTileSize());
 		projectile = new Rock(gp);
+		this.pColor = new Color (240, 50, 0);
+		this.pSize = 6;
+		this.pSpeed = 1;
+		this.pDuration = 18;
 	}
 	/**
 	 * Override from MonsterInterface
@@ -105,6 +110,7 @@ public class MonsterGreenSlime extends Monster {
 	public void damagePlayer (Player player) {
 		int postDmgLife = player.getLife() - this.attack + player.getTotalDefense();
 		
+		this.generateParticles(this, player);
 		
 		if (postDmgLife > player.getLife()) postDmgLife = player.getLife();
 		

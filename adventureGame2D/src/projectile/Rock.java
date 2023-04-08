@@ -1,5 +1,7 @@
 package projectile;
 
+import java.awt.Color;
+
 import adventureGame2D.GamePanel;
 
 
@@ -20,6 +22,10 @@ public class Rock extends Projectile {
 		this.alive = false;
 		this.getImage();
 		this.collisionOn = false;
+		this.pColor = new Color (240, 50, 0);
+		this.pSize = 6;
+		this.pSpeed = 1;
+		this.pDuration = 18;
 		
 	}
 	

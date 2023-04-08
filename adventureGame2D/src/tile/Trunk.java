@@ -22,7 +22,7 @@ public class Trunk extends InteractiveTile{
 	}
 
 	@Override
-	public void updateInteractiveTile() {
+	public void update() {
 		// TODO Auto-generated method stub
 		
 	}

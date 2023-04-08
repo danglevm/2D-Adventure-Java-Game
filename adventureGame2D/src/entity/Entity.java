@@ -63,6 +63,22 @@ public class Entity{
 	//alive and in dying animation or not
 	protected boolean alive = true, dying = false;
 	
+	/**
+	 * Setting up particle characteristics
+	 */
+	protected Color pColor;
+	
+	protected int pSize; //6 pixels
+	
+	protected int pSpeed; //how fast particle flies
+	
+	protected int pDuration; //HP of particle
+	
+	protected int pOffset; //Changes where the particle effects take place
+
+	
+	
+	
 //	Constructor
 	public Entity (GamePanel gp) {
 		this.gp = gp;
@@ -207,6 +223,12 @@ public class Entity{
 	}
 	
 
+	protected final void generateParticles(Entity generator, Entity target) {
+		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, -1));
+		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, -1));
+		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, 1));
+		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, 1));
+	}
 	/*
 	 * SETTERS AND GETTERS
 	 */

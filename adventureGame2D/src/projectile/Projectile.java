@@ -4,6 +4,7 @@ import adventureGame2D.GamePanel;
 import entity.Entity;
 import entity.Player;
 import enums.Direction;
+import monster.Monster;
 
 public abstract class Projectile extends Entity {
 	
@@ -38,16 +39,18 @@ public abstract class Projectile extends Entity {
 		if (user == player) {
 			int monsterIndex = gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 			if (monsterIndex != 9999) {
+				this.generateParticles(this, gp.getMonsters().get(monsterIndex));
 				this.alive = false;
-				gp.getPlayer().damageMonster(monsterIndex);
-					
+				player.damageMonster(monsterIndex);
+
 			}
-		} else if (user != player) {
+		} else if (user != player && user instanceof Monster) {
 			if (!gp.getPlayer().getInvincibility() && gp.getCollisionCheck().checkPlayer(this)) {
 				int postDmgLife = player.getLife() - this.attack + player.getTotalDefense();
 				if (postDmgLife > player.getLife()) postDmgLife = player.getLife();
 				player.setLife(postDmgLife);
 				player.setInvincibility(true);
+				this.generateParticles(((Monster)user).getMonsterProjectile(), player);
 				player.checkInvincibilityTime();
 				gp.playSE(6);
 				this.alive = false;
