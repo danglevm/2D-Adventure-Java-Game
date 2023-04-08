@@ -30,8 +30,6 @@ public class UI {
 	
 	GamePanel gp;
 	Graphics2D g2;
-	//Sub-states
-	//0 - welcome screen; 1 - story paths
 	private TitleState titleScreenState;
 	private InventoryState inventoryState;
 	
@@ -46,6 +44,7 @@ public class UI {
 	Color nameColor1 = new Color(253, 218, 13);
 	Color nameColor2 = new Color(196, 30, 58);
 	
+	
 	//Inventory option cursor color
 	Color optionColor = new Color(247, 135, 2);
 	
@@ -53,7 +52,7 @@ public class UI {
 		  equippedDefenseColor = new Color(121,68,59),
 		  equippedToolColor = new Color(175, 225, 175);
 	
-	protected int cursorNum = 0, statusCursor = 0, inventoryOptionCursor = 0;
+	protected int cursorNum = 0, statusCursor = 0, inventoryOptionCursor = 0, pauseCursor = 0;
 	
 	//Drawing hearts
 	private BufferedImage heart_full, heart_half, heart_blank;
@@ -69,6 +68,8 @@ public class UI {
 	//Drawing SubTitles
 	ArrayList <String> subtitleMsg = new ArrayList <String> ();
 	ArrayList <Integer> subtitleMsgCount = new ArrayList <Integer> ();
+	
+	private int pauseOption = 0;
 	
 	
 	//Drawing and setting UI
@@ -208,15 +209,63 @@ public class UI {
 		Color background = new Color (0,0,0, 220);
 		g2.setColor(background);
 		g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
+		
+		int menuFrameX = gp.getTileSize() * 4,
+				menuFrameY = gp.getTileSize(),
+				menuFrameWidth = gp.getTileSize() * 12,
+				menuFrameHeight = gp.getTileSize() * 11;
+			this.drawSubWindow(menuFrameX, menuFrameY, menuFrameWidth, menuFrameHeight);
 			
 		
 		g2.setFont(maruMonica);
-		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80));
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 36));
 		g2.setColor(Color.white);
-		String text = "Game Paused";
-		int x = getXCenter(text), y = gp.getScreenHeight()/2;
-		g2.drawString(text,x, y);
+		String pauseText = "GAME PAUSED";
+		int pauseX = getXCenter(pauseText), pauseY = gp.getTileSize() * 2;
+		g2.drawString(pauseText, pauseX, pauseY);
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 24));
+		String optionsText = "OPTIONS";
+		int optionsX = getXCenter(optionsText), optionsY = gp.getTileSize() * 3 - gp.getTileSize()/3;
+		g2.drawString(optionsText, optionsX, optionsY);
 		
+		g2.setColor(Color.white);
+		g2.setFont(g2.getFont().deriveFont(32F));
+		
+		
+		
+		switch (pauseOption) {
+		case 0 -> {pauseLabels(menuFrameX, menuFrameY);}
+		case 1 -> {;}
+		case 2 -> {;}
+		}
+		
+	}
+	
+	private final void pauseLabels (int frameX, int frameY) {
+		int textX = frameX + gp.getTileSize(), 
+			textY = gp.getTileSize() * 4;
+		g2.drawString("Full Screen", textX, textY);
+		g2.drawString("Music", textX, textY  += gp.getTileSize());
+		g2.drawString("Sound Effects", textX, textY  += gp.getTileSize());
+		g2.drawString("Keybindings", textX, textY  += gp.getTileSize());
+		g2.drawString("Show Subtitles", textX, textY += gp.getTileSize());
+		g2.drawString("Load last save", textX, textY += gp.getTileSize());
+		g2.drawString("Save", textX, textY += gp.getTileSize());
+		g2.drawString("Save and Quit to Menu", textX, textY  += gp.getTileSize());
+		g2.drawString(">", textX - 20, gp.getTileSize() * 4 + gp.getTileSize() * pauseCursor);
+		
+		g2.setStroke(new BasicStroke(3));
+		this.fullScreenCheckbox(frameX, frameY);
+		this.drawMusicSlider(frameX, frameY);
+		
+	}
+	
+	private final void fullScreenCheckbox (int frameX, int frameY) {
+		g2.drawRect(frameX + gp.getTileSize() * 9, gp.getTileSize() * 3 + 23, 24, 24);
+	}
+	
+	private final void drawMusicSlider (int frameX, int frameY) {
+		g2.drawRect(frameX + gp.getTileSize() * 7, gp.getTileSize() * 4 + 23, 120, 24);
 	}
 	
 	private void drawRandomPauseQuotes() {
@@ -231,7 +280,7 @@ public class UI {
 			pauseText = pauseQuotes.getPauseNoCombat(rand);
 			gp.getKeyHandler().setPauseQuote(false);
 		}
-		int y = gp.getScreenHeight()/2 + gp.getTileSize()*2, x = getXCenter (pauseText);
+		int y = gp.getScreenHeight() - gp.getTileSize(), x = getXCenter (pauseText);
 		g2.drawString(pauseText,x, y);
 		
 	}

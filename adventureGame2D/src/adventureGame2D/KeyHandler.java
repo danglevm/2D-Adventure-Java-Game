@@ -246,6 +246,14 @@ public class KeyHandler implements KeyListener{
 	
 	private final void pauseState (int code) {
 		if (code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.PLAY);
+		
+		if (code == KeyEvent.VK_W) --gp.getGameUI().pauseCursor;
+		
+		if (code == KeyEvent.VK_S) ++gp.getGameUI().pauseCursor;
+		
+		if (gp.getGameUI().pauseCursor > 7) gp.getGameUI().pauseCursor = 7;
+		 
+		if (gp.getGameUI().pauseCursor < 0) gp.getGameUI().pauseCursor = 0;
 	}
 	
 	private final void dialogueState (int code) {
@@ -255,7 +263,7 @@ public class KeyHandler implements KeyListener{
 	
 	private final void statusState (int code) {
 		
-		if (code == KeyEvent.VK_C) gp.setGameState(GameState.PLAY);  
+		if (code == KeyEvent.VK_C || code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.PLAY);  
 		
 		if (code == KeyEvent.VK_W) --gp.getGameUI().statusCursor;
 		
@@ -328,6 +336,7 @@ public class KeyHandler implements KeyListener{
 		}
 		
 	}
+	
 		
 	@Override
 	public final void keyReleased(KeyEvent e) {
