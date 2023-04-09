@@ -68,7 +68,7 @@ public class GamePanel extends JPanel implements Runnable{
 	private GameState gameState;
 	
 	//FPS
-	private int FPS = 60, FPS_x = screenWidth - tileSize*3, FPS_y = tileSize;
+	private int FPS = 60, FPS_x = screenWidth - tileSize*5, FPS_y = tileSize;
 	private String FPS_text = "";
 	
 	//******************************************************************************************************************		
@@ -82,6 +82,8 @@ public class GamePanel extends JPanel implements Runnable{
 	private UI ui = new UI(this);
 	private EventHandler eHandler = new EventHandler (this);
 	private AssetPlacement assetPlace = new AssetPlacement(this);
+	private Config config = new Config (this);
+	
 	
 	//Entities
 	Thread gameThread;
@@ -97,7 +99,11 @@ public class GamePanel extends JPanel implements Runnable{
 	private ArrayList <Entity> removeMonsterList = new ArrayList <Entity> ();
 	private ArrayList <Entity> removeProjectileList = new ArrayList <Entity> ();
 	private ArrayList <Entity> removeParticleList = new ArrayList <Entity> ();
+
 	
+	//options menu
+	private boolean fullScreen = false;
+	private boolean subtitleOn = false;
 	
 	//sound
 	Sound music = new Sound();
@@ -146,6 +152,12 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public Player getPlayer () { return player;}
 	
+	public Sound getMusic () { return music; }
+	
+	public Sound getSoundEffects () { return se;}
+	
+	public Config getMenuOptionConfig() { return config; }
+	
 	public ArrayList<Entity> getNPCS() { return NPCs;}
 	
 	public ArrayList<Entity> getObjects() { return objects;}
@@ -167,7 +179,7 @@ public class GamePanel extends JPanel implements Runnable{
 		bufferScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
 		g2 = (Graphics2D)bufferScreen.getGraphics();
 		
-		this.drawFullScreen();
+		if (this.getFullScreen()) this.drawFullScreen();
 	}
 	
 	@Override
@@ -399,6 +411,14 @@ public void playMusic (int i) {
 	public ArrayList<Entity> getInteractiveTiles () { return interactiveTiles;}
 	
 	public ArrayList<Entity> getParticles() { return particles; }
+
+	public final boolean getFullScreen() { return fullScreen;}
+	
+	public final void setFullScreen(boolean fullScreen) {this.fullScreen = fullScreen; }
+	
+	public final boolean getSubtitleState() { return subtitleOn; }
+	
+	public final void setSubtitileState (boolean subtitleOn) {this.subtitleOn = subtitleOn; }
 }
 
 

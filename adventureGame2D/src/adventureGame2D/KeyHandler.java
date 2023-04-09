@@ -245,7 +245,25 @@ public class KeyHandler implements KeyListener{
 	 */
 	
 	private final void pauseState (int code) {
-		if (code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.PLAY);
+		
+		if (code == KeyEvent.VK_ESCAPE) { 
+			
+			switch (gp.getGameUI().getPauseOption()) {
+			case 0 -> {
+				gp.setGameState(GameState.PLAY);
+			}
+			
+			case 1, 2 -> {
+				gp.getGameUI().setPauseOption(0);
+			}
+			}
+			
+			if (gp.getGameUI().getPauseOption() != 1) {
+				
+			} else {
+				gp.getGameUI().setPauseOption(0);
+			}
+		}
 		
 		if (code == KeyEvent.VK_W) --gp.getGameUI().pauseCursor;
 		
@@ -254,6 +272,61 @@ public class KeyHandler implements KeyListener{
 		if (gp.getGameUI().pauseCursor > 7) gp.getGameUI().pauseCursor = 7;
 		 
 		if (gp.getGameUI().pauseCursor < 0) gp.getGameUI().pauseCursor = 0;
+		
+		if (code == KeyEvent.VK_ENTER) {
+			switch (gp.getGameUI().pauseCursor) {
+			case 0 -> {
+				if (gp.getGameUI().getPauseOption() == 0) {
+					gp.setFullScreen(!gp.getFullScreen());
+					gp.getGameUI().setPauseOption(1);
+				}
+			}
+			
+			case 1 -> {}
+			
+			case 2 -> {}
+			
+			case 3 -> {
+				if (gp.getGameUI().getPauseOption() == 0) {
+					gp.getGameUI().setPauseOption(2);
+				}
+			}
+			
+			case 4 -> { 
+				gp.setSubtitileState(!gp.getSubtitleState());
+			}
+			
+			case 7 -> {
+				gp.getGameUI().setTitleScreenState(TitleState.WELCOME);
+				gp.setGameState(GameState.TITLE);
+			}
+			
+			}
+		}
+		if (gp.getGameUI().getPauseOption() == 0)
+			if (gp.getGameUI().pauseCursor == 1) {
+				if (code == KeyEvent.VK_A && gp.getMusic().getVolumeScale() > 0) {
+					gp.getMusic().setVolumeScale(gp.getMusic().getVolumeScale() - 1);
+					gp.getMusic().adjustVolume();
+				}
+				
+				if (code == KeyEvent.VK_D && gp.getMusic().getVolumeScale() < 5) {
+					gp.getMusic().setVolumeScale(gp.getMusic().getVolumeScale() + 1);
+					gp.getMusic().adjustVolume();
+				}
+			}
+		
+			if (gp.getGameUI().pauseCursor == 2) {
+				if (code == KeyEvent.VK_A && gp.getSoundEffects().getVolumeScale() > 0) {
+					gp.getSoundEffects().setVolumeScale(gp.getSoundEffects().getVolumeScale() - 1);
+				}
+			
+				if (code == KeyEvent.VK_D && gp.getSoundEffects().getVolumeScale() < 5) {
+					gp.getSoundEffects().setVolumeScale(gp.getSoundEffects().getVolumeScale() + 1);
+				}
+			}
+			
+		
 	}
 	
 	private final void dialogueState (int code) {

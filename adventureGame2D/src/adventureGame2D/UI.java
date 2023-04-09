@@ -69,7 +69,7 @@ public class UI {
 	ArrayList <String> subtitleMsg = new ArrayList <String> ();
 	ArrayList <Integer> subtitleMsgCount = new ArrayList <Integer> ();
 	
-	private int pauseOption = 0;
+	private int pauseOptionState = 0;
 	
 	
 	//Drawing and setting UI
@@ -133,6 +133,10 @@ public class UI {
 	
 	public final void setSlotRow (int slotRow) { this.slotRow = slotRow;}
 	
+	public final int getPauseOption () { return pauseOptionState; }
+	
+	public final void setPauseOption (int pauseOptionState) { this.pauseOptionState = pauseOptionState; } 
+	
 	public final void addSubtitleMsg (String message) {
 		this.subtitleMsg.add(message);
 		this.subtitleMsgCount.add(0);
@@ -183,7 +187,7 @@ public class UI {
 		
 		case PLAY -> {
 			drawPlayerHUD();
-			drawSubtitleMsg();
+			if (gp.getSubtitleState()) drawSubtitleMsg();
 			if (gp.getEventHandler().getInteraction()) { drawInteractionKey(); }
 		
 		}
@@ -233,11 +237,12 @@ public class UI {
 		
 		
 		
-		switch (pauseOption) {
+		switch (pauseOptionState) {
 		case 0 -> {pauseLabels(menuFrameX, menuFrameY);}
-		case 1 -> {;}
-		case 2 -> {;}
+		case 1 -> {fullScreenNotification(menuFrameX, menuFrameY);}
+		case 2 -> {keyBindings(menuFrameX, menuFrameY);}
 		}
+	
 		
 	}
 	
@@ -254,18 +259,86 @@ public class UI {
 		g2.drawString("Save and Quit to Menu", textX, textY  += gp.getTileSize());
 		g2.drawString(">", textX - 20, gp.getTileSize() * 4 + gp.getTileSize() * pauseCursor);
 		
+		
 		g2.setStroke(new BasicStroke(3));
-		this.fullScreenCheckbox(frameX, frameY);
-		this.drawMusicSlider(frameX, frameY);
+		this.fullScreenCheckbox(frameX, 3);
+		//Music volume slider
+		this.drawMusicSlider(frameX, 4);
+		
+		//Sound effect slider
+		this.drawSoundSlider(frameX, 5);
+		
+		this.subtitleCheckbox(frameX, 7);
+		
+		gp.getMenuOptionConfig().saveConfig();
 		
 	}
 	
-	private final void fullScreenCheckbox (int frameX, int frameY) {
-		g2.drawRect(frameX + gp.getTileSize() * 9, gp.getTileSize() * 3 + 23, 24, 24);
+	private final void fullScreenCheckbox (int frameX, int valueY) {
+		g2.drawRect(frameX + gp.getTileSize() * 9, gp.getTileSize() * valueY + 23, 24, 24);
+		if (gp.getFullScreen()) {
+			g2.fillRect(frameX + gp.getTileSize() * 9, gp.getTileSize() * valueY + 23, 24, 24);
+		}
 	}
 	
-	private final void drawMusicSlider (int frameX, int frameY) {
-		g2.drawRect(frameX + gp.getTileSize() * 7, gp.getTileSize() * 4 + 23, 120, 24);
+	private final void fullScreenNotification (int frameX, int frameY) {
+		int textX = frameX + gp.getTileSize();
+		int textY = frameY + gp.getTileSize() * 3;
+		
+		String message = "The changes will take effect after you \nrestart the game.";
+		
+		for (String line : message.split("\n")) {
+			g2.drawString(line, textX, textY);
+			//increase the display
+			textY += 40;
+		}
+		
+		g2.drawString("Press ESC to go back to menu options.", textX, textY + 40);
+	}
+	
+	private final void drawMusicSlider (int frameX, int valueY) {
+		g2.drawRect(frameX + gp.getTileSize() * 7, gp.getTileSize() * valueY + 23, 120, 24); //120/5 = 24
+		int volumeWidth = 24 * gp.getMusic().getVolumeScale();
+		g2.fillRect(frameX + gp.getTileSize() * 7, gp.getTileSize() * valueY + 23, volumeWidth, 24);
+	}
+	
+	private final void drawSoundSlider (int frameX, int valueY) {
+		g2.drawRect(frameX + gp.getTileSize() * 7, gp.getTileSize() * valueY + 23, 120, 24); //120/5 = 24
+		int volumeWidth = 24 * gp.getSoundEffects().getVolumeScale();
+		g2.fillRect(frameX + gp.getTileSize() * 7, gp.getTileSize() * valueY + 23, volumeWidth, 24);
+	}
+	
+	private final void subtitleCheckbox (int frameX, int valueY) {
+		g2.drawRect(frameX + gp.getTileSize() * 9, gp.getTileSize() * valueY + 23, 24, 24);
+		if (gp.getSubtitleState()) {
+			g2.fillRect(frameX + gp.getTileSize() * 9, gp.getTileSize() * valueY + 23, 24, 24);
+		}
+	}
+	
+	private final void keyBindings (int frameX, int frameY) {
+		int textX = frameX + gp.getTileSize();
+		int textY = frameY + gp.getTileSize();
+
+		g2.drawString("Movement", textX, textY += gp.getTileSize());
+		g2.drawString("Attack", textX, textY += gp.getTileSize());
+		g2.drawString("Use Tools", textX, textY += gp.getTileSize());
+		g2.drawString("Cast Spells", textX, textY += gp.getTileSize());
+		g2.drawString("Display Info", textX, textY += gp.getTileSize());
+		g2.drawString("Open Inventory", textX, textY += gp.getTileSize());
+		g2.drawString("Open Status and Upgrades", textX, textY += gp.getTileSize());
+		g2.drawString("Upgrades and inventory interaction", textX, textY += gp.getTileSize());
+		g2.drawString("Press ESC to go back", textX, textY += gp.getTileSize());
+		
+		textX = frameX + gp.getTileSize() * 10;
+		textY = frameY + gp.getTileSize() * 2;
+		g2.drawString("WASD", textX, textY);
+		g2.drawString("J", textX, textY += gp.getTileSize());
+		g2.drawString("K", textX, textY += gp.getTileSize());
+		g2.drawString("L", textX, textY += gp.getTileSize());
+		g2.drawString("T", textX, textY += gp.getTileSize());
+		g2.drawString("E", textX, textY += gp.getTileSize());
+		g2.drawString("C", textX, textY += gp.getTileSize());
+		g2.drawString("ENTER", textX, textY += gp.getTileSize());
 	}
 	
 	private void drawRandomPauseQuotes() {
@@ -610,6 +683,10 @@ public class UI {
 		}
 		if (player.getEquippedDefense() != null) {
 			g2.drawImage(player.getEquippedDefense().getDown1(), tailX, valueY , null);
+		}
+		
+		if (player.getEquippedTool() != null) {
+			g2.drawImage(player.getEquippedTool().getDown1(), tailX + gp.getTileSize(), valueY , null);
 		}
 		
 		/**

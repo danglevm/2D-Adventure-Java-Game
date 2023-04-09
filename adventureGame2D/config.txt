@@ -1,0 +1,3 @@
+fullscreen,off
+music,4
+sound,4

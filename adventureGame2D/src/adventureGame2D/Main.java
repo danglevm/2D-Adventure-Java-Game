@@ -24,7 +24,13 @@ public class Main {
 		//Game panel object
 		GamePanel gamePanel = new GamePanel();
 		window.add(gamePanel);
-				
+		
+		gamePanel.getMenuOptionConfig().loadConfig();
+		if (gamePanel.getFullScreen()) {
+			window.setUndecorated(true);
+		} else {
+			window.setUndecorated(false);
+		}
 			
 		window.pack(); //Resizes the frame so all contents are at or above preferred size
 		window.setLocationRelativeTo(null);//Center the GUI on the screen
