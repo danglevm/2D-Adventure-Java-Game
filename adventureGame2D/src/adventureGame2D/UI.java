@@ -270,6 +270,8 @@ public class UI {
 		
 		this.subtitleCheckbox(frameX, 7);
 		
+		gp.getMenuOptionConfig().saveConfig();
+		
 	}
 	
 	private final void fullScreenCheckbox (int frameX, int valueY) {

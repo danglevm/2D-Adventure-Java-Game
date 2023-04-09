@@ -82,6 +82,8 @@ public class GamePanel extends JPanel implements Runnable{
 	private UI ui = new UI(this);
 	private EventHandler eHandler = new EventHandler (this);
 	private AssetPlacement assetPlace = new AssetPlacement(this);
+	private Config config = new Config (this);
+	
 	
 	//Entities
 	Thread gameThread;
@@ -97,7 +99,7 @@ public class GamePanel extends JPanel implements Runnable{
 	private ArrayList <Entity> removeMonsterList = new ArrayList <Entity> ();
 	private ArrayList <Entity> removeProjectileList = new ArrayList <Entity> ();
 	private ArrayList <Entity> removeParticleList = new ArrayList <Entity> ();
-	
+
 	
 	//options menu
 	private boolean fullScreen = false;
@@ -154,6 +156,8 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public Sound getSoundEffects () { return se;}
 	
+	public Config getMenuOptionConfig() { return config; }
+	
 	public ArrayList<Entity> getNPCS() { return NPCs;}
 	
 	public ArrayList<Entity> getObjects() { return objects;}
@@ -175,7 +179,7 @@ public class GamePanel extends JPanel implements Runnable{
 		bufferScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
 		g2 = (Graphics2D)bufferScreen.getGraphics();
 		
-		this.drawFullScreen();
+		if (this.getFullScreen()) this.drawFullScreen();
 	}
 	
 	@Override
