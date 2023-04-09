@@ -22,6 +22,7 @@ public class AssetPlacement {
 	}
 	
 	public final void setObject() {
+		gp.getObjects().clear();
 		gp.getObjects().add(new Door(gp, 121, 123));
 		gp.getObjects().add(new Boots(gp, 121, 124));
 		gp.getObjects().add(new Axe(gp, 121, 125));
@@ -34,10 +35,12 @@ public class AssetPlacement {
 	}
 	
 	public final void setNPCs() {
+		gp.getNPCS().clear();
 		gp.getNPCS().add(new OldDude(gp, 121, 139));
 	}
 	
 	public final void setMonsters() {
+		gp.getMonsters().clear();
 		gp.getMonsters().add(new MonsterGreenSlime (gp, 126, 136));
 		gp.getMonsters().add(new MonsterGreenSlime (gp, 125, 120));
 		gp.getMonsters().add(new MonsterGreenSlime (gp, 124, 121));
@@ -47,6 +50,7 @@ public class AssetPlacement {
 	}
 	
 	final void setInteractiveTiles() {
+		gp.getInteractiveTiles().clear();
 		gp.getInteractiveTiles().add(new DryTree (gp, 140, 130));
 		gp.getInteractiveTiles().add(new DryTree (gp, 137, 127));
 		gp.getInteractiveTiles().add(new DryTree (gp, 136, 126));

@@ -175,7 +175,7 @@ public class Player extends Entity {
 	}
 	
 	
-	private final void setDefaultPlayerValues() {
+	public final void setDefaultPlayerValues() {
 		//Default player values
 		WorldX = gp.getTileSize() * 122;
 		WorldY = gp.getTileSize() * 132;
@@ -193,10 +193,6 @@ public class Player extends Entity {
 		solidArea.height = 32;
 		
 		
-		//Attack area - could really increase this for potions
-		//Attack area inherits from object's attackArea
-//		attackArea.width = 32;
-//		attackArea.height = 32;
 		
 		playerAttack = false;
 		useTool = false;
@@ -238,6 +234,7 @@ public class Player extends Entity {
 		mana = 6;
 		coin = 0;
 		experience = 0;
+		invincibility = false;
 	
 		nextLevelExperience = 9;
 		upgradePoints = 10;
@@ -251,6 +248,8 @@ public class Player extends Entity {
 		equippedAccessory1 = null;
 		equippedAccessory2 = null;
 		equippedTool = null;
+		
+		
 	
 		
 		addDefaultInventoryItems();
@@ -341,7 +340,10 @@ public class Player extends Entity {
 	
 	public void update() 
 	{
-		
+		if (life < 1) { 
+			gp.setGameState(GameState.GAMEOVER);
+			gp.playSE(18);;
+		}
 		this.updatePlayerAttributes();
 		collisionOn = false;	
 		this.checkLevelUp();
@@ -673,10 +675,10 @@ public class Player extends Entity {
 		++spriteCounter;
 		
 		//10 frames of short attack animation
-		if (spriteCounter < 10) {
+		if (spriteCounter < 15) {
 			spriteNum = true;
 		//next 20 frames of long attack animation
-		} else if (spriteCounter < 30) {
+		} else if (spriteCounter < 35) {
 			spriteNum = false;
 
 			//Save player's current location on map
@@ -785,6 +787,7 @@ public class Player extends Entity {
 	}
 	
 	private final void addDefaultInventoryItems() {
+		inventory.clear();
 		inventory.add(equippedWeapon);
 		inventory.add(equippedDefense);
 		inventory.add(new BlueShield(gp, 0, 0));

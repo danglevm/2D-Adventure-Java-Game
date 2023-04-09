@@ -120,7 +120,7 @@ public class GamePanel extends JPanel implements Runnable{
 		//Set the Game Panel to focus on taking inputs from key presses
 		this.setFocusable(true);
 		entityList.ensureCapacity(100);
-		
+		gameState = GameState.TITLE;
 	}
 	
 	//-------------------------------CLASS METHODS------------------
@@ -168,13 +168,10 @@ public class GamePanel extends JPanel implements Runnable{
 	//*******************************GAME SETUP**********************
 	public void GameSetup() {
 		
-		gameState = GameState.TITLE;
 		assetPlace.setObject();
 		assetPlace.setNPCs();
 		assetPlace.setMonsters();
 		assetPlace.setInteractiveTiles();
-		playMusic(0);
-		stopMusic();
 		
 		bufferScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
 		g2 = (Graphics2D)bufferScreen.getGraphics();
@@ -270,14 +267,7 @@ public void drawBuffer() {
 		//Draw the tiles first before the player characters
 		//TILE
 		tileM.draw(g2);
-//		
-//		//Draw all interactive tiles
-//		for (int i = 0; i < interactiveTiles.size(); ++i) {
-//			if (interactiveTiles.get(i) != null) {
-//				interactiveTiles.get(i).draw(g2, this);
-//			}
-//		}
-//	
+
 		entityList.add(player);
 	
 		//Add both npcs and objects to the array list 
