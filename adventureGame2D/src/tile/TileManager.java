@@ -16,18 +16,23 @@ public class TileManager extends Tile{
 
 	GamePanel gp;
 	public ArrayList<Tile> tilesList;
-	public int mapTileNum[][];
+	public int mapTileNum[][][];
 	//Change file path for maps
 	String filePath1 = "/maps/spawnmap";
+	String filePath2 = "/maps/trade_interior";
 	
 	//-------------------------------CONSTRUCTORS------------------
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
 		tilesList = new ArrayList<Tile>();
-		mapTileNum = new int [gp.getMaxWorldCol()][gp.getMaxWorldRow()];
+		mapTileNum = new int [gp.MAX_MAP][gp.getMaxWorldCol()][gp.getMaxWorldRow()];
 		
 		getTileImage();
-		loadMap(filePath1);
+		//Default spawn map
+		loadMap(filePath2, 0);
+		loadMap (filePath2, 0);
+		
+		//Trading interior map
 	}
 	//-------------------------------CLASS METHODS------------------
 	//Store tile images as entries inside the Tile array
@@ -97,7 +102,7 @@ public class TileManager extends Tile{
 		}
 	}
 
-	public void loadMap(String filePath) {
+	public void loadMap(String filePath, int map) {
 		try{
 			//Store link to text file as variable and read the text file
 			InputStream is = getClass().getResourceAsStream(filePath);
@@ -115,7 +120,7 @@ public class TileManager extends Tile{
 					
 					int num = Integer.parseInt(numbers[col]);
 					
-					mapTileNum[col][row]= num;
+					mapTileNum[map][col][row]= num;
 					++col;
 				}
 				if (col == gp.getMaxWorldCol()) {
@@ -140,7 +145,7 @@ public class TileManager extends Tile{
 		//While the tiles are still within max row and column size, draw the tile
 		while (worldCol < gp.getMaxWorldCol() && worldRow < gp.getMaxWorldRow()) {
 			//Retrieve the tile from mapTileNum
-			int tileNum = mapTileNum[worldCol][worldRow];
+			int tileNum = mapTileNum[gp.currentMap][worldCol][worldRow];
 			//Find the drawing location
 			//Render the area viewable only in the player field of view
 			int worldX = worldCol * gp.getTileSize();

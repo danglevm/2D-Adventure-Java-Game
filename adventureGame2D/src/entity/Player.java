@@ -177,8 +177,10 @@ public class Player extends Entity {
 	
 	public final void setDefaultPlayerValues() {
 		//Default player values
-		WorldX = gp.getTileSize() * 122;
-		WorldY = gp.getTileSize() * 132;
+//		WorldX = gp.getTileSize() * 122;
+//		WorldY = gp.getTileSize() * 132;
+		WorldX = gp.getTileSize() * 112;
+		WorldY = gp.getTileSize() * 115;
 		direction = Direction.DOWN;
 		
 		//x, y, width, length
@@ -282,7 +284,7 @@ public class Player extends Entity {
 		/**
 		 * netspeed = default speed of 3 + speed upgrades - encumbrance - temporarily not
 		 */
-		netSpeed = 3;
+		netSpeed = 30;
 
 		
 		//set the speed to be affected by equipment's encumbrance

@@ -44,8 +44,8 @@ public class CollisionCheck{
 			//Predict to see where the player will end up next - blocks up ahead
 			//Check the left and right corner of the entity to see if it will collide
 			entityTopRow = (entityTopWorldY - entity.getSpeed())/gp.getTileSize();
-			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
+			tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];
+			tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityTopRow];
 			
 			//Check the type of tile and see whether it has collision on
 			if (gp.tileM.tilesList.get(tileNum1).collision||gp.tileM.tilesList.get(tileNum2).collision) {
@@ -54,8 +54,8 @@ public class CollisionCheck{
 			break;
 		case DOWN:
 			entityBotRow = (entityBotWorldY + entity.getSpeed())/gp.getTileSize();
-			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBotRow];
-			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBotRow];
+			tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityBotRow];
+			tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityBotRow];
 			
 			//Check the type of tile and see whether it has collision on
 			if (gp.tileM.tilesList.get(tileNum1).collision||gp.tileM.tilesList.get(tileNum2).collision) {
@@ -64,8 +64,8 @@ public class CollisionCheck{
 			break;
 		case LEFT:
 			entityLeftCol = (entityLeftWorldX - entity.getSpeed())/gp.getTileSize();
-			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-			tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBotRow];
+			tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];
+			tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityBotRow];
 			
 			//Check the type of tile and see whether it has collision on
 			if (gp.tileM.tilesList.get(tileNum1).collision||gp.tileM.tilesList.get(tileNum2).collision) {
@@ -74,8 +74,8 @@ public class CollisionCheck{
 			break;
 		case RIGHT:
 			entityRightCol = (entityRightWorldX + entity.getSpeed())/gp.getTileSize();
-			tileNum1 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBotRow];
+			tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityTopRow];
+			tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityBotRow];
 			
 			//Check the type of tile and see whether it has collision on
 			if (gp.tileM.tilesList.get(tileNum1).collision||gp.tileM.tilesList.get(tileNum2).collision) {
