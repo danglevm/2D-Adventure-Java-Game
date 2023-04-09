@@ -6,11 +6,15 @@ import java.util.ArrayList;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 public class Sound {
 
 	//Open audio files
 	Clip clip;
+	FloatControl fc;
+	int volumeScale = 3;
+	float volume;
 	
 	//Store file path of sound files
 	ArrayList <URL> soundURL = new ArrayList<>();
@@ -46,9 +50,10 @@ public class Sound {
 			AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL.get(i));
 			clip = AudioSystem.getClip();
 			clip.open(ais);
+			fc = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+			this.adjustVolume();
 			
-			
-		}catch(Exception e){
+		} catch(Exception e){
 			
 		}
 	}
@@ -64,5 +69,26 @@ public class Sound {
 	
 	public void stop() {
 		clip.stop();
+	}
+	
+	public final void adjustVolume () {
+		switch (volumeScale) {
+		case 0 -> {volume = -80f;}
+		case 1 -> {volume = -20f;}
+		case 2 -> {volume = -12f;}
+		case 3 -> {volume = -5f;}
+		case 4 -> {volume = 1f;}
+		case 5 -> {volume = 6f;}
+		}
+		
+		fc.setValue(volume);
+	}
+	
+	public final int getVolumeScale () {
+		return volumeScale;
+	}
+	
+	public final void setVolumeScale (int volumeScale) {
+		this.volumeScale = volumeScale;
 	}
 }

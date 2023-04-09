@@ -68,7 +68,7 @@ public class GamePanel extends JPanel implements Runnable{
 	private GameState gameState;
 	
 	//FPS
-	private int FPS = 60, FPS_x = screenWidth - tileSize*3, FPS_y = tileSize;
+	private int FPS = 60, FPS_x = screenWidth - tileSize*5, FPS_y = tileSize;
 	private String FPS_text = "";
 	
 	//******************************************************************************************************************		
@@ -98,6 +98,10 @@ public class GamePanel extends JPanel implements Runnable{
 	private ArrayList <Entity> removeProjectileList = new ArrayList <Entity> ();
 	private ArrayList <Entity> removeParticleList = new ArrayList <Entity> ();
 	
+	
+	//options menu
+	private boolean fullScreen = false;
+	private boolean subtitleOn = false;
 	
 	//sound
 	Sound music = new Sound();
@@ -145,6 +149,10 @@ public class GamePanel extends JPanel implements Runnable{
 	public AssetPlacement getAssetPlacement () { return assetPlace;}
 	
 	public Player getPlayer () { return player;}
+	
+	public Sound getMusic () { return music; }
+	
+	public Sound getSoundEffects () { return se;}
 	
 	public ArrayList<Entity> getNPCS() { return NPCs;}
 	
@@ -399,6 +407,14 @@ public void playMusic (int i) {
 	public ArrayList<Entity> getInteractiveTiles () { return interactiveTiles;}
 	
 	public ArrayList<Entity> getParticles() { return particles; }
+
+	public final boolean getFullScreen() { return fullScreen;}
+	
+	public final void setFullScreen(boolean fullScreen) {this.fullScreen = fullScreen; }
+	
+	public final boolean getSubtitleState() { return subtitleOn; }
+	
+	public final void setSubtitileState (boolean subtitleOn) {this.subtitleOn = subtitleOn; }
 }
 
 
