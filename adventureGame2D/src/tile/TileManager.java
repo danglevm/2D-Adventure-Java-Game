@@ -29,8 +29,8 @@ public class TileManager extends Tile{
 		
 		getTileImage();
 		//Default spawn map
-		loadMap(filePath2, 0);
-		loadMap (filePath2, 0);
+		loadMap(filePath1, 0);
+//		loadMap (filePath2, 0);
 		
 		//Trading interior map
 	}

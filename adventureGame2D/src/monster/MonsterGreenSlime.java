@@ -87,7 +87,7 @@ public class MonsterGreenSlime extends Monster {
 	int i = new Random().nextInt(100) + 1;
 		if (i > 99 && !projectile.getAlive()) {
 			projectile.set(this.WorldX, this.WorldY, direction, this);
-			gp.getProjectiles().add(projectile);
+			gp.getProjectiles().get(gp.currentMap).add(projectile);
 			this.projectile.setCollisionOn(false);
 		}
 	}
@@ -139,31 +139,31 @@ public class MonsterGreenSlime extends Monster {
 		int entityWorldX = this.WorldX/gp.getTileSize();
 		int entityWorldY = this.WorldY/gp.getTileSize();
 		if (i < 100) {
-			gp.getObjects().add(new BronzeCoin(gp, entityWorldX, entityWorldY));
+			gp.getObjects().get(gp.currentMap).add(new BronzeCoin(gp, entityWorldX, entityWorldY));
 		}
 		
 		if (i > 60 && i < 80) {
-			gp.getObjects().add(new BronzeCoin (gp, entityWorldX, entityWorldY));
-			gp.getObjects().add(new Heart (gp, entityWorldX, entityWorldY));
+			gp.getObjects().get(gp.currentMap).add(new BronzeCoin (gp, entityWorldX, entityWorldY));
+			gp.getObjects().get(gp.currentMap).add(new Heart (gp, entityWorldX, entityWorldY));
 		}
 		
 		if (i > 100 && i < 130) {
-			gp.getObjects().add(new Mana (gp, entityWorldX, entityWorldY));
-			gp.getObjects().add(new Heart (gp, entityWorldX, entityWorldY));
+			gp.getObjects().get(gp.currentMap).add(new Mana (gp, entityWorldX, entityWorldY));
+			gp.getObjects().get(gp.currentMap).add(new Heart (gp, entityWorldX, entityWorldY));
 		}
 		
 		if (i > 200 && i < 230) {
-			gp.getObjects().add(new Mana (gp, entityWorldX, entityWorldY));
-			gp.getObjects().add(new BronzeCoin (gp, entityWorldX, entityWorldY));
+			gp.getObjects().get(gp.currentMap).add(new Mana (gp, entityWorldX, entityWorldY));
+			gp.getObjects().get(gp.currentMap).add(new BronzeCoin (gp, entityWorldX, entityWorldY));
 		}
 		
 		
 		if (i > 180 && i < 200) {
-			gp.getObjects().add(new Mana (gp, entityWorldX, entityWorldY));
+			gp.getObjects().get(gp.currentMap).add(new Mana (gp, entityWorldX, entityWorldY));
 		}
 		
 		if (i > 250 && i < 270) {
-			gp.getObjects().add(new Heart(gp, entityWorldX, entityWorldY));
+			gp.getObjects().get(gp.currentMap).add(new Heart(gp, entityWorldX, entityWorldY));
 		}
 	}
 	
