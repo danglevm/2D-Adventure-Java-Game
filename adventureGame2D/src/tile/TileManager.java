@@ -36,7 +36,7 @@ public class TileManager extends Tile{
 			//Streams (sequences of bytes) are searched and found, then decoded into buffered image and stored into an object
 			tileSetup(0, "000", false);
 			tileSetup(1, "001", false);
-			tileSetup(2, "002", false);
+			tileSetup(2, "002", false); //grass tile with grass
 			tileSetup(3, "003", false);
 			tileSetup(4, "004", false);
 			tileSetup(5, "005", false);
@@ -52,7 +52,7 @@ public class TileManager extends Tile{
 			tileSetup(13, "013", false);
 			tileSetup(14, "014", false);
 			tileSetup(15, "015", false);
-			tileSetup(16, "016", true);
+			tileSetup(16, "016", true); //tree
 			tileSetup(17, "017", false);
 
 			tileSetup(18, "018", true);
@@ -71,9 +71,9 @@ public class TileManager extends Tile{
 			
 			tileSetup(30, "030", true);
 			tileSetup(31, "031", true);
-			tileSetup(32, "032", true);
-			tileSetup(33, "033", true);
-			tileSetup(34, "034", false);
+			tileSetup(32, "032", true); //brick block
+			tileSetup(33, "033", true); //hut
+			tileSetup(34, "034", false); //wood floor
 			tileSetup(35, "035", true);
 			
 			tileSetup(36, "036", false);
