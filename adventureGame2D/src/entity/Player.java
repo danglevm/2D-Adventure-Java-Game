@@ -534,7 +534,7 @@ public class Player extends Entity {
 		
 		//stamina starts recharging after 1 second of not attacking and attackStamina recharges
 		if (actionStamina < maxStamina && staminaRechargeCounter > 60) {
-			actionStamina += 1 * attributeUpgrades.get("Stamina");
+			actionStamina += 1 * (attributeUpgrades.get("Stamina") + 1);
 		}
 	
 		//attack cool down period is on
