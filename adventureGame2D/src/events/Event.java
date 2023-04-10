@@ -29,4 +29,11 @@ public class Event {
 		gp.getPlayer().setWorldX(xTiles * gp.getTileSize());
 		gp.getPlayer().setWorldY(yTiles * gp.getTileSize()); 
 	}
+	
+	public void mapTransition (GameState gameState, int xTiles, int yTiles, int transitionMap) {
+		gp.currentMap = transitionMap;
+		gp.setGameState(gameState);
+		gp.getPlayer().setWorldX(xTiles * gp.getTileSize());
+		gp.getPlayer().setWorldY(yTiles * gp.getTileSize()); 
+	}
 }

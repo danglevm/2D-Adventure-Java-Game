@@ -16,9 +16,12 @@ public class MonsterGreenSlime extends Monster {
 	
 	GamePanel gp;
 	
+	Player player;
+	
 	public MonsterGreenSlime (GamePanel gp, int worldX, int worldY) {
 		super(gp);
 		this.gp = gp;
+		player = gp.getPlayer();
 		this.WorldX = worldX * gp.getTileSize();
 		this.WorldY = worldY * gp.getTileSize();
 		this.setDefaultValues();
@@ -84,6 +87,29 @@ public class MonsterGreenSlime extends Monster {
 		actionLock = 0;
 	}
 	
+	switch (direction) {
+	
+	case UP:
+		if (spriteNum) {image = up1;} else {image = up2;} break;
+		
+	case DOWN:
+		if (spriteNum) {image = down1;} else {image = down2;} break;
+		
+	case LEFT:
+		if (spriteNum) {image = left1;} else {image = left2;} break;
+		
+	case RIGHT:
+		if (spriteNum) {image = right1;} else {image = right2;} break;
+	default: break;
+		}
+	
+	if (!collisionOn) ++spriteCounter;
+	//Player image changes every 12 frames
+	if (spriteCounter > 12) {
+		spriteNum = !spriteNum;
+		spriteCounter = 0;
+	}
+	
 	int i = new Random().nextInt(100) + 1;
 		if (i > 99 && !projectile.getAlive()) {
 			projectile.set(this.WorldX, this.WorldY, direction, this);
@@ -97,7 +123,7 @@ public class MonsterGreenSlime extends Monster {
 	 */
 	
 	@Override
-	public void monsterDamageReaction(Player player) {
+	public void monsterDamageReaction() {
 		this.actionLock = 0;
 		this.direction = player.getDirection();
 	}
@@ -107,7 +133,8 @@ public class MonsterGreenSlime extends Monster {
 	 */
 	
 	@Override
-	public void damagePlayer (Player player) {
+	public void damagePlayer () {
+	
 		int postDmgLife = player.getLife() - this.attack + player.getTotalDefense();
 		
 		this.generateParticles(this, player);

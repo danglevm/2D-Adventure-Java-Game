@@ -10,9 +10,9 @@ public interface MonsterInterface{
 		
 		abstract void getImage(int size);
 		
-		abstract void damagePlayer(Player player);
+		abstract void damagePlayer();
 		
-		abstract void monsterDamageReaction(Player player);
+		abstract void monsterDamageReaction();
 		
 		abstract void checkInvincibilityTime();
 		

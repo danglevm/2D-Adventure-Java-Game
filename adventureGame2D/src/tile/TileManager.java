@@ -28,9 +28,9 @@ public class TileManager extends Tile{
 		mapTileNum = new int [gp.MAX_MAP][gp.getMaxWorldCol()][gp.getMaxWorldRow()];
 		
 		getTileImage();
-		//Default spawn map
+		//Default MapsConstants.SPAWN map
 		loadMap(filePath1, 0);
-//		loadMap (filePath2, 0);
+		loadMap (filePath2, 1);
 		
 		//Trading interior map
 	}
@@ -39,7 +39,7 @@ public class TileManager extends Tile{
 	public void getTileImage() {
 		
 			//Streams (sequences of bytes) are searched and found, then decoded into buffered image and stored into an object
-			tileSetup(0, "000", false);
+			tileSetup(0, "000", true);
 			tileSetup(1, "001", false);
 			tileSetup(2, "002", false); //grass tile with grass
 			tileSetup(3, "003", false);
@@ -77,7 +77,7 @@ public class TileManager extends Tile{
 			tileSetup(30, "030", true);
 			tileSetup(31, "031", true);
 			tileSetup(32, "032", true); //brick block
-			tileSetup(33, "033", true); //hut
+			tileSetup(33, "033", false); //hut
 			tileSetup(34, "034", false); //wood floor
 			tileSetup(35, "035", true);
 			

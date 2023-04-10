@@ -46,6 +46,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	
 	public final int MAX_MAP = 10;
+	public final int MAP_AMOUNT = 2;
 	public int currentMap = 0;
 	
 	//Playing on full screen - draws everything to the buffer before drawing it to the JPANEL
@@ -170,16 +171,19 @@ public class GamePanel extends JPanel implements Runnable{
 	//Setting up the game
 	//*******************************GAME SETUP**********************
 	public void GameSetup() {
-		NPCs.add(new ArrayList<Entity>());
-		objects.add(new ArrayList<Entity>());
-		monsters.add(new ArrayList<Entity>());
-		projectiles.add(new ArrayList<Entity>());
-		particles.add(new ArrayList<Entity>());
-		interactiveTiles.add(new ArrayList<Entity>());
-		entityList.add(new ArrayList<Entity>());
-		removeMonsterList.add(new ArrayList<Entity>());
-		removeProjectileList.add(new ArrayList<Entity>());
-		removeParticleList.add(new ArrayList<Entity>());
+		
+		for (int i = 0; i < MAP_AMOUNT; ++i) {
+			NPCs.add(new ArrayList<Entity>());
+			objects.add(new ArrayList<Entity>());
+			monsters.add(new ArrayList<Entity>());
+			projectiles.add(new ArrayList<Entity>());
+			particles.add(new ArrayList<Entity>());
+			interactiveTiles.add(new ArrayList<Entity>());
+			entityList.add(new ArrayList<Entity>());
+			removeMonsterList.add(new ArrayList<Entity>());
+			removeProjectileList.add(new ArrayList<Entity>());
+			removeParticleList.add(new ArrayList<Entity>());
+		}
 		
 		
 		assetPlace.setObject();

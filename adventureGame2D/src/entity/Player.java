@@ -180,6 +180,10 @@ public class Player extends Entity {
 		WorldX = gp.getTileSize() * 122;
 		WorldY = gp.getTileSize() * 132;
 		
+		//Near the forest values
+//		WorldX = gp.getTileSize() * 136;
+//		WorldY = gp.getTileSize() * 124;
+		
 		//Trade starting location
 //		WorldX = gp.getTileSize() * 112;
 //		WorldY = gp.getTileSize() * 115;
@@ -384,7 +388,7 @@ public class Player extends Entity {
 				if (!this.invincibility) {
 					//Downcasting Entity to Monster to get player index
 					if (gp.getMonsters().get(gp.currentMap).get(monsterIndex) instanceof Monster) {
-						((Monster) gp.getMonsters().get(gp.currentMap).get(monsterIndex)).damagePlayer(this);
+						((Monster) gp.getMonsters().get(gp.currentMap).get(monsterIndex)).damagePlayer();
 					}
 					
 				}
@@ -530,7 +534,7 @@ public class Player extends Entity {
 		
 		//stamina starts recharging after 1 second of not attacking and attackStamina recharges
 		if (actionStamina < maxStamina && staminaRechargeCounter > 60) {
-			++actionStamina;
+			actionStamina += 1 * attributeUpgrades.get("Stamina");
 		}
 	
 		//attack cool down period is on
@@ -749,7 +753,7 @@ public class Player extends Entity {
 				
 				
 				if (monster instanceof Monster) {
-					((Monster) monster).monsterDamageReaction(this);
+					((Monster) monster).monsterDamageReaction();
 				}
 				
 				gp.getGameUI().addSubtitleMsg(this.name + " damaged " + monster.getName());

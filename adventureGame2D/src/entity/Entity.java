@@ -185,6 +185,7 @@ public class Entity{
 	private final void checkMonsterCollision() {
 		if (gp.getCollisionCheck().checkPlayer(this) && this.entityType == EntityType.HOSTILE) {
 			if (!gp.getPlayer().invincibility) {
+				((Monster)this).damagePlayer();
 				gp.getPlayer().invincibility = true;
 			}
 		}
