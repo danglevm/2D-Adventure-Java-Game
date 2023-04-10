@@ -44,8 +44,8 @@ public class CollisionCheck{
 			//Predict to see where the player will end up next - blocks up ahead
 			//Check the left and right corner of the entity to see if it will collide
 			entityTopRow = (entityTopWorldY - entity.getSpeed())/gp.getTileSize();
-			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
+			tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];
+			tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityTopRow];
 			
 			//Check the type of tile and see whether it has collision on
 			if (gp.tileM.tilesList.get(tileNum1).collision||gp.tileM.tilesList.get(tileNum2).collision) {
@@ -54,8 +54,8 @@ public class CollisionCheck{
 			break;
 		case DOWN:
 			entityBotRow = (entityBotWorldY + entity.getSpeed())/gp.getTileSize();
-			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBotRow];
-			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBotRow];
+			tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityBotRow];
+			tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityBotRow];
 			
 			//Check the type of tile and see whether it has collision on
 			if (gp.tileM.tilesList.get(tileNum1).collision||gp.tileM.tilesList.get(tileNum2).collision) {
@@ -64,8 +64,8 @@ public class CollisionCheck{
 			break;
 		case LEFT:
 			entityLeftCol = (entityLeftWorldX - entity.getSpeed())/gp.getTileSize();
-			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-			tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBotRow];
+			tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];
+			tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityBotRow];
 			
 			//Check the type of tile and see whether it has collision on
 			if (gp.tileM.tilesList.get(tileNum1).collision||gp.tileM.tilesList.get(tileNum2).collision) {
@@ -74,8 +74,8 @@ public class CollisionCheck{
 			break;
 		case RIGHT:
 			entityRightCol = (entityRightWorldX + entity.getSpeed())/gp.getTileSize();
-			tileNum1 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBotRow];
+			tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityTopRow];
+			tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityBotRow];
 			
 			//Check the type of tile and see whether it has collision on
 			if (gp.tileM.tilesList.get(tileNum1).collision||gp.tileM.tilesList.get(tileNum2).collision) {
@@ -93,9 +93,9 @@ public class CollisionCheck{
 		//If player is colliding with any object. If player is, returns index of the object
 		int index = 9999;
 		
-		for (int i = 0; i < gp.getObjects().size(); i++) {
+		for (int i = 0; i < gp.getObjects().get(gp.currentMap).size(); i++) {
 			
-			if (gp.getObjects().get(i) != null) {
+			if (gp.getObjects().get(gp.currentMap).get(i) != null) {
 				
 				//Get entity's solid area position
 				//Location of entity + entity solid area size - 0 is default, can be changed later
@@ -103,8 +103,8 @@ public class CollisionCheck{
 				entity.getSolidArea().y = entity.getWorldY() + entity.getSolidArea().y;
 				
 				//Get object's solid area position
-				gp.getObjects().get(i).getSolidArea().x = gp.getObjects().get(i).getWorldX() + gp.getObjects().get(i).getSolidArea().x;
-				gp.getObjects().get(i).getSolidArea().y = gp.getObjects().get(i).getWorldY() + gp.getObjects().get(i).getSolidArea().y;
+				gp.getObjects().get(gp.currentMap).get(i).getSolidArea().x = gp.getObjects().get(gp.currentMap).get(i).getWorldX() + gp.getObjects().get(gp.currentMap).get(i).getSolidArea().x;
+				gp.getObjects().get(gp.currentMap).get(i).getSolidArea().y = gp.getObjects().get(gp.currentMap).get(i).getWorldY() + gp.getObjects().get(gp.currentMap).get(i).getSolidArea().y;
 				
 				//NPC cannot pick up objects
 				switch (entity.getDirection()) {
@@ -127,7 +127,7 @@ public class CollisionCheck{
 				}
 				
 				//entity rectangle intersects with object rectangle
-				if (entity.getSolidArea().intersects(gp.getObjects().get(i).getSolidArea())) {
+				if (entity.getSolidArea().intersects(gp.getObjects().get(gp.currentMap).get(i).getSolidArea())) {
 					entity.setCollisionOn(true);
 					if (entity instanceof Player) {
 						index = i;
@@ -137,8 +137,8 @@ public class CollisionCheck{
 				//reset entity's solid Area or else the values increase indefinitely
 				entity.getSolidArea().x = entity.getSolidAreaDefaultX();
 				entity.getSolidArea().y = entity.getSolidAreaDefaultY();
-				gp.getObjects().get(i).getSolidArea().x = gp.getObjects().get(i).getSolidAreaDefaultX();
-				gp.getObjects().get(i).getSolidArea().y = gp.getObjects().get(i).getSolidAreaDefaultY();
+				gp.getObjects().get(gp.currentMap).get(i).getSolidArea().x = gp.getObjects().get(gp.currentMap).get(i).getSolidAreaDefaultX();
+				gp.getObjects().get(gp.currentMap).get(i).getSolidArea().y = gp.getObjects().get(gp.currentMap).get(i).getSolidAreaDefaultY();
 			}
 		}
 		
@@ -146,13 +146,13 @@ public class CollisionCheck{
 	}
 	
 	//NPCs and monster collision
-	public final int checkEntity (Entity entity, ArrayList <Entity> entities) {
+	public final int checkEntity (Entity entity, ArrayList <ArrayList<Entity>> entities) {
 		//If player is colliding with a NPC. If player is, returns index of the object
 				int index = 9999;
 			
-				for (int i = 0; i < entities.size(); i++) {
+				for (int i = 0; i < entities.get(gp.currentMap).size(); i++) {
 					
-					if (entities.get(i) != null) {
+					if (entities.get(gp.currentMap).get(i) != null) {
 						
 						//Get entity's solid area position
 						//Location of entity + entity solid area size - 0 is default, can be changed later
@@ -160,8 +160,8 @@ public class CollisionCheck{
 						entity.getSolidArea().y = entity.getWorldY() + entity.getSolidArea().y;
 							
 						//Get target's solid area position
-						entities.get(i).getSolidArea().x = entities.get(i).getWorldX() + entities.get(i).getSolidArea().x;
-						entities.get(i).getSolidArea().y = entities.get(i).getWorldY() + entities.get(i).getSolidArea().y;						
+						entities.get(gp.currentMap).get(i).getSolidArea().x = entities.get(gp.currentMap).get(i).getWorldX() + entities.get(gp.currentMap).get(i).getSolidArea().x;
+						entities.get(gp.currentMap).get(i).getSolidArea().y = entities.get(gp.currentMap).get(i).getWorldY() + entities.get(gp.currentMap).get(i).getSolidArea().y;						
 						
 						switch (entity.getDirection()) {
 						case UP:
@@ -180,16 +180,16 @@ public class CollisionCheck{
 							break;
 						}
 						//reset entity's solid Area or else the values increase indefinitely
-						if (entity.getSolidArea().intersects(entities.get(i).getSolidArea())) {
-							if (entities.get(i) != entity) {
+						if (entity.getSolidArea().intersects(entities.get(gp.currentMap).get(i).getSolidArea())) {
+							if (entities.get(gp.currentMap).get(i) != entity) {
 								entity.setCollisionOn(true);
 								index = i;
 							}
 						};
 						entity.getSolidArea().x = entity.getSolidAreaDefaultX();
 						entity.getSolidArea().y = entity.getSolidAreaDefaultY();
-						entities.get(i).getSolidArea().x = entities.get(i).getSolidAreaDefaultX();
-						entities.get(i).getSolidArea().y = entities.get(i).getSolidAreaDefaultY();
+						entities.get(gp.currentMap).get(i).getSolidArea().x = entities.get(gp.currentMap).get(i).getSolidAreaDefaultX();
+						entities.get(gp.currentMap).get(i).getSolidArea().y = entities.get(gp.currentMap).get(i).getSolidAreaDefaultY();
 					}
 				}
 				

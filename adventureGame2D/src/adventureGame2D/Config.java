@@ -60,7 +60,6 @@ public class Config {
 				//full screen
 				//double equals compare references not values. Use equals
 				if (options[0].equalsIgnoreCase("fullscreen")) {
-					System.out.println(options[0]);
 					if (options[1].equalsIgnoreCase("on")) {
 						gp.setFullScreen(true);
 					} else if (options [1].equalsIgnoreCase("off")) {

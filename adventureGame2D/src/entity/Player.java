@@ -175,10 +175,18 @@ public class Player extends Entity {
 	}
 	
 	
-	private final void setDefaultPlayerValues() {
+	public final void setDefaultPlayerValues() {
 		//Default player values
 		WorldX = gp.getTileSize() * 122;
 		WorldY = gp.getTileSize() * 132;
+		
+		//Near the forest values
+//		WorldX = gp.getTileSize() * 136;
+//		WorldY = gp.getTileSize() * 124;
+		
+		//Trade starting location
+//		WorldX = gp.getTileSize() * 112;
+//		WorldY = gp.getTileSize() * 115;
 		direction = Direction.DOWN;
 		
 		//x, y, width, length
@@ -193,10 +201,6 @@ public class Player extends Entity {
 		solidArea.height = 32;
 		
 		
-		//Attack area - could really increase this for potions
-		//Attack area inherits from object's attackArea
-//		attackArea.width = 32;
-//		attackArea.height = 32;
 		
 		playerAttack = false;
 		useTool = false;
@@ -238,6 +242,7 @@ public class Player extends Entity {
 		mana = 6;
 		coin = 0;
 		experience = 0;
+		invincibility = false;
 	
 		nextLevelExperience = 9;
 		upgradePoints = 10;
@@ -251,6 +256,8 @@ public class Player extends Entity {
 		equippedAccessory1 = null;
 		equippedAccessory2 = null;
 		equippedTool = null;
+		
+		
 	
 		
 		addDefaultInventoryItems();
@@ -341,7 +348,10 @@ public class Player extends Entity {
 	
 	public void update() 
 	{
-		
+		if (life < 1) { 
+			gp.setGameState(GameState.GAMEOVER);
+			gp.playSE(18);;
+		}
 		this.updatePlayerAttributes();
 		collisionOn = false;	
 		this.checkLevelUp();
@@ -377,8 +387,8 @@ public class Player extends Entity {
 			if (monsterIndex != 9999) {
 				if (!this.invincibility) {
 					//Downcasting Entity to Monster to get player index
-					if (gp.getMonsters().get(monsterIndex) instanceof Monster) {
-						((Monster) gp.getMonsters().get(monsterIndex)).damagePlayer(this);
+					if (gp.getMonsters().get(gp.currentMap).get(monsterIndex) instanceof Monster) {
+						((Monster) gp.getMonsters().get(gp.currentMap).get(monsterIndex)).damagePlayer();
 					}
 					
 				}
@@ -434,7 +444,7 @@ public class Player extends Entity {
 			this.mana -= this.currentProjectile.getSpellCost();
 			Projectile projectile = new Fireball(gp);
 			projectile.set(this.WorldX, this.WorldY, this.direction, this);
-			gp.getProjectiles().add(projectile);
+			gp.getProjectiles().get(gp.currentMap).add(projectile);
 			gp.playSE(16);
 			castSpell = false;
 		}
@@ -474,13 +484,13 @@ public class Player extends Entity {
 		
 		if (index != 9999) {
 			
-			GameObject currentObject = (GameObject) gp.getObjects().get(index);
+			GameObject currentObject = (GameObject) gp.getObjects().get(gp.currentMap).get(index);
 			
 			//12 is max inventory size
 			if (inventory.size() != 12 && currentObject.getPickUpState()) {
 				gp.playSE(1);
 				text =  "You picked up " + currentObject.getName() + "!";
-				gp.getObjects().remove(index);
+				gp.getObjects().get(gp.currentMap).remove(index);
 				
 				if (currentObject instanceof PowerUpObjectInterface) 
 					((PowerUpObjectInterface)currentObject).grantPowerUpEffects();
@@ -501,8 +511,8 @@ public class Player extends Entity {
 			//player touching npc
 			if (keyH.getDialoguePress()) {
 				gp.setGameState(GameState.DIALOGUE);;
-				if (gp.getNPCS().get(i) instanceof NPC) {
-					((NPC) gp.getNPCS().get(i)).speak();
+				if (gp.getNPCS().get(gp.currentMap).get(i) instanceof NPC) {
+					((NPC) gp.getNPCS().get(gp.currentMap).get(i)).speak();
 				}
 				
 				keyH.setDialoguePress(false);
@@ -524,7 +534,7 @@ public class Player extends Entity {
 		
 		//stamina starts recharging after 1 second of not attacking and attackStamina recharges
 		if (actionStamina < maxStamina && staminaRechargeCounter > 60) {
-			++actionStamina;
+			actionStamina += 1 * attributeUpgrades.get("Stamina");
 		}
 	
 		//attack cool down period is on
@@ -673,10 +683,10 @@ public class Player extends Entity {
 		++spriteCounter;
 		
 		//10 frames of short attack animation
-		if (spriteCounter < 10) {
+		if (spriteCounter < 15) {
 			spriteNum = true;
 		//next 20 frames of long attack animation
-		} else if (spriteCounter < 30) {
+		} else if (spriteCounter < 35) {
 			spriteNum = false;
 
 			//Save player's current location on map
@@ -702,13 +712,13 @@ public class Player extends Entity {
 		int monsterIndex = gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 		if (monsterIndex != 9999) {
 			damageMonster(monsterIndex);
-			this.generateParticles(this, gp.getMonsters().get(monsterIndex));
+			this.generateParticles(this, gp.getMonsters().get(gp.currentMap).get(monsterIndex));
 		}
 		
 		//Check collision with an interactive tile
 		int interactiveTileIndex = gp.getCollisionCheck().checkEntity(this, gp.getInteractiveTiles());
 		if (interactiveTileIndex != 9999) {
-			((InteractiveTile)gp.getInteractiveTiles().get(interactiveTileIndex)).interactTile(interactiveTileIndex, useTool);
+			((InteractiveTile)gp.getInteractiveTiles().get(gp.currentMap).get(interactiveTileIndex)).interactTile(interactiveTileIndex, useTool);
 		}
 		//After checking collision, restore original data
 		WorldX = currWorldX;
@@ -731,7 +741,7 @@ public class Player extends Entity {
 
 	public final void damageMonster(int i) {
 		if (i != 9999) {
-			Entity monster = gp.getMonsters().get(i);
+			Entity monster = gp.getMonsters().get(gp.currentMap).get(i);
 			
 			if (!monster.invincibility) {
 				gp.playSE(5);
@@ -743,7 +753,7 @@ public class Player extends Entity {
 				
 				
 				if (monster instanceof Monster) {
-					((Monster) monster).monsterDamageReaction(this);
+					((Monster) monster).monsterDamageReaction();
 				}
 				
 				gp.getGameUI().addSubtitleMsg(this.name + " damaged " + monster.getName());
@@ -785,6 +795,7 @@ public class Player extends Entity {
 	}
 	
 	private final void addDefaultInventoryItems() {
+		inventory.clear();
 		inventory.add(equippedWeapon);
 		inventory.add(equippedDefense);
 		inventory.add(new BlueShield(gp, 0, 0));
@@ -793,7 +804,7 @@ public class Player extends Entity {
 		inventory.add(new HealingPotion(gp, 0, 0));
 	}
 	
-	public void handleInventoryOptions(int option) {
+	public final void handleInventoryOptions(int option) {
 		GameObject selectedItem = inventory.get(gp.getGameUI().getItemIndex());
 		ObjectType type = selectedItem.getInventoryType();
 		

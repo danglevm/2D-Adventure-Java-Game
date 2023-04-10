@@ -39,7 +39,7 @@ public abstract class Projectile extends Entity {
 		if (user == player) {
 			int monsterIndex = gp.getCollisionCheck().checkEntity(this, gp.getMonsters());
 			if (monsterIndex != 9999) {
-				this.generateParticles(this, gp.getMonsters().get(monsterIndex));
+				this.generateParticles(this, gp.getMonsters().get(gp.currentMap).get(monsterIndex));
 				this.alive = false;
 				player.damageMonster(monsterIndex);
 

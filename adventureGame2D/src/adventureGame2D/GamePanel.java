@@ -45,6 +45,10 @@ public class GamePanel extends JPanel implements Runnable{
 	private final int screenHeight = tileSize * maxScreenRows; //672 pixels
 	
 	
+	public final int MAX_MAP = 10;
+	public final int MAP_AMOUNT = 2;
+	public int currentMap = 0;
+	
 	//Playing on full screen - draws everything to the buffer before drawing it to the JPANEL
 	int screenWidth2 = screenWidth;
 	int screenHeight2 = screenHeight;
@@ -88,17 +92,17 @@ public class GamePanel extends JPanel implements Runnable{
 	//Entities
 	Thread gameThread;
 	private Player player = new Player(this, keyH);
-	private ArrayList <Entity> NPCs = new ArrayList <Entity> (); 
-	private ArrayList <Entity> objects = new ArrayList <Entity> ();
-	private ArrayList <Entity> monsters = new ArrayList <Entity> ();
-	private ArrayList <Entity> projectiles = new ArrayList <Entity> ();
-	private ArrayList <Entity> particles = new ArrayList <Entity> ();
-	private ArrayList <Entity> interactiveTiles = new ArrayList <Entity> ();
+	private ArrayList <ArrayList<Entity>> NPCs = new ArrayList <ArrayList<Entity>> (); 
+	private ArrayList <ArrayList<Entity>> objects = new ArrayList <ArrayList<Entity>> ();
+	private ArrayList <ArrayList<Entity>> monsters = new ArrayList <ArrayList<Entity>> ();
+	private ArrayList <ArrayList<Entity>> projectiles = new ArrayList <ArrayList<Entity>> ();
+	private ArrayList <ArrayList<Entity>> particles = new ArrayList <ArrayList<Entity>> ();
+	private ArrayList <ArrayList<Entity>> interactiveTiles = new ArrayList <ArrayList<Entity>> ();
 	//entity with lowest world Y index 0, highest world y final index
-	private ArrayList<Entity> entityList = new ArrayList<Entity>();
-	private ArrayList <Entity> removeMonsterList = new ArrayList <Entity> ();
-	private ArrayList <Entity> removeProjectileList = new ArrayList <Entity> ();
-	private ArrayList <Entity> removeParticleList = new ArrayList <Entity> ();
+	private ArrayList<ArrayList<Entity>> entityList = new ArrayList<ArrayList<Entity>>();
+	private ArrayList <ArrayList<Entity>> removeMonsterList = new ArrayList <> ();
+	private ArrayList <ArrayList<Entity>> removeProjectileList = new ArrayList <> ();
+	private ArrayList <ArrayList<Entity>> removeParticleList = new ArrayList <> ();
 
 	
 	//options menu
@@ -120,7 +124,7 @@ public class GamePanel extends JPanel implements Runnable{
 		//Set the Game Panel to focus on taking inputs from key presses
 		this.setFocusable(true);
 		entityList.ensureCapacity(100);
-		
+		gameState = GameState.TITLE;
 	}
 	
 	//-------------------------------CLASS METHODS------------------
@@ -158,23 +162,34 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public Config getMenuOptionConfig() { return config; }
 	
-	public ArrayList<Entity> getNPCS() { return NPCs;}
+	public ArrayList<ArrayList<Entity>> getNPCS() { return NPCs;}
 	
-	public ArrayList<Entity> getObjects() { return objects;}
+	public ArrayList<ArrayList<Entity>> getObjects() { return objects;}
 	
-	public ArrayList<Entity> getMonsters() { return monsters;}
+	public ArrayList<ArrayList<Entity>> getMonsters() { return monsters;}
 	
 	//Setting up the game
 	//*******************************GAME SETUP**********************
 	public void GameSetup() {
 		
-		gameState = GameState.TITLE;
+		for (int i = 0; i < MAP_AMOUNT; ++i) {
+			NPCs.add(new ArrayList<Entity>());
+			objects.add(new ArrayList<Entity>());
+			monsters.add(new ArrayList<Entity>());
+			projectiles.add(new ArrayList<Entity>());
+			particles.add(new ArrayList<Entity>());
+			interactiveTiles.add(new ArrayList<Entity>());
+			entityList.add(new ArrayList<Entity>());
+			removeMonsterList.add(new ArrayList<Entity>());
+			removeProjectileList.add(new ArrayList<Entity>());
+			removeParticleList.add(new ArrayList<Entity>());
+		}
+		
+		
 		assetPlace.setObject();
-		assetPlace.setNPCs();
+		assetPlace.setNPCsSpawn();
 		assetPlace.setMonsters();
 		assetPlace.setInteractiveTiles();
-		playMusic(0);
-		stopMusic();
 		
 		bufferScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
 		g2 = (Graphics2D)bufferScreen.getGraphics();
@@ -239,19 +254,19 @@ public void update() {
 		//Player
 		player.update();
 		//NPCs
-		updateEntities (particles);
-		updateEntities(objects);
-		updateEntities(NPCs);
-		updateEntities(monsters);
-		updateEntities (projectiles);
-		updateEntities(interactiveTiles);
+		updateEntities (particles.get(currentMap));
+		updateEntities(objects.get(currentMap));
+		updateEntities(NPCs.get(currentMap));
+		updateEntities(monsters.get(currentMap));
+		updateEntities (projectiles.get(currentMap));
+		updateEntities(interactiveTiles.get(currentMap));
 		
 		
-		monsters.removeAll(removeMonsterList);
-		projectiles.removeAll(removeProjectileList);
-		particles.removeAll(removeParticleList);
-		removeMonsterList.clear();
-		removeProjectileList.clear();
+		monsters.get(currentMap).removeAll(removeMonsterList.get(currentMap));
+		projectiles.get(currentMap).removeAll(removeProjectileList.get(currentMap));
+		particles.get(currentMap).removeAll(removeParticleList.get(currentMap));
+		removeMonsterList.get(currentMap).clear();
+		removeProjectileList.get(currentMap).clear();
 			
 		
 		
@@ -270,26 +285,21 @@ public void drawBuffer() {
 		//Draw the tiles first before the player characters
 		//TILE
 		tileM.draw(g2);
-//		
-//		//Draw all interactive tiles
-//		for (int i = 0; i < interactiveTiles.size(); ++i) {
-//			if (interactiveTiles.get(i) != null) {
-//				interactiveTiles.get(i).draw(g2, this);
-//			}
-//		}
-//	
-		entityList.add(player);
+
 	
 		//Add both npcs and objects to the array list 
-		addtoEntityList(NPCs);
-		addtoEntityList(objects);
-		addtoEntityList(monsters);
-		addtoEntityList (projectiles);
-		addtoEntityList(interactiveTiles);
-		addtoEntityList(particles);
+		addtoEntityList(NPCs.get(currentMap));
+		addtoEntityList(objects.get(currentMap));
+		addtoEntityList(monsters.get(currentMap));
+		addtoEntityList (projectiles.get(currentMap));
+		addtoEntityList(interactiveTiles.get(currentMap));
+		addtoEntityList(particles.get(currentMap));
+		
+		entityList.get(currentMap).add(player);
+		
 		
 		//Sort the entityList
-		Collections.sort(entityList, new Comparator<Entity>() {
+		Collections.sort(entityList.get(currentMap), new Comparator<Entity>() {
 
 			@Override
 			public int compare(Entity e1, Entity e2) {
@@ -302,7 +312,7 @@ public void drawBuffer() {
 		});
 		
 		//Draw entities
-		for (Entity currentEntity : entityList) {
+		for (Entity currentEntity : entityList.get(currentMap)) {
 			if (currentEntity != null) {
 				if (currentEntity != player) {
 					currentEntity.draw(g2, this);
@@ -313,7 +323,7 @@ public void drawBuffer() {
 			}
 		}
 		//Empty entity list after drawing
-		entityList.clear();
+		entityList.get(currentMap).clear();
 		
 		ui.draw(g2);
 	
@@ -362,9 +372,12 @@ public void playMusic (int i) {
 	
 	//Add from array to array List
 	private final void addtoEntityList (ArrayList <Entity> entities) {
-		entities.forEach(entity -> {
-				entityList.add(entity);
+		if (!entities.isEmpty()) {
+			entities.forEach(entity -> {
+				entityList.get(currentMap).add(entity);
 		});
+		}
+		
 	}
 	
 	private final void updateEntities (ArrayList <Entity> entities) {
@@ -372,14 +385,14 @@ public void playMusic (int i) {
 			
 			if (!entity.getAlive() ) {
 				if (entity instanceof Monster && !entity.getDying()) {
-					removeMonsterList.add(entity);
+					removeMonsterList.get(currentMap).add(entity);
 				}
 				if (entity instanceof Projectile) {
-					removeProjectileList.add(entity);
+					removeProjectileList.get(currentMap).add(entity);
 				}
 				
 				if (entity instanceof Particle) {
-					removeParticleList.add(entity);
+					removeParticleList.get(currentMap).add(entity);
 				}
 			
 			} else if (entity.getAlive()) {
@@ -406,11 +419,11 @@ public void playMusic (int i) {
 	
 	public int getTileSize () { return tileSize; }
 	
-	public ArrayList<Entity> getProjectiles () { return projectiles;}
+	public ArrayList<ArrayList<Entity>> getProjectiles () { return projectiles;}
 	
-	public ArrayList<Entity> getInteractiveTiles () { return interactiveTiles;}
+	public ArrayList<ArrayList<Entity>> getInteractiveTiles () { return interactiveTiles;}
 	
-	public ArrayList<Entity> getParticles() { return particles; }
+	public ArrayList<ArrayList<Entity>> getParticles() { return particles; }
 
 	public final boolean getFullScreen() { return fullScreen;}
 	

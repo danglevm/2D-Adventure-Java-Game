@@ -16,27 +16,32 @@ public class TileManager extends Tile{
 
 	GamePanel gp;
 	public ArrayList<Tile> tilesList;
-	public int mapTileNum[][];
+	public int mapTileNum[][][];
 	//Change file path for maps
 	String filePath1 = "/maps/spawnmap";
+	String filePath2 = "/maps/trade_interior";
 	
 	//-------------------------------CONSTRUCTORS------------------
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
 		tilesList = new ArrayList<Tile>();
-		mapTileNum = new int [gp.getMaxWorldCol()][gp.getMaxWorldRow()];
+		mapTileNum = new int [gp.MAX_MAP][gp.getMaxWorldCol()][gp.getMaxWorldRow()];
 		
 		getTileImage();
-		loadMap(filePath1);
+		//Default MapsConstants.SPAWN map
+		loadMap(filePath1, 0);
+		loadMap (filePath2, 1);
+		
+		//Trading interior map
 	}
 	//-------------------------------CLASS METHODS------------------
 	//Store tile images as entries inside the Tile array
 	public void getTileImage() {
 		
 			//Streams (sequences of bytes) are searched and found, then decoded into buffered image and stored into an object
-			tileSetup(0, "000", false);
+			tileSetup(0, "000", true);
 			tileSetup(1, "001", false);
-			tileSetup(2, "002", false);
+			tileSetup(2, "002", false); //grass tile with grass
 			tileSetup(3, "003", false);
 			tileSetup(4, "004", false);
 			tileSetup(5, "005", false);
@@ -52,7 +57,7 @@ public class TileManager extends Tile{
 			tileSetup(13, "013", false);
 			tileSetup(14, "014", false);
 			tileSetup(15, "015", false);
-			tileSetup(16, "016", true);
+			tileSetup(16, "016", true); //tree
 			tileSetup(17, "017", false);
 
 			tileSetup(18, "018", true);
@@ -71,9 +76,9 @@ public class TileManager extends Tile{
 			
 			tileSetup(30, "030", true);
 			tileSetup(31, "031", true);
-			tileSetup(32, "032", true);
-			tileSetup(33, "033", true);
-			tileSetup(34, "034", false);
+			tileSetup(32, "032", true); //brick block
+			tileSetup(33, "033", false); //hut
+			tileSetup(34, "034", false); //wood floor
 			tileSetup(35, "035", true);
 			
 			tileSetup(36, "036", false);
@@ -97,7 +102,7 @@ public class TileManager extends Tile{
 		}
 	}
 
-	public void loadMap(String filePath) {
+	public void loadMap(String filePath, int map) {
 		try{
 			//Store link to text file as variable and read the text file
 			InputStream is = getClass().getResourceAsStream(filePath);
@@ -115,7 +120,7 @@ public class TileManager extends Tile{
 					
 					int num = Integer.parseInt(numbers[col]);
 					
-					mapTileNum[col][row]= num;
+					mapTileNum[map][col][row]= num;
 					++col;
 				}
 				if (col == gp.getMaxWorldCol()) {
@@ -140,7 +145,7 @@ public class TileManager extends Tile{
 		//While the tiles are still within max row and column size, draw the tile
 		while (worldCol < gp.getMaxWorldCol() && worldRow < gp.getMaxWorldRow()) {
 			//Retrieve the tile from mapTileNum
-			int tileNum = mapTileNum[worldCol][worldRow];
+			int tileNum = mapTileNum[gp.currentMap][worldCol][worldRow];
 			//Find the drawing location
 			//Render the area viewable only in the player field of view
 			int worldX = worldCol * gp.getTileSize();

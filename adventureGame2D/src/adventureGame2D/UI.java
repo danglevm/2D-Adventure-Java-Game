@@ -52,7 +52,7 @@ public class UI {
 		  equippedDefenseColor = new Color(121,68,59),
 		  equippedToolColor = new Color(175, 225, 175);
 	
-	protected int cursorNum = 0, statusCursor = 0, inventoryOptionCursor = 0, pauseCursor = 0;
+	protected int cursorNum = 0, statusCursor = 0, inventoryOptionCursor = 0, pauseCursor = 0, gameOverCursor = 0;
 	
 	//Drawing hearts
 	private BufferedImage heart_full, heart_half, heart_blank;
@@ -198,7 +198,7 @@ public class UI {
 			drawInventoryScreen();
 		}
 		
-		
+		case GAMEOVER ->{drawGameOverScreen();}
 		
 		default -> throw new IllegalArgumentException("Unknown Game State: " + gp.getGameState());
 		}
@@ -209,7 +209,7 @@ public class UI {
 	//draw screen when paused
 	private void drawPauseScreen () {		
 	
-		//Draw background
+		//Draw dark background
 		Color background = new Color (0,0,0, 220);
 		g2.setColor(background);
 		g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
@@ -944,6 +944,50 @@ public class UI {
 		g2.drawString("CANCEL", optionX, optionY + lineHeight * 2);
 }
 	
+	private final void drawGameOverScreen() {
+		//Draw dark background
+		Color background = new Color (0,0,0, 220);
+		g2.setColor(background);
+		g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
+	
+		int x, y;
+		g2.setFont(maruMonica);
+		String text = "You Died";
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 110f));
+		
+		//Letters shadow
+		g2.setColor(Color.black);
+		x = getXCenter(text);
+		y = gp.getTileSize() * 4;
+		g2.drawString(text, x, y);
+		
+		//Main class
+		g2.setColor(Color.white);
+		g2.drawString(text, x - 6, y - 6);
+		
+		
+		//New game
+		g2.setFont(g2.getFont().deriveFont(50f));
+		
+		//Restart from last save
+		text = "Load Last Save";
+		g2.drawString(text, getXCenter(text), y += gp.getTileSize() * 4);
+		
+		//Start a new game
+		text = "New Game";
+		g2.drawString(text, getXCenter(text), y + gp.getTileSize() * 2);
+		
+		//Quit to title screen
+		text = "Quit";
+		g2.drawString(text, getXCenter(text), y + gp.getTileSize() * 4);
+		
+		g2.drawString(">", x - gp.getTileSize(), y + gp.getTileSize() * 2 * gameOverCursor);
+		
+				
+		
+		
+	
+	}
 
 	
 }

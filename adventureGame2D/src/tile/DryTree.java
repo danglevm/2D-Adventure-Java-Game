@@ -45,10 +45,10 @@ public class DryTree extends InteractiveTile {
 				--this.life;
 				this.invincibility = true;
 				
-				this.generateParticles(gp.getInteractiveTiles().get(index), gp.getInteractiveTiles().get(index));
+				this.generateParticles(gp.getInteractiveTiles().get(gp.currentMap).get(index), gp.getInteractiveTiles().get(gp.currentMap).get(index));
 				
 				if (this.life < 1) {
-					gp.getInteractiveTiles().set(index, new Trunk(gp, this.WorldX/gp.getTileSize(), this.WorldY/gp.getTileSize()));
+					gp.getInteractiveTiles().get(gp.currentMap).set(index, new Trunk(gp, this.WorldX/gp.getTileSize(), this.WorldY/gp.getTileSize()));
 				}
 			}
 		}

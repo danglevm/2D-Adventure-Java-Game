@@ -104,6 +104,8 @@ public class KeyHandler implements KeyListener{
 		}
 	}
 	
+	case GAMEOVER -> { gameOverState(code);}
+	
 	}
 	}
 	
@@ -263,6 +265,7 @@ public class KeyHandler implements KeyListener{
 			} else {
 				gp.getGameUI().setPauseOption(0);
 			}
+			gp.playSE(11);
 		}
 		
 		if (code == KeyEvent.VK_W) --gp.getGameUI().pauseCursor;
@@ -297,11 +300,13 @@ public class KeyHandler implements KeyListener{
 			}
 			
 			case 7 -> {
+				gp.getMusic().stop();
 				gp.getGameUI().setTitleScreenState(TitleState.WELCOME);
 				gp.setGameState(GameState.TITLE);
 			}
 			
 			}
+			gp.playSE(11);
 		}
 		if (gp.getGameUI().getPauseOption() == 0)
 			if (gp.getGameUI().pauseCursor == 1) {
@@ -410,6 +415,33 @@ public class KeyHandler implements KeyListener{
 		
 	}
 	
+	private final void gameOverState(int code) {
+		if (code == KeyEvent.VK_S) ++gp.getGameUI().gameOverCursor;
+		
+		if (code == KeyEvent.VK_W) --gp.getGameUI().gameOverCursor;
+		
+		if (gp.getGameUI().gameOverCursor < 0) gp.getGameUI().gameOverCursor = 0;
+		
+		if (gp.getGameUI().gameOverCursor > 2) gp.getGameUI().gameOverCursor = 2;
+		
+		if (code == KeyEvent.VK_ENTER) {
+			switch (gp.getGameUI().gameOverCursor) {
+			case 0 -> {}
+			case 1 -> {
+				gp.getPlayer().setDefaultPlayerValues();
+				gp.setGameState(GameState.PLAY);
+				gp.GameSetup();
+			}
+			case 2 -> {
+				gp.getMusic().stop();
+				gp.getGameUI().setTitleScreenState(TitleState.WELCOME);
+				gp.setGameState(GameState.TITLE);
+			}
+			
+			}
+			gp.playSE(11);
+		}
+	}
 		
 	@Override
 	public final void keyReleased(KeyEvent e) {

@@ -185,6 +185,7 @@ public class Entity{
 	private final void checkMonsterCollision() {
 		if (gp.getCollisionCheck().checkPlayer(this) && this.entityType == EntityType.HOSTILE) {
 			if (!gp.getPlayer().invincibility) {
+				((Monster)this).damagePlayer();
 				gp.getPlayer().invincibility = true;
 			}
 		}
@@ -224,10 +225,10 @@ public class Entity{
 	
 
 	protected final void generateParticles(Entity generator, Entity target) {
-		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, -1));
-		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, -1));
-		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, 1));
-		gp.getParticles().add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, 1));
+		gp.getParticles().get(gp.currentMap).add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, -1));
+		gp.getParticles().get(gp.currentMap).add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, -1));
+		gp.getParticles().get(gp.currentMap).add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, 1));
+		gp.getParticles().get(gp.currentMap).add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, 1));
 	}
 	/*
 	 * SETTERS AND GETTERS
