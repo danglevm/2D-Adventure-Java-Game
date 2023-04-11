@@ -8,5 +8,7 @@ public enum GameState {
 	DIALOGUE,
 	STATUS,
 	INVENTORY,
+	TRANSITION,
+	TRADE,
 	GAMEOVER;
 }

@@ -10,16 +10,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import entity.Entity;
 import entity.Player;
-import enums.GameState;
 import enums.ObjectType;
+import enums.GameState;
 import enums.InventoryState;
 import enums.TitleState;
+import enums.TradeState;
+import npc.NPC;
 import object.GameObject;
 import object.Heart;
 import object.Mana;
@@ -32,6 +33,7 @@ public class UI {
 	Graphics2D g2;
 	private TitleState titleScreenState;
 	private InventoryState inventoryState;
+	protected TradeState tradeState;
 	
 	//Quotes
 	PauseQuotes pauseQuotes = new PauseQuotes();
@@ -40,7 +42,7 @@ public class UI {
 	//Font styles
 	Font arial_30, arial_50, arial_70, maruMonica, purisa;
 	//Dialogue
-	private String currentDialogue = "";	
+	private String currentDialogue = "";
 	Color nameColor1 = new Color(253, 218, 13);
 	Color nameColor2 = new Color(196, 30, 58);
 	
@@ -52,7 +54,8 @@ public class UI {
 		  equippedDefenseColor = new Color(121,68,59),
 		  equippedToolColor = new Color(175, 225, 175);
 	
-	protected int cursorNum = 0, statusCursor = 0, inventoryOptionCursor = 0, pauseCursor = 0, gameOverCursor = 0;
+	protected int cursorNum = 0, statusCursor = 0, inventoryOptionCursor = 0, 
+			pauseCursor = 0, gameOverCursor = 0, tradeCursor = 0;
 	
 	//Drawing hearts
 	private BufferedImage heart_full, heart_half, heart_blank;
@@ -71,6 +74,9 @@ public class UI {
 	
 	private int pauseOptionState = 0;
 	
+	private int transitionCounter = 0;
+	
+	private NPC npc; 
 	
 	//Drawing and setting UI
 	public UI(GamePanel gp) {
@@ -78,7 +84,9 @@ public class UI {
 		
 		titleScreenState = TitleState.WELCOME;
 		
-		inventoryState = inventoryState.NORMAL;
+		inventoryState = InventoryState.NORMAL;
+		
+		tradeState = TradeState.SELECT;
 	
 		arial_30 = new Font ("Arial", Font.PLAIN, 30);
 		arial_50 = new Font ("Arial", Font.PLAIN, 50);
@@ -142,7 +150,9 @@ public class UI {
 		this.subtitleMsgCount.add(0);
 	}
 	
+	public final NPC getNPC() { return npc; }
 	
+	public final void setNPC(NPC npc) { this.npc = npc; }
 	
 	/*
 	 * String aligning values getters
@@ -188,7 +198,6 @@ public class UI {
 		case PLAY -> {
 			drawPlayerHUD();
 			if (gp.getSubtitleState()) drawSubtitleMsg();
-			if (gp.getEventHandler().getInteraction()) { drawInteractionKey(); }
 		
 		}
 		
@@ -199,6 +208,10 @@ public class UI {
 		}
 		
 		case GAMEOVER ->{drawGameOverScreen();}
+		
+		case TRANSITION -> {drawTransition();}
+		
+		case TRADE -> {drawTradeScreen(); }
 		
 		default -> throw new IllegalArgumentException("Unknown Game State: " + gp.getGameState());
 		}
@@ -258,7 +271,7 @@ public class UI {
 		g2.drawString("Save", textX, textY += gp.getTileSize());
 		g2.drawString("Save and Quit to Menu", textX, textY  += gp.getTileSize());
 		g2.drawString(">", textX - 20, gp.getTileSize() * 4 + gp.getTileSize() * pauseCursor);
-		
+
 		
 		g2.setStroke(new BasicStroke(3));
 		this.fullScreenCheckbox(frameX, 3);
@@ -508,7 +521,9 @@ public class UI {
 		dialogueX += 390;
 		dialogueY = (gp.getTileSize()/2) + gp.getTileSize() + 120;
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 14));
-		g2.drawString(moveDialogue, dialogueX, dialogueY);
+		if (gp.getGameState() != GameState.TRADE) {
+			g2.drawString(moveDialogue, dialogueX, dialogueY);
+		}
 	}
 	
 	//Receives input and actually draw the window inside the dialogue box
@@ -528,17 +543,6 @@ public class UI {
 		
 	}
 	
-	
-	//Method for drawing a simple string above the player head for event interaction
-	private void drawInteractionKey() {
-		String text = "X Interact";
-		int x = getXCenter(text) - gp.getTileSize()/4, 
-			y = gp.getScreenHeight()/2 - gp.getTileSize();
-		g2.setColor(Color.white);
-		g2.drawRect(gp.getPlayer().getScreenX() + 3, gp.getPlayer().getScreenY() - 48, 28, 28);
-		g2.setFont(g2.getFont().deriveFont(24F));
-		g2.drawString(text, x, y);
-	}
 	
 	private final void drawStatusScreen() {
 		
@@ -711,10 +715,6 @@ public class UI {
 		}
 	
 	}
-	
-	
-	
-
 	
 	private final void drawSubtitleMsg() {
 		
@@ -989,5 +989,65 @@ public class UI {
 	
 	}
 
+	private final void drawTransition() {
+		++transitionCounter;
+		
+		//alpha value increasing from 0 to 250 - transparent to opaque
+		g2.setColor(new Color(0, 0, 0, transitionCounter * 5));
+		g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
+		
+		if (transitionCounter >= 50) {
+			transitionCounter = 0;
+			gp.getEventHandler().getEventObject().transitionBackEffect();
+		}
+	}
+
+	private final void drawTradeScreen() {
+		switch (tradeState) {
+		case SELECT ->{drawTradeSelect();}
+		case BUY ->{drawTradeBuy();}
+		case SELL ->{drawTradeSell();}
+		default -> {}
+		}
+		gp.getKeyHandler().setDialoguePress(false);
+	}
+	
+	private final void drawTradeSelect() {
+		drawDialogueScreen();
+		int x = gp.getTileSize() * 14,
+			y = gp.getTileSize() * 4 + 15,
+			width = gp.getTileSize() * 4,
+			height = gp.getTileSize() * 4;
+		drawSubWindow(x, y, width, height);
+	
+
+		g2.setFont(maruMonica);
+		g2.setFont(g2.getFont().deriveFont(40F));
+		//DRAW SELECT ITEM WINDOW
+		g2.setColor(optionColor);
+		g2.drawString(">", x + 15, y + gp.getTileSize() * (tradeCursor + 1));
+		g2.setColor(Color.white);
+		
+		if (tradeCursor == 0) g2.setColor(optionColor);
+		g2.drawString("BUY", x + gp.getTileSize(), y + gp.getTileSize());
+		g2.setColor(Color.white);
+		
+		if (tradeCursor == 1) g2.setColor(optionColor);
+		g2.drawString("SELL", x + gp.getTileSize(), y + gp.getTileSize() * 2);
+		g2.setColor(Color.white);
+		
+		if (tradeCursor == 2) g2.setColor(optionColor);
+		g2.drawString("LEAVE", x + gp.getTileSize(), y + gp.getTileSize() * 3);
+		g2.setColor(Color.white);
+		
+		
+		
+	}
+	private final void drawTradeBuy() {
+		
+	}
+	private final void drawTradeSell() {
+	
+	}
 	
 }

@@ -6,6 +6,8 @@ import enums.GameState;
 public class Event {
 	
 	GamePanel gp;
+	
+	private int tempMap, tempCol, tempRow;
 
 	public Event(GamePanel gp) {
 		this.gp = gp ;
@@ -31,9 +33,19 @@ public class Event {
 	}
 	
 	public void mapTransition (GameState gameState, int xTiles, int yTiles, int transitionMap) {
-		gp.currentMap = transitionMap;
+		tempMap = transitionMap;
+		tempRow = xTiles;
+		tempCol = yTiles;
 		gp.setGameState(gameState);
-		gp.getPlayer().setWorldX(xTiles * gp.getTileSize());
-		gp.getPlayer().setWorldY(yTiles * gp.getTileSize()); 
+	}
+	
+	
+	public final void transitionBackEffect () {
+		gp.setGameState(GameState.PLAY);
+		gp.currentMap = this.tempMap;
+		gp.getPlayer().setWorldX(this.tempRow * gp.getTileSize());
+		gp.getPlayer().setWorldY(this.tempCol * gp.getTileSize());
+		gp.getEventHandler().setPreviousEventX(gp.getPlayer().getWorldX());
+		gp.getEventHandler().setPreviousEventY(gp.getPlayer().getWorldY());
 	}
 }

@@ -104,6 +104,8 @@ public class KeyHandler implements KeyListener{
 		}
 	}
 	
+	case TRADE -> {tradeState(code);}
+	
 	case GAMEOVER -> { gameOverState(code);}
 	
 	}
@@ -231,14 +233,7 @@ public class KeyHandler implements KeyListener{
 		 * Trigger player to use current spell
 		 */
 		if (code == KeyEvent.VK_L) gp.getPlayer().setPlayerCastSpell(true);
-		/*
-		 * Player stands near interactive event and can trigger events
-		 */
-		if (gp.getEventHandler().getInteraction()) {
-			if (code == KeyEvent.VK_X) {
-				interaction = true;
-			}
-		}
+	
 	}
 	
 	
@@ -461,6 +456,35 @@ public class KeyHandler implements KeyListener{
 		if (code == KeyEvent.VK_L) gp.getPlayer().setPlayerCastSpell(false);
 	
 	}
+	
+	private final void tradeState (int code) {
+		UI ui = gp.getGameUI();
+		
+		if (code == KeyEvent.VK_W) --ui.tradeCursor;
+		
+		if (code == KeyEvent.VK_S) ++ui.tradeCursor;
+		
+		if (ui.tradeCursor < 0) ui.tradeCursor = 0;
+		
+		if (ui.tradeCursor > 2) ui.tradeCursor = 2;
+		
+		if (code == KeyEvent.VK_ENTER) {
+			switch (ui.tradeState) {
+			case BUY -> {}
+			case SELECT -> {}
+			case SELL -> {}
+			case LEAVE -> { gp.setGameState(GameState.PLAY);}
+			default -> {}
+			
+			}
+			gp.playSE(12);
+		}
+		
+	
+		
+	}
+	
+
 	
 
 }

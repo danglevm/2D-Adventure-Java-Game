@@ -4,6 +4,7 @@ import adventureGame2D.GamePanel;
 import enums.Direction;
 import enums.GameState;
 import enums.MapsConstants;
+import npc.NPC;
 
 public class EventHandler {
 	
@@ -11,19 +12,15 @@ public class EventHandler {
 	GamePanel gp;
 	Event eventObject;
 	EventRectangle[][][] eventRect;
-	int previousEventX, previousEventY;
-	boolean touchEvent = true, interact = false;
+	private int previousEventX, previousEventY;
+	boolean touchEvent = true;
 	
 	private final int pitX = 121, pitY = 122; 
 	private final int healX = 110, healY = 128;
 	private final int tradeX = 134, tradeY = 125, tradeBackX = 134, tradeBackY = 126;
 	private final int tpXto = 132, tpYto = 152, tpXback = 153, tpYback = 150;
 	
-	//return interaction state
-	public boolean getInteraction() {
-		return interact;
-	}
-	
+
 	public EventHandler (GamePanel gp) {
 		this.gp = gp;
 		int map = 0;
@@ -97,14 +94,19 @@ public class EventHandler {
 			
 			//go into trading hut
 			if (eventCollision(MapsConstants.SPAWN, tradeX, tradeY, Direction.ANY)) {
-				eventObject.mapTransition(GameState.PLAY, MapsConstants.TRADE_SPAWN_X, MapsConstants.TRADE_SPAWN_Y, MapsConstants.TRADE);
+				eventObject.mapTransition(GameState.TRANSITION, MapsConstants.TRADE_SPAWN_X, MapsConstants.TRADE_SPAWN_Y, MapsConstants.TRADE);
 				gp.playSE(19);
 			}
 			
 			//exit trading hut
 			if (eventCollision(MapsConstants.TRADE, MapsConstants.TRADE_BACK_X, MapsConstants.TRADE_BACK_Y, Direction.ANY)) {
-				eventObject.mapTransition(GameState.PLAY, tradeBackX, tradeBackY, MapsConstants.SPAWN);
+				eventObject.mapTransition(GameState.TRANSITION, tradeBackX, tradeBackY, MapsConstants.SPAWN);
 				gp.playSE(19);
+			}
+			
+			//talk to merchant npc
+			if (eventCollision(MapsConstants.TRADE, MapsConstants.TRADE_PLATFORM_X, MapsConstants.TRADE_PLATFORM_Y, Direction.UP)) {
+				((NPC) gp.getNPCS().get(MapsConstants.TRADE).get(0)).speak();
 			}
 			
 			
@@ -143,4 +145,11 @@ public class EventHandler {
 			return playerCollision;
 		}
 
+	public Event getEventObject () { return eventObject; }
+	
+	public final void setPreviousEventX (int previousEventX) { this.previousEventX = previousEventX;}
+	
+	public final void setPreviousEventY (int previousEventY) { this.previousEventY = previousEventY;}
+	
+	
 }
