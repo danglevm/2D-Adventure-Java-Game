@@ -3,7 +3,7 @@ package projectile;
 import adventureGame2D.GamePanel;
 import entity.Entity;
 import entity.Player;
-import enums.Direction;
+import enums_and_constants.Direction;
 import monster.Monster;
 
 public abstract class Projectile extends Entity {

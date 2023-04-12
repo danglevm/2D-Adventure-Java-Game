@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import adventureGame2D.GamePanel;
 import entity.Entity;
 import entity.Player;
-import enums.Direction;
+import enums_and_constants.Direction;
 import object.GameObject;
 
 public abstract class NPC extends Entity {

@@ -1,4 +1,4 @@
-package enums;
+package enums_and_constants;
 
 public abstract class MapsConstants {
 	public static final int SPAWN = 0;

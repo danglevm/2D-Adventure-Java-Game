@@ -5,8 +5,8 @@ import java.util.Random;
 
 import adventureGame2D.GamePanel;
 import entity.Player;
-import enums.Direction;
-import enums.EntityType;
+import enums_and_constants.Direction;
+import enums_and_constants.EntityType;
 import object.BronzeCoin;
 import object.Heart;
 import object.Mana;

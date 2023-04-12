@@ -15,11 +15,12 @@ import java.util.Map.Entry;
 
 import entity.Entity;
 import entity.Player;
-import enums.ObjectType;
-import enums.GameState;
-import enums.InventoryState;
-import enums.TitleState;
-import enums.TradeState;
+import enums_and_constants.GameState;
+import enums_and_constants.InventoryState;
+import enums_and_constants.ObjectType;
+import enums_and_constants.PauseState;
+import enums_and_constants.TitleState;
+import enums_and_constants.TradeState;
 import npc.NPC;
 import object.GameObject;
 import object.Heart;
@@ -34,6 +35,7 @@ public class UI {
 	private TitleState titleScreenState;
 	private InventoryState inventoryState;
 	protected TradeState tradeState;
+	protected PauseState pauseState;
 	
 	//Quotes
 	PauseQuotes pauseQuotes = new PauseQuotes();
@@ -72,7 +74,7 @@ public class UI {
 	ArrayList <String> subtitleMsg = new ArrayList <String> ();
 	ArrayList <Integer> subtitleMsgCount = new ArrayList <Integer> ();
 	
-	private int pauseOptionState = 0;
+
 	
 	private int transitionCounter = 0;
 	
@@ -87,6 +89,8 @@ public class UI {
 		inventoryState = InventoryState.NORMAL;
 		
 		tradeState = TradeState.SELECT;
+		
+		pauseState = PauseState.MENU;
 	
 		arial_30 = new Font ("Arial", Font.PLAIN, 30);
 		arial_50 = new Font ("Arial", Font.PLAIN, 50);
@@ -125,6 +129,10 @@ public class UI {
 	
 	public InventoryState getInventoryState () { return inventoryState; }
 	
+	public TradeState getTradeState() { return tradeState; }
+	
+	public void setTradeState(TradeState tradeState) { this.tradeState = tradeState; }
+	
 	public final int getItemIndex () { return slotCol + (slotRow * 4);}
 	
 	public final void setTitleScreenState (TitleState titleScreenState) { this.titleScreenState = titleScreenState; }
@@ -140,10 +148,7 @@ public class UI {
 	public final void setSlotColumn (int slotColumn) { this.slotCol = slotColumn;}
 	
 	public final void setSlotRow (int slotRow) { this.slotRow = slotRow;}
-	
-	public final int getPauseOption () { return pauseOptionState; }
-	
-	public final void setPauseOption (int pauseOptionState) { this.pauseOptionState = pauseOptionState; } 
+	 
 	
 	public final void addSubtitleMsg (String message) {
 		this.subtitleMsg.add(message);
@@ -250,10 +255,10 @@ public class UI {
 		
 		
 		
-		switch (pauseOptionState) {
-		case 0 -> {pauseLabels(menuFrameX, menuFrameY);}
-		case 1 -> {fullScreenNotification(menuFrameX, menuFrameY);}
-		case 2 -> {keyBindings(menuFrameX, menuFrameY);}
+		switch (pauseState) {
+		case MENU -> {pauseLabels(menuFrameX, menuFrameY);}
+		case FULLSCREEN -> {fullScreenNotification(menuFrameX, menuFrameY);}
+		case KEYBINDINGS -> {keyBindings(menuFrameX, menuFrameY);}
 		}
 	
 		
@@ -915,7 +920,7 @@ public class UI {
 			optionX = x + 20,
 			optionY = y + 50;
 		Player player = gp.getPlayer();
-		if (cursorLoc == 0) g2.setColor(optionColor);
+		if (cursorLoc == InventoryState.EQUIP_OPTION) g2.setColor(optionColor);
 		switch (type) {
 		case CONSUMMABLE, INTERACT -> {
 			g2.drawString("USE", optionX, optionY);
@@ -935,12 +940,12 @@ public class UI {
 		
 		g2.setColor(Color.white);
 		
-		if ( cursorLoc == 1) { g2.setColor(optionColor);}
+		if ( cursorLoc == InventoryState.DISCARD_OPTION) { g2.setColor(optionColor);}
 		g2.drawString("DISCARD", optionX, optionY + lineHeight);
 		
 		g2.setColor(Color.white);
 		
-		if ( cursorLoc == 2)  g2.setColor(optionColor);
+		if ( cursorLoc == InventoryState.CANCEL_OPTION)  g2.setColor(optionColor);
 		g2.drawString("CANCEL", optionX, optionY + lineHeight * 2);
 }
 	
@@ -1007,6 +1012,7 @@ public class UI {
 		case SELECT ->{drawTradeSelect();}
 		case BUY ->{drawTradeBuy();}
 		case SELL ->{drawTradeSell();}
+		case LEAVE -> {}
 		default -> {}
 		}
 		gp.getKeyHandler().setDialoguePress(false);

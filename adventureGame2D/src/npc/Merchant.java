@@ -3,9 +3,9 @@ package npc;
 import java.awt.Rectangle;
 
 import adventureGame2D.GamePanel;
-import enums.Direction;
-import enums.EntityType;
-import enums.GameState;
+import enums_and_constants.Direction;
+import enums_and_constants.EntityType;
+import enums_and_constants.GameState;
 import object.consummable.HealingPotion;
 
 public class Merchant extends NPC{
@@ -58,7 +58,6 @@ public class Merchant extends NPC{
 	@Override
 	public void speak() {
 		super.speak();
-		gp.setGameState(GameState.TRADE);
 		gp.getGameUI().setNPC(this);
 	}
 

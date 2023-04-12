@@ -3,8 +3,8 @@ package tile;
 import java.awt.Color;
 
 import adventureGame2D.GamePanel;
-import enums.Direction;
-import enums.ToolType;
+import enums_and_constants.Direction;
+import enums_and_constants.ToolType;
 import object.interfaces.ToolObjectInterface;
 
 public class DryTree extends InteractiveTile {

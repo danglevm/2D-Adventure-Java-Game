@@ -1,7 +1,7 @@
 package tile;
 
 import adventureGame2D.GamePanel;
-import enums.Direction;
+import enums_and_constants.Direction;
 
 public class Trunk extends InteractiveTile{
 
