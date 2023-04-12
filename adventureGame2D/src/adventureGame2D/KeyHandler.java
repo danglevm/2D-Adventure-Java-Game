@@ -3,9 +3,13 @@ package adventureGame2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import enums.GameState;
-import enums.InventoryState;
-import enums.TitleState;
+import enums_and_constants.Direction;
+import enums_and_constants.GameOverState;
+import enums_and_constants.GameState;
+import enums_and_constants.InventoryState;
+import enums_and_constants.PauseState;
+import enums_and_constants.TitleState;
+import enums_and_constants.TradeState;
 
 public class KeyHandler implements KeyListener{
 
@@ -130,17 +134,17 @@ public class KeyHandler implements KeyListener{
 			/*
 			 * New game
 			 */
-			if (gp.getGameUI().cursorNum == 0) gp.getGameUI().setTitleScreenState(TitleState.CHARACTERSELECT);
+			if (gp.getGameUI().cursorNum == TitleState.NEW_GAME) gp.getGameUI().setTitleScreenState(TitleState.CHARACTERSELECT);
 			
-			else if (gp.getGameUI().cursorNum == 1) {
+			else if (gp.getGameUI().cursorNum == TitleState.LOAD_SAVE) {
 				/*
 				 * Load save
 				 */
-			} else if (gp.getGameUI().cursorNum == 2) {
+			} else if (gp.getGameUI().cursorNum == TitleState.SETTINGS) {
 				/*
 				 * Settings
 				 */
-			} else {
+			} else if (gp.getGameUI().cursorNum == TitleState.EXIT){
 				System.exit(0);
 			}
 			gp.playSE(11);
@@ -163,7 +167,7 @@ public class KeyHandler implements KeyListener{
 			/*
 			 * Blue boy
 			 */	
-			if (gp.getGameUI().cursorNum == 0) {
+			if (gp.getGameUI().cursorNum == TitleState.BLUE_BOY) {
 				gp.setGameState(GameState.PLAY);
 				gp.playMusic(0);
 			} else {
@@ -245,22 +249,19 @@ public class KeyHandler implements KeyListener{
 		
 		if (code == KeyEvent.VK_ESCAPE) { 
 			
-			switch (gp.getGameUI().getPauseOption()) {
-			case 0 -> {
+			switch (gp.getGameUI().pauseState) {
+			case MENU -> {
 				gp.setGameState(GameState.PLAY);
+				gp.playSE(11);
 			}
 			
-			case 1, 2 -> {
-				gp.getGameUI().setPauseOption(0);
+			case FULLSCREEN, KEYBINDINGS -> {
+				gp.getGameUI().pauseState = PauseState.MENU;
+				gp.playSE(11);
 			}
 			}
 			
-			if (gp.getGameUI().getPauseOption() != 1) {
-				
-			} else {
-				gp.getGameUI().setPauseOption(0);
-			}
-			gp.playSE(11);
+			
 		}
 		
 		if (code == KeyEvent.VK_W) --gp.getGameUI().pauseCursor;
@@ -273,28 +274,28 @@ public class KeyHandler implements KeyListener{
 		
 		if (code == KeyEvent.VK_ENTER) {
 			switch (gp.getGameUI().pauseCursor) {
-			case 0 -> {
-				if (gp.getGameUI().getPauseOption() == 0) {
+			case PauseState.FULLSCREEN_OPTION -> {
+				if (gp.getGameUI().pauseState == PauseState.MENU) {
 					gp.setFullScreen(!gp.getFullScreen());
-					gp.getGameUI().setPauseOption(1);
+					gp.getGameUI().pauseState = PauseState.FULLSCREEN;
 				}
 			}
 			
-			case 1 -> {}
+			case PauseState.MUSIC_OPTION -> {}
 			
-			case 2 -> {}
+			case PauseState.SOUND_OPTION -> {}
 			
-			case 3 -> {
-				if (gp.getGameUI().getPauseOption() == 0) {
-					gp.getGameUI().setPauseOption(2);
+			case PauseState.KEYBINDING_OPTION -> {
+				if (gp.getGameUI().pauseState == PauseState.MENU) {
+					gp.getGameUI().pauseState = PauseState.KEYBINDINGS;
 				}
 			}
 			
-			case 4 -> { 
+			case PauseState.SUBTITLE_OPTION -> { 
 				gp.setSubtitileState(!gp.getSubtitleState());
 			}
 			
-			case 7 -> {
+			case PauseState.SAVEQUIT_OPTION -> {
 				gp.getMusic().stop();
 				gp.getGameUI().setTitleScreenState(TitleState.WELCOME);
 				gp.setGameState(GameState.TITLE);
@@ -303,8 +304,8 @@ public class KeyHandler implements KeyListener{
 			}
 			gp.playSE(11);
 		}
-		if (gp.getGameUI().getPauseOption() == 0)
-			if (gp.getGameUI().pauseCursor == 1) {
+		if (gp.getGameUI().pauseState == PauseState.MENU)
+			if (gp.getGameUI().pauseCursor == PauseState.MUSIC_OPTION) {
 				if (code == KeyEvent.VK_A && gp.getMusic().getVolumeScale() > 0) {
 					gp.getMusic().setVolumeScale(gp.getMusic().getVolumeScale() - 1);
 					gp.getMusic().adjustVolume();
@@ -316,7 +317,7 @@ public class KeyHandler implements KeyListener{
 				}
 			}
 		
-			if (gp.getGameUI().pauseCursor == 2) {
+			if (gp.getGameUI().pauseCursor == PauseState.SOUND_OPTION) {
 				if (code == KeyEvent.VK_A && gp.getSoundEffects().getVolumeScale() > 0) {
 					gp.getSoundEffects().setVolumeScale(gp.getSoundEffects().getVolumeScale() - 1);
 				}
@@ -421,13 +422,13 @@ public class KeyHandler implements KeyListener{
 		
 		if (code == KeyEvent.VK_ENTER) {
 			switch (gp.getGameUI().gameOverCursor) {
-			case 0 -> {}
-			case 1 -> {
+			case GameOverState.LOADSAVE_OPTION -> {}
+			case GameOverState.NEWGAME_OPTION -> {
 				gp.getPlayer().setDefaultPlayerValues();
 				gp.setGameState(GameState.PLAY);
 				gp.GameSetup();
 			}
-			case 2 -> {
+			case GameOverState.QUIT_OPTION -> {
 				gp.getMusic().stop();
 				gp.getGameUI().setTitleScreenState(TitleState.WELCOME);
 				gp.setGameState(GameState.TITLE);
@@ -469,11 +470,25 @@ public class KeyHandler implements KeyListener{
 		if (ui.tradeCursor > 2) ui.tradeCursor = 2;
 		
 		if (code == KeyEvent.VK_ENTER) {
+			System.out.println(ui.tradeState);
+			System.out.println(gp.getPlayer().getDirection());
 			switch (ui.tradeState) {
+			
 			case BUY -> {}
-			case SELECT -> {}
+			case SELECT -> {
+				if (ui.tradeCursor == TradeState.BUY_OPTION) {
+					gp.getGameUI().tradeState = TradeState.SELL;
+				};
+				if (ui.tradeCursor == TradeState.SELL_OPTION) {
+					gp.getGameUI().tradeState = TradeState.SELL;
+				};
+				if (ui.tradeCursor == TradeState.LEAVE_OPTION) {
+					gp.setGameState(GameState.PLAY);
+					gp.getGameUI().setTradeState(TradeState.LEAVE);
+					gp.getPlayer().setDirection(Direction.DOWN);
+				};
+			}
 			case SELL -> {}
-			case LEAVE -> { gp.setGameState(GameState.PLAY);}
 			default -> {}
 			
 			}

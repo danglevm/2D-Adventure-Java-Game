@@ -13,11 +13,12 @@ import java.util.Map.Entry;
 
 import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
-import enums.Direction;
-import enums.EntityType;
-import enums.GameState;
-import enums.ObjectType;
-import enums.ToolType;
+import enums_and_constants.Direction;
+import enums_and_constants.EntityType;
+import enums_and_constants.GameState;
+import enums_and_constants.InventoryState;
+import enums_and_constants.ObjectType;
+import enums_and_constants.ToolType;
 import monster.Monster;
 import npc.NPC;
 import object.GameObject;
@@ -808,7 +809,7 @@ public class Player extends Entity {
 		GameObject selectedItem = inventory.get(gp.getGameUI().getItemIndex());
 		ObjectType type = selectedItem.getInventoryType();
 		
-		if (option == 0) {
+		if (option == InventoryState.EQUIP_OPTION) {
 			switch (type) {
 			case CONSUMMABLE -> {
 				//if player successfully uses consummable
@@ -845,7 +846,7 @@ public class Player extends Entity {
 			}
 			
 			
-		} else if (option == 1){
+		} else if (option == InventoryState.DISCARD_OPTION){
 			//inventory.remove(selectedItem);
 			inventory.remove(selectedItem);
 			switch (type) {
@@ -868,7 +869,7 @@ public class Player extends Entity {
 			
 			}
 			
-		} else if (option == 2) {
+		} else if (option == InventoryState.CANCEL_OPTION) {
 			gp.setGameState(GameState.INVENTORY);
 		}
 	}

@@ -3,8 +3,8 @@ package npc;
 import java.awt.Rectangle;
 import java.util.Random;
 import adventureGame2D.GamePanel;
-import enums.Direction;
-import enums.EntityType;
+import enums_and_constants.Direction;
+import enums_and_constants.EntityType;
 
 public class OldDude extends NPC {
 	//Dialogues

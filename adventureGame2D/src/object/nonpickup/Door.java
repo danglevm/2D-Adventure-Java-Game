@@ -1,7 +1,7 @@
 package object.nonpickup;
 
 import adventureGame2D.GamePanel;
-import enums.ObjectType;
+import enums_and_constants.ObjectType;
 import object.GameObject;
 
 

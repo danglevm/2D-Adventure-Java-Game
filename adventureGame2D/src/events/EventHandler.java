@@ -1,9 +1,10 @@
 package events;
 
 import adventureGame2D.GamePanel;
-import enums.Direction;
-import enums.GameState;
-import enums.MapsConstants;
+import enums_and_constants.Direction;
+import enums_and_constants.GameState;
+import enums_and_constants.MapsConstants;
+import enums_and_constants.TradeState;
 import npc.NPC;
 
 public class EventHandler {
@@ -13,7 +14,7 @@ public class EventHandler {
 	Event eventObject;
 	EventRectangle[][][] eventRect;
 	private int previousEventX, previousEventY;
-	boolean touchEvent = true;
+	protected boolean touchEvent = true;
 	
 	private final int pitX = 121, pitY = 122; 
 	private final int healX = 110, healY = 128;
@@ -64,7 +65,9 @@ public class EventHandler {
 			yDistance = Math.abs(gp.getPlayer().getWorldX() - previousEventY),
 			distance = Math.max(xDistance, yDistance);
 		
+		if (distance > gp.getTileSize()) { this.touchEvent = true; }
 		
+		if (this.touchEvent) {
 		//damage player
 			if (eventCollision(MapsConstants.SPAWN, pitX, pitY, Direction.ANY)) {
 				eventObject.DamagePit(GameState.DIALOGUE);
@@ -107,9 +110,12 @@ public class EventHandler {
 			//talk to merchant npc
 			if (eventCollision(MapsConstants.TRADE, MapsConstants.TRADE_PLATFORM_X, MapsConstants.TRADE_PLATFORM_Y, Direction.UP)) {
 				((NPC) gp.getNPCS().get(MapsConstants.TRADE).get(0)).speak();
+				gp.setGameState(GameState.TRADE);
+				gp.getGameUI().setTradeState(TradeState.SELECT);
+				touchEvent = false;
 			}
 			
-			
+		}
 		
 	}
 	

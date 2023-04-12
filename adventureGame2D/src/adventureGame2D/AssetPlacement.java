@@ -1,6 +1,6 @@
 package adventureGame2D;
 
-import enums.MapsConstants;
+import enums_and_constants.MapsConstants;
 import monster.MonsterGreenSlime;
 import npc.Merchant;
 import npc.OldDude;

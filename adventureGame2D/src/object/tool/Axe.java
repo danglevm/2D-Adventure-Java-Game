@@ -1,8 +1,8 @@
 package object.tool;
 
 import adventureGame2D.GamePanel;
-import enums.ObjectType;
-import enums.ToolType;
+import enums_and_constants.ObjectType;
+import enums_and_constants.ToolType;
 import object.GameObject;
 import object.interfaces.AttackObjectInterface;
 import object.interfaces.ToolObjectInterface;

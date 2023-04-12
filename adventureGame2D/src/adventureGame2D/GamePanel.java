@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import entity.Entity;
 import entity.Particle;
 import entity.Player;
-import enums.GameState;
+import enums_and_constants.GameState;
 import events.EventHandler;
 import monster.Monster;
 import projectile.Projectile;
