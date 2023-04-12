@@ -2,7 +2,7 @@ package object;
 
 
 import adventureGame2D.GamePanel;
-import enums.ObjectType;
+import enums_and_constants.ObjectType;
 
 
 public class Boots extends GameObject {

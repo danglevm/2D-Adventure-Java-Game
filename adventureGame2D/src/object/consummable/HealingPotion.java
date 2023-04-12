@@ -1,7 +1,7 @@
 package object.consummable;
 
 import adventureGame2D.GamePanel;
-import enums.ObjectType;
+import enums_and_constants.ObjectType;
 import object.GameObject;
 import object.interfaces.ConsummableInterface;
 

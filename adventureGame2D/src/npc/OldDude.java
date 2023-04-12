@@ -1,17 +1,14 @@
 package npc;
 
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.Random;
 import adventureGame2D.GamePanel;
-import enums.Direction;
-import enums.EntityType;
+import enums_and_constants.Direction;
+import enums_and_constants.EntityType;
 
-public class OldDude extends NPC implements FriendlyInterface{
+public class OldDude extends NPC {
 	//Dialogues
 	GamePanel gp;
-	private ArrayList<String> oldDudeDialogues = new ArrayList <String>();
-	private int dialogueIndex = 0;
 
 	public OldDude (GamePanel gp, int worldX, int worldY) {
 		super(gp);
@@ -21,7 +18,12 @@ public class OldDude extends NPC implements FriendlyInterface{
 		this.WorldX = gp.getTileSize() * worldX;
 		this.WorldY = gp.getTileSize() * worldY;
 		
-		this.setDefaultValues();
+		name = "Old_Dude";
+		direction = Direction.DOWN;
+		speed = 2;
+		maxLife = 6;
+		life = maxLife;
+		entityType = EntityType.FRIENDLY;
 		this.getImage();
 		this.setDialogue();
 	}
@@ -46,14 +48,14 @@ public class OldDude extends NPC implements FriendlyInterface{
 	public void setDialogue() {
 		
 		//Meeting the player for the first time
-		oldDudeDialogues.add(" '...' ");
-		oldDudeDialogues.add(" 'OH what the-' ");
-		oldDudeDialogues.add(" 'Who the heck are you, whippersnapper?\n Creeping on me like that?' ");
+		dialogues.add(" '...' ");
+		dialogues.add(" 'OH what the-' ");
+		dialogues.add(" 'Who the heck are you, whippersnapper?\n Creeping on me like that?' ");
 		
 		//depends on what the player chooses
-		oldDudeDialogues.add(" 'You deaf, son?' "); 
-		oldDudeDialogues.add(" 'I sure as hell haven't seen you around.\n What's your name?' "); 
-		oldDudeDialogues.add(" 'You what? You woke up in my HOUSE?' ");
+		dialogues.add(" 'You deaf, son?' "); 
+		dialogues.add(" 'I sure as hell haven't seen you around.\n What's your name?' "); 
+		dialogues.add(" 'You what? You woke up in my HOUSE?' ");
 	}
 	
 	@Override
@@ -81,30 +83,16 @@ public class OldDude extends NPC implements FriendlyInterface{
 		}
 	
 	}
-	
-	public void speak() {
-		//Opening speak
-		try {
-		if (oldDudeDialogues.get(dialogueIndex) != null) {
-			gp.getGameUI().setCurrentDialogue(oldDudeDialogues.get(dialogueIndex));
-			++dialogueIndex;
-			}
-		} catch (IndexOutOfBoundsException e){}
-		
-		talkingDirection(gp.getPlayer(), this);
-		
-	}
+
 
 	@Override
-	public final void setDefaultValues() {
-		name = "Old_Dude";
-		direction = Direction.DOWN;
-		speed = 2;
-		maxLife = 6;
-		life = maxLife;
-		entityType = EntityType.FRIENDLY;
+	void setInventory() {
+		// TODO Auto-generated method stub
 		
 	}
+	
+
+
 
 
 	

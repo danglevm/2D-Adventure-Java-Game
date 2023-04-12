@@ -1,4 +1,4 @@
-package enums;
+package enums_and_constants;
 
 public enum GameState {
 	TITLE,
@@ -8,5 +8,7 @@ public enum GameState {
 	DIALOGUE,
 	STATUS,
 	INVENTORY,
+	TRANSITION,
+	TRADE,
 	GAMEOVER;
 }

@@ -11,8 +11,8 @@ import javax.imageio.ImageIO;
 
 import adventureGame2D.GamePanel;
 import adventureGame2D.UtilityTool;
-import enums.Direction;
-import enums.EntityType;
+import enums_and_constants.Direction;
+import enums_and_constants.EntityType;
 import monster.Monster;
 
 public class Entity{

@@ -17,11 +17,10 @@ import javax.swing.JPanel;
 import entity.Entity;
 import entity.Particle;
 import entity.Player;
-import enums.GameState;
+import enums_and_constants.GameState;
 import events.EventHandler;
 import monster.Monster;
 import projectile.Projectile;
-import tile.InteractiveTile;
 import tile.TileManager;
 
 //Game Panel inherits all components from JPanel
@@ -187,8 +186,8 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		
 		assetPlace.setObject();
-		assetPlace.setNPCsSpawn();
-		assetPlace.setMonsters();
+		assetPlace.setNPC();
+		assetPlace.setMonster();
 		assetPlace.setInteractiveTiles();
 		
 		bufferScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);

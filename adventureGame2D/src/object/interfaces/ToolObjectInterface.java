@@ -1,6 +1,6 @@
 package object.interfaces;
 
-import enums.ToolType;
+import enums_and_constants.ToolType;
 
 public interface ToolObjectInterface {
 	abstract ToolType getToolType();

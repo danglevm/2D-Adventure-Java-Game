@@ -3,7 +3,7 @@ package object;
 import adventureGame2D.GamePanel;
 import entity.Entity;
 import entity.Player;
-import enums.ObjectType;
+import enums_and_constants.ObjectType;
 
 
 public abstract class GameObject extends Entity{
