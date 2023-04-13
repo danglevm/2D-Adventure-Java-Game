@@ -69,7 +69,12 @@ public class UI {
 	
 	private String [] statusScreenLabels = {"NEW GAME", "LOAD SAVE", "SETTINGS", "QUIT"};
 	
+	//Player inventory column and row
 	private int slotCol = 0, slotRow = 0;
+	
+	//NPC inventory column and row
+	private int NPCslotCol = 0, NPCslotRow = 0;
+	
 	//Drawing SubTitles
 	ArrayList <String> subtitleMsg = new ArrayList <String> ();
 	ArrayList <Integer> subtitleMsgCount = new ArrayList <Integer> ();
@@ -209,7 +214,7 @@ public class UI {
 		case STATUS -> { drawStatusScreen(); } 
 		
 		case INVENTORY -> { 
-			drawInventoryScreen();
+			drawPlayerInventoryScreen();
 		}
 		
 		case GAMEOVER ->{drawGameOverScreen();}
@@ -751,19 +756,26 @@ public class UI {
 		
 	}
 	
-	private final void drawInventoryScreen() {
+	private final void drawPlayerInventoryScreen() {
 		Player player = gp.getPlayer();
 		int tileSize = gp.getTileSize();
 		/**
 		 * 
 		 * INVENTORY FRAME
 		 */
-		final int frameX = gp.getTileSize() *2,
-			frameY = gp.getTileSize(),
+		final int frameX = gp.getTileSize() *2,			
 			frameWidth = gp.getTileSize() * 16,
 			frameHeight = gp.getTileSize() * 7 + 10;
 		
+		int frameY = gp.getTileSize();
+		
+		if (this.tradeState == TradeState.BUY || this.tradeState == TradeState.SELL) {
+			frameY = gp.getTileSize() * 6;
+		}
+		
 		drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+		
+	
 		
 		final int defaultSlotX = frameX + 40,
 				  defaultSlotY = frameY + 30;
@@ -807,11 +819,21 @@ public class UI {
 		
 			
 			slotX += gp.getTileSize() * 2;
+		
 			
-			if (i % 4 == 3) {
-				slotX = defaultSlotX;
-				slotY += gp.getTileSize() * 2;
+			if (this.tradeState == TradeState.SELECT) {
+				if (i % 4 == 3) {
+					slotX = defaultSlotX;
+					slotY += gp.getTileSize() * 2;
+				}
+			} else {
+				if (i % 6 == 1 && i != 1) {
+					slotX = defaultSlotX;
+					slotY += gp.getTileSize() * 2;
+				}
 			}
+			
+			
 		}
 		
 		/**
@@ -830,6 +852,8 @@ public class UI {
 		/**
 		 * DESCRIPTION Frame
 		 */
+		int itemIndex = slotCol + (slotRow * 4);
+		if (this.tradeState != TradeState.BUY && this.tradeState != TradeState.SELL) {
 		int descriptionFrameX = frameX,
 			descriptionFrameY = frameY + frameHeight + 10,
 			descriptionFrameWidth = frameWidth,
@@ -846,7 +870,7 @@ public class UI {
 		 * 
 		 * Max of 3 rows and 4 columns
 		 */
-		int itemIndex = slotCol + (slotRow * 4);
+	
 		
 		g2.setFont(maruMonica);
 		g2.setFont(g2.getFont().deriveFont(42F));
@@ -878,7 +902,7 @@ public class UI {
 			g2.setColor(Color.white);
 			g2.drawString(emptySlotDescription, descriptionTextX, descriptionTextY);
 		}
-		
+		}
 		/*
 		 * Draw use options for items currently being pointed at by cursor
 		 * CHECK the type of the object in inventory then call the correct method to draw the correct one
@@ -913,6 +937,10 @@ public class UI {
 		}
 		
 	
+	}
+	
+	private final void drawNPCInventoryScreen() {
+		
 	}
 	
 	private final void drawInventoryOptions (int x, int y, ObjectType type, int cursorLoc, GameObject selectedItem) {
@@ -1050,10 +1078,11 @@ public class UI {
 		
 	}
 	private final void drawTradeBuy() {
-		
+		drawPlayerInventoryScreen();
+		drawNPCInventoryScreen();
 	}
 	private final void drawTradeSell() {
-	
+		drawPlayerInventoryScreen();
 	}
 	
 }

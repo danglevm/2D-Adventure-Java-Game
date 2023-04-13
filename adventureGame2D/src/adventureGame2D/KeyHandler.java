@@ -461,6 +461,8 @@ public class KeyHandler implements KeyListener{
 	private final void tradeState (int code) {
 		UI ui = gp.getGameUI();
 		
+		if (ui.tradeState == TradeState.SELECT) {
+			
 		if (code == KeyEvent.VK_W) --ui.tradeCursor;
 		
 		if (code == KeyEvent.VK_S) ++ui.tradeCursor;
@@ -469,31 +471,41 @@ public class KeyHandler implements KeyListener{
 		
 		if (ui.tradeCursor > 2) ui.tradeCursor = 2;
 		
-		if (code == KeyEvent.VK_ENTER) {
-			System.out.println(ui.tradeState);
-			System.out.println(gp.getPlayer().getDirection());
-			switch (ui.tradeState) {
+		}
+		
+		switch (ui.tradeState) {
 			
-			case BUY -> {}
+			case BUY -> {
+				System.out.println("Hey");
+				if (code == KeyEvent.VK_ESCAPE) {
+					gp.getGameUI().setTradeState(TradeState.SELECT);
+				};
+				
+			}
 			case SELECT -> {
+				if (code == KeyEvent.VK_ENTER) {
 				if (ui.tradeCursor == TradeState.BUY_OPTION) {
-					gp.getGameUI().tradeState = TradeState.SELL;
+					gp.getGameUI().tradeState = TradeState.BUY;
+					this.tradeState(code);
 				};
 				if (ui.tradeCursor == TradeState.SELL_OPTION) {
 					gp.getGameUI().tradeState = TradeState.SELL;
+					this.tradeState(code);
 				};
 				if (ui.tradeCursor == TradeState.LEAVE_OPTION) {
-					gp.setGameState(GameState.PLAY);
+					gp.setGameState(GameState.DIALOGUE);
+					gp.getGameUI().setCurrentDialogue("Come back with some money boy!\nThe goods are always here.");
 					gp.getGameUI().setTradeState(TradeState.LEAVE);
 					gp.getPlayer().setDirection(Direction.DOWN);
 				};
+				}
 			}
 			case SELL -> {}
 			default -> {}
 			
 			}
 			gp.playSE(12);
-		}
+		
 		
 	
 		

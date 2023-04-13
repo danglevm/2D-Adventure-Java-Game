@@ -6,7 +6,7 @@ public enum TradeState {
 	SELL,
 	LEAVE;
 	
-	public static final int BUY_OPTION = 1;
+	public static final int BUY_OPTION = 0;
 	public static final int SELL_OPTION = 1;
 	public static final int LEAVE_OPTION = 2;
 }

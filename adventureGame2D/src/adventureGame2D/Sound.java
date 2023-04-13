@@ -9,6 +9,8 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
 public class Sound {
+	
+	public static final int TRADE_DOOR = 19;
 
 	//Open audio files
 	Clip clip;
@@ -40,7 +42,7 @@ public class Sound {
 		soundURL.add (getClass().getResource("/sounds/objects/burning.wav")); //16
 		soundURL.add (getClass().getResource("/sounds/player/cuttree.wav")); //17
 		soundURL.add (getClass().getResource("/sounds/game/gameover.wav")); //18
-		soundURL.add (getClass().getResource("/sounds/game/trade_door.wav")); //19
+		soundURL.add (getClass().getResource("/sounds/game/trade-door.wav")); //19
 		
 		
 		
