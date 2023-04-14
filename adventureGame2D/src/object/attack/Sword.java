@@ -19,6 +19,7 @@ public class Sword extends GameObject implements AttackObjectInterface {
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		setTradeNameDescription();
 	}
 
 
@@ -49,6 +50,14 @@ public class Sword extends GameObject implements AttackObjectInterface {
 	@Override
 	public void setInventoryType() {
 		this.inventoryType = ObjectType.ATTACK;
+		
+	}
+
+
+	@Override
+	public void setTradeNameDescription() {
+		this.tradeName = "Iron \nSword";
+		this.tradeDescription = "Grants 2 attack power";
 		
 	}
 

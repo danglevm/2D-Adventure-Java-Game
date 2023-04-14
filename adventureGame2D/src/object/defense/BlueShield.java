@@ -17,6 +17,7 @@ public class BlueShield extends GameObject implements DefenseObjectInterface{
 		setPickupState();
 		setInventoryType();
 		encumbrance = 2;
+		setTradeNameDescription();
 	}
 
 	@Override
@@ -42,5 +43,12 @@ public class BlueShield extends GameObject implements DefenseObjectInterface{
 	public int getDefenseValue() {
 		// TODO Auto-generated method stub
 		return 3;
+	}
+
+	@Override
+	public void setTradeNameDescription() {
+		this.tradeName = "Blue \nShield";
+		this.tradeDescription = "Grants 3 defense but slows by 2";
+		
 	}
 }

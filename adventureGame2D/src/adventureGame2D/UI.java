@@ -958,7 +958,7 @@ public class UI {
 		 * 
 		 * INVENTORY FRAME
 		 */
-		final int frameX = tileSize *2,			
+		final int frameX = tileSize * 2,			
 			frameWidth = tileSize * 13 + 40,
 			frameHeight = tileSize * 3 + 20,
 			frameY = tileSize;
@@ -1157,6 +1157,7 @@ public class UI {
 	}
 	private final void drawTradeBuy() {
 		drawPlayerInventoryScreen();
+		drawTradeItemDescription();
 		drawNPCInventoryScreen(gp.getNPCS().get(MapsConstants.TRADE).get(Merchant.MERCHANT_INDEX));
 		drawPlayerCoinTrade();
 		drawPlayerGoBackInventory();
@@ -1164,6 +1165,7 @@ public class UI {
 	
 	private final void drawTradeSell() {
 		drawPlayerInventoryScreen();
+		drawTradeItemDescription();
 		drawNPCInventoryScreen(gp.getNPCS().get(MapsConstants.TRADE).get(Merchant.MERCHANT_INDEX));
 		drawPlayerCoinTrade();
 		drawPlayerGoBackInventory();
@@ -1193,6 +1195,73 @@ public class UI {
 		g2.setFont(maruMonica);
 		g2.setFont(g2.getFont().deriveFont(28F));
 		g2.drawString("[ESC] Leave ", x + 10, y + height/2);
+	}
+	
+	private final void drawTradeItemDescription () { 
+		int tileSize = gp.getTileSize();
+		int itemIndex;
+		final int frameX = tileSize * 2,
+				frameWidth = tileSize * 3 + 40,
+				frameHeight = tileSize * 3 + 20,
+				frameY = tileSize * 4 + 25;
+	
+		
+		g2.setFont(maruMonica);
+		g2.setFont(g2.getFont().deriveFont(38F));
+		
+		int textY = frameY + frameHeight/2;
+		int textX = frameX + 20;
+		int descriptionFrameWidth = tileSize * 10;
+		this.drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+		
+		this.drawSubWindow(frameX *3 - 5, frameY, descriptionFrameWidth, frameHeight);
+		g2.setColor(Color.YELLOW);
+		if (this.tradeState == TradeState.SELL) {
+			itemIndex = slotCol + (slotRow * 6);
+		try {
+			GameObject currentItem = gp.getPlayer().getInventory().get(itemIndex);
+			String tradeName = currentItem.getTradeName();
+			for (String line : tradeName.split("\n")) {
+				g2.drawString(line, textX + 10, textY - 10);
+				//increase the display
+				textY += gp.getTileSize();
+			}
+			g2.setColor(Color.WHITE);
+			g2.drawString(currentItem.getTradeDescription(), frameX * 3 + 20, textY - tileSize * 2 + 10);
+			
+			this.drawSubWindow(frameX * 7, frameY + frameHeight - tileSize, tileSize * 2, frameHeight/2);
+			g2.drawImage(coin.getDown1(), frameX * 7, frameY + frameHeight - tileSize + 10, tileSize + 10, tileSize + 10, null);
+		} catch (Exception e) {
+				
+		}
+			
+		} else if (this.tradeState == TradeState.BUY) {
+			itemIndex = slotCol;
+			try {
+				GameObject currentItem = ((NPC)gp.getNPCS().get(MapsConstants.TRADE).get(Merchant.MERCHANT_INDEX)).getNPCInventory().get(itemIndex);
+				String tradeName = currentItem.getTradeName();
+				for (String line : tradeName.split("\n")) {
+					g2.drawString(line, textX + 10, textY - 10);
+					//increase the display
+					textY += gp.getTileSize();
+				}
+				
+				this.drawSubWindow(frameX * 7, frameY - tileSize, tileSize * 2, frameHeight/2);
+				g2.drawImage(coin.getDown1(), frameX * 7, frameY - tileSize + 10, tileSize + 10, tileSize + 10, null);
+				
+				g2.setColor(Color.WHITE);
+				g2.drawString(currentItem.getTradeDescription(), frameX * 3 + 20, textY - tileSize * 2 + 10);
+				} catch (Exception e) {
+					
+				}
+			
+				
+		}
+		g2.setColor(Color.WHITE);
+		
+		
+
+				
 	}
 	
 }

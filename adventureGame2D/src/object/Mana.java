@@ -16,6 +16,8 @@ public class Mana extends PowerUpObject {
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		setTradeNameDescription();
+		
 	}
 
 	public void setDefaultAttributes() {
@@ -41,5 +43,12 @@ public class Mana extends PowerUpObject {
 	public void grantPowerUpEffects() {
 		player.setMana(player.getMana() + 1);
 		if (player.getMana() >= player.getMaxMana()) player.setMana(player.getMaxMana());
+	}
+
+	@Override
+	public void setTradeNameDescription() {
+		// TODO Auto-generated method stub
+		this.tradeName = "Mana";
+		this.tradeDescription = "Not supposed to be here. You cheating?";
 	}	
 }

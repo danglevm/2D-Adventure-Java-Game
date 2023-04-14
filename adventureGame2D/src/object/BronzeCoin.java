@@ -18,11 +18,12 @@ public class BronzeCoin extends PowerUpObject {
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		setTradeNameDescription();
 	}
 	
 	@Override
 	protected void setDefaultAttributes() {
-		name = "Shiny Bronze Coin";
+		name = "Shiny \nBronze \nCoin";
 		collisionOn = false;
 		down1 = setupEntity("coin_bronze", "/objects/equip/", gp.getTileSize(), gp.getTileSize());
 		objectDescription =  "Looks really like your old mother's bedroom key.\nToo bad she's sleeping in the skies now.\nCan be used to open locked doors.";
@@ -48,6 +49,13 @@ public class BronzeCoin extends PowerUpObject {
 	@Override
 	public void grantPowerUpEffects() {
 		gp.getPlayer().setCoin(gp.getPlayer().getCoin() + 1);
+	}
+
+	@Override
+	public void setTradeNameDescription() {
+		this.tradeName = "Bronze Coin";
+		this.tradeDescription = "One more shiny coin doesn't hurt";
+		
 	}
 	
 	

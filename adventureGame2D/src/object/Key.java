@@ -17,6 +17,7 @@ public class Key extends GameObject {
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		setTradeNameDescription();
 	}
 	
 	@Override
@@ -39,6 +40,13 @@ public class Key extends GameObject {
 	@Override
 	public void setInventoryType() {
 		this.inventoryType = ObjectType.INTERACT;
+		
+	}
+
+	@Override
+	public void setTradeNameDescription() {
+		this.tradeName = "Golden \nKey";
+		this.tradeDescription = "For opening a locked door";
 		
 	}
 	

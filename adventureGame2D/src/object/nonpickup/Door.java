@@ -17,6 +17,7 @@ public class Door extends GameObject {
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		setTradeNameDescription();
 	}
 
 	public void setDefaultAttributes() {
@@ -42,6 +43,13 @@ public class Door extends GameObject {
 	@Override
 	public void setInventoryType() {
 		this.inventoryType = ObjectType.NONPICKUP;
+		
+	}
+
+	@Override
+	public void setTradeNameDescription() {
+		this.tradeName = "Door";
+		this.tradeDescription = "Not supposed to be here. You cheating?";
 		
 	}	
 	

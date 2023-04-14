@@ -17,6 +17,10 @@ public abstract class GameObject extends Entity{
 	protected int encumbrance;
 	
 	protected Player player;
+	
+	protected String tradeName;
+	
+	protected String tradeDescription;
 
 	
 	public GameObject(GamePanel gp) {
@@ -40,4 +44,10 @@ public abstract class GameObject extends Entity{
 	public int getEncumbrance () { return encumbrance; }
 	
 	public ObjectType getInventoryType () { return inventoryType; }
+	
+	public final String getTradeName() {return tradeName; }
+	
+	public final String getTradeDescription() {return tradeDescription; }
+	
+	public abstract void setTradeNameDescription();
 }

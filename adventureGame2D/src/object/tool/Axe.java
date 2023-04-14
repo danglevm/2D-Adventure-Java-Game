@@ -18,7 +18,7 @@ public class Axe extends GameObject implements AttackObjectInterface, ToolObject
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
-		
+		setTradeNameDescription();
 	}
 
 	@Override
@@ -49,5 +49,12 @@ public class Axe extends GameObject implements AttackObjectInterface, ToolObject
 	@Override
 	public ToolType getToolType() {
 		return ToolType.AXE;
+	}
+
+	@Override
+	public void setTradeNameDescription() {
+		this.tradeName = "Iron \nAxe";
+		this.tradeDescription = "For chopping down dry trees";
+		
 	}
 }

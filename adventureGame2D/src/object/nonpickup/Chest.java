@@ -16,6 +16,7 @@ public class Chest extends GameObject {
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		setTradeNameDescription();
 	}
 
 	@Override
@@ -33,6 +34,13 @@ public class Chest extends GameObject {
 	@Override
 	public void setInventoryType() {
 		this.inventoryType = ObjectType.NONPICKUP;
+		
+	}
+
+	@Override
+	public void setTradeNameDescription() {
+		this.tradeName = "Chest";
+		this.tradeDescription = "Not supposed to be here. You cheating?";
 		
 	}		
 }

@@ -16,6 +16,7 @@ public class Heart extends PowerUpObject {
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		setTradeNameDescription();
 	}
 
 	public void setDefaultAttributes() {
@@ -43,5 +44,12 @@ public class Heart extends PowerUpObject {
 	public void grantPowerUpEffects() {
 		player.setLife(player.getLife() + 2);
 		if (player.getLife() >= player.getMaxLife()) player.setLife(player.getMaxLife());
+	}
+
+	@Override
+	public void setTradeNameDescription() {
+		this.tradeName = "Heart";
+		this.tradeDescription = "Not supposed to be here. You cheating?";
+		
 	}	
 }

@@ -19,6 +19,7 @@ public class HealingPotion extends GameObject implements ConsummableInterface {
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		setTradeNameDescription();
 	}
 
 	@Override
@@ -55,6 +56,13 @@ public class HealingPotion extends GameObject implements ConsummableInterface {
 			//Do something if player drinks at full HP
 		}
 		return false;
+	}
+
+	@Override
+	public void setTradeNameDescription() {
+		this.tradeName = "Healing \nPotion";
+		this.tradeDescription = "Grants 4 HP immediately";
+		
 	}
 
 }

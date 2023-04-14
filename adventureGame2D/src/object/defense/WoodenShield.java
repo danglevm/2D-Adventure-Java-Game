@@ -19,6 +19,7 @@ public class WoodenShield extends GameObject implements DefenseObjectInterface{
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		setTradeNameDescription();
 	}
 	
 	public void setDefaultAttributes() {
@@ -47,5 +48,14 @@ public class WoodenShield extends GameObject implements DefenseObjectInterface{
 		this.inventoryType = ObjectType.DEFENSE;
 		
 	}
+
+	@Override
+	public void setTradeNameDescription() {
+		this.tradeName = "Wooden \nShield";
+		this.tradeDescription = "Grants 1 defense";
+		
+	}
+	
+	
 
 }

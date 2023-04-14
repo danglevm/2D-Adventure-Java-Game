@@ -36,5 +36,11 @@ public class Boots extends GameObject {
 	public void setInventoryType() {
 		this.inventoryType = ObjectType.ACCESSORY;
 	}
+
+	@Override
+	public void setTradeNameDescription() {
+		this.tradeName = "Boots";
+		this.tradeDescription = "Grants 1 movement speed";
+	}
 }
 
