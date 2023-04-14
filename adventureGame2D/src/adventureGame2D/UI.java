@@ -17,11 +17,14 @@ import entity.Entity;
 import entity.Player;
 import enums_and_constants.GameState;
 import enums_and_constants.InventoryState;
+import enums_and_constants.MapsConstants;
 import enums_and_constants.ObjectType;
 import enums_and_constants.PauseState;
 import enums_and_constants.TitleState;
 import enums_and_constants.TradeState;
+import npc.Merchant;
 import npc.NPC;
+import object.BronzeCoin;
 import object.GameObject;
 import object.Heart;
 import object.Mana;
@@ -79,6 +82,8 @@ public class UI {
 	ArrayList <String> subtitleMsg = new ArrayList <String> ();
 	ArrayList <Integer> subtitleMsgCount = new ArrayList <Integer> ();
 	
+	BronzeCoin coin;
+	
 
 	
 	private int transitionCounter = 0;
@@ -96,6 +101,8 @@ public class UI {
 		tradeState = TradeState.SELECT;
 		
 		pauseState = PauseState.MENU;
+		
+		coin = new BronzeCoin(gp, 0, 0);
 	
 		arial_30 = new Font ("Arial", Font.PLAIN, 30);
 		arial_50 = new Font ("Arial", Font.PLAIN, 50);
@@ -316,7 +323,7 @@ public class UI {
 			textY += 40;
 		}
 		
-		g2.drawString("Press ESC to go back to menu options.", textX, textY + 40);
+		g2.drawString(" [ESC] Go back to menu ", textX, textY + 40);
 	}
 	
 	private final void drawMusicSlider (int frameX, int valueY) {
@@ -350,7 +357,7 @@ public class UI {
 		g2.drawString("Open Inventory", textX, textY += gp.getTileSize());
 		g2.drawString("Open Status and Upgrades", textX, textY += gp.getTileSize());
 		g2.drawString("Upgrades and inventory interaction", textX, textY += gp.getTileSize());
-		g2.drawString("Press ESC to go back", textX, textY += gp.getTileSize());
+		g2.drawString("[ESC] Go back to menu", textX, textY += gp.getTileSize());
 		
 		textX = frameX + gp.getTileSize() * 10;
 		textY = frameY + gp.getTileSize() * 2;
@@ -763,14 +770,15 @@ public class UI {
 		 * 
 		 * INVENTORY FRAME
 		 */
-		final int frameX = gp.getTileSize() *2,			
-			frameWidth = gp.getTileSize() * 16,
-			frameHeight = gp.getTileSize() * 7 + 10;
-		
-		int frameY = gp.getTileSize();
+		int frameX = tileSize *2,			
+			frameWidth = tileSize * 16,
+			frameHeight = tileSize * 7 + 10,
+			frameY = tileSize;
 		
 		if (this.tradeState == TradeState.BUY || this.tradeState == TradeState.SELL) {
-			frameY = gp.getTileSize() * 6;
+			frameWidth = tileSize * 13 + 40;
+			frameHeight = tileSize * 5 + 20;
+			frameY = tileSize * 8;
 		}
 		
 		drawSubWindow(frameX, frameY, frameWidth, frameHeight);
@@ -821,13 +829,13 @@ public class UI {
 			slotX += gp.getTileSize() * 2;
 		
 			
-			if (this.tradeState == TradeState.SELECT) {
+			if (this.tradeState == TradeState.SELECT || this.tradeState == TradeState.LEAVE) {
 				if (i % 4 == 3) {
 					slotX = defaultSlotX;
 					slotY += gp.getTileSize() * 2;
 				}
 			} else {
-				if (i % 6 == 1 && i != 1) {
+				if (i % 6 == 5) {
 					slotX = defaultSlotX;
 					slotY += gp.getTileSize() * 2;
 				}
@@ -839,6 +847,7 @@ public class UI {
 		/**
 		 * CURSOR 
 		 */
+		if (this.tradeState == TradeState.SELL || this.tradeState == TradeState.SELECT || this.tradeState == TradeState.LEAVE) {
 		int cursorX = defaultSlotX + (gp.getTileSize() * 2 * slotCol),
 			cursorY = defaultSlotY + (gp.getTileSize() * 2 * slotRow),
 			cursorWidth = gp.getTileSize() * 2,
@@ -848,6 +857,7 @@ public class UI {
 		g2.setStroke(new BasicStroke (8));
 		g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
 	
+		}
 		
 		/**
 		 * DESCRIPTION Frame
@@ -939,8 +949,76 @@ public class UI {
 	
 	}
 	
-	private final void drawNPCInventoryScreen() {
+	private final void drawNPCInventoryScreen(Entity entity) {
 		
+		int tileSize = gp.getTileSize();
+		
+		if (tradeState == TradeState.BUY || tradeState == TradeState.SELL) {
+		/**
+		 * 
+		 * INVENTORY FRAME
+		 */
+		final int frameX = tileSize *2,			
+			frameWidth = tileSize * 13 + 40,
+			frameHeight = tileSize * 3 + 20,
+			frameY = tileSize;
+	
+		drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+		
+		final int defaultSlotX = frameX + 40,
+				  defaultSlotY = frameY + 30;
+		int slotX = defaultSlotX,
+			slotY = defaultSlotY;
+		
+		NPC npc = (NPC) entity;
+		
+	
+		/**
+		 * DRAW NPC's ITEMS
+		 */
+		//max inventory size for an npc is 6, as soon as there is no object inside the array, starts drawing out those x'es inside the inventory slot
+		for (int i = 0; i < 6; ++i) {
+			g2.setColor(Color.LIGHT_GRAY);
+			g2.setStroke(new BasicStroke (2));
+			if (i < npc.getNPCInventory().size()) {	
+				Entity currentItem = npc.getNPCInventory().get(i);
+		
+				
+				g2.drawImage(UtilityTool.scaleImage(currentItem.getDown1(), tileSize * 2, tileSize * 2), slotX, slotY, null);
+				
+			} 
+			g2.drawRoundRect(slotX, slotY, tileSize * 2, tileSize * 2, 10, 10);
+//				g2.setStroke(new BasicStroke (1));
+//				g2.drawLine(slotX, slotY, slotX + gp.getTileSize() * 2, slotY + gp.getTileSize() * 2);
+//				g2.drawLine(slotX + gp.getTileSize() * 2, slotY, slotX, slotY + gp.getTileSize() * 2);
+			
+			
+		
+			
+			slotX += gp.getTileSize() * 2;
+			
+				if (i % 6 == 5) {
+					slotX = defaultSlotX;
+					slotY += gp.getTileSize() * 2;
+				}
+			
+			
+			
+		}
+		
+		if (npc instanceof Merchant && this.tradeState == TradeState.BUY) {
+			int cursorX = defaultSlotX + (tileSize * 2 * slotCol),
+				cursorY = defaultSlotY + (tileSize * 2 * slotRow),
+				cursorWidth = tileSize * 2,
+				cursorHeight = tileSize * 2;
+			
+			g2.setColor(Color.white);
+			g2.setStroke(new BasicStroke (8));
+			g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+		
+		
+		}
+		}
 	}
 	
 	private final void drawInventoryOptions (int x, int y, ObjectType type, int cursorLoc, GameObject selectedItem) {
@@ -1071,7 +1149,7 @@ public class UI {
 		g2.setColor(Color.white);
 		
 		if (tradeCursor == TradeState.LEAVE_OPTION) g2.setColor(optionColor);
-		g2.drawString("LEAVE", x + gp.getTileSize(), y + gp.getTileSize() * 3);
+		g2.drawString("GOODBYE!", x + gp.getTileSize(), y + gp.getTileSize() * 3);
 		g2.setColor(Color.white);
 		
 		
@@ -1079,10 +1157,42 @@ public class UI {
 	}
 	private final void drawTradeBuy() {
 		drawPlayerInventoryScreen();
-		drawNPCInventoryScreen();
+		drawNPCInventoryScreen(gp.getNPCS().get(MapsConstants.TRADE).get(Merchant.MERCHANT_INDEX));
+		drawPlayerCoinTrade();
+		drawPlayerGoBackInventory();
 	}
+	
 	private final void drawTradeSell() {
 		drawPlayerInventoryScreen();
+		drawNPCInventoryScreen(gp.getNPCS().get(MapsConstants.TRADE).get(Merchant.MERCHANT_INDEX));
+		drawPlayerCoinTrade();
+		drawPlayerGoBackInventory();
+	}
+	
+	private final void drawPlayerCoinTrade () {
+		//Draw player's coin window
+		int x = gp.getTileSize() * 16, 
+			y = gp.getTileSize() * 8,
+			width = gp.getTileSize() * 3,
+			height = (gp.getTileSize() * 5 ) / 2;
+		int coinWidth = 40;
+		drawSubWindow(x, y, width, height);
+		g2.setFont(maruMonica);
+		g2.setFont(g2.getFont().deriveFont(42F));
+		if (gp.getPlayer().getCoin() > 100) coinWidth = 15;
+		g2.drawString("" + gp.getPlayer().getCoin(), x + coinWidth, y + height/2 + 20);
+		g2.drawImage(coin.getDown1(), x + width/2 - 10, y + height/2 - gp.getTileSize(), gp.getTileSize() * 2, gp.getTileSize() * 2, null);
+	}
+	
+	private final void drawPlayerGoBackInventory() {
+		int x = gp.getTileSize() * 16, 
+				y = gp.getTileSize() * 8 + ((gp.getTileSize() * 5 + 40) / 2),
+				width = gp.getTileSize() * 3,
+				height = (gp.getTileSize() * 5 ) / 2;
+		drawSubWindow(x, y, width, height);
+		g2.setFont(maruMonica);
+		g2.setFont(g2.getFont().deriveFont(28F));
+		g2.drawString("[ESC] Leave ", x + 10, y + height/2);
 	}
 	
 }

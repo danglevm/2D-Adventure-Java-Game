@@ -11,6 +11,8 @@ import object.consummable.HealingPotion;
 public class Merchant extends NPC{
 	
 	GamePanel gp;
+	
+	public static final int MERCHANT_INDEX = 0;
 
 	public Merchant(GamePanel gp, int worldX, int worldY) {
 		super(gp);
@@ -28,6 +30,7 @@ public class Merchant extends NPC{
 		entityType = EntityType.FRIENDLY;
 		this.getImage();
 		this.setDialogue();
+		this.setInventory();
 	}
 
 	@Override
@@ -51,6 +54,7 @@ public class Merchant extends NPC{
 
 	@Override
 	void setInventory() {
+		npcInventory.add(new HealingPotion(gp, 0, 0));
 		npcInventory.add(new HealingPotion(gp, 0, 0));
 		
 	}

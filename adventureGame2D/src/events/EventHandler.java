@@ -5,6 +5,7 @@ import enums_and_constants.Direction;
 import enums_and_constants.GameState;
 import enums_and_constants.MapsConstants;
 import enums_and_constants.TradeState;
+import npc.Merchant;
 import npc.NPC;
 
 public class EventHandler {
@@ -109,7 +110,7 @@ public class EventHandler {
 			
 			//talk to merchant npc
 			if (eventCollision(MapsConstants.TRADE, MapsConstants.TRADE_PLATFORM_X, MapsConstants.TRADE_PLATFORM_Y, Direction.UP)) {
-				((NPC) gp.getNPCS().get(MapsConstants.TRADE).get(0)).speak();
+				((NPC) gp.getNPCS().get(MapsConstants.TRADE).get(Merchant.MERCHANT_INDEX)).speak();
 				gp.setGameState(GameState.TRADE);
 				gp.getGameUI().setTradeState(TradeState.SELECT);
 				touchEvent = false;

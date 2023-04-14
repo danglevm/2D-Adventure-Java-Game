@@ -1,3 +1,3 @@
-fullscreen,off
+fullscreen,on
 music,2
 sound,3

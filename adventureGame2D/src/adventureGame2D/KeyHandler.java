@@ -362,17 +362,17 @@ public class KeyHandler implements KeyListener{
 		
 		if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) gp.setGameState(GameState.PLAY);
 		
-		if (code == KeyEvent.VK_D) { ui.setSlotColumn(ui.getSlotColumn() + 1); gp.playSE(9); }
+		if (code == KeyEvent.VK_D) { ui.setSlotColumn(ui.getSlotColumn() + 1); gp.playSE(Sound.INVENTORY_CURSOR); }
 		
-		if (code == KeyEvent.VK_A) { ui.setSlotColumn(ui.getSlotColumn() - 1); gp.playSE(9); }
+		if (code == KeyEvent.VK_A) { ui.setSlotColumn(ui.getSlotColumn() - 1); gp.playSE(Sound.INVENTORY_CURSOR); }
 		
-		if (code == KeyEvent.VK_W) { ui.setSlotRow(ui.getSlotRow() - 1); gp.playSE(9); }
+		if (code == KeyEvent.VK_W) { ui.setSlotRow(ui.getSlotRow() - 1); gp.playSE(Sound.INVENTORY_CURSOR); }
 		
-		if (code == KeyEvent.VK_S) { ui.setSlotRow(ui.getSlotRow() + 1); gp.playSE(9); }
+		if (code == KeyEvent.VK_S) { ui.setSlotRow(ui.getSlotRow() + 1); gp.playSE(Sound.INVENTORY_CURSOR); }
 		
 		if (code == KeyEvent.VK_ENTER) { 
 			ui.setInventoryState(InventoryState.OPTIONS);
-			gp.playSE(12);
+			gp.playSE(Sound.INVENTORY_SELECT);
 			}
 		
 		if (ui.getSlotRow() < 0) ui.setSlotRow(0);
@@ -476,35 +476,66 @@ public class KeyHandler implements KeyListener{
 		switch (ui.tradeState) {
 			
 			case BUY -> {
-				System.out.println("Hey");
-				if (code == KeyEvent.VK_ESCAPE) {
-					gp.getGameUI().setTradeState(TradeState.SELECT);
-				};
+				if (code == KeyEvent.VK_ESCAPE) ui.setTradeState(TradeState.SELECT);
 				
+				
+				if (code == KeyEvent.VK_D) { ui.setSlotColumn(ui.getSlotColumn() + 1); gp.playSE(Sound.INVENTORY_CURSOR); }
+				
+				if (code == KeyEvent.VK_A) { ui.setSlotColumn(ui.getSlotColumn() - 1); gp.playSE(Sound.INVENTORY_CURSOR); }
+				
+				if (ui.getSlotColumn() > 5) ui.setSlotColumn(5);
+				
+				if (ui.getSlotColumn() < 0) ui.setSlotColumn(0);
 			}
 			case SELECT -> {
 				if (code == KeyEvent.VK_ENTER) {
 				if (ui.tradeCursor == TradeState.BUY_OPTION) {
-					gp.getGameUI().tradeState = TradeState.BUY;
+					ui.tradeState = TradeState.BUY;
+					ui.setSlotColumn(0);
+					ui.setSlotRow(0);
 					this.tradeState(code);
-				};
+				}
 				if (ui.tradeCursor == TradeState.SELL_OPTION) {
-					gp.getGameUI().tradeState = TradeState.SELL;
+					ui.tradeState = TradeState.SELL;
+					ui.setSlotColumn(0);
+					ui.setSlotRow(0);
 					this.tradeState(code);
-				};
+				}
 				if (ui.tradeCursor == TradeState.LEAVE_OPTION) {
+					ui.tradeCursor = 0;
 					gp.setGameState(GameState.DIALOGUE);
-					gp.getGameUI().setCurrentDialogue("Come back with some money boy!\nThe goods are always here.");
-					gp.getGameUI().setTradeState(TradeState.LEAVE);
+					ui.setCurrentDialogue("Come back with some money boy!\nThe goods are always here.");
+					ui.setTradeState(TradeState.LEAVE);
 					gp.getPlayer().setDirection(Direction.DOWN);
-				};
+				}
+				gp.playSE(Sound.INVENTORY_SELECT);
 				}
 			}
-			case SELL -> {}
+			case SELL -> {
+				
+				if (code == KeyEvent.VK_ESCAPE) ui.setTradeState(TradeState.SELECT);
+				
+				if (code == KeyEvent.VK_D) { ui.setSlotColumn(ui.getSlotColumn() + 1); gp.playSE(Sound.INVENTORY_CURSOR); }
+				
+				if (code == KeyEvent.VK_A) { ui.setSlotColumn(ui.getSlotColumn() - 1); gp.playSE(Sound.INVENTORY_CURSOR); }
+				
+				if (code == KeyEvent.VK_W) { ui.setSlotRow(ui.getSlotRow() - 1); gp.playSE(Sound.INVENTORY_CURSOR); }
+				
+				if (code == KeyEvent.VK_S) { ui.setSlotRow(ui.getSlotRow() + 1); gp.playSE(Sound.INVENTORY_CURSOR); }
+				
+				if (ui.getSlotRow() < 0) ui.setSlotRow(0);
+				
+				if (ui.getSlotRow() > 1) ui.setSlotRow(1);
+				
+				if (ui.getSlotColumn() < 0) ui.setSlotColumn(0);
+				
+				if (ui.getSlotColumn() > 5) ui.setSlotColumn(5);
+				
+			}
 			default -> {}
 			
 			}
-			gp.playSE(12);
+			
 		
 		
 	

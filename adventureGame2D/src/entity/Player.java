@@ -241,7 +241,7 @@ public class Player extends Entity {
 		level = 1;
 		life = 12;	
 		mana = 6;
-		coin = 0;
+		coin = 1;
 		experience = 0;
 		invincibility = false;
 	

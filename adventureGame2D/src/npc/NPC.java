@@ -56,5 +56,7 @@ public abstract class NPC extends Entity {
 	NPC.setDirection(entityDirection); 
 		
 	}
+	
+	public final ArrayList<GameObject> getNPCInventory(){ return npcInventory; }
 
 }

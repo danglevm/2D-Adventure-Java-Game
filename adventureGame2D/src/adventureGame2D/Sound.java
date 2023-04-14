@@ -10,6 +10,8 @@ import javax.sound.sampled.FloatControl;
 
 public class Sound {
 	
+	public static final int INVENTORY_CURSOR = 9;
+	public static final int INVENTORY_SELECT = 12;
 	public static final int TRADE_DOOR = 19;
 
 	//Open audio files
