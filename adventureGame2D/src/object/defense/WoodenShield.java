@@ -16,6 +16,8 @@ public class WoodenShield extends GameObject implements DefenseObjectInterface{
 		this.gp = gp;
 		this.WorldX = WorldX * gp.getTileSize();
 		this.WorldY = WorldY * gp.getTileSize();
+		this.buyPrice = 30;
+		this.sellPrice = 15;
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();

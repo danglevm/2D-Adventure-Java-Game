@@ -21,6 +21,10 @@ public abstract class GameObject extends Entity{
 	protected String tradeName;
 	
 	protected String tradeDescription;
+	
+	protected int buyPrice = 0;
+	
+	protected int sellPrice = 0;
 
 	
 	public GameObject(GamePanel gp) {
@@ -48,6 +52,10 @@ public abstract class GameObject extends Entity{
 	public final String getTradeName() {return tradeName; }
 	
 	public final String getTradeDescription() {return tradeDescription; }
+	
+	public final int getBuyPrice() { return buyPrice; }
+	
+	public final int getSellPrice() { return sellPrice;}
 	
 	public abstract void setTradeNameDescription();
 }

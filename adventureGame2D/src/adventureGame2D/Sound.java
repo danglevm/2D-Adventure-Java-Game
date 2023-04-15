@@ -12,7 +12,10 @@ public class Sound {
 	
 	public static final int INVENTORY_CURSOR = 9;
 	public static final int INVENTORY_SELECT = 12;
+	public static final int ACTION_FAILED = 13;
+	public static final int TRADE_SUCCESS = 15;
 	public static final int TRADE_DOOR = 19;
+	public static final int UPGRADE_SUCCESS = 20;
 
 	//Open audio files
 	Clip clip;
@@ -40,11 +43,12 @@ public class Sound {
 		soundURL.add (getClass().getResource("/sounds/player/inventory_select.wav")); //12
 		soundURL.add (getClass().getResource("/sounds/player/upgrade-failed.wav")); //13
 		soundURL.add (getClass().getResource("/sounds/objects/health-potion-drink.wav")); //14
-		soundURL.add (getClass().getResource("/sounds/player/upgrade-success.wav")); //15
+		soundURL.add (getClass().getResource("/sounds/player/trade-success.wav")); //15
 		soundURL.add (getClass().getResource("/sounds/objects/burning.wav")); //16
 		soundURL.add (getClass().getResource("/sounds/player/cuttree.wav")); //17
 		soundURL.add (getClass().getResource("/sounds/game/gameover.wav")); //18
 		soundURL.add (getClass().getResource("/sounds/game/trade-door.wav")); //19
+		soundURL.add (getClass().getResource("/sounds/player/upgrade-success.wav")); //20
 		
 		
 		

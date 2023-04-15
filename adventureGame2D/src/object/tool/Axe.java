@@ -15,6 +15,8 @@ public class Axe extends GameObject implements AttackObjectInterface, ToolObject
 		this.gp = gp;
 		this.WorldX = worldX * gp.getTileSize();
 		this.WorldY = worldY * gp.getTileSize();
+		this.buyPrice = 40;
+		this.sellPrice = 20;
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();

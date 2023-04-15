@@ -7,9 +7,13 @@ import enums_and_constants.Direction;
 import enums_and_constants.GameOverState;
 import enums_and_constants.GameState;
 import enums_and_constants.InventoryState;
+import enums_and_constants.MapsConstants;
 import enums_and_constants.PauseState;
 import enums_and_constants.TitleState;
 import enums_and_constants.TradeState;
+import npc.Merchant;
+import npc.NPC;
+import object.GameObject;
 
 public class KeyHandler implements KeyListener{
 
@@ -331,7 +335,11 @@ public class KeyHandler implements KeyListener{
 	}
 	
 	private final void dialogueState (int code) {
-		if (code == KeyEvent.VK_ENTER) gp.setGameState(GameState.PLAY);
+		if (code == KeyEvent.VK_ENTER) {
+			if (gp.getGameUI().tradeState != TradeState.SELL || gp.getGameUI().tradeState != TradeState.BUY) {
+				gp.setGameState(GameState.PLAY);
+			}
+		}
 		
 	}
 	
@@ -349,9 +357,9 @@ public class KeyHandler implements KeyListener{
 		
 		if (code == KeyEvent.VK_ENTER) 
 			if (gp.getPlayer().upgradeAttribute(gp.getGameUI().statusCursor)) {
-				gp.playSE(15);
+				gp.playSE(Sound.UPGRADE_SUCCESS);
 			} else {
-				gp.playSE(13);
+				gp.playSE(Sound.ACTION_FAILED);
 			};
 		
 	}
@@ -476,8 +484,9 @@ public class KeyHandler implements KeyListener{
 		switch (ui.tradeState) {
 			
 			case BUY -> {
-				if (code == KeyEvent.VK_ESCAPE) ui.setTradeState(TradeState.SELECT);
 				
+				
+				if (code == KeyEvent.VK_ESCAPE) ui.setTradeState(TradeState.SELECT);
 				
 				if (code == KeyEvent.VK_D) { ui.setSlotColumn(ui.getSlotColumn() + 1); gp.playSE(Sound.INVENTORY_CURSOR); }
 				
@@ -486,6 +495,32 @@ public class KeyHandler implements KeyListener{
 				if (ui.getSlotColumn() > 5) ui.setSlotColumn(5);
 				
 				if (ui.getSlotColumn() < 0) ui.setSlotColumn(0);
+				
+				int itemIndex = ui.getSlotColumn();
+				
+				if (code == KeyEvent.VK_ENTER) {
+					try {
+					GameObject currentItem = ((NPC)gp.getNPCS().get(MapsConstants.TRADE).get(Merchant.MERCHANT_INDEX)).getNPCInventory().get(itemIndex);
+					if (currentItem.getBuyPrice() > gp.getPlayer().getCoin()) {
+					
+						gp.playSE(Sound.ACTION_FAILED);
+						gp.setGameState(GameState.DIALOGUE);
+						ui.setCurrentDialogue("You don't have enough coins, buddy!\nYou tryna rob me?");
+					
+					} else if (gp.getPlayer().getInventory().size() == 12) {
+						gp.playSE(Sound.ACTION_FAILED);
+						gp.setGameState(GameState.DIALOGUE);
+						ui.setCurrentDialogue("Your backpack is full of stuffs, man!\nNot sure you can put anything more in.");
+					} else {
+						gp.getPlayer().setCoin(gp.getPlayer().getCoin() - currentItem.getBuyPrice());
+						gp.getPlayer().getInventory().add(currentItem);
+						((NPC)gp.getNPCS().get(MapsConstants.TRADE).get(Merchant.MERCHANT_INDEX)).getNPCInventory().remove(itemIndex);
+						gp.playSE(Sound.TRADE_SUCCESS);
+					}
+					} catch (Exception e) {
+						
+					}
+				}
 			}
 			case SELECT -> {
 				if (code == KeyEvent.VK_ENTER) {
@@ -493,13 +528,14 @@ public class KeyHandler implements KeyListener{
 					ui.tradeState = TradeState.BUY;
 					ui.setSlotColumn(0);
 					ui.setSlotRow(0);
-					this.tradeState(code);
+					
+					this.tradeState(9999);
 				}
 				if (ui.tradeCursor == TradeState.SELL_OPTION) {
 					ui.tradeState = TradeState.SELL;
 					ui.setSlotColumn(0);
 					ui.setSlotRow(0);
-					this.tradeState(code);
+					this.tradeState(9999);
 				}
 				if (ui.tradeCursor == TradeState.LEAVE_OPTION) {
 					ui.tradeCursor = 0;
@@ -512,6 +548,8 @@ public class KeyHandler implements KeyListener{
 				}
 			}
 			case SELL -> {
+				
+				int itemIndex = ui.getItemIndex();
 				
 				if (code == KeyEvent.VK_ESCAPE) ui.setTradeState(TradeState.SELECT);
 				
@@ -531,7 +569,19 @@ public class KeyHandler implements KeyListener{
 				
 				if (ui.getSlotColumn() > 5) ui.setSlotColumn(5);
 				
+				if (code == KeyEvent.VK_ENTER) {
+					try {
+					gp.getPlayer().setCoin(gp.getPlayer().getCoin() + gp.getPlayer().getInventory().get(itemIndex).getSellPrice());
+					gp.playSE(Sound.TRADE_SUCCESS);
+					gp.getPlayer().handleInventoryOptions(InventoryState.DISCARD_OPTION);
+					} catch (Exception e) {
+	
+					}
+					
+				}
+				
 			}
+			
 			default -> {}
 			
 			}

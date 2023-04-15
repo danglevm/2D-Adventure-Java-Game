@@ -13,6 +13,8 @@ public class BlueShield extends GameObject implements DefenseObjectInterface{
 		this.gp = gp;
 		this.WorldX = worldX * gp.getTileSize();
 		this.WorldY = worldY * gp.getTileSize();
+		this.buyPrice = 80;
+		this.sellPrice = 40;
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();

@@ -145,7 +145,11 @@ public class UI {
 	
 	public void setTradeState(TradeState tradeState) { this.tradeState = tradeState; }
 	
-	public final int getItemIndex () { return slotCol + (slotRow * 4);}
+	public final int getItemIndex () { 
+		if (tradeState != TradeState.SELL) return slotCol + (slotRow * 4);
+		
+		return slotCol + (slotRow * 6);
+	}
 	
 	public final void setTitleScreenState (TitleState titleScreenState) { this.titleScreenState = titleScreenState; }
 	
@@ -887,6 +891,7 @@ public class UI {
 		
 		if (itemIndex < player.getInventory().size()) {
 			
+		try {
 			//use 1 for normal items, use 2 for much more serious items
 			g2.setColor(nameColor1);
 			g2.drawString(player.getInventory().get(itemIndex).getName(), descriptionTextX, descriptionTextY);
@@ -901,7 +906,9 @@ public class UI {
 			descriptionTextY += 40;
 			
 		}
+		}catch (Exception e) {
 			
+		}
 		} else {
 			//use 1 for normal items, use 2 for much more serious items
 			g2.setColor(nameColor1);
@@ -1180,8 +1187,9 @@ public class UI {
 		int coinWidth = 40;
 		drawSubWindow(x, y, width, height);
 		g2.setFont(maruMonica);
-		g2.setFont(g2.getFont().deriveFont(42F));
-		if (gp.getPlayer().getCoin() > 100) coinWidth = 15;
+		g2.setFont(g2.getFont().deriveFont(48F));
+		if (gp.getPlayer().getCoin() >= 100) { coinWidth = 20; }
+		if (gp.getPlayer().getCoin() >= 1000) { coinWidth = 10; }
 		g2.drawString("" + gp.getPlayer().getCoin(), x + coinWidth, y + height/2 + 20);
 		g2.drawImage(coin.getDown1(), x + width/2 - 10, y + height/2 - gp.getTileSize(), gp.getTileSize() * 2, gp.getTileSize() * 2, null);
 	}
@@ -1214,13 +1222,16 @@ public class UI {
 		int descriptionFrameWidth = tileSize * 10;
 		this.drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 		
-		this.drawSubWindow(frameX *3 - 5, frameY, descriptionFrameWidth, frameHeight);
-		g2.setColor(Color.YELLOW);
+		this.drawSubWindow(frameX * 3 - 5, frameY, descriptionFrameWidth, frameHeight);
+		
+		
+		this.drawSubWindow(frameX * 7, frameY + frameHeight - tileSize, tileSize * 2, frameHeight/2);
 		if (this.tradeState == TradeState.SELL) {
 			itemIndex = slotCol + (slotRow * 6);
 		try {
 			GameObject currentItem = gp.getPlayer().getInventory().get(itemIndex);
 			String tradeName = currentItem.getTradeName();
+			g2.setColor(Color.YELLOW);
 			for (String line : tradeName.split("\n")) {
 				g2.drawString(line, textX + 10, textY - 10);
 				//increase the display
@@ -1229,8 +1240,9 @@ public class UI {
 			g2.setColor(Color.WHITE);
 			g2.drawString(currentItem.getTradeDescription(), frameX * 3 + 20, textY - tileSize * 2 + 10);
 			
-			this.drawSubWindow(frameX * 7, frameY + frameHeight - tileSize, tileSize * 2, frameHeight/2);
-			g2.drawImage(coin.getDown1(), frameX * 7, frameY + frameHeight - tileSize + 10, tileSize + 10, tileSize + 10, null);
+			g2.setColor(Color.GREEN);
+			g2.drawString("" + currentItem.getSellPrice(), frameX * 7 + tileSize, textY - 10);
+			
 		} catch (Exception e) {
 				
 		}
@@ -1240,28 +1252,34 @@ public class UI {
 			try {
 				GameObject currentItem = ((NPC)gp.getNPCS().get(MapsConstants.TRADE).get(Merchant.MERCHANT_INDEX)).getNPCInventory().get(itemIndex);
 				String tradeName = currentItem.getTradeName();
+				g2.setColor(Color.YELLOW);
 				for (String line : tradeName.split("\n")) {
 					g2.drawString(line, textX + 10, textY - 10);
 					//increase the display
 					textY += gp.getTileSize();
 				}
 				
-				this.drawSubWindow(frameX * 7, frameY - tileSize, tileSize * 2, frameHeight/2);
-				g2.drawImage(coin.getDown1(), frameX * 7, frameY - tileSize + 10, tileSize + 10, tileSize + 10, null);
 				
 				g2.setColor(Color.WHITE);
 				g2.drawString(currentItem.getTradeDescription(), frameX * 3 + 20, textY - tileSize * 2 + 10);
+				
+				g2.setColor(Color.RED);
+				g2.drawString("" + currentItem.getBuyPrice(), frameX * 7 + tileSize, textY - 10);
 				} catch (Exception e) {
 					
 				}
 			
 				
 		}
+		
+		g2.drawImage(coin.getDown1(), frameX * 7, frameY + frameHeight - tileSize + 10, tileSize + 10, tileSize + 10, null);
+		
 		g2.setColor(Color.WHITE);
 		
 		
 
 				
 	}
+	
 	
 }

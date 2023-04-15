@@ -1,7 +1,5 @@
 package monster;
 
-import entity.Player;
-
 public interface MonsterInterface{
 		//set default values for the entity
 		//an abstract method does not have a body

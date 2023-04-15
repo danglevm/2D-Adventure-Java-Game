@@ -14,6 +14,9 @@ public class Key extends GameObject {
 		this.WorldX = worldX * gp.getTileSize();
 		this.WorldY = worldY * gp.getTileSize();
 		
+		this.buyPrice = 0;
+		this.sellPrice = 25;
+		
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();

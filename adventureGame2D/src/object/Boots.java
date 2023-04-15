@@ -14,9 +14,12 @@ public class Boots extends GameObject {
 		this.gp = gp;
 		this.WorldX = worldX * gp.getTileSize();
 		this.WorldY = worldY * gp.getTileSize();
+		this.buyPrice = 100;
+		this.sellPrice = 50;
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
+		this.setTradeNameDescription();
 	}
 
 	@Override

@@ -16,6 +16,8 @@ public class HealingPotion extends GameObject implements ConsummableInterface {
 		this.gp = gp;
 		this.WorldX = WorldX * gp.getTileSize();
 		this.WorldY = WorldY * gp.getTileSize();
+		this.buyPrice = 20;
+		this.sellPrice = 10;
 		setDefaultAttributes();
 		setPickupState();
 		setInventoryType();
