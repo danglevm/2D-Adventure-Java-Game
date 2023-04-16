@@ -1,6 +1,7 @@
 package projectile;
 
 import adventureGame2D.GamePanel;
+import adventureGame2D.Sound;
 import entity.Entity;
 import entity.Player;
 import enums_and_constants.Direction;
@@ -52,7 +53,7 @@ public abstract class Projectile extends Entity {
 				player.setInvincibility(true);
 				this.generateParticles(((Monster)user).getMonsterProjectile(), player);
 				player.checkInvincibilityTime();
-				gp.playSE(6);
+				gp.playSE(Sound.PLAYER_DAMAGED);
 				this.alive = false;
 			}
 		}

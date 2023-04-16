@@ -1,6 +1,7 @@
 package events;
 
 import adventureGame2D.GamePanel;
+import adventureGame2D.Sound;
 import enums_and_constants.Direction;
 import enums_and_constants.GameState;
 import enums_and_constants.MapsConstants;
@@ -99,13 +100,13 @@ public class EventHandler {
 			//go into trading hut
 			if (eventCollision(MapsConstants.SPAWN, tradeX, tradeY, Direction.ANY)) {
 				eventObject.mapTransition(GameState.TRANSITION, MapsConstants.TRADE_SPAWN_X, MapsConstants.TRADE_SPAWN_Y, MapsConstants.TRADE);
-				gp.playSE(19);
+				gp.playSE(Sound.TRADE_DOOR);
 			}
 			
 			//exit trading hut
 			if (eventCollision(MapsConstants.TRADE, MapsConstants.TRADE_BACK_X, MapsConstants.TRADE_BACK_Y, Direction.ANY)) {
 				eventObject.mapTransition(GameState.TRANSITION, tradeBackX, tradeBackY, MapsConstants.SPAWN);
-				gp.playSE(19);
+				gp.playSE(Sound.TRADE_DOOR);
 			}
 			
 			//talk to merchant npc

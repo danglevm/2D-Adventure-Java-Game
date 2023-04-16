@@ -161,6 +161,8 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public Config getMenuOptionConfig() { return config; }
 	
+	public TileManager getTileManager() { return tileM; }
+	
 	public ArrayList<ArrayList<Entity>> getNPCS() { return NPCs;}
 	
 	public ArrayList<ArrayList<Entity>> getObjects() { return objects;}

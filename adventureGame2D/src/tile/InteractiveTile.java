@@ -17,6 +17,8 @@ public abstract class InteractiveTile extends Entity {
 	public abstract void update();
 	
 	public abstract void interactTile(int index, boolean useTool);
+	
+	public final boolean getDestructible () { return destructible; }
 
 	
 }

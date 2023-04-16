@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 
 import adventureGame2D.GamePanel;
 import adventureGame2D.KeyHandler;
+import adventureGame2D.Sound;
 import enums_and_constants.Direction;
 import enums_and_constants.EntityType;
 import enums_and_constants.GameState;
@@ -351,7 +352,7 @@ public class Player extends Entity {
 	{
 		if (life < 1) { 
 			gp.setGameState(GameState.GAMEOVER);
-			gp.playSE(18);;
+			gp.playSE(Sound.GAME_OVER);
 		}
 		this.updatePlayerAttributes();
 		collisionOn = false;	
@@ -446,7 +447,7 @@ public class Player extends Entity {
 			Projectile projectile = new Fireball(gp);
 			projectile.set(this.WorldX, this.WorldY, this.direction, this);
 			gp.getProjectiles().get(gp.currentMap).add(projectile);
-			gp.playSE(16);
+			gp.playSE(Sound.FIREBALL_SHOOT);
 			castSpell = false;
 		}
 		
@@ -489,7 +490,7 @@ public class Player extends Entity {
 			
 			//12 is max inventory size
 			if (inventory.size() != 12 && currentObject.getPickUpState()) {
-				gp.playSE(1);
+				gp.playSE(Sound.PICKUP_SOUND);
 				text =  "You picked up " + currentObject.getName() + "!";
 				gp.getObjects().get(gp.currentMap).remove(index);
 				
@@ -745,7 +746,7 @@ public class Player extends Entity {
 			Entity monster = gp.getMonsters().get(gp.currentMap).get(i);
 			
 			if (!monster.invincibility) {
-				gp.playSE(5);
+				gp.playSE(Sound.MONSTER_DAMAGED);
 				//attack lands
 				int damage = monster.getLife() + monster.getDefense() - this.attackVal;
 				monster.setLife(damage);
@@ -784,7 +785,7 @@ public class Player extends Entity {
 	
 	private final void checkLevelUp() {
 		if (this.experience >= this.nextLevelExperience) {
-			gp.playSE(8);
+			gp.playSE(Sound.LEVELUP);
 			++level;
 			++upgradePoints;
 			this.experience -= this.nextLevelExperience;

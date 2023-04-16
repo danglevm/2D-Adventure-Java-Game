@@ -3,6 +3,7 @@ package tile;
 import java.awt.Color;
 
 import adventureGame2D.GamePanel;
+import adventureGame2D.Sound;
 import enums_and_constants.Direction;
 import enums_and_constants.ToolType;
 import object.interfaces.ToolObjectInterface;
@@ -41,7 +42,7 @@ public class DryTree extends InteractiveTile {
 	public void interactTile(int index, boolean useTool) {
 		if (index != 9999 && this.destructible && useTool && !this.invincibility) {
 			if (((ToolObjectInterface)gp.getPlayer().getEquippedTool()).getToolType() == ToolType.AXE) {
-				gp.playSE(17);
+				gp.playSE(Sound.CUT_TREE);
 				--this.life;
 				this.invincibility = true;
 				

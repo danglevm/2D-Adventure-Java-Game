@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.Random;
 
 import adventureGame2D.GamePanel;
+import adventureGame2D.Sound;
 import entity.Player;
 import enums_and_constants.Direction;
 import enums_and_constants.EntityType;
@@ -143,7 +144,7 @@ public class MonsterGreenSlime extends Monster {
 		
 		if (postDmgLife != player.getLife() && !this.dying && this.alive) {
 			gp.getGameUI().addSubtitleMsg(gp.getPlayer().getName() + " hurt by " + this.name);
-			gp.playSE(6);
+			gp.playSE(Sound.PLAYER_DAMAGED);
 		}
 		
 		if (!this.dying)
@@ -157,7 +158,7 @@ public class MonsterGreenSlime extends Monster {
 	
 	@Override
 	public final int returnDeathSound() {
-		return 7;
+		return Sound.SLIME_DEATH;
 	};
 	
 	@Override

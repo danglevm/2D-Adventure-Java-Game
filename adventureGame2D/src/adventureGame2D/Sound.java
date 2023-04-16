@@ -10,10 +10,25 @@ import javax.sound.sampled.FloatControl;
 
 public class Sound {
 	
+	public static final int BACKGROUND_MUSIC = 0;
+	public static final int PICKUP_SOUND = 1;
+	public static final int POWERUP = 2;
+	public static final int UNLOCK_OBJECT = 3;
+	public static final int FANFARE = 4;
+	public static final int MONSTER_DAMAGED = 5;
+	public static final int PLAYER_DAMAGED = 6;
+	public static final int SLIME_DEATH = 7;
+	public static final int LEVELUP = 8;
 	public static final int INVENTORY_CURSOR = 9;
+	public static final int INVETORY_OPEN = 10;
+	public static final int SELECT_OPTION = 11;
 	public static final int INVENTORY_SELECT = 12;
 	public static final int ACTION_FAILED = 13;
+	public static final int DRINK_POTION = 14;
 	public static final int TRADE_SUCCESS = 15;
+	public static final int FIREBALL_SHOOT = 16;
+	public static final int CUT_TREE = 17;
+	public static final int GAME_OVER = 18;
 	public static final int TRADE_DOOR = 19;
 	public static final int UPGRADE_SUCCESS = 20;
 

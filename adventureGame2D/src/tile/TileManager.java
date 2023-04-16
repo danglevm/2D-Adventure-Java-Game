@@ -169,4 +169,7 @@ public class TileManager extends Tile{
 		}
 	}
 	
+	
+	public ArrayList<Tile> getTilesList() { return tilesList; }
+	
 }

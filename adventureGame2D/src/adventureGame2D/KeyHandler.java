@@ -151,7 +151,7 @@ public class KeyHandler implements KeyListener{
 			} else if (gp.getGameUI().cursorNum == TitleState.EXIT){
 				System.exit(0);
 			}
-			gp.playSE(11);
+			gp.playSE(Sound.SELECT_OPTION);
 		}
 		
 		if (gp.getGameUI().cursorNum > 3) gp.getGameUI().cursorNum = 3;
@@ -173,13 +173,13 @@ public class KeyHandler implements KeyListener{
 			 */	
 			if (gp.getGameUI().cursorNum == TitleState.BLUE_BOY) {
 				gp.setGameState(GameState.PLAY);
-				gp.playMusic(0);
+				gp.playMusic(Sound.BACKGROUND_MUSIC);
 			} else {
 				/*
 				 * Yellow girl
 				 */	
 			}
-			gp.playSE(11);
+			gp.playSE(Sound.SELECT_OPTION);
 		}
 		
 		if (gp.getGameUI().cursorNum > 1) gp.getGameUI().cursorNum = 1;
@@ -217,7 +217,7 @@ public class KeyHandler implements KeyListener{
 		//Change to inventory state
 		if (code == KeyEvent.VK_E) {
 			gp.setGameState(GameState.INVENTORY);
-			gp.playSE(10);
+			gp.playSE(Sound.INVETORY_OPEN);
 		}
 		
 
@@ -256,12 +256,12 @@ public class KeyHandler implements KeyListener{
 			switch (gp.getGameUI().pauseState) {
 			case MENU -> {
 				gp.setGameState(GameState.PLAY);
-				gp.playSE(11);
+				gp.playSE(Sound.SELECT_OPTION);
 			}
 			
 			case FULLSCREEN, KEYBINDINGS -> {
 				gp.getGameUI().pauseState = PauseState.MENU;
-				gp.playSE(11);
+				gp.playSE(Sound.SELECT_OPTION);
 			}
 			}
 			
@@ -306,7 +306,7 @@ public class KeyHandler implements KeyListener{
 			}
 			
 			}
-			gp.playSE(11);
+			gp.playSE(Sound.SELECT_OPTION);
 		}
 		if (gp.getGameUI().pauseState == PauseState.MENU)
 			if (gp.getGameUI().pauseCursor == PauseState.MUSIC_OPTION) {
@@ -407,7 +407,7 @@ public class KeyHandler implements KeyListener{
 		
 		if (code == KeyEvent.VK_ENTER) {
 			ui.setInventoryState(InventoryState.NORMAL); 
-			gp.playSE(12);
+			gp.playSE(Sound.INVENTORY_SELECT);
 			gp.getPlayer().handleInventoryOptions(ui.inventoryOptionCursor);
 			ui.inventoryOptionCursor = 0;
 		}
@@ -443,7 +443,7 @@ public class KeyHandler implements KeyListener{
 			}
 			
 			}
-			gp.playSE(11);
+			gp.playSE(Sound.SELECT_OPTION);
 		}
 	}
 		
