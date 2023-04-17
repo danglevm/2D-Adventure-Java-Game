@@ -1,5 +1,6 @@
 package tile;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import adventureGame2D.GamePanel;
 import adventureGame2D.UtilityTool;
+import pathfinding.Node;
 
 public class TileManager extends Tile{
 
@@ -20,7 +22,7 @@ public class TileManager extends Tile{
 	//Change file path for maps
 	String filePath1 = "/maps/spawnmap";
 	String filePath2 = "/maps/trade_interior";
-	
+	boolean drawPath = true;
 	//-------------------------------CONSTRUCTORS------------------
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
@@ -130,8 +132,9 @@ public class TileManager extends Tile{
 			}
 			br.close();
 		} catch(Exception e) {
-			
+			e.printStackTrace();
 		}
+
 	}
 	
 	
@@ -165,6 +168,19 @@ public class TileManager extends Tile{
 			if (worldCol == gp.getMaxWorldCol()) {
 				worldCol = 0;
 				worldRow++;
+			}
+		}
+		
+		if (drawPath) {
+			g2.setColor(new Color(255,0,0,70));
+			
+			for (Node node : gp.getPathfinder().getPathList()) {
+				int worldX = node.getCol() * gp.getTileSize();
+				int worldY = node.getRow() * gp.getTileSize();
+				int screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
+				int screenY = worldY - gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
+			
+				g2.fillRect(screenX, screenY, gp.getTileSize(), gp.getTileSize());
 			}
 		}
 	}

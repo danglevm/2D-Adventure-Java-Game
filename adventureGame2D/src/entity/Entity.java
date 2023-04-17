@@ -23,6 +23,8 @@ public class Entity{
 	protected String name;
 	protected Direction direction = Direction.DOWN;
 	
+	protected boolean findPath = false;
+	
 	
 	//Entity position
 	protected int WorldX;
@@ -88,10 +90,8 @@ public class Entity{
 // 	Class methods
 	protected void setBehaviour() {}
 	
-	
-	public void update() {
-		setBehaviour();
-		collisionOn = false;
+	protected void checkCollision() {
+		this.collisionOn = false;
 		gp.getCollisionCheck().CheckTile(this);
 		gp.getCollisionCheck().checkObject(this);
 		gp.getCollisionCheck().checkEntity(this, gp.getNPCS());
@@ -99,6 +99,12 @@ public class Entity{
 		gp.getCollisionCheck().checkEntity(this, gp.getInteractiveTiles());
 		
 		this.checkMonsterCollision();
+	}
+	
+	
+	public void update() {
+		setBehaviour();
+		checkCollision();
 		
 
 		if (!collisionOn) {
@@ -229,6 +235,96 @@ public class Entity{
 		gp.getParticles().get(gp.currentMap).add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, -1));
 		gp.getParticles().get(gp.currentMap).add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, 1));
 		gp.getParticles().get(gp.currentMap).add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, 1));
+	}
+	
+	protected void searchPath (int goalCol, int goalRow) {
+		int tileSize = gp.getTileSize();
+		int startCol = (this.WorldX + solidArea.x)/tileSize,
+			startRow = (this.WorldY + solidArea.y)/tileSize;
+		gp.getPathfinder().setNodes(startCol, startRow, goalCol, goalRow);
+		
+		if (gp.getPathfinder().searchPath()) {
+			
+			//Get next WorldX and WorldY where the entity is going to move to
+			//complete the path
+			int nextWorldX = gp.getPathfinder().getPathList().get(0).getCol() * tileSize;
+			int nextWorldY = gp.getPathfinder().getPathList().get(0).getRow() * tileSize;
+		
+			//Get four sides of the entity's solid area
+			int solidLeftX = this.WorldX + solidArea.x;
+			int solidRightX = this.WorldX + solidArea.x + solidArea.width;
+			int solidTopY = this.WorldY + solidArea.y;
+			int solidBotY = this.WorldY + solidArea.y + solidArea.height;
+			
+			
+			if (solidLeftX >= nextWorldX && solidRightX < nextWorldX + tileSize) {
+				//if NPC is above the top block at the top
+				if (solidTopY > nextWorldY) {
+					this.direction = Direction.UP;
+				}
+				//if NPC is below the top block at the top
+				if (solidTopY < nextWorldY) {
+					this.direction = Direction.DOWN;
+				}
+			}
+			
+			//if NPC is further right than the block to move to
+			//checks if the npc worldY can fit into that block
+			//checks if the lower part of worldY fits in
+			if (solidTopY >= nextWorldY && solidBotY < nextWorldY + tileSize) {
+				if (solidLeftX < nextWorldX) {
+					this.direction = Direction.RIGHT;
+				}
+				
+				if (solidLeftX > nextWorldX) {
+					this.direction = Direction.LEFT;
+				}
+			}
+			
+			//EXCEPTION CASES 
+			//if the block to move to is at top left but 
+			//in front of the NPC there is a solid block
+			if (solidTopY > nextWorldY && solidLeftX > nextWorldX) {
+				//GO UP OR LEFT
+				this.direction = Direction.UP;
+				checkCollision();
+				//if he's colliding with the solid block up top
+				if (collisionOn) direction = Direction.LEFT;	
+			}
+			
+			//block to move is at top right but top block is solid
+			if (solidTopY > nextWorldY && solidLeftX < nextWorldX) {
+				this.direction = Direction.UP;
+				checkCollision();
+				//if colliding with block up top then go for right instead
+				if (collisionOn) direction = Direction.RIGHT;
+			}
+			
+			//block to move is at bottom left but below NPC is solid
+			if (solidTopY < nextWorldY && solidLeftX > nextWorldX) {
+				// go down or go left
+				this.direction = Direction.DOWN;
+				checkCollision();
+				if (collisionOn) direction = Direction.LEFT;
+			}
+			
+			//block to move is at bottom right but below NPC is solid
+			if (solidTopY < nextWorldY && solidLeftX < nextWorldX) {
+				// go down or go left
+				this.direction = Direction.DOWN;
+				checkCollision();
+				if (collisionOn) direction = Direction.RIGHT;
+			}
+			
+			int nextCol = gp.getPathfinder().getPathList().get(0).getCol();
+			int nextRow = gp.getPathfinder().getPathList().get(0).getRow();
+			//if it reaches the goal stop searching
+			if (nextCol == goalCol && nextRow == goalRow) this.findPath = false;
+			
+			
+			
+		}
+		
 	}
 	/*
 	 * SETTERS AND GETTERS

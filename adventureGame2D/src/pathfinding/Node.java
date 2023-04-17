@@ -20,4 +20,8 @@ public class Node {
 		this.row = row;
 	}
 	
+	public int getCol() { return col; }
+	
+	public int getRow () { return row; }
+	
 }

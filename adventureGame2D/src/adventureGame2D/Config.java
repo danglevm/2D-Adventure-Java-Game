@@ -83,7 +83,7 @@ public class Config {
 			
 			
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 		
 		

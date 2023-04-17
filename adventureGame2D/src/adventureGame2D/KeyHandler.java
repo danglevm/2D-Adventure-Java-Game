@@ -518,7 +518,7 @@ public class KeyHandler implements KeyListener{
 						gp.playSE(Sound.TRADE_SUCCESS);
 					}
 					} catch (Exception e) {
-						
+						e.getStackTrace();
 					}
 				}
 			}

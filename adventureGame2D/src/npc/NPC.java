@@ -18,9 +18,12 @@ public abstract class NPC extends Entity {
 
 	protected int dialogueIndex = 0;
 	
+	protected int tileSize;
+	
 	public NPC(GamePanel gp) {
 		super(gp);
 		this.gp = gp;
+		tileSize = gp.getTileSize();
 	}
 	
 	abstract void getImage();
@@ -37,7 +40,9 @@ public abstract class NPC extends Entity {
 				gp.getGameUI().setCurrentDialogue(dialogues.get(dialogueIndex));
 				++dialogueIndex;
 				}
-			} catch (IndexOutOfBoundsException e){}
+			} catch (IndexOutOfBoundsException e){
+				e.printStackTrace();
+			}
 				talkingDirection(gp.getPlayer(), this);
 	};
 	
@@ -59,4 +64,5 @@ public abstract class NPC extends Entity {
 	
 	public final ArrayList<GameObject> getNPCInventory(){ return npcInventory; }
 
+	
 }

@@ -179,12 +179,12 @@ public class Player extends Entity {
 	
 	public final void setDefaultPlayerValues() {
 		//Default player values
-//		WorldX = gp.getTileSize() * 122;
-//		WorldY = gp.getTileSize() * 132;
+		WorldX = gp.getTileSize() * 122;
+		WorldY = gp.getTileSize() * 132;
 		
-		//Near the forest values
-		WorldX = gp.getTileSize() * 136;
-		WorldY = gp.getTileSize() * 124;
+//		//Near the forest values
+//		WorldX = gp.getTileSize() * 136;
+//		WorldY = gp.getTileSize() * 124;
 		
 		//Trade starting location
 //		WorldX = gp.getTileSize() * 112;

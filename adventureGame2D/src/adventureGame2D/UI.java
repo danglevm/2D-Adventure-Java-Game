@@ -907,7 +907,7 @@ public class UI {
 			
 		}
 		}catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 		} else {
 			//use 1 for normal items, use 2 for much more serious items
@@ -1244,7 +1244,7 @@ public class UI {
 			g2.drawString("" + currentItem.getSellPrice(), frameX * 7 + tileSize, textY - 10);
 			
 		} catch (Exception e) {
-				
+				e.printStackTrace();
 		}
 			
 		} else if (this.tradeState == TradeState.BUY) {
@@ -1266,7 +1266,7 @@ public class UI {
 				g2.setColor(Color.RED);
 				g2.drawString("" + currentItem.getBuyPrice(), frameX * 7 + tileSize, textY - 10);
 				} catch (Exception e) {
-					
+					e.printStackTrace();
 				}
 			
 				

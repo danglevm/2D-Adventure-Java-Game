@@ -20,6 +20,7 @@ import entity.Player;
 import enums_and_constants.GameState;
 import events.EventHandler;
 import monster.Monster;
+import pathfinding.Pathfinder;
 import projectile.Projectile;
 import tile.TileManager;
 
@@ -86,6 +87,7 @@ public class GamePanel extends JPanel implements Runnable{
 	private EventHandler eHandler = new EventHandler (this);
 	private AssetPlacement assetPlace = new AssetPlacement(this);
 	private Config config = new Config (this);
+	private Pathfinder pathFinder = new Pathfinder(this);
 	
 	
 	//Entities
@@ -160,6 +162,8 @@ public class GamePanel extends JPanel implements Runnable{
 	public Sound getSoundEffects () { return se;}
 	
 	public Config getMenuOptionConfig() { return config; }
+	
+	public Pathfinder getPathfinder() { return pathFinder;}
 	
 	public TileManager getTileManager() { return tileM; }
 	
@@ -333,7 +337,8 @@ public void drawBuffer() {
 			g2.setColor(Color.white);
 			g2.setFont(g2.getFont().deriveFont(Font.PLAIN,25));
 			g2.drawString(FPS_text, FPS_x, FPS_y);
-			g2.drawString("X: " + (player.getWorldX())/tileSize + " Y: " + (player.getWorldY())/tileSize, FPS_x - tileSize/2, FPS_y + tileSize);
+			g2.drawString("X: " + player.getWorldX() + " Y: " + player.getWorldY(), FPS_x - tileSize/2, FPS_y + tileSize);
+			g2.drawString("C: " + (player.getWorldX())/tileSize + " R: " + (player.getWorldY())/tileSize, FPS_x - tileSize/2, FPS_y + tileSize);
 		}
 	}
 }

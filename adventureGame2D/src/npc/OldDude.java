@@ -14,7 +14,7 @@ public class OldDude extends NPC {
 		super(gp);
 		this.gp = gp;
 		//x, y, width, height
-		solidArea = new Rectangle(8, 8, 36, 36);
+		solidArea = new Rectangle(4, 4, 36, 36);
 		this.WorldX = gp.getTileSize() * worldX;
 		this.WorldY = gp.getTileSize() * worldY;
 		
@@ -61,26 +61,39 @@ public class OldDude extends NPC {
 	@Override
 	public void setBehaviour() {
 		
-		++actionLock;
+		if (findPath) {
+			int goalCol = 121;
+			int goalRow = 132;
+			
+			this.searchPath(goalCol, goalRow);
+
+			
+			
+			
+		} 
+
+			++actionLock;
+			
+			//After every a certain pseudo random amount of time
+		if (actionLock == 240) {
+			Random random = new Random();
+			int i = random.nextInt(100) + 1;//1 to 100
+			
+			
+			if (i < 25) {
+				this.direction = Direction.UP;
+			} else if (i < 50) {
+				this.direction = Direction.DOWN;
+			} else if (i < 75) {
+				this.direction = Direction.LEFT;
+			} else {
+				direction = Direction.RIGHT;
+			}
+			
+			actionLock = 0;
+			}
 		
-		//After every a certain pseudo random amount of time
-	if (actionLock == 240) {
-		Random random = new Random();
-		int i = random.nextInt(100) + 1;//1 to 100
 		
-		
-		if (i < 25) {
-			this.direction = Direction.UP;
-		} else if (i < 50) {
-			this.direction = Direction.DOWN;
-		} else if (i < 75) {
-			this.direction = Direction.LEFT;
-		} else {
-			direction = Direction.RIGHT;
-		}
-		
-		actionLock = 0;
-		}
 	
 	}
 
@@ -89,6 +102,12 @@ public class OldDude extends NPC {
 	void setInventory() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void speak() {
+		super.speak();
+		this.findPath = true;
 	}
 	
 

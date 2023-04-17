@@ -21,6 +21,7 @@ public class Pathfinder {
 
 	public Pathfinder (GamePanel gp) {
 		this.gp = gp;
+		instantiateNodes();
 	}
 	
 	//Set all the nodes to the tiles on the game.
@@ -100,7 +101,9 @@ public class Pathfinder {
 					int iRow = iTile.getWorldY()/gp.getTileSize();
 					node[iCol][iRow].solid = true;
 					}
-				} catch (Exception e) {}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			
 			//get the g, h, f cost of the node
@@ -129,8 +132,7 @@ public class Pathfinder {
 	}
 	
 	public final boolean searchPath() {
-		while (!goalReached && step < 200) {
-			
+		while (!goalReached && step < 500) {
 			int col = currentNode.col;
 			int row = currentNode.row;
 			
@@ -164,17 +166,23 @@ public class Pathfinder {
 			}
 			
 			//if there is no node in the open List, end the loop
-			if (openList.isEmpty()) break;
+		
+			if (openList.isEmpty()) {
+				break;
+			}
 			
 			currentNode = openList.get(bestNodeIndex);
 			
 			if (currentNode == goalNode) {
 				goalReached = true;
+
 				backtrackPath();
 			}
 			
 			++step;
+
 		}
+	
 		return goalReached;
 	}
 	
@@ -186,12 +194,17 @@ public class Pathfinder {
 		}
 	}
 	
+	
+	//adds all the nodes starting from the end to the start
+	//first node of the pathList arraylist will be the first location for NPCs to move to
 	private final void backtrackPath () {
 		Node current = goalNode;
 		
-		while (current != goalNode) {
+		while (current != startNode) {
 			pathList.add(0, current);
-			current = goalNode.parentNode;
+			current = current.parentNode;
 		}
 	}
+
+	public final ArrayList<Node> getPathList () { return pathList; }
 }
