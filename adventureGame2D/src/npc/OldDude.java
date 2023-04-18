@@ -62,17 +62,18 @@ public class OldDude extends NPC {
 	public void setBehaviour() {
 		
 		if (findPath) {
-			int goalCol = 121;
-			int goalRow = 132;
+//			Go to a row and column
+//			int goalCol = 121;
+//			int goalRow = 132;
 			
-			this.searchPath(goalCol, goalRow);
-
+			int goalCol = (gp.getPlayer().getWorldX() + gp.getPlayer().getSolidArea().x)/gp.getTileSize();
+			int goalRow = (gp.getPlayer().getWorldY() + gp.getPlayer().getSolidArea().y)/gp.getTileSize();
 			
 			
-			
+			this.searchPath(goalCol, goalRow);			
 		} 
 
-			++actionLock;
+		++actionLock;
 			
 			//After every a certain pseudo random amount of time
 		if (actionLock == 240) {
@@ -92,6 +93,13 @@ public class OldDude extends NPC {
 			
 			actionLock = 0;
 			}
+		
+		++spriteCounter;
+		//Player image changes every 12 frames
+		if (spriteCounter > 20) {
+			spriteNum = !spriteNum;
+			spriteCounter = 0;
+		}
 		
 		
 	

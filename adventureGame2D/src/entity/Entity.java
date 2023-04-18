@@ -154,6 +154,8 @@ public class Entity{
 			//Draw monster HP Bar
 			drawHealthBar(g2, entityScreenX, entityScreenY);
 			
+			
+			
 			if (this.entityType == EntityType.HOSTILE && this instanceof Monster) {
 				if (invincibility) {
 					hpBarEnabled = true;
@@ -316,11 +318,11 @@ public class Entity{
 				if (collisionOn) direction = Direction.RIGHT;
 			}
 			
-			int nextCol = gp.getPathfinder().getPathList().get(0).getCol();
-			int nextRow = gp.getPathfinder().getPathList().get(0).getRow();
-			//if it reaches the goal stop searching
-			if (nextCol == goalCol && nextRow == goalRow) this.findPath = false;
-			
+//			int nextCol = gp.getPathfinder().getPathList().get(0).getCol();
+//			int nextRow = gp.getPathfinder().getPathList().get(0).getRow();
+//			//if it reaches the goal stop searching
+//			if (nextCol == goalCol && nextRow == goalRow) this.findPath = false;
+//			
 			
 			
 		}

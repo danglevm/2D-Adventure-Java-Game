@@ -72,21 +72,56 @@ public class MonsterGreenSlime extends Monster {
 	}
 	
 	@Override
+	public void update() {
+		super.update();
+		
+		int xDistance = Math.abs((this.WorldX - gp.getPlayer().getWorldX())/gp.getTileSize());
+		int yDistance = Math.abs((this.WorldY - gp.getPlayer().getWorldY())/gp.getTileSize());
+		int tileDistance = (xDistance + yDistance);
+		System.out.println(tileDistance);
+		if (tileDistance > 15 && this.findPath) {
+			this.findPath = false;
+		}
+	}
+	
+	@Override
 	/**
 	 * Override from Entity
 	 */
 	public final void setBehaviour() {
+		if (findPath) {
+//			Go to a row and column
+//			int goalCol = 121;
+//			int goalRow = 132;
+			
+			int goalCol = (gp.getPlayer().getWorldX() + gp.getPlayer().getSolidArea().x)/gp.getTileSize();
+			int goalRow = (gp.getPlayer().getWorldY() + gp.getPlayer().getSolidArea().y)/gp.getTileSize();
+			
+			
+			this.searchPath(goalCol, goalRow);			
+			
+			int i = new Random().nextInt(100) + 1;
+			if (i > 99 && !projectile.getAlive()) {
+				projectile.set(this.WorldX, this.WorldY, direction, this);
+				gp.getProjectiles().get(gp.currentMap).add(projectile);
+				this.projectile.setCollisionOn(false);
+			}
+		} else {
+			//After every a certain pseudo random amount of time
+			if (actionLock == 240) {
+				Random random = new Random();
+				int i = random.nextInt(100) + 1;//1 to 100
+				if (i < 25) direction = Direction.UP;
+				else if (i < 50) direction = Direction.DOWN;
+				else if (i < 75) direction = Direction.LEFT;
+				else direction = Direction.RIGHT;
+				actionLock = 0;
+				
+			}
+		}
+		
 	++actionLock;
-		//After every a certain pseudo random amount of time
-	if (actionLock == 240) {
-		Random random = new Random();
-		int i = random.nextInt(100) + 1;//1 to 100
-		if (i < 25) direction = Direction.UP;
-		else if (i < 50) direction = Direction.DOWN;
-		else if (i < 75) direction = Direction.LEFT;
-		else direction = Direction.RIGHT;
-		actionLock = 0;
-	}
+	
 	
 	switch (direction) {
 	
@@ -111,12 +146,7 @@ public class MonsterGreenSlime extends Monster {
 		spriteCounter = 0;
 	}
 	
-	int i = new Random().nextInt(100) + 1;
-		if (i > 99 && !projectile.getAlive()) {
-			projectile.set(this.WorldX, this.WorldY, direction, this);
-			gp.getProjectiles().get(gp.currentMap).add(projectile);
-			this.projectile.setCollisionOn(false);
-		}
+	
 	}
 	
 	/**
@@ -126,7 +156,9 @@ public class MonsterGreenSlime extends Monster {
 	@Override
 	public void monsterDamageReaction() {
 		this.actionLock = 0;
-		this.direction = player.getDirection();
+//		this.direction = player.getDirection();
+		this.findPath = true;
+
 	}
 	
 	/**
