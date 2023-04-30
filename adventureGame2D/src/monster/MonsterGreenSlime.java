@@ -40,7 +40,8 @@ public class MonsterGreenSlime extends Monster {
 		name = "Green Slime";
 		attack = 2;
 		defense = 0;
-		speed = 1;
+		defaultSpeed = 1;
+		speed = defaultSpeed;
 		maxLife = 6;
 		experience = 2;
 		life = maxLife;

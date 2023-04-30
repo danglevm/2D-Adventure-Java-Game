@@ -31,6 +31,7 @@ public class Sound {
 	public static final int GAME_OVER = 18;
 	public static final int TRADE_DOOR = 19;
 	public static final int UPGRADE_SUCCESS = 20;
+	public static final int DESTROY_PROJECTILE = 21;
 
 	//Open audio files
 	Clip clip;
@@ -64,6 +65,7 @@ public class Sound {
 		soundURL.add (getClass().getResource("/sounds/game/gameover.wav")); //18
 		soundURL.add (getClass().getResource("/sounds/game/trade-door.wav")); //19
 		soundURL.add (getClass().getResource("/sounds/player/upgrade-success.wav")); //20
+		soundURL.add (getClass().getResource("/sounds/player/fireball_destroy.wav")); //21
 		
 		
 		

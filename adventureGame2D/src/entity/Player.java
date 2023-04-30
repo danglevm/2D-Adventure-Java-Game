@@ -51,6 +51,7 @@ public class Player extends Entity {
 	private final int screenX;
 	
 	private final int screenY;
+
 	
 	private boolean switchOpacity;
 	
@@ -221,6 +222,7 @@ public class Player extends Entity {
 		staminaEnabled = false;
 		manaRegenCount = 0;
 		healthRegenCount = 0;
+		defaultSpeed = 3;
 		
 		//player opacity
 		switchOpacity = false;
@@ -292,7 +294,7 @@ public class Player extends Entity {
 		/**
 		 * netspeed = default speed of 3 + speed upgrades - encumbrance - temporarily not
 		 */
-		netSpeed = 3;
+		netSpeed = defaultSpeed;
 
 		
 		//set the speed to be affected by equipment's encumbrance
@@ -722,6 +724,13 @@ public class Player extends Entity {
 		if (interactiveTileIndex != 9999) {
 			((InteractiveTile)gp.getInteractiveTiles().get(gp.currentMap).get(interactiveTileIndex)).interactTile(interactiveTileIndex, useTool);
 		}
+		
+		//Check collision with a projectile 
+		int pIndex = gp.getCollisionCheck().checkEntity(this, gp.getProjectiles());
+		if (pIndex != 9999) {
+			this.damageProjectiles(pIndex);
+		}
+		
 		//After checking collision, restore original data
 		WorldX = currWorldX;
 		WorldY = currWorldY;
@@ -758,6 +767,8 @@ public class Player extends Entity {
 					((Monster) monster).monsterDamageReaction();
 				}
 				
+				this.knockback(monster);
+				
 				gp.getGameUI().addSubtitleMsg(this.name + " damaged " + monster.getName());
 				
 				if (monster.getLife() < 1) {
@@ -781,6 +792,14 @@ public class Player extends Entity {
 			}
 		}
 			//Miss the attack
+	}
+	
+	//Kill off the particle
+	public final void damageProjectiles (int i) {
+		Entity projectile = gp.getProjectiles().get(gp.currentMap).get(i);
+		projectile.alive = false;
+		this.generateParticles(this, projectile);
+		gp.playSE(Sound.DESTROY_PROJECTILE);
 	}
 	
 	private final void checkLevelUp() {

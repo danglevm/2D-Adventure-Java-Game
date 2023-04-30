@@ -29,7 +29,7 @@ public class Entity{
 	//Entity position
 	protected int WorldX;
 	protected int WorldY;
-	protected int speed;
+	protected int speed, defaultSpeed;
 	protected int spriteCounter = 0, actionLock = 0, invincibilityCounter = 0;
 	protected boolean spriteNum = true; 
 	
@@ -53,6 +53,9 @@ public class Entity{
 	//attack area
 	protected Rectangle attackArea = new Rectangle (0, 0, 0, 0);
 	
+	//Knockback
+	protected boolean knockback = false;
+	protected int knockbackCount = 0;
 	
 	//ENTITY STATUS
 	//Character HP - both players and monster
@@ -103,6 +106,38 @@ public class Entity{
 	
 	
 	public void update() {
+		
+		if (knockback) {
+			
+			this.checkCollision();
+			
+			if (collisionOn) {
+				knockbackCount = 0;
+				knockback = false;
+				this.speed = defaultSpeed;
+				
+			} else if (!collisionOn) {
+				switch (this.direction) {
+				case UP: WorldY -= speed; break;
+				case DOWN: WorldY += speed; break;
+				case LEFT: WorldX -= speed; break;
+				case RIGHT: WorldX += speed; break;
+				default:
+					break;
+				}
+			}
+			
+			++knockbackCount;
+			
+			//increase the count to increase the distance of knockback
+			if (knockbackCount == 5) {
+				knockbackCount = 0;
+				knockback = false;
+				speed = defaultSpeed;
+			}
+			
+		} else {
+		
 		setBehaviour();
 		checkCollision();
 		
@@ -126,6 +161,7 @@ public class Entity{
 		if (this instanceof Monster) {
 			((Monster) this).checkInvincibilityTime();
 		}
+	}
 	}
 	
 	
@@ -232,6 +268,7 @@ public class Entity{
 	}
 	
 
+	//generate particles at the target location
 	protected final void generateParticles(Entity generator, Entity target) {
 		gp.getParticles().get(gp.currentMap).add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, -2, -1));
 		gp.getParticles().get(gp.currentMap).add(new Particle (gp, target, this.pColor, this.pSize, this.pSpeed, this.pDuration, 2, -1));
@@ -328,6 +365,13 @@ public class Entity{
 		}
 		
 	}
+	
+	protected final void knockback(Entity target) {
+		target.direction = direction;
+		target.speed += 10;
+		target.knockback = true;
+	}
+	
 	/*
 	 * SETTERS AND GETTERS
 	 */
