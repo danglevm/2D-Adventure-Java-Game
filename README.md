@@ -1,4 +1,5 @@
 # 🎮 Java 2D RPG Adventure Game
+![image](https://github.com/danglevm/2DJavaGame/assets/84720339/97dcd99c-9733-4fa2-a236-aee0da234665)
 
 ## 📄 Overview
 Single-player top-down 2D graphical adventure RPG game made with Java and Swing. The game follows a man waking up in a dream-like world trying to find his way back to Earth. Implemented A* pathfinding for hostile entities and object-oriented programming principles in building the game.
@@ -8,7 +9,7 @@ Single-player top-down 2D graphical adventure RPG game made with Java and Swing.
 
 ## Controls:
 - **ESC** - Open exit menu
-- **ENTER** - Interact/Select
+- **ENTER** - Interact with menus and options
 - **WASD** - Move up, left, down, and right.
 - **J** - Attack
 - **K** - Swing sword/Use tool
@@ -19,7 +20,17 @@ Single-player top-down 2D graphical adventure RPG game made with Java and Swing.
 
 ![image](https://github.com/danglevm/2DJavaGame/assets/84720339/54814ca5-0f88-41e8-bff0-80267fe03b77)
 
-## Project folders and file descriptions
+## Project folder and file descriptions
+- **adventureGame2D**: handles game creation, refreshing, UI creation and sound effects.
+- **entity:** define player, passive/hostile entity and particle interactions within the game
+- **enums_and_constants:** defines enum to be used for programming
+- **events:** handles player interactive events
+- **monster:** define hostile entities
+- **npc:** define passive entities
+- **object:** define in-game objects and tools usable by the player
+- **projectile:** generate in-game projectiles and particle effects
+- **quotes:** generate quotes for in-game usage
+- **tile:** load graphics for game tiles and floors
 
 ![image](https://github.com/danglevm/2DJavaGame/assets/84720339/64406cc0-19dc-4a1f-922d-22c5b819dfd3)
 
