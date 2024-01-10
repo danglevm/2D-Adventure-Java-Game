@@ -1,32 +1,39 @@
 # 🎮 Java 2D RPG Adventure Game
 
-Hello, this is a repo containing the source code for a Java 2D game that I am working on. Currently, the core of the game is done but there are a lot of enhancements and improvements that I am planning to make in the future.
+## 📄 Overview
+Single-player top-down 2D graphical adventure RPG game made with Java and Swing. The game follows a man waking up in a dream-like world trying to find his way back to Earth. Implemented A* pathfinding for hostile entities and object-oriented programming principles in building the game.
 
-## 🎯 Purpose
+![image](https://github.com/danglevm/2DJavaGame/assets/84720339/97dcd99c-9733-4fa2-a236-aee0da234665)
 
-Personally, I started this project because I am interested in game development. As I go through the project, I also found that it helped me with understanding some concepts that I wasn't
-quite grasping at work (interfaces, abstract classes and design patterns) and develop my programming skills in Java. My enjoyment and learning experience are the
-two things that kept me working on and improving the game.
 
-## 📄 Description
+## Controls:
+- **ESC** - Open exit menu
+- **ENTER** - Interact/Select
+- **WASD** - Move up, left, down, and right.
+- **J** - Attack
+- **K** - Swing sword/Use tool
+- **L** - Cast fireball attack
+- **T** - display FPS and in-game coordinates
+- **E** - Open inventory
+- **C** - Open status and upgrades menus
 
-This is a single-player game that follows a main character who is trying to find their way back to Earth. The game can be played with the controls that are
-specified inside the game and requires JRE to be installed on the play computer.
+![image](https://github.com/danglevm/2DJavaGame/assets/84720339/54814ca5-0f88-41e8-bff0-80267fe03b77)
 
-I used Java because it was a language I felt I had neglected to improve in a long time and wanted to get back on track with it.
-I chose Java Swing as the tool to draw and render my GUI simply because it's quite straightforward to use and I wanted to focus more on the programming side. The resources - images, sound effects, music - I downloaded and installed from
-online sources and tutorials since I didn't want to touch this part (yet) at this point.
+## Project folders and file descriptions
 
-I found that at the start, due to my seriously poor knowledge of object oriented programming, I was struggling to utilize this paradigm
-in modularizing and improve my game efficiency. I also initially struggled at doing the GUI correctly and developing correct algorithms for the in-game
-systems simply because I was very much lacking in experience. However, through time commitment, research and experience, I got through these hurdles.
+![image](https://github.com/danglevm/2DJavaGame/assets/84720339/64406cc0-19dc-4a1f-922d-22c5b819dfd3)
+
 
 ## 🔭 Work in progress
 - Character storyline
-- Rendering enhancements
-- New game mechanics
+- Graphics rendering enhancements
+- New game mechanics - knockback, special effects
 - New attack and animation mechanics
 - New monsters and bosses
+- Additional sound effects
+
+![image](https://github.com/danglevm/2DJavaGame/assets/84720339/abbf42bc-6808-4086-bb1a-6f8eb1d63fad)
+
 
 ## 📷 Screenshots
 
